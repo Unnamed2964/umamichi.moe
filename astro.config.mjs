@@ -16,6 +16,12 @@ export default defineConfig({
   integrations: [mdx(), sitemap(), react()],
   adapter: cloudflare(),
   markdown: {
+    shikiConfig: {
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
+    },
     remarkPlugins: [remarkMath],
     rehypePlugins: [rehypeKatex],
   },
