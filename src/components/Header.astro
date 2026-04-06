@@ -1,15 +1,21 @@
 ---
 import { SITE_TITLE } from '../consts';
-import HeaderLink from './HeaderLink.astro';
+import RadixHeaderNav from './RadixHeaderNav';
+
+const navItems = [
+	{ href: '/', label: 'Home' },
+	{ href: '/blog', label: 'Blog' },
+	{ href: '/about', label: 'About' },
+];
+
+const currentPath = Astro.url.pathname.replace(import.meta.env.BASE_URL, '') || '/';
 ---
 
 <header>
 	<nav>
 		<h2><a href="/">{SITE_TITLE}</a></h2>
 		<div class="internal-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
+			<RadixHeaderNav client:load currentPath={currentPath} items={navItems} />
 		</div>
 		<div class="social-links">
 			<a href="https://twitter.com/Umamichiz" target="_blank">
@@ -53,12 +59,55 @@ import HeaderLink from './HeaderLink.astro';
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		gap: 1.5rem;
 	}
 	nav a {
 		padding: 1em 0.5em;
 		color: var(--black);
 		border-bottom: 4px solid transparent;
 		text-decoration: none;
+	}
+	.internal-links {
+		flex: 1;
+		display: flex;
+		justify-content: center;
+	}
+	:global(.nav-menu-root) {
+		display: flex;
+		justify-content: center;
+		width: 100%;
+	}
+	:global(.nav-menu-list) {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	:global(.nav-menu-link) {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 1rem 0.85rem;
+		border-bottom: 4px solid transparent;
+		font-weight: 600;
+		line-height: 1;
+		color: rgb(var(--gray-dark));
+		text-decoration: none;
+		transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease;
+	}
+	:global(.nav-menu-link:hover) {
+		color: rgb(var(--black));
+		background: rgba(var(--gray-light), 0.45);
+	}
+	:global(.nav-menu-link.active),
+	:global(.nav-menu-link[data-active]) {
+		color: rgb(var(--black));
+		border-bottom-color: var(--accent);
+	}
+	:global(.nav-menu-indicator) {
+		display: none;
 	}
 	nav a.active {
 		text-decoration: none;
@@ -69,6 +118,18 @@ import HeaderLink from './HeaderLink.astro';
 		display: flex;
 	}
 	@media (max-width: 720px) {
+		nav {
+			flex-wrap: wrap;
+			justify-content: center;
+		}
+		.internal-links {
+			order: 3;
+			flex-basis: 100%;
+		}
+		:global(.nav-menu-list) {
+			flex-wrap: wrap;
+			justify-content: center;
+		}
 		.social-links {
 			display: none;
 		}

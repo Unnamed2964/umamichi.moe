@@ -19,6 +19,7 @@
     "@astrojs/react": "^5.0.2",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.2",
+    "@radix-ui/react-navigation-menu": "^1.2.14",
     "@radix-ui/themes": "^3.3.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
