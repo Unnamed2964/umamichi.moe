@@ -2,7 +2,6 @@
 title: 'The blog is under construction.'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Apr. 06 2026'
-heroImage: '../../assets/adachi_doll.webp'
 ---
 
 The blog is under construction.
