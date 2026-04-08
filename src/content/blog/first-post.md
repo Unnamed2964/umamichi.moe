@@ -65,7 +65,7 @@ std::cout << sum << std::endl;
 
 Inductive Odd : nat -> Type :=
   | odd_1: Odd 1
-  | odd_S_S_n: forall (n : nat)， Odd n -> Odd (S (S n))
+  | odd_S_S_n: forall (n : nat), Odd n -> Odd (S (S n))
   end.
 
 Example 0_is_not_odd : Odd 0 -> False.
@@ -81,9 +81,9 @@ $global:Threshold = 80
 function Check-CPU {
     $usage = (Get-Counter '\Processor(_Total)\% Processor Time').CounterSamples[0].CookedValue
     if ($usage -gt $global:Threshold) {
-        Write-Output "CPU 使用率过高：$([math]::Round($usage， 2))%"
+        Write-Output "CPU 使用率过高：$([math]::Round($usage, 2))%"
     } else {
-        Write-Output "CPU 使用率正常：$([math]::Round($usage， 2))%"
+        Write-Output "CPU 使用率正常：$([math]::Round($usage, 2))%"
     }
 }
 ```
@@ -96,14 +96,6 @@ function Check-CPU {
 | 物种   | 奇美拉   | 人类         | 机器人                                       | 机器人     |
 | 性格   | 傲娇     | 无口         | 温柔                                         | 笨蛋       |
 | 代表物 | 法棍     | 火箭推进榴弹 | 扫帚、鸡毛掸子等清洁工具、锅和勺子等做菜工具 | 炸鸡和橘子 |
-
-> [!WARNING]
->
-> ###### 当心奇美拉
-
-> [!CAUTION]
->
-> 重音テト认识所有人
 
 ## 运转日程
 

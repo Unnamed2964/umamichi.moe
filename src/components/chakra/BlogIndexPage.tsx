@@ -1,9 +1,10 @@
 import {
+  Box,
+  Flex,
   Heading,
   Image,
   LinkBox,
   LinkOverlay,
-  SimpleGrid,
   Stack,
   Text,
 } from "@chakra-ui/react"
@@ -24,7 +25,7 @@ type BlogIndexPageProps = {
 
 export function BlogIndexPage({ posts }: BlogIndexPageProps) {
   return (
-    <SiteFrame currentPath="/blog" mainMaxW="6xl">
+    <SiteFrame currentPath="/blog" mainMaxW="5xl">
       <Stack gap="8">
         <Stack gap="3" maxW="36rem">
           <Text
@@ -49,41 +50,50 @@ export function BlogIndexPage({ posts }: BlogIndexPageProps) {
           </Text>
         </Stack>
 
-        <SimpleGrid columns={{ base: 1, md: 2 }} gap="8">
-          {posts.map((post, index) => (
+        <Stack gap="0" borderTopWidth="1px" borderColor="blackAlpha.100">
+          {posts.map((post) => (
             <LinkBox
               key={post.id}
               as="article"
-              borderWidth="1px"
+              borderBottomWidth="1px"
               borderColor="blackAlpha.100"
-              bg="white"
-              rounded="3xl"
-              overflow="hidden"
-              boxShadow={index === 0 ? "lg" : "sm"}
-              gridColumn={index === 0 ? { base: "span 1", md: "span 2" } : undefined}
-              transition="transform 0.2s ease, box-shadow 0.2s ease"
-              _hover={{ transform: "translateY(-4px)", boxShadow: "xl" }}
+              py={{ base: 5, md: 6 }}
+              transition="background-color 0.2s ease"
+              _hover={{ bg: "blackAlpha.50" }}
             >
-              {post.heroImage && (
-                <Image
-                  src={post.heroImage.src}
-                  alt=""
-                  w="full"
-                  h={index === 0 ? { base: "220px", md: "320px" } : "220px"}
-                  objectFit="cover"
-                />
-              )}
-              <Stack gap="3" p={{ base: 5, md: 6 }}>
-                <Text color="gray.500" fontSize="sm" fontWeight="600">
-                  {post.pubDate}
-                </Text>
-                <Heading as="h2" size={index === 0 ? "xl" : "lg"} letterSpacing="tight">
-                  <LinkOverlay href={`/blog/${post.id}/`}>{post.title}</LinkOverlay>
-                </Heading>
-              </Stack>
+              <Flex align={{ base: "start", md: "center" }} gap={{ base: 4, md: 6 }}>
+                {post.heroImage ? (
+                  <Image
+                    src={post.heroImage.src}
+                    alt=""
+                    flexShrink={0}
+                    w={{ base: "96px", md: "128px" }}
+                    h={{ base: "72px", md: "88px" }}
+                    objectFit="cover"
+                    rounded="lg"
+                  />
+                ) : (
+                  <Box
+                    flexShrink={0}
+                    w={{ base: "96px", md: "128px" }}
+                    h={{ base: "72px", md: "88px" }}
+                    rounded="lg"
+                    bg="gray.100"
+                  />
+                )}
+
+                <Stack gap="2" flex="1" minW="0">
+                  <Text color="gray.500" fontSize="sm" fontWeight="600">
+                    {post.pubDate}
+                  </Text>
+                  <Heading as="h2" size={{ base: "md", md: "lg" }} letterSpacing="tight">
+                    <LinkOverlay href={`/blog/${post.id}/`}>{post.title}</LinkOverlay>
+                  </Heading>
+                </Stack>
+              </Flex>
             </LinkBox>
           ))}
-        </SimpleGrid>
+        </Stack>
       </Stack>
     </SiteFrame>
   )
