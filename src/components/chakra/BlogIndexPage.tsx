@@ -1,8 +1,5 @@
 import {
-  Box,
   Flex,
-  Heading,
-  Image,
   LinkBox,
   LinkOverlay,
   Stack,
@@ -25,9 +22,9 @@ type BlogIndexPageProps = {
 
 export function BlogIndexPage({ posts }: BlogIndexPageProps) {
   return (
-    <SiteFrame currentPath="/blog" mainMaxW="5xl">
-      <Stack gap="8">
-        <Stack gap="3" maxW="36rem">
+    <SiteFrame currentPath="/blog" mainMaxW="4xl">
+      <Stack gap="8" fontSize="var(--site-content-font-size)" lineHeight="var(--site-content-line-height)">
+        <Stack gap="3">
           <Text
             display="inline-flex"
             px="3"
@@ -38,17 +35,18 @@ export function BlogIndexPage({ posts }: BlogIndexPageProps) {
             fontSize="sm"
             fontWeight="700"
             letterSpacing="wide"
-            textTransform="uppercase"
+            maxW="9rem"
           >
-            Blog archive
+            Blog Archive
           </Text>
-          <Heading as="h1" size="2xl" letterSpacing="tight">
+          <Text as="h1" fontSize={{ base: "2.4em", md: "2.8em" }} fontWeight="700" lineHeight={{ base: 1.2, md: 1.15 }} letterSpacing="tight">
             Writing and notes
-          </Heading>
+          </Text>
           <Text color="gray.600">
             A list of posts published on the site, newest first.
           </Text>
         </Stack>
+        
 
         <Stack gap="0" borderTopWidth="1px" borderColor="blackAlpha.100">
           {posts.map((post) => (
@@ -57,39 +55,35 @@ export function BlogIndexPage({ posts }: BlogIndexPageProps) {
               as="article"
               borderBottomWidth="1px"
               borderColor="blackAlpha.100"
-              py={{ base: 5, md: 6 }}
+              py="2"
               transition="background-color 0.2s ease"
               _hover={{ bg: "blackAlpha.50" }}
             >
-              <Flex align={{ base: "start", md: "center" }} gap={{ base: 4, md: 6 }}>
-                {post.heroImage ? (
-                  <Image
-                    src={post.heroImage.src}
-                    alt=""
-                    flexShrink={0}
-                    w={{ base: "96px", md: "128px" }}
-                    h={{ base: "72px", md: "88px" }}
-                    objectFit="cover"
-                    rounded="lg"
-                  />
-                ) : (
-                  <Box
-                    flexShrink={0}
-                    w={{ base: "96px", md: "128px" }}
-                    h={{ base: "72px", md: "88px" }}
-                    rounded="lg"
-                    bg="gray.100"
-                  />
-                )}
-
-                <Stack gap="2" flex="1" minW="0">
-                  <Text color="gray.500" fontSize="sm" fontWeight="600">
-                    {post.pubDate}
-                  </Text>
-                  <Heading as="h2" size={{ base: "md", md: "lg" }} letterSpacing="tight">
-                    <LinkOverlay href={`/blog/${post.id}/`}>{post.title}</LinkOverlay>
-                  </Heading>
-                </Stack>
+              <Flex align="center" gap="4" minH="1.75em">
+                <Text
+                  as="h2"
+                  flex="1"
+                  minW="0"
+                  fontSize={{ base: "1.02em", md: "1.08em" }}
+                  fontWeight="500"
+                  lineHeight="1.4"
+                  letterSpacing="tight"
+                  whiteSpace="nowrap"
+                  overflow="hidden"
+                  textOverflow="ellipsis"
+                >
+                  <LinkOverlay href={`/blog/${post.id}/`}>{post.title}</LinkOverlay>
+                </Text>
+                <Text
+                  flexShrink={0}
+                  color="gray.500"
+                  fontSize="0.92em"
+                  fontWeight="600"
+                  lineHeight="1.4"
+                  whiteSpace="nowrap"
+                >
+                  {post.pubDate}
+                </Text>
               </Flex>
             </LinkBox>
           ))}

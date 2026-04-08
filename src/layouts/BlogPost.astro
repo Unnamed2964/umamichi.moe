@@ -1,17 +1,36 @@
 ---
-import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import { ArticleLayout } from '../components/chakra/ArticleLayout';
 
-type Props = CollectionEntry<'blog'>['data'];
+type LayoutData = {
+	title?: string;
+	description?: string;
+	pubDate?: Date;
+	updatedDate?: Date;
+	heroImage?: {
+		src: string;
+	};
+};
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const pageData: LayoutData = 'frontmatter' in Astro.props
+	? Astro.props.frontmatter
+	: Astro.props;
+
+const { title, description, pubDate, updatedDate, heroImage } = pageData;
 const currentPath = Astro.url.pathname;
 const formattedPubDate = pubDate
-	? new Intl.DateTimeFormat('en', { dateStyle: 'medium' }).format(pubDate)
+	? new Intl.DateTimeFormat('zh-CN', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+	}).format(pubDate)
 	: undefined;
 const formattedUpdatedDate = updatedDate
-	? new Intl.DateTimeFormat('en', { dateStyle: 'medium' }).format(updatedDate)
+	? new Intl.DateTimeFormat('zh-CN', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+	}).format(updatedDate)
 	: undefined;
 ---
 

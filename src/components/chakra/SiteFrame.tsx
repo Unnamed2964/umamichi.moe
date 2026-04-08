@@ -18,9 +18,11 @@ type SiteFrameProps = PropsWithChildren<{
 }>
 
 const navItems = [
-  { href: "/", label: "Home" },
-  { href: "/blog", label: "Blog" },
-  { href: "/about", label: "About" },
+  { href: "/", label: "首页" },
+  { href: "/blog", label: "文章" },
+  { href: "/tools", label: "工具" },
+  { href: "/friends", label: "友情链接" },
+  { href: "/about", label: "关于" },
 ]
 
 function isActiveLink(href: string, currentPath: string) {
@@ -42,12 +44,11 @@ export function SiteFrame({ children, currentPath, mainMaxW = "6xl" }: SiteFrame
           zIndex="10"
           borderBottomWidth="1px"
           borderColor="blackAlpha.100"
-          bg="whiteAlpha.900"
-          backdropFilter="blur(14px)"
+          bg="white"
         >
           <Container maxW="6xl" px={{ base: 4, md: 6 }}>
             <Flex minH="72px" align="center" justify="space-between" gap="6" wrap="wrap">
-              <Heading as="h4" size="md" letterSpacing="tight">
+              <Heading as="h1" size="xl" letterSpacing="tight">
                 <Link href="/" _hover={{ textDecoration: "none", color: "cyan.700" }}>
                   {SITE_TITLE}
                 </Link>
@@ -86,7 +87,19 @@ export function SiteFrame({ children, currentPath, mainMaxW = "6xl" }: SiteFrame
           </Container>
         </Box>
 
-        <Container as="main" maxW={mainMaxW} px={{ base: 4, md: 6 }} py={{ base: 10, md: 14 }}>
+        <Container
+          as="main"
+          maxW={mainMaxW}
+          px={{ base: 4, md: 6 }}
+          py={{ base: 10, md: 14 }}
+          css={{
+            "--site-content-font-size": "var(--chakra-font-sizes-md)",
+            "--site-content-line-height": "var(--chakra-line-heights-tall)",
+            "@media screen and (min-width: 48rem)": {
+              "--site-content-font-size": "var(--chakra-font-sizes-lg)",
+            },
+          }}
+        >
           {children}
         </Container>
 
@@ -99,7 +112,7 @@ export function SiteFrame({ children, currentPath, mainMaxW = "6xl" }: SiteFrame
         >
           <Container maxW="6xl" px={{ base: 4, md: 6 }} py="10">
             <Stack gap="2" align="center" textAlign="center">
-              <Text color="gray.600" fontSize="sm">
+              <Text color="gray.600" fontSize="lg">
                 © {new Date().getFullYear()} Umamichi/Unnamed2964. All rights reserved. <del>😈Most lefts and centers also reserved.</del>
               </Text>
             </Stack>
