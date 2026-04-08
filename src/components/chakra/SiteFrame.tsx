@@ -34,7 +34,7 @@ function isActiveLink(href: string, currentPath: string) {
 export function SiteFrame({ children, currentPath, mainMaxW = "6xl" }: SiteFrameProps) {
   return (
     <Provider>
-      <Box minH="100vh" bg="#f5f8fc">
+      <Box minH="100vh" bg="white">
         <Box
           as="header"
           position="sticky"

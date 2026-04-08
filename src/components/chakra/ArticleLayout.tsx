@@ -24,13 +24,13 @@ export function ArticleLayout({
     <SiteFrame currentPath={currentPath} mainMaxW="5xl">
       <Stack as="article" gap="10">
         {heroImage && (
-          <Box overflow="hidden" rounded="3xl" boxShadow="lg">
+          <Box overflow="hidden" rounded="3xl">
             <Image src={heroImage.src} alt="" w="full" maxH="32rem" objectFit="cover" />
           </Box>
         )}
 
-        <Stack gap="6" maxW="42rem" mx="auto" w="full">
-          <Stack gap="2" textAlign="center">
+        <Stack gap="6" maxW="48rem" mx="auto" w="full">
+          <Stack gap="3" align="start" textAlign="left">
             <Text color="gray.500" fontWeight="600">
               {pubDate}
             </Text>
@@ -39,96 +39,166 @@ export function ArticleLayout({
                 Last updated on {updatedDate}
               </Text>
             )}
-            <Heading as="h1" size="2xl" letterSpacing="tight">
+            <Heading
+              as="h1"
+              fontSize={{ base: "4xl", md: "6xl" }}
+              fontWeight="700"
+              lineHeight={{ base: 1.2, md: 1.15 }}
+              letterSpacing="tight"
+            >
               {title}
             </Heading>
+            <Box h="3px" w={{ base: "5rem", md: "6.5rem" }} rounded="full" bg="cyan.200" />
           </Stack>
-
-          <Box h="1px" bg="blackAlpha.200" />
 
           <Box
             color="gray.700"
             className="prose"
+            fontSize={{ base: "lg", md: "xl" }}
+            lineHeight="tall"
             css={{
-              fontSize: "1.05rem",
-              lineHeight: 1.85,
-              "& > :first-child": { marginTop: 0 },
-              "& p": { marginBottom: "1.75rem" },
-              "& h2": {
-                marginTop: "3.5rem",
+              wordBreak: "break-word",
+              "& > :first-of-type": { marginTop: 0 },
+              "& > :last-child": { marginBottom: 0 },
+              "& p": { marginTop: 0, marginBottom: "1rem" },
+              "& h1": {
+                marginTop: "1.4em",
                 marginBottom: "1rem",
-                fontSize: "2rem",
-                fontWeight: 800,
-                lineHeight: 1.2,
-                letterSpacing: "-0.03em",
-                color: "#111827",
+                paddingBottom: "0.35em",
+                fontSize: "2.2em",
+                fontWeight: 700,
+                lineHeight: 1.24,
+                borderBottomWidth: "1px",
+                borderBottomStyle: "solid",
+                borderBottomColor: "var(--chakra-colors-border-muted)",
+              },
+              "& h2": {
+                marginTop: "1.32em",
+                marginBottom: "1rem",
+                paddingBottom: "0.3em",
+                fontSize: "1.95em",
+                fontWeight: 600,
+                lineHeight: 1.32,
+                borderBottomWidth: "1px",
+                borderBottomStyle: "solid",
+                borderBottomColor: "var(--chakra-colors-border-muted)",
               },
               "& h3": {
-                marginTop: "2.75rem",
-                marginBottom: "0.9rem",
-                fontSize: "1.55rem",
-                fontWeight: 750,
-                lineHeight: 1.25,
-                letterSpacing: "-0.02em",
-                color: "#172554",
+                marginTop: "1.26em",
+                marginBottom: "1rem",
+                fontSize: "1.65em",
+                fontWeight: 600,
+                lineHeight: 1.42,
               },
               "& h4": {
-                marginTop: "2.25rem",
-                marginBottom: "0.75rem",
-                fontSize: "1.2rem",
-                fontWeight: 700,
-                lineHeight: 1.3,
-                color: "#1f2937",
+                marginTop: "1.2em",
+                marginBottom: "1rem",
+                fontSize: "1.38em",
+                fontWeight: 600,
+                lineHeight: 1.52,
               },
-              "& ul, & ol": { paddingInlineStart: "1.5rem", marginBottom: "1.75rem" },
-              "& li": { marginBottom: "0.5rem" },
+              "& h5, & h6": {
+                marginTop: "1.12em",
+                marginBottom: "1rem",
+                fontSize: "1.18em",
+                fontWeight: 600,
+                lineHeight: 1.625,
+              },
+              "& ul, & ol": {
+                marginTop: 0,
+                marginBottom: "1rem",
+                paddingInlineStart: "2em",
+              },
+              "& ul ul, & ul ol, & ol ol, & ol ul": {
+                marginTop: 0,
+                marginBottom: 0,
+              },
+              "& li": { marginTop: "0.25em" },
+              "& li > p": { marginTop: "0.25em", marginBottom: "0.25em" },
               "& a": {
-                color: "#0f766e",
+                color: "cyan.700",
+                textDecoration: "none",
+              },
+              "& a:hover": {
+                color: "cyan.800",
                 textDecoration: "underline",
-                textUnderlineOffset: "0.18em",
               },
               "& strong": {
-                fontWeight: 800,
-                color: "#111827",
+                fontWeight: 600,
+              },
+              "& table": {
+                display: "block",
+                width: "max-content",
+                maxWidth: "100%",
+                overflowX: "auto",
+                marginTop: 0,
+                marginBottom: "1rem",
+                borderSpacing: 0,
+                borderCollapse: "collapse",
+              },
+              "& th, & td": {
+                padding: "6px 13px",
+                borderWidth: "1px",
+                borderStyle: "solid",
+                borderColor: "var(--chakra-colors-border-muted)",
+              },
+              "& tr": {
+                backgroundColor: "var(--chakra-colors-bg)",
+                borderTopWidth: "1px",
+                borderTopStyle: "solid",
+                borderTopColor: "var(--chakra-colors-border-muted)",
+              },
+              "& tr:nth-of-type(2n)": {
+                backgroundColor: "var(--chakra-colors-bg-subtle)",
               },
               "& blockquote": {
-                marginBlock: "2rem",
-                paddingInline: "1.25rem",
-                borderLeft: "4px solid #67e8f9",
-                color: "#334155",
-                fontSize: "1.1rem",
-                fontStyle: "italic",
-                backgroundColor: "rgba(255, 255, 255, 0.7)",
+                marginTop: 0,
+                marginBottom: "1rem",
+                paddingInline: "1em",
+                color: "var(--chakra-colors-fg-muted)",
+                borderLeftWidth: "0.25em",
+                borderLeftStyle: "solid",
+                borderLeftColor: "var(--chakra-colors-border-muted)",
+              },
+              "& blockquote > :first-of-type": {
+                marginTop: 0,
+              },
+              "& blockquote > :last-child": {
+                marginBottom: 0,
               },
               "& :not(pre) > code": {
-                paddingInline: "0.35rem",
-                paddingBlock: "0.15rem",
-                borderRadius: "0.35rem",
-                fontSize: "0.92em",
-                color: "#155e75",
-                backgroundColor: "rgba(207, 250, 254, 0.9)",
+                padding: "0.2em 0.4em",
+                margin: 0,
+                borderRadius: "6px",
+                fontSize: "0.875em",
+                backgroundColor: "var(--chakra-colors-bg-muted)",
               },
               "& pre": {
                 overflowX: "auto",
-                marginBlock: "2rem",
-                padding: "1.25rem",
-                borderRadius: "1rem",
-                fontSize: "0.95rem",
-                lineHeight: 1.7,
-                backgroundColor: "#0f172a",
-                color: "#e2e8f0",
+                marginTop: 0,
+                marginBottom: "1rem",
+                padding: "16px",
+                borderRadius: "6px",
+                fontSize: "0.9em",
+                lineHeight: 1.45,
+                backgroundColor: "var(--chakra-colors-bg-subtle)",
               },
               "& pre code": {
                 backgroundColor: "transparent",
                 color: "inherit",
                 padding: 0,
+                fontSize: "inherit",
               },
               "& hr": {
-                marginBlock: "2.5rem",
+                height: "0.25em",
+                margin: "24px 0",
                 border: "0",
-                borderTop: "1px solid rgba(15, 23, 42, 0.12)",
+                backgroundColor: "var(--chakra-colors-border-muted)",
               },
-              "& img": { borderRadius: "16px", boxShadow: "var(--box-shadow)" },
+              "& img": {
+                maxWidth: "100%",
+                borderRadius: "6px",
+              },
             }}
           >
             {children}
