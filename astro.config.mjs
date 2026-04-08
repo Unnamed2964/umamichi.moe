@@ -3,6 +3,7 @@
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
+import remarkGfm from 'remark-gfm';
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 
@@ -16,7 +17,7 @@ export default defineConfig({
   integrations: [mdx(), sitemap(), react()],
   adapter: cloudflare(),
   markdown: {
-    remarkPlugins: [remarkMath],
+    remarkPlugins: [remarkGfm, remarkMath],
     rehypePlugins: [rehypeKatex],
   },
 });
