@@ -7,6 +7,12 @@ type Props = CollectionEntry<'blog'>['data'];
 
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 const currentPath = Astro.url.pathname;
+const formattedPubDate = pubDate
+	? new Intl.DateTimeFormat('en', { dateStyle: 'medium' }).format(pubDate)
+	: undefined;
+const formattedUpdatedDate = updatedDate
+	? new Intl.DateTimeFormat('en', { dateStyle: 'medium' }).format(updatedDate)
+	: undefined;
 ---
 
 <html lang="en">
@@ -18,8 +24,8 @@ const currentPath = Astro.url.pathname;
 		<ArticleLayout
 			currentPath={currentPath}
 			title={title}
-			pubDate={new Intl.DateTimeFormat('en', { dateStyle: 'medium' }).format(pubDate)}
-			updatedDate={updatedDate ? new Intl.DateTimeFormat('en', { dateStyle: 'medium' }).format(updatedDate) : undefined}
+			pubDate={formattedPubDate}
+			updatedDate={formattedUpdatedDate}
 			heroImage={heroImage ? { src: heroImage.src } : undefined}
 		>
 			<slot />

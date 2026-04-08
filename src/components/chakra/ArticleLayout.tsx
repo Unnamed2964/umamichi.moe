@@ -5,7 +5,7 @@ import { SiteFrame } from "./SiteFrame"
 type ArticleLayoutProps = PropsWithChildren<{
   currentPath: string
   title: string
-  pubDate: string
+  pubDate?: string
   updatedDate?: string
   heroImage?: {
     src: string
@@ -31,9 +31,11 @@ export function ArticleLayout({
 
         <Stack gap="6" maxW="48rem" mx="auto" w="full">
           <Stack gap="3" align="start" textAlign="left">
-            <Text color="gray.500" fontWeight="600">
-              {pubDate}
-            </Text>
+            {pubDate && (
+              <Text color="gray.500" fontWeight="600">
+                {pubDate}
+              </Text>
+            )}
             {updatedDate && (
               <Text color="gray.500" fontSize="sm" fontStyle="italic">
                 Last updated on {updatedDate}
