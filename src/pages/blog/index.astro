@@ -11,8 +11,10 @@ const posts = (await getCollection('blog')).sort(
 const postCards = posts.map((post) => ({
 	id: post.id,
 	title: post.data.title,
-	pubDate: new Intl.DateTimeFormat('en', {
-		dateStyle: 'medium',
+	pubDate: new Intl.DateTimeFormat('zh-CN', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
 	}).format(post.data.pubDate),
 	heroImage: post.data.heroImage
 		? {

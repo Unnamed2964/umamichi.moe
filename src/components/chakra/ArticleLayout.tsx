@@ -21,15 +21,15 @@ export function ArticleLayout({
   heroImage,
 }: ArticleLayoutProps) {
   return (
-    <SiteFrame currentPath={currentPath} mainMaxW="5xl">
+    <SiteFrame currentPath={currentPath} mainMaxW="4xl">
       <Stack as="article" gap="10">
         {heroImage && (
-          <Box overflow="hidden" rounded="3xl">
-            <Image src={heroImage.src} alt="" w="full" maxH="32rem" objectFit="cover" />
+          <Box overflow="hidden" rounded="2xl">
+            <Image src={heroImage.src} alt="" w="full" maxH="20rem" objectFit="cover" />
           </Box>
         )}
 
-        <Stack gap="6" maxW="48rem" mx="auto" w="full">
+        <Stack gap="6" mx="auto" w="full">
           <Stack gap="3" align="start" textAlign="left">
             {pubDate && (
               <Text color="gray.500" fontWeight="600">
@@ -56,8 +56,8 @@ export function ArticleLayout({
           <Box
             color="gray.700"
             className="prose"
-            fontSize={{ base: "lg", md: "xl" }}
-            lineHeight="tall"
+            fontSize="var(--site-content-font-size)"
+            lineHeight="var(--site-content-line-height)"
             css={{
               wordBreak: "break-word",
               "& > :first-of-type": { marginTop: 0 },
