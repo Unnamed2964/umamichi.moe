@@ -5,9 +5,31 @@ pubDate: 'Apr. 06 2026'
 heroImage: '../../assets/adachi_doll.webp'
 ---
 
+# h1
+
+## h2
+
+### h3
+
+#### h4
+
+##### h5
+
+###### h6
+
+正文
+
 The blog is under construction.
 
-test of mathjax: 
+> （nonsense example texts）
+
+为此改造必须找到一个解决方案，解决上述问题。另外，从长远方面考虑，由于硬件和操作系统发展日新月异，未来还将面临硬件更新以及操作系统版本陈旧的问题，还需要进一步确保在将来更新升级硬件和操作系统的可行性。
+
+为了解决上述一系列问题，最终形成了应用虚拟机技术的改造方案。将牵引供电监控系统升级成新软件版本（诊断系统软件仍采用旧版本），并在虚拟计算机环境中运行而不依赖于将来硬件的变化，这样，在未来系统可以很容易地升级硬件版本。并且，那些没有升级新版本的系统软件或在新操作系统下无许可的其它系统软件，也可以在虚拟计算机环境中旧的操作系统下运行使用。
+
+**GitHub**: [Unnamed2964's GitHub Homepage](https://github.com/Unnamed2964)
+
+## test of mathjax: 
 
 $\cfrac{2}{\cfrac{1}{a} + \cfrac{1}{b}} \leq \sqrt{ab} \leq \cfrac{a + b}{2} \leq \sqrt{\cfrac{a^2+b^2}{2}}$
 
@@ -20,7 +42,11 @@ I_3 =
 \end{bmatrix}
 $$
 
-test of code block:
+## test of quotes:
+
+> 实现铁路“跨越式”发展！
+
+## test of code block:
 
 ```c++
 // some nonsense code
@@ -39,7 +65,7 @@ std::cout << sum << std::endl;
 
 Inductive Odd : nat -> Type :=
   | odd_1: Odd 1
-  | odd_S_S_n: forall (n : nat), Odd n -> Odd (S (S n))
+  | odd_S_S_n: forall (n : nat)， Odd n -> Odd (S (S n))
   end.
 
 Example 0_is_not_odd : Odd 0 -> False.
@@ -55,9 +81,26 @@ $global:Threshold = 80
 function Check-CPU {
     $usage = (Get-Counter '\Processor(_Total)\% Processor Time').CounterSamples[0].CookedValue
     if ($usage -gt $global:Threshold) {
-        Write-Output "CPU 使用率过高：$([math]::Round($usage, 2))%"
+        Write-Output "CPU 使用率过高：$([math]::Round($usage， 2))%"
     } else {
-        Write-Output "CPU 使用率正常：$([math]::Round($usage, 2))%"
+        Write-Output "CPU 使用率正常：$([math]::Round($usage， 2))%"
     }
 }
 ```
+
+## Comparison of Utau Charactors
+
+|        | 重音テト | 呗音ウタ     | 桃音モモ                                     | 足立レイ   |
+| ------ | -------- | ------------ | -------------------------------------------- | ---------- |
+| 生日   | 4.1      | 2.5/3.6      | 5.22                                         | 1.1        |
+| 物种   | 奇美拉   | 人类         | 机器人                                       | 机器人     |
+| 性格   | 傲娇     | 无口         | 温柔                                         | 笨蛋       |
+| 代表物 | 法棍     | 火箭推进榴弹 | 扫帚、鸡毛掸子等清洁工具、锅和勺子等做菜工具 | 炸鸡和橘子 |
+
+> [!WARNING]
+>
+> ###### 当心奇美拉
+
+> [!CAUTION]
+>
+> 重音テト认识所有人
