@@ -108,13 +108,53 @@ export function ArticleLayout({
                 marginTop: 0,
                 marginBottom: "1rem",
                 paddingInlineStart: "2em",
+                listStylePosition: "outside",
               },
-              "& ul ul, & ul ol, & ol ol, & ol ul": {
-                marginTop: 0,
+              "& ul": {
+                listStyleType: "disc",
+              },
+              "& ol": {
+                listStyleType: "decimal",
+              },
+              "& ul ul": {
+                marginTop: "0.35rem",
+                marginBottom: 0,
+                listStyleType: "circle",
+              },
+              "& ul ul ul": {
+                listStyleType: "square",
+              },
+              "& ol ol": {
+                marginTop: "0.35rem",
+                marginBottom: 0,
+                listStyleType: "lower-alpha",
+              },
+              "& ol ol ol": {
+                listStyleType: "lower-roman",
+              },
+              "& ul ol, & ol ul": {
+                marginTop: "0.35rem",
                 marginBottom: 0,
               },
               "& li": { marginTop: "0.25em" },
               "& li > p": { marginTop: "0.25em", marginBottom: "0.25em" },
+              "& li::marker": {
+                color: "var(--chakra-colors-fg-muted)",
+              },
+              "& .contains-task-list": {
+                paddingInlineStart: 0,
+                listStyle: "none",
+              },
+              "& .task-list-item": {
+                listStyle: "none",
+              },
+              "& .task-list-item::marker": {
+                content: '""',
+              },
+              "& .task-list-item input": {
+                marginInlineEnd: "0.6em",
+                verticalAlign: "middle",
+              },
               "& a": {
                 color: "cyan.700",
                 textDecoration: "none",
