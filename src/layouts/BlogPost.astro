@@ -13,9 +13,16 @@ type LayoutData = {
 	};
 };
 
+type TocHeading = {
+	depth: number;
+	slug: string;
+	text: string;
+};
+
 const pageData: LayoutData = 'frontmatter' in Astro.props
 	? Astro.props.frontmatter
 	: Astro.props;
+const headings = 'headings' in Astro.props ? (Astro.props.headings as TocHeading[]) : undefined;
 
 const title = pageData.title ?? SITE_TITLE;
 const description = pageData.description ?? SITE_DESCRIPTION;
@@ -45,6 +52,7 @@ const formattedUpdatedDate = updatedDate
 	<body>
 		<ArticleLayout
 			currentPath={currentPath}
+			headings={headings}
 			title={title}
 			pubDate={formattedPubDate}
 			updatedDate={formattedUpdatedDate}

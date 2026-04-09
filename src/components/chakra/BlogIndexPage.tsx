@@ -23,7 +23,7 @@ type BlogIndexPageProps = {
 
 export function BlogIndexPage({ posts }: BlogIndexPageProps) {
   return (
-    <SiteFrame currentPath="/blog" mainMaxW="4xl">
+    <SiteFrame currentPath="/blog">
       <Stack gap="8" fontSize="var(--site-content-font-size)" lineHeight="var(--site-content-line-height)">
         <ArticleHeader
           title="文章与笔记"

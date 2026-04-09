@@ -1,9 +1,10 @@
 import type { PropsWithChildren } from "react"
-import { Stack } from "@chakra-ui/react"
+import { Box, Stack } from "@chakra-ui/react"
 import { ArticleContent } from "./ArticleContent"
 import { ArticleHeader } from "./ArticleHeader"
 import { ArticleHeroImage } from "./ArticleHeroImage"
-import { SiteFrame } from "./SiteFrame"
+import { ArticleToc, type ArticleTocHeading } from "./ArticleToc"
+import { SiteFrame, SITE_MAIN_MAX_W } from "./SiteFrame"
 
 type ArticleLayoutProps = PropsWithChildren<{
   currentPath: string
@@ -13,6 +14,7 @@ type ArticleLayoutProps = PropsWithChildren<{
   heroImage?: {
     src: string
   }
+  headings?: ArticleTocHeading[]
 }>
 
 export function ArticleLayout({
@@ -22,18 +24,38 @@ export function ArticleLayout({
   pubDate,
   updatedDate,
   heroImage,
+  headings = [],
 }: ArticleLayoutProps) {
+  const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3)
+  const hasToc = tocHeadings.length > 0
+
   return (
-    <SiteFrame currentPath={currentPath} mainMaxW="4xl">
-      <Stack as="article" gap="10">
-        <Stack gap="6" mx="auto" w="full">
-          <ArticleHeader title={title} pubDate={pubDate} updatedDate={updatedDate} />
+    <SiteFrame currentPath={currentPath}>
+      <Box maxW={SITE_MAIN_MAX_W} mx="auto" position="relative">
+        {hasToc && (
+          <Box
+            as="aside"
+            display={{ base: "none", xl: "block" }}
+            position="fixed"
+            top="calc(72px + 2rem)"
+            left="max(1rem, calc(50vw - 24rem - 15rem - 1.5rem))"
+            w="15rem"
+            zIndex="1"
+          >
+            <ArticleToc headings={tocHeadings} />
+          </Box>
+        )}
 
-          {heroImage && <ArticleHeroImage src={heroImage.src} />}
+        <Stack as="article" gap="10" w="full">
+          <Stack gap="6" w="full">
+            <ArticleHeader title={title} pubDate={pubDate} updatedDate={updatedDate} />
 
-          <ArticleContent>{children}</ArticleContent>
+            {heroImage && <ArticleHeroImage src={heroImage.src} />}
+
+            <ArticleContent>{children}</ArticleContent>
+          </Stack>
         </Stack>
-      </Stack>
+      </Box>
     </SiteFrame>
   )
 }
