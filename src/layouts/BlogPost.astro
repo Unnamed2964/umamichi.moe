@@ -1,6 +1,7 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
 import { ArticleLayout } from '../components/chakra/ArticleLayout';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 type LayoutData = {
 	title?: string;
@@ -16,7 +17,9 @@ const pageData: LayoutData = 'frontmatter' in Astro.props
 	? Astro.props.frontmatter
 	: Astro.props;
 
-const { title, description, pubDate, updatedDate, heroImage } = pageData;
+const title = pageData.title ?? SITE_TITLE;
+const description = pageData.description ?? SITE_DESCRIPTION;
+const { pubDate, updatedDate, heroImage } = pageData;
 const currentPath = Astro.url.pathname;
 const formattedPubDate = pubDate
 	? new Intl.DateTimeFormat('zh-CN', {
@@ -34,7 +37,7 @@ const formattedUpdatedDate = updatedDate
 	: undefined;
 ---
 
-<html lang="en">
+<html lang="zh-CN">
 	<head>
 		<BaseHead title={title} description={description} />
 	</head>

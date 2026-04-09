@@ -5,6 +5,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react"
+import { ArticleHeader } from "./ArticleHeader"
 import { SiteFrame } from "./SiteFrame"
 
 type BlogCard = {
@@ -24,30 +25,13 @@ export function BlogIndexPage({ posts }: BlogIndexPageProps) {
   return (
     <SiteFrame currentPath="/blog" mainMaxW="4xl">
       <Stack gap="8" fontSize="var(--site-content-font-size)" lineHeight="var(--site-content-line-height)">
-        <Stack gap="3">
-          <Text
-            display="inline-flex"
-            px="3"
-            py="1"
-            rounded="full"
-            bg="cyan.50"
-            color="cyan.800"
-            fontSize="sm"
-            fontWeight="700"
-            letterSpacing="wide"
-            maxW="9rem"
-          >
-            Blog Archive
-          </Text>
-          <Text as="h1" fontSize={{ base: "2.4em", md: "2.8em" }} fontWeight="700" lineHeight={{ base: 1.2, md: 1.15 }} letterSpacing="tight">
-            Writing and notes
-          </Text>
-          <Text color="gray.600">
-            A list of posts published on the site, newest first.
-          </Text>
-        </Stack>
-        
-
+        <ArticleHeader
+          title="文章与笔记"
+          description="博客归档"
+        />
+        <Text color="gray.600">
+          这里收录了本站发布的文章，按发布时间倒序排列。
+        </Text>
         <Stack gap="0" borderTopWidth="1px" borderColor="blackAlpha.100">
           {posts.map((post) => (
             <LinkBox
