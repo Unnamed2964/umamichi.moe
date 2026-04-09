@@ -1,5 +1,4 @@
 ---
-layout: ../layouts/BlogPost.astro
 title: Umamichi 的博客
 description: 欢迎来到 Umamichi 的网站！
 ---
