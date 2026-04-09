@@ -1,7 +1,7 @@
 ---
-title: 'The blog is under construction.'
-description: 'Lorem ipsum dolor sit amet'
-pubDate: 'Apr. 06 2026'
+title: '博客仍在建设中'
+description: '一篇用于展示排版效果的测试文章'
+pubDate: '2026-04-06'
 ---
 
 # h1
@@ -18,17 +18,17 @@ pubDate: 'Apr. 06 2026'
 
 正文
 
-The blog is under construction.
+博客仍在建设中。
 
-> （nonsense example texts）
+> （以下为排版示例文本）
 
 为此改造必须找到一个解决方案，解决上述问题。另外，从长远方面考虑，由于硬件和操作系统发展日新月异，未来还将面临硬件更新以及操作系统版本陈旧的问题，还需要进一步确保在将来更新升级硬件和操作系统的可行性。
 
 为了解决上述一系列问题，最终形成了应用虚拟机技术的改造方案。将牵引供电监控系统升级成新软件版本（诊断系统软件仍采用旧版本），并在虚拟计算机环境中运行而不依赖于将来硬件的变化，这样，在未来系统可以很容易地升级硬件版本。并且，那些没有升级新版本的系统软件或在新操作系统下无许可的其它系统软件，也可以在虚拟计算机环境中旧的操作系统下运行使用。
 
-**GitHub**: [Unnamed2964's GitHub Homepage](https://github.com/Unnamed2964)
+**GitHub**: [Unnamed2964 的 GitHub 主页](https://github.com/Unnamed2964)
 
-## test of mathjax: 
+## MathJax 测试
 
 $\cfrac{2}{\cfrac{1}{a} + \cfrac{1}{b}} \leq \sqrt{ab} \leq \cfrac{a + b}{2} \leq \sqrt{\cfrac{a^2+b^2}{2}}$
 
@@ -41,14 +41,14 @@ I_3 =
 \end{bmatrix}
 $$
 
-## test of quotes:
+## 引用测试
 
 > 实现铁路**“跨越式”**发展！
 
-## test of code block:
+## 代码块测试
 
 ```c++
-// some nonsense code
+// 示例代码
 int sum = 0;
 for (int i = 0; i < 100; i++) {
     if (i % 2 == 0)
@@ -73,7 +73,7 @@ Proof.
 ```
 
 ```powershell
-# some powershell script copy from somewhere else
+# 一段示例 PowerShell 脚本
 
 $global:Threshold = 80
 
@@ -87,7 +87,7 @@ function Check-CPU {
 }
 ```
 
-## Comparison of Utau Charactors
+## Utau 角色对比
 
 |        | 重音テト | 呗音ウタ     | 桃音モモ                                     | 足立レイ   |
 | ------ | -------- | ------------ | -------------------------------------------- | ---------- |

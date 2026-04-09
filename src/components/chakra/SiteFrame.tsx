@@ -48,7 +48,7 @@ export function SiteFrame({ children, currentPath, mainMaxW = "6xl" }: SiteFrame
         >
           <Container maxW="6xl" px={{ base: 4, md: 6 }}>
             <Flex minH="72px" align="center" justify="space-between" gap="6" wrap="wrap">
-              <Heading as="h1" size="xl" letterSpacing="tight">
+              <Heading as="h1" size="lg" letterSpacing="tight">
                 <Link href="/" _hover={{ textDecoration: "none", color: "cyan.700" }}>
                   {SITE_TITLE}
                 </Link>
@@ -112,8 +112,24 @@ export function SiteFrame({ children, currentPath, mainMaxW = "6xl" }: SiteFrame
         >
           <Container maxW="6xl" px={{ base: 4, md: 6 }} py="10">
             <Stack gap="2" align="center" textAlign="center">
-              <Text color="gray.600" fontSize="lg">
-                © {new Date().getFullYear()} Umamichi/Unnamed2964. All rights reserved. <del>😈Most lefts and centers also reserved.</del>
+              <Text
+                color="gray.600"
+                fontSize="lg"
+                display="inline-flex"
+                alignItems="center"
+                gap="1"
+                flexWrap="wrap"
+                justifyContent="center"
+              >
+                <Box as="span">© {new Date().getFullYear()} Umamichi/Unnamed2964.</Box>
+                <Box as="span">Powered by</Box>
+                <Link href="https://astro.build/" target="_blank" rel="noreferrer" color="cyan.700">
+                  Astro
+                </Link>
+                <Box as="span">and</Box>
+                <Link href="https://chakra-ui.com/" target="_blank" rel="noreferrer" color="cyan.700">
+                  Chakra UI
+                </Link>
               </Text>
             </Stack>
           </Container>

@@ -1,9 +1,9 @@
 ---
 layout: ../layouts/BlogPost.astro
-title: Umamichi's blog
-description: Welcome to my website!
+title: Umamichi 的博客
+description: 欢迎来到 Umamichi 的网站！
 ---
 
-Welcome to my blog.
+欢迎来到我的博客。
 
-If you want to generate a Shanghai Metro lineid block referenced from a real shot of the Line 9 onboard map, visit [this tool](https://shmetro-idblock.umamichi.moe/).
+如果你想根据上海地铁 9 号线车载线路图的实拍图生成对应的 lineid 标识块，可以访问[这个工具](https://shmetro-idblock.umamichi.moe/)。
