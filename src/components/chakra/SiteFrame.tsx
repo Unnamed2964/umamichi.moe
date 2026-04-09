@@ -14,9 +14,10 @@ import { FaGithub, FaXTwitter } from "react-icons/fa6"
 import { Provider } from "../ui/provider"
 import { SITE_TITLE } from "../../consts"
 
+export const SITE_MAIN_MAX_W = "3xl"
+
 type SiteFrameProps = PropsWithChildren<{
   currentPath: string
-  mainMaxW?: string
 }>
 
 const navItems = [
@@ -35,7 +36,7 @@ function isActiveLink(href: string, currentPath: string) {
   return currentPath === href || currentPath.startsWith(`${href}/`)
 }
 
-export function SiteFrame({ children, currentPath, mainMaxW = "6xl" }: SiteFrameProps) {
+export function SiteFrame({ children, currentPath }: SiteFrameProps) {
   return (
     <Provider>
       <Box minH="100vh" bg="white">
@@ -107,7 +108,7 @@ export function SiteFrame({ children, currentPath, mainMaxW = "6xl" }: SiteFrame
 
         <Container
           as="main"
-          maxW={mainMaxW}
+          maxW={SITE_MAIN_MAX_W}
           px={{ base: 4, md: 6 }}
           py={{ base: 10, md: 14 }}
           css={{
