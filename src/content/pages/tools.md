@@ -1,5 +1,4 @@
 ---
-layout: ../layouts/BlogPost.astro
 title: 工具
 description: 常用工具与站外实用页面。
 ---

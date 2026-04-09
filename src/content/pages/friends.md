@@ -1,5 +1,4 @@
 ---
-layout: ../layouts/BlogPost.astro
 title: 友情链接
 description: 朋友们的网站与相关链接。
 ---
