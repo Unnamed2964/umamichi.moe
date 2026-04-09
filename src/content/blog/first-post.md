@@ -64,12 +64,11 @@ std::cout << sum << std::endl;
 
 Inductive Odd : nat -> Type :=
   | odd_1: Odd 1
-  | odd_S_S_n: forall (n : nat), Odd n -> Odd (S (S n))
-  end.
+  | odd_S_S_n: forall (n : nat), Odd n -> Odd (S (S n)).
 
-Example 0_is_not_odd : Odd 0 -> False.
+Example zero_is_not_odd : Odd 0 -> False.
 Proof.
-  inversion. Qed.
+  intro H. inversion H. Qed.
 ```
 
 ```powershell
