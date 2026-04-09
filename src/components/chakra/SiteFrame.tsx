@@ -119,7 +119,7 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
         <Container
           as="main"
           maxW={SITE_MAIN_MAX_W}
-          px={{ base: 4, md: 6 }}
+          px={{ base: 6, md: 8 }}
           py={{ base: 10, md: 14 }}
           css={{
             "--site-content-font-size": "var(--chakra-font-sizes-md)",
@@ -143,7 +143,7 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
             <Stack gap="2" align="center" textAlign="center">
               <Text
                 color="gray.600"
-                fontSize="lg"
+                fontSize={{ base: "md", md: "lg" }}
                 display="inline-flex"
                 alignItems="center"
                 gap="1"
