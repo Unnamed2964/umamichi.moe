@@ -5,10 +5,12 @@ import {
   Flex,
   Heading,
   HStack,
+  Icon,
   Link,
   Stack,
   Text,
 } from "@chakra-ui/react"
+import { FaGithub, FaXTwitter } from "react-icons/fa6"
 import { Provider } from "../ui/provider"
 import { SITE_TITLE } from "../../consts"
 
@@ -76,11 +78,27 @@ export function SiteFrame({ children, currentPath, mainMaxW = "6xl" }: SiteFrame
               </HStack>
 
               <HStack gap="4" color="gray.600" fontSize="sm">
-                <Link href="https://twitter.com/Umamichiz" target="_blank" rel="noreferrer">
-                  X
+              <Link
+                href="https://twitter.com/Umamichiz"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="X"
+                display="inline-flex"
+                alignItems="center"
+                _hover={{ color: "cyan.700" }}
+              >
+                <Icon as={FaXTwitter} boxSize="5" />
                 </Link>
-                <Link href="https://github.com/Unnamed2964" target="_blank" rel="noreferrer">
-                  GitHub
+              <Link
+                href="https://github.com/Unnamed2964"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="GitHub"
+                display="inline-flex"
+                alignItems="center"
+                _hover={{ color: "cyan.700" }}
+              >
+                <Icon as={FaGithub} boxSize="5" />
                 </Link>
               </HStack>
             </Flex>
