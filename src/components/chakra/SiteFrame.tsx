@@ -50,59 +50,69 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
           bg="white"
         >
           <Container maxW="6xl" px={{ base: 4, md: 6 }}>
-            <Flex minH="72px" align="center" justify="space-between" gap="6" wrap="wrap">
-              <Heading as="h1" size="lg" letterSpacing="tight">
-                <Link href="/" _hover={{ textDecoration: "none", color: "cyan.700" }}>
-                  {SITE_TITLE}
-                </Link>
-              </Heading>
+            <Stack gap={{ base: 3, md: 0 }} py={{ base: 3, md: 0 }}>
+              <Flex minH={{ base: "auto", md: "72px" }} direction={{ base: "column", md: "row" }} align={{ base: "stretch", md: "center" }} justify="space-between" gap={{ base: 3, md: 6 }}>
+                <Heading as="h1" size="lg" letterSpacing="tight" textAlign={{ base: "center", md: "left" }}>
+                  <Link href="/" _hover={{ textDecoration: "none", color: "cyan.700" }}>
+                    {SITE_TITLE}
+                  </Link>
+                </Heading>
 
-              <HStack gap={{ base: 1, md: 2 }} flexWrap="wrap">
-                {navItems.map((item) => {
-                  const active = isActiveLink(item.href, currentPath)
-                  return (
+                <Flex
+                  flex="1"
+                  align="center"
+                  justify={{ base: "center", md: "space-between" }}
+                  gap={{ base: 3, md: 6 }}
+                  direction={{ base: "column", sm: "row" }}
+                >
+                  <HStack gap={{ base: 1, md: 2 }} flexWrap="wrap" justify={{ base: "center", sm: "flex-start" }}>
+                    {navItems.map((item) => {
+                      const active = isActiveLink(item.href, currentPath)
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          px="3"
+                          py="2"
+                          rounded="full"
+                          fontWeight={active ? "700" : "500"}
+                          bg={active ? "cyan.50" : "transparent"}
+                          color={active ? "cyan.700" : "gray.700"}
+                          _hover={{ textDecoration: "none", bg: "blackAlpha.50" }}
+                        >
+                          {item.label}
+                        </Link>
+                      )
+                    })}
+                  </HStack>
+
+                  <HStack gap="4" color="gray.600" fontSize="sm" justify="center" flexShrink={0}>
                     <Link
-                      key={item.href}
-                      href={item.href}
-                      px="3"
-                      py="2"
-                      rounded="full"
-                      fontWeight={active ? "700" : "500"}
-                      bg={active ? "cyan.50" : "transparent"}
-                      color={active ? "cyan.700" : "gray.700"}
-                      _hover={{ textDecoration: "none", bg: "blackAlpha.50" }}
+                      href="https://twitter.com/Umamichiz"
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label="X"
+                      display="inline-flex"
+                      alignItems="center"
+                      _hover={{ color: "cyan.700" }}
                     >
-                      {item.label}
+                      <Icon as={FaXTwitter} boxSize="5" />
                     </Link>
-                  )
-                })}
-              </HStack>
-
-              <HStack gap="4" color="gray.600" fontSize="sm">
-              <Link
-                href="https://twitter.com/Umamichiz"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="X"
-                display="inline-flex"
-                alignItems="center"
-                _hover={{ color: "cyan.700" }}
-              >
-                <Icon as={FaXTwitter} boxSize="5" />
-                </Link>
-              <Link
-                href="https://github.com/Unnamed2964"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="GitHub"
-                display="inline-flex"
-                alignItems="center"
-                _hover={{ color: "cyan.700" }}
-              >
-                <Icon as={FaGithub} boxSize="5" />
-                </Link>
-              </HStack>
-            </Flex>
+                    <Link
+                      href="https://github.com/Unnamed2964"
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label="GitHub"
+                      display="inline-flex"
+                      alignItems="center"
+                      _hover={{ color: "cyan.700" }}
+                    >
+                      <Icon as={FaGithub} boxSize="5" />
+                    </Link>
+                  </HStack>
+                </Flex>
+              </Flex>
+            </Stack>
           </Container>
         </Box>
 
