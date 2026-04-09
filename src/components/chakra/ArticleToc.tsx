@@ -26,6 +26,10 @@ export function ArticleToc({ headings }: ArticleTocProps) {
       rounded="xl"
       bg="white"
       p="5"
+      maxH="calc(100vh - 72px - 4rem)"
+      overflowY="auto"
+      overflowX="hidden"
+      overscrollBehavior="contain"
     >
       <Stack gap="4">
         <Text fontSize="sm" fontWeight="700" letterSpacing="wide" color="gray.500">
