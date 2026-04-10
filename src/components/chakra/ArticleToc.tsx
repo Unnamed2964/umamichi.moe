@@ -26,7 +26,7 @@ export function ArticleToc({ headings }: ArticleTocProps) {
       rounded="xl"
       bg="white"
       p="5"
-      maxH="calc(100vh - 72px - 4rem)"
+      maxH="calc(100vh - var(--site-header-offset) - 4rem)"
       overflowY="auto"
       overflowX="hidden"
       overscrollBehavior="contain"

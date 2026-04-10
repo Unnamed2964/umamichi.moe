@@ -38,7 +38,7 @@ export function ArticleLayout({
             display={{ base: "none", xl: "block" }}
             position="fixed"
             top="calc(var(--site-header-offset) + 2rem)"
-            left="max(1rem, calc(50vw - 24rem - 15rem - 1.5rem))"
+            right="max(1rem, calc(50vw - 24rem - 15rem - 1.5rem))"
             w="15rem"
             zIndex="1"
           >
