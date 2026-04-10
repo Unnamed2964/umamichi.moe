@@ -20,11 +20,6 @@ export function ArticleHeader({ title, description, pubDate, updatedDate }: Arti
           最后更新于 {updatedDate}
         </Text>
       )}
-      {description && (
-        <Text color="gray.600" fontSize="sm" fontWeight="600" letterSpacing="wide">
-          {description}
-        </Text>
-      )}
       <Heading
         as="h1"
         fontSize={{ base: "4xl", md: "6xl" }}

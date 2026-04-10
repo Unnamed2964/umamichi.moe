@@ -27,7 +27,6 @@ export function BlogIndexPage({ posts }: BlogIndexPageProps) {
       <Stack gap="8" fontSize="var(--site-content-font-size)" lineHeight="var(--site-content-line-height)">
         <ArticleHeader
           title="文章与笔记"
-          description="博客归档"
         />
         <Text color="gray.600">
           这里收录了本站发布的文章，按发布时间倒序排列。
