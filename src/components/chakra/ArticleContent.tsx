@@ -13,7 +13,7 @@ export function ArticleContent({ children }: PropsWithChildren) {
         "& > :first-of-type": { marginTop: 0 },
         "& > :last-child": { marginBottom: 0 },
         "& h1, & h2, & h3, & h4, & h5, & h6": {
-          scrollMarginTop: "calc(72px + 1.5rem)",
+          scrollMarginTop: "calc(var(--site-header-offset) + 1.5rem)",
         },
         "& p": { marginTop: 0, marginBottom: "1rem" },
         "& h1": {
