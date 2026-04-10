@@ -1,3 +1,16 @@
 html {
-	scroll-padding-top: 72px;
+	--site-header-offset: 9.5rem;
+	scroll-padding-top: var(--site-header-offset);
+}
+
+@media screen and (min-width: 30rem) {
+	html {
+		--site-header-offset: 7rem;
+	}
+}
+
+@media screen and (min-width: 48rem) {
+	html {
+		--site-header-offset: 72px;
+	}
 }
