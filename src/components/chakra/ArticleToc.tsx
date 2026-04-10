@@ -21,15 +21,19 @@ export function ArticleToc({ headings }: ArticleTocProps) {
     <Box
       as="nav"
       aria-label="文章目录"
-      borderWidth="1px"
-      borderColor="blackAlpha.100"
       rounded="xl"
       bg="white"
-      p="5"
       maxH="calc(100vh - var(--site-header-offset) - 4rem)"
       overflowY="auto"
       overflowX="hidden"
       overscrollBehavior="contain"
+      css={{
+        scrollbarWidth: "none",
+        msOverflowStyle: "none",
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
+      }}
     >
       <Stack gap="4">
         <Text fontSize="sm" fontWeight="700" letterSpacing="wide" color="gray.500">
