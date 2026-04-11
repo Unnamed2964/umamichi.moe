@@ -122,6 +122,7 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
       <Box minH="100vh" bg="white">
         <Box
           as="header"
+          data-site-header
           position="sticky"
           top="0"
           zIndex="10"
