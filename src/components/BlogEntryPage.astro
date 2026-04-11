@@ -1,0 +1,19 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import BlogPost from '../layouts/BlogPost.astro';
+
+type Props = {
+	post: CollectionEntry<'blog'>;
+	postList: {
+		id: string;
+		title: string;
+	}[];
+};
+
+const { post, postList } = Astro.props;
+const { Content, headings } = await render(post);
+---
+
+<BlogPost {...post.data} headings={headings} postList={postList} currentPostId={post.id}>
+	<Content />
+</BlogPost>
