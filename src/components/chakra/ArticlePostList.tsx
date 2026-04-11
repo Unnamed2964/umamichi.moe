@@ -21,6 +21,8 @@ export function ArticlePostList({ posts, currentPostId }: ArticlePostListProps) 
       aria-label="文章列表"
       rounded="xl"
       bg="white"
+      borderWidth="1px"
+      borderColor="blackAlpha.100"
       maxH="calc(100vh - var(--site-header-offset) - 4rem)"
       overflowX="hidden"
       display="flex"
