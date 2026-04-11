@@ -20,17 +20,17 @@ type TocHeading = {
 };
 
 type PostListItem = {
+	href: string;
 	id: string;
 	title: string;
-	pubDate: string;
 };
 
 const pageData: LayoutData = 'frontmatter' in Astro.props
 	? Astro.props.frontmatter
 	: Astro.props;
 const headings = 'headings' in Astro.props ? (Astro.props.headings as TocHeading[]) : undefined;
-const postList = 'postList' in Astro.props ? (Astro.props.postList as PostListItem[]) : undefined;
-const currentPostId = 'currentPostId' in Astro.props ? (Astro.props.currentPostId as string) : undefined;
+const articleList = 'articleList' in Astro.props ? (Astro.props.articleList as PostListItem[]) : undefined;
+const currentEntryId = 'currentEntryId' in Astro.props ? (Astro.props.currentEntryId as string) : undefined;
 
 const title = pageData.title ?? SITE_TITLE;
 const description = pageData.description ?? SITE_DESCRIPTION;
@@ -59,8 +59,8 @@ const formattedUpdatedDate = updatedDate
 
 	<body>
 		<ArticleLayout
-			articleList={postList}
-			currentPostId={currentPostId}
+			articleList={articleList}
+			currentPostId={currentEntryId}
 			currentPath={currentPath}
 			headings={headings}
 			title={title}
