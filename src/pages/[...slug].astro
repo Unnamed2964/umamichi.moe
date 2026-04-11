@@ -1,0 +1,60 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BlogEntryPage from '../components/BlogEntryPage.astro';
+import CollectionPage from '../components/CollectionPage.astro';
+
+type RouteProps =
+	| {
+		kind: 'page';
+		entry: CollectionEntry<'pages'>;
+	  }
+	| {
+		kind: 'blog-post';
+		entry: CollectionEntry<'blog'>;
+		postList: { id: string; title: string }[];
+	  };
+
+export async function getStaticPaths() {
+	const [pages, posts] = await Promise.all([
+		getCollection('pages'),
+		getCollection('blog'),
+	]);
+
+	const sortedPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+	const postList = sortedPosts.map((entry) => ({
+		id: entry.id,
+		title: entry.data.title,
+	}));
+
+	const pagePaths = pages.map((entry) => ({
+		params: {
+			slug: entry.id === 'index' ? undefined : entry.id,
+		},
+		props: {
+			kind: 'page',
+			entry,
+		},
+	}));
+
+	const blogPaths = sortedPosts.map((entry) => ({
+		params: {
+			slug: `blog/${entry.id}`,
+		},
+		props: {
+			kind: 'blog-post',
+			entry,
+			postList,
+		},
+	}));
+
+	return [...pagePaths, ...blogPaths];
+}
+
+const props = Astro.props as RouteProps;
+---
+
+{props.kind === 'page' ? (
+	<CollectionPage page={props.entry} />
+) : (
+	<BlogEntryPage post={props.entry} postList={props.postList} />
+)}
