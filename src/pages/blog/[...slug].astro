@@ -13,8 +13,15 @@ type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
 const { Content, headings } = await render(post);
+const allPosts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const postList = allPosts.map((entry) => ({
+	id: entry.id,
+	title: entry.data.title,
+}));
 ---
 
-<BlogPost {...post.data} headings={headings}>
+<BlogPost {...post.data} headings={headings} postList={postList} currentPostId={post.id}>
 	<Content />
 </BlogPost>
