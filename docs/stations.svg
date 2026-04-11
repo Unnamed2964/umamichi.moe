@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg
+   width="131"
+   height="100"
+   viewBox="0 0 131 100"
+   xmlns="http://www.w3.org/2000/svg">
+  <path
+     d="m 110,97 c -9,0 -16,-7 -16,-16 v -17 c 0,-9 7,-16 16,-16 v 0 c 9,0 16,7 16,16 v 17 c 0,9 -7,16 -16,16 z"
+     stroke="#61cbf4"
+     stroke-width="7"
+     stroke-miterlimit="8"
+     fill="#ffffff"
+     fill-rule="evenodd" />
+  <path
+     d="m 110,38 c -9,0 -17,-8 -17,-17 0,-9 8,-17 17,-17 9,0 17,8 17,17 0,9 -8,17 -17,17 z"
+     stroke="#61cbf4"
+     stroke-width="9"
+     stroke-miterlimit="8"
+     fill="#ffffff"
+     fill-rule="evenodd" />
+  <path
+     d="m 23,96 c -11,0 -20,-9 -20,-20 v -53 c 0,-11 9,-20 20,-20 v 0 c 11,0 20,9 20,20 v 53 c 0,11 -9,20 -20,20 z"
+     stroke="#61cbf4"
+     stroke-width="7"
+     stroke-miterlimit="8"
+     fill="#ffffff"
+     fill-rule="evenodd" />
+  <rect
+     x="46"
+     y="0"
+     width="43"
+     height="100"
+     fill="#61cbf4"
+     />
+</svg>
