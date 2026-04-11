@@ -72,6 +72,26 @@ const formattedUpdatedDate = updatedDate
 		</ArticleLayout>
 
 		<script is:inline>
+			const header = document.querySelector('[data-site-header]');
+
+			if (header instanceof HTMLElement) {
+				const syncHeaderOffset = () => {
+					const headerHeight = Math.ceil(header.getBoundingClientRect().height);
+					document.documentElement.style.setProperty('--site-header-offset', `${headerHeight}px`);
+				};
+
+				syncHeaderOffset();
+
+				const observer = new ResizeObserver(() => {
+					syncHeaderOffset();
+				});
+
+				observer.observe(header);
+				window.addEventListener('resize', syncHeaderOffset, { passive: true });
+			}
+		</script>
+
+		<script is:inline>
 			const toc = document.querySelector('[data-toc]');
 			if (toc) {
 				const links = Array.from(toc.querySelectorAll('[data-toc-link]'));
