@@ -1,6 +1,7 @@
 import { Box, Link, Stack, Text } from "@chakra-ui/react"
 
 export type ArticlePostListItem = {
+  href: string
   id: string
   title: string
 }
@@ -57,7 +58,7 @@ export function ArticlePostList({ posts, currentPostId }: ArticlePostListProps) 
             return (
               <Link
                 key={post.id}
-                href={`/blog/${post.id}/`}
+                href={post.href}
                 aria-current={isCurrent ? "page" : undefined}
                 display="block"
                 color="gray.700"

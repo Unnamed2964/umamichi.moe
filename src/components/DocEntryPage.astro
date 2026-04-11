@@ -1,0 +1,17 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import BlogPost from '../layouts/BlogPost.astro';
+import type { DocListItem } from '../lib/docs';
+
+type Props = {
+	articleList?: DocListItem[];
+	entry: CollectionEntry<'docs'>;
+};
+
+const { articleList = [], entry } = Astro.props;
+const { Content, headings } = await render(entry);
+---
+
+<BlogPost {...entry.data} headings={headings} articleList={articleList} currentEntryId={entry.id}>
+	<Content />
+</BlogPost>
