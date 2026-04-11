@@ -20,13 +20,93 @@ type SiteFrameProps = PropsWithChildren<{
   currentPath: string
 }>
 
-const navItems = [
-  { href: "/", label: "首页" },
-  { href: "/blog", label: "文章" },
-  { href: "/tools", label: "工具" },
-  { href: "/friends", label: "友情链接" },
-  { href: "/about", label: "关于" },
+type NavIconKind = "normal" | "transfer" | "transfer-and-out-of-station-transfer"
+
+const navItems: ReadonlyArray<{
+  href: string
+  label: string
+  icon: NavIconKind
+}> = [
+  { href: "/", label: "首页", icon: "normal" },
+  { href: "/blog", label: "文章", icon: "normal" },
+  { href: "/tools", label: "工具", icon: "transfer" },
+  { href: "/friends", label: "友情链接", icon: "transfer-and-out-of-station-transfer" },
+  { href: "/about", label: "关于", icon: "normal" },
 ]
+
+function MetroNavIcon({ kind, active }: { kind: NavIconKind; active: boolean }) {
+  const accent = active ? "var(--chakra-colors-cyan-700)" : "var(--chakra-colors-cyan-500)"
+  const scale = 0.16
+  const iconStyle = {
+    display: "block",
+    overflow: "visible",
+  } as const
+
+  if (kind === "normal") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="44 0 47 100"
+        width={47 * scale}
+        height={100 * scale}
+        focusable="false"
+        style={iconStyle}
+      >
+        <rect x="46" y="0" width="43" height="100" fill={accent} />
+      </svg>
+    )
+  }
+
+  if (kind === "transfer") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="-0.5 -0.5 47 100"
+        width={47 * scale}
+        height={100 * scale}
+        focusable="false"
+        style={iconStyle}
+      >
+        <path
+          d="m 23,96 c -11,0 -20,-9 -20,-20 v -53 c 0,-11 9,-20 20,-20 v 0 c 11,0 20,9 20,20 v 53 c 0,11 -9,20 -20,20 z"
+          stroke={accent}
+          strokeWidth="7"
+          strokeMiterlimit="8"
+          fill="white"
+          fillRule="evenodd"
+        />
+      </svg>
+    )
+  }
+
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="88.5 -0.5 43 101"
+      width={43 * scale}
+      height={101 * scale}
+      focusable="false"
+      style={iconStyle}
+    >
+      <path
+        d="m 110,38 c -9,0 -17,-8 -17,-17 0,-9 8,-17 17,-17 9,0 17,8 17,17 0,9 -8,17 -17,17 z"
+        stroke={accent}
+        strokeWidth="9"
+        strokeMiterlimit="8"
+        fill="white"
+        fillRule="evenodd"
+      />
+      <path
+        d="m 110,97 c -9,0 -16,-7 -16,-16 v -17 c 0,-9 7,-16 16,-16 v 0 c 9,0 16,7 16,16 v 17 c 0,9 -7,16 -16,16 z"
+        stroke={accent}
+        strokeWidth="7"
+        strokeMiterlimit="8"
+        fill="white"
+        fillRule="evenodd"
+      />
+    </svg>
+  )
+}
 
 function isActiveLink(href: string, currentPath: string) {
   if (href === "/") {
@@ -72,6 +152,9 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                         <Link
                           key={item.href}
                           href={item.href}
+                          display="inline-flex"
+                          alignItems="center"
+                          gap="2"
                           px="3"
                           py="2"
                           rounded="full"
@@ -80,7 +163,18 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                           color={active ? "cyan.700" : "gray.700"}
                           _hover={{ textDecoration: "none", bg: "blackAlpha.50" }}
                         >
-                          {item.label}
+                          <Box
+                            as="span"
+                            display="inline-flex"
+                            alignItems="flex-end"
+                            justifyContent="center"
+                            flexShrink={0}
+                            minH="16.16px"
+                            lineHeight="0"
+                          >
+                            <MetroNavIcon kind={item.icon} active={active} />
+                          </Box>
+                          <Box as="span">{item.label}</Box>
                         </Link>
                       )
                     })}
