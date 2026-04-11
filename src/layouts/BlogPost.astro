@@ -60,5 +60,74 @@ const formattedUpdatedDate = updatedDate
 		>
 			<slot />
 		</ArticleLayout>
+
+		<script is:inline>
+			const toc = document.querySelector('[data-toc]');
+			if (toc) {
+				const links = Array.from(toc.querySelectorAll('[data-toc-link]'));
+				const headings = links
+					.map((link) => {
+						const slug = link.getAttribute('data-toc-link');
+						if (!slug) return null;
+
+						const heading = document.getElementById(slug);
+						if (!heading) return null;
+
+						return { slug, link, heading };
+					})
+					.filter(Boolean);
+
+				if (headings.length > 0) {
+					const setActive = (slug) => {
+						for (const item of headings) {
+							if (item.slug === slug) {
+								item.link.setAttribute('aria-current', 'location');
+								item.link.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+							} else {
+								item.link.removeAttribute('aria-current');
+							}
+						}
+					};
+
+					const pickActiveSlug = () => {
+						const headerOffset = Number.parseFloat(
+							getComputedStyle(document.documentElement).getPropertyValue('--site-header-offset'),
+						) || 0;
+						const activationY = headerOffset + 32;
+
+						let current = headings[0].slug;
+
+						for (const item of headings) {
+							if (item.heading.getBoundingClientRect().top <= activationY) {
+								current = item.slug;
+							} else {
+								break;
+							}
+						}
+
+						return current;
+					};
+
+					const refreshActive = () => setActive(pickActiveSlug());
+
+					const observer = new IntersectionObserver(
+						() => refreshActive(),
+						{
+							rootMargin: '0px 0px -70% 0px',
+							threshold: [0, 1],
+						},
+					);
+
+					for (const item of headings) {
+						observer.observe(item.heading);
+					}
+
+					window.addEventListener('hashchange', refreshActive);
+					window.addEventListener('resize', refreshActive, { passive: true });
+					document.addEventListener('scroll', refreshActive, { passive: true });
+					refreshActive();
+				}
+			}
+		</script>
 	</body>
 </html>
