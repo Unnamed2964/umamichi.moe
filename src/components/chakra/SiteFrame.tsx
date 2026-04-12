@@ -414,6 +414,8 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                             flexShrink={0}
                             minW="20px"
                             lineHeight="0"
+                            transform="rotate(90deg)"
+                            transformOrigin="center"
                           >
                             <MetroNavIcon kind={item.icon} active={active} />
                           </Box>
