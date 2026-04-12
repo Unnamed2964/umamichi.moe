@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   width="326"
+   height="103"
+   viewBox="0 0 326 103"
+   version="1.1"
+   id="stations-2"
+>
+   <rect
+      id="running-line"
+      x="0"
+      y="50"
+      width="326"
+      height="50"
+      fill="#d9d9d9"
+   />
+   <g id="out-of-station-transfer-and-out-of-station-transfer">
+      <path
+         d="m 294,4 c 7,0 13,6 13,13 0,8 -6,14 -13,14 -7,0 -13,-6 -13,-14 0,-7 6,-13 13,-13 z"
+         stroke="#84e291"
+         stroke-width="7"
+         stroke-miterlimit="8"
+         fill="#ffffff"
+         fill-rule="evenodd"
+      />
+      <path
+         d="m 294,39 c 7,0 13,6 13,13 0,8 -6,14 -13,14 -7,0 -13,-6 -13,-14 0,-7 6,-13 13,-13 z"
+         stroke="#84e291"
+         stroke-width="7"
+         stroke-miterlimit="8"
+         fill="#ffffff"
+         fill-rule="evenodd"
+      />
+      <path
+         d="m 294,74 c 7,0 13,6 13,13 0,7 -6,13 -13,13 -7,0 -13,-6 -13,-13 0,-7 6,-13 13,-13 z"
+         stroke="#84e291"
+         stroke-width="7"
+         stroke-miterlimit="8"
+         fill="#ffffff"
+         fill-rule="evenodd"
+      />
+   </g>
+   <g id="out-of-station-transfer">
+      <path
+         d="m 229,4 c 11,0 21,10 21,20 0,11 -10,21 -21,21 -11,0 -21,-10 -21,-21 0,-10 10,-20 21,-20 z"
+         stroke="#84e291"
+         stroke-width="7"
+         stroke-miterlimit="8"
+         fill="#ffffff"
+         fill-rule="evenodd"
+      />
+      <path
+         d="m 229,55 c 11,0 21,10 21,20 0,11 -10,21 -21,21 -11,0 -21,-10 -21,-21 0,-10 10,-20 21,-20 z"
+         stroke="#84e291"
+         stroke-width="7"
+         stroke-miterlimit="8"
+         fill="#ffffff"
+         fill-rule="evenodd"
+      />
+   </g>
+   <g id="transfer">
+      <path
+         d="m 164,4 c 11,0 20,9 20,20 v 53 c 0,11 -9,20 -20,20 -11,0 -20,-9 -20,-20 v -53 c 0,-11 9,-20 20,-20 z"
+         stroke="#61cbf4"
+         stroke-width="7"
+         stroke-miterlimit="8"
+         fill="#ffffff"
+         fill-rule="evenodd"
+      />
+   </g>
+   <g id="normal">
+      <path
+         d="M 120,100 H 77 V 0 H 120 Z"
+         fill="#61cbf4"
+         fill-rule="evenodd"
+      />
+   </g>
+   <g id="transfer-and-out-of-station-transfer">
+      <path
+         d="m 35,99 c -9,0 -16,-7 -16,-16 v -17 c 0,-9 7,-16 16,-16 9,0 16,7 16,16 v 17 c 0,9 -7,16 -16,16 z"
+         stroke="#84e291"
+         stroke-width="7"
+         stroke-miterlimit="8"
+         fill="#ffffff"
+         fill-rule="evenodd"
+      />
+      <path
+         d="m 35,38 c -8,0 -15,-7 -15,-16 0,-8 7,-15 15,-15 9,0 16,7 16,15 0,9 -7,16 -16,16 z"
+         stroke="#84e291"
+         stroke-width="7"
+         stroke-miterlimit="8"
+         fill="#ffffff"
+         fill-rule="evenodd"
+      />
+   </g>
+</svg>
