@@ -1,16 +1,18 @@
-import type { PropsWithChildren } from "react"
+import { type PropsWithChildren, useEffect, useState } from "react"
 import {
   Box,
+  CloseButton,
   Container,
   Flex,
   Heading,
   HStack,
   Icon,
+  IconButton,
   Link,
   Stack,
   Text,
 } from "@chakra-ui/react"
-import { FaGithub, FaXTwitter } from "react-icons/fa6"
+import { FaBars, FaGithub, FaXTwitter } from "react-icons/fa6"
 import { Provider } from "../ui/provider"
 import { SITE_TITLE } from "../../consts"
 
@@ -199,6 +201,34 @@ function isActiveLink(href: string, currentPath: string) {
 }
 
 export function SiteFrame({ children, currentPath }: SiteFrameProps) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) {
+      return
+    }
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsMobileMenuOpen(false)
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [isMobileMenuOpen])
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false)
+  }, [currentPath])
+
   return (
     <Provider>
       <Box minH="100vh" bg="white">
@@ -214,8 +244,43 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
         >
           <Container maxW="6xl" px={{ base: 4, md: 6 }}>
             <Stack gap={{ base: 3, md: 0 }} py={{ base: 3, md: 0 }}>
-              <Flex minH={{ base: "auto", md: "72px" }} direction={{ base: "column", md: "row" }} align={{ base: "stretch", md: "center" }} justify="space-between" gap={{ base: 3, md: 6 }}>
-                <Heading as="h1" size="lg" letterSpacing="tight" textAlign={{ base: "center", md: "left" }}>
+              <Flex
+                minH={{ base: "auto", md: "72px" }}
+                direction={{ base: "row", md: "row" }}
+                align="center"
+                justify="space-between"
+                gap={{ base: 3, md: 6 }}
+              >
+                <HStack display={{ base: "flex", md: "none" }} gap="3" flex="1" justify="flex-start" minW="0">
+                  <IconButton
+                    aria-label={isMobileMenuOpen ? "关闭菜单" : "打开菜单"}
+                    variant="ghost"
+                    rounded="full"
+                    size="sm"
+                    bg="white"
+                    color="gray.700"
+                    _hover={{ bg: "blackAlpha.50" }}
+                    _active={{ bg: "blackAlpha.100" }}
+                    onClick={() => setIsMobileMenuOpen((open) => !open)}
+                  >
+                    <Icon as={FaBars} boxSize="4" />
+                  </IconButton>
+
+                  <Heading
+                    as="h1"
+                    size="lg"
+                    letterSpacing="tight"
+                    textAlign="left"
+                    flex="1"
+                    minW="0"
+                  >
+                    <Link href="/" _hover={{ textDecoration: "none", color: "cyan.700" }}>
+                      {SITE_TITLE}
+                    </Link>
+                  </Heading>
+                </HStack>
+
+                <Heading as="h1" size="lg" letterSpacing="tight" textAlign="left" flex="0 0 auto" display={{ base: "none", md: "block" }}>
                   <Link href="/" _hover={{ textDecoration: "none", color: "cyan.700" }}>
                     {SITE_TITLE}
                   </Link>
@@ -224,11 +289,12 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                 <Flex
                   flex="1"
                   align="center"
-                  justify={{ base: "center", md: "space-between" }}
+                  justify="space-between"
                   gap={{ base: 3, md: 6 }}
-                  direction={{ base: "column", sm: "row" }}
+                  direction="row"
+                  display={{ base: "none", md: "flex" }}
                 >
-                  <HStack gap={{ base: 1, md: 2 }} flexWrap="wrap" justify={{ base: "center", sm: "flex-start" }}>
+                  <HStack gap={{ base: 1, md: 2 }} flexWrap="wrap" justify="flex-start">
                     {navItems.map((item) => {
                       const active = isActiveLink(item.href, currentPath)
                       return (
@@ -290,6 +356,110 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                 </Flex>
               </Flex>
             </Stack>
+          </Container>
+        </Box>
+
+        <Box
+          as="nav"
+          aria-label="移动端菜单"
+          position="fixed"
+          inset="0"
+          zIndex="20"
+          bg="white"
+          display={{ base: isMobileMenuOpen ? "block" : "none", md: "none" }}
+        >
+          <Container maxW="6xl" px="4" py="4" minH="100dvh">
+            <Flex direction="column" minH="calc(100dvh - 2rem)">
+              <Flex align="center" justify="flex-start" gap="3">
+                <CloseButton
+                  aria-label="关闭菜单"
+                  size="sm"
+                  rounded="full"
+                  color="gray.700"
+                  bg="white"
+                  _hover={{ bg: "blackAlpha.50" }}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                />
+
+                <Heading as="p" size="lg" letterSpacing="tight" textAlign="left">
+                  {SITE_TITLE}
+                </Heading>
+              </Flex>
+
+              <Flex flex="1" align="flex-start" justify="flex-start" px="2" pt="8">
+                <Stack as="ul" listStyleType="none" gap="3" w="full" maxW="sm" p="0" m="0" align="flex-start">
+                  {navItems.map((item) => {
+                    const active = isActiveLink(item.href, currentPath)
+                    return (
+                      <Box as="li" key={item.href}>
+                        <Link
+                          href={item.href}
+                          display="inline-flex"
+                          alignItems="center"
+                          gap="2"
+                          px="3"
+                          py="2"
+                          rounded="full"
+                          fontWeight={active ? "700" : "500"}
+                          bg={active ? "cyan.50" : "transparent"}
+                          color={active ? "cyan.700" : "gray.700"}
+                          _hover={{ textDecoration: "none", bg: "blackAlpha.50" }}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          <Box
+                            as="span"
+                            display="inline-flex"
+                            alignItems="center"
+                            justifyContent="center"
+                            flexShrink={0}
+                            minW="20px"
+                            lineHeight="0"
+                          >
+                            <MetroNavIcon kind={item.icon} active={active} />
+                          </Box>
+                          <Box as="span">{item.label}</Box>
+                        </Link>
+                      </Box>
+                    )
+                  })}
+                </Stack>
+              </Flex>
+
+              <HStack gap="4" justify="center" color="gray.600" pb="2">
+                <Link
+                  href="https://twitter.com/Umamichiz"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="X"
+                  display="inline-flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  boxSize="10"
+                  rounded="full"
+                  borderWidth="1px"
+                  borderColor="blackAlpha.200"
+                  _hover={{ color: "cyan.700", bg: "blackAlpha.50", textDecoration: "none" }}
+                >
+                  <Icon as={FaXTwitter} boxSize="4" />
+                </Link>
+                <Link
+                  href="https://github.com/Unnamed2964"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="GitHub"
+                  display="inline-flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  boxSize="10"
+                  rounded="full"
+                  borderWidth="1px"
+                  borderColor="blackAlpha.200"
+                  _hover={{ color: "cyan.700", bg: "blackAlpha.50", textDecoration: "none" }}
+                >
+                  <Icon as={FaGithub} boxSize="4" />
+                </Link>
+              </HStack>
+            </Flex>
           </Container>
         </Box>
 
