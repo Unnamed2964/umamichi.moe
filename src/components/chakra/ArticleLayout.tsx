@@ -5,7 +5,10 @@ import { ArticleHeader } from "./ArticleHeader"
 import { ArticleHeroImage } from "./ArticleHeroImage"
 import { ArticlePostList, type ArticlePostListItem } from "./ArticlePostList"
 import { ArticleToc, type ArticleTocHeading } from "./ArticleToc"
-import { SiteFrame, SITE_MAIN_MAX_W } from "./SiteFrame"
+import { SiteFrame, SITE_MAIN_HALF_W, SITE_MAIN_MAX_W } from "./SiteFrame"
+
+const ARTICLE_SIDEBAR_W = "12rem"
+const ARTICLE_SIDEBAR_GAP = "0.5rem"
 
 type ArticleLayoutProps = PropsWithChildren<{
   currentPath: string
@@ -44,8 +47,8 @@ export function ArticleLayout({
             display={{ base: "none", xl: "block" }}
             position="fixed"
             top="calc(var(--site-header-offset) + 2rem)"
-            left="max(1rem, calc(50vw - 24rem - 15rem - 1.5rem))"
-            w="15rem"
+            left={`max(1rem, calc(50vw - ${SITE_MAIN_HALF_W} - ${ARTICLE_SIDEBAR_W} - ${ARTICLE_SIDEBAR_GAP}))`}
+            w={ARTICLE_SIDEBAR_W}
             zIndex="1"
           >
             <ArticlePostList posts={articleList} currentPostId={currentPostId} />
@@ -58,8 +61,8 @@ export function ArticleLayout({
             display={{ base: "none", xl: "block" }}
             position="fixed"
             top="calc(var(--site-header-offset) + 2rem)"
-            right="max(1rem, calc(50vw - 24rem - 15rem - 1.5rem))"
-            w="15rem"
+            right={`max(1rem, calc(50vw - ${SITE_MAIN_HALF_W} - ${ARTICLE_SIDEBAR_W} - ${ARTICLE_SIDEBAR_GAP}))`}
+            w={ARTICLE_SIDEBAR_W}
             zIndex="1"
           >
             <ArticleToc headings={tocHeadings} />

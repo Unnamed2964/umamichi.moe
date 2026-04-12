@@ -14,7 +14,8 @@ import { FaGithub, FaXTwitter } from "react-icons/fa6"
 import { Provider } from "../ui/provider"
 import { SITE_TITLE } from "../../consts"
 
-export const SITE_MAIN_MAX_W = "3xl"
+export const SITE_MAIN_MAX_W = "4xl"
+export const SITE_MAIN_HALF_W = `calc(var(--chakra-sizes-${SITE_MAIN_MAX_W}) / 2)`
 
 type SiteFrameProps = PropsWithChildren<{
   currentPath: string
