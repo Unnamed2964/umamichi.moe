@@ -23,6 +23,7 @@ html {
 	--article-list-marker: var(--chakra-colors-fg-muted);
 	--article-link: var(--chakra-colors-cyan-700);
 	--article-link-hover: var(--chakra-colors-cyan-800);
+	--article-title-bar: var(--chakra-colors-cyan-200);
 	scroll-padding-top: var(--site-header-offset);
 }
 
@@ -51,6 +52,7 @@ html.dark {
 	--article-list-marker: #7d8590;
 	--article-link: var(--chakra-colors-cyan-300);
 	--article-link-hover: var(--chakra-colors-cyan-200);
+	--article-title-bar: var(--chakra-colors-cyan-700);
 }
 
 body {
