@@ -1,0 +1,117 @@
+<script is:inline>
+	const storageKey = 'site-theme';
+	const themeButtons = Array.from(document.querySelectorAll('[data-site-theme-toggle]'));
+	const themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+	const getStoredThemePreference = () => {
+		const stored = window.localStorage.getItem(storageKey);
+		return stored === 'light' || stored === 'dark' ? stored : 'system';
+	};
+
+	const getResolvedTheme = (preference) => {
+		if (preference === 'system') {
+			return themeMediaQuery.matches ? 'dark' : 'light';
+		}
+
+		return preference;
+	};
+
+	const applyThemePreference = (preference) => {
+		const resolved = getResolvedTheme(preference);
+		document.documentElement.classList.toggle('dark', resolved === 'dark');
+		document.documentElement.dataset.themePreference = preference;
+		document.documentElement.dataset.themeResolved = resolved;
+		document.documentElement.style.colorScheme = resolved;
+
+		for (const button of themeButtons) {
+			button.setAttribute('aria-label', resolved === 'dark' ? '切换到浅色模式' : '切换到深色模式');
+			button.setAttribute('title', resolved === 'dark' ? '切换到浅色模式' : '切换到深色模式');
+		}
+	};
+
+	applyThemePreference(getStoredThemePreference());
+
+	for (const button of themeButtons) {
+		button.addEventListener('click', () => {
+			const currentResolved = document.documentElement.dataset.themeResolved === 'dark' ? 'dark' : 'light';
+			const nextPreference = currentResolved === 'dark' ? 'light' : 'dark';
+			window.localStorage.setItem(storageKey, nextPreference);
+			applyThemePreference(nextPreference);
+		});
+	}
+
+	themeMediaQuery.addEventListener('change', () => {
+		if (getStoredThemePreference() === 'system') {
+			applyThemePreference('system');
+		}
+	});
+</script>
+
+<script is:inline>
+	const mobileMenu = document.querySelector('[data-site-mobile-menu]');
+	const menuToggleButtons = Array.from(document.querySelectorAll('[data-site-menu-toggle]'));
+	const menuCloseButtons = Array.from(document.querySelectorAll('[data-site-menu-close]'));
+	const menuLinks = Array.from(document.querySelectorAll('[data-site-menu-link]'));
+
+	if (mobileMenu instanceof HTMLElement) {
+		const setMenuOpen = (isOpen) => {
+			mobileMenu.hidden = !isOpen;
+			mobileMenu.setAttribute('aria-hidden', String(!isOpen));
+			document.body.style.overflow = isOpen ? 'hidden' : '';
+
+			for (const button of menuToggleButtons) {
+				button.setAttribute('aria-expanded', String(isOpen));
+				button.setAttribute('aria-label', isOpen ? '关闭菜单' : '打开菜单');
+			}
+		};
+
+		for (const button of menuToggleButtons) {
+			button.addEventListener('click', () => {
+				const isCurrentlyOpen = button.getAttribute('aria-expanded') === 'true';
+				setMenuOpen(!isCurrentlyOpen);
+			});
+		}
+
+		for (const button of menuCloseButtons) {
+			button.addEventListener('click', () => setMenuOpen(false));
+		}
+
+		for (const link of menuLinks) {
+			link.addEventListener('click', () => setMenuOpen(false));
+		}
+
+		window.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape') {
+				setMenuOpen(false);
+			}
+		});
+
+		window.addEventListener('resize', () => {
+			if (window.innerWidth >= 768) {
+				setMenuOpen(false);
+			}
+		}, { passive: true });
+
+		setMenuOpen(false);
+	}
+</script>
+
+<script is:inline>
+	const header = document.querySelector('[data-site-header]');
+
+	if (header instanceof HTMLElement) {
+		const syncHeaderOffset = () => {
+			const headerHeight = Math.ceil(header.getBoundingClientRect().height);
+			document.documentElement.style.setProperty('--site-header-offset', `${headerHeight}px`);
+		};
+
+		syncHeaderOffset();
+
+		const observer = new ResizeObserver(() => {
+			syncHeaderOffset();
+		});
+
+		observer.observe(header);
+		window.addEventListener('resize', syncHeaderOffset, { passive: true });
+	}
+</script>
