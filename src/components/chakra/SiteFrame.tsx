@@ -1,7 +1,6 @@
-import { type PropsWithChildren, useEffect, useState } from "react"
+import type { ComponentProps, PropsWithChildren } from "react"
 import {
   Box,
-  CloseButton,
   Container,
   Flex,
   Heading,
@@ -13,7 +12,7 @@ import {
   Text,
 } from "@chakra-ui/react"
 import { FaBars, FaGithub, FaXTwitter } from "react-icons/fa6"
-import { ColorModeButton } from "../ui/color-mode"
+import { LuMoon, LuSun } from "react-icons/lu"
 import { Provider } from "../ui/provider"
 import { SITE_TITLE } from "../../consts"
 
@@ -201,35 +200,32 @@ function isActiveLink(href: string, currentPath: string) {
   return currentPath === href || currentPath.startsWith(`${href}/`)
 }
 
+function ThemeToggleButton(props: Omit<ComponentProps<typeof IconButton>, "aria-label">) {
+  return (
+    <IconButton
+      data-site-theme-toggle
+      variant="ghost"
+      aria-label="切换主题"
+      size="sm"
+      {...props}
+      css={{
+        _icon: {
+          width: "5",
+          height: "5",
+        },
+      }}
+    >
+      <Box as="span" data-site-theme-icon="light" aria-hidden="true">
+        <Icon as={LuSun} boxSize="5" />
+      </Box>
+      <Box as="span" data-site-theme-icon="dark" aria-hidden="true">
+        <Icon as={LuMoon} boxSize="5" />
+      </Box>
+    </IconButton>
+  )
+}
+
 export function SiteFrame({ children, currentPath }: SiteFrameProps) {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-
-  useEffect(() => {
-    if (!isMobileMenuOpen) {
-      return
-    }
-
-    const previousOverflow = document.body.style.overflow
-    document.body.style.overflow = "hidden"
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setIsMobileMenuOpen(false)
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown)
-
-    return () => {
-      document.body.style.overflow = previousOverflow
-      window.removeEventListener("keydown", handleKeyDown)
-    }
-  }, [isMobileMenuOpen])
-
-  useEffect(() => {
-    setIsMobileMenuOpen(false)
-  }, [currentPath])
-
   return (
     <Provider>
       <Box minH="100vh" bg="var(--site-bg)" color="var(--site-fg)">
@@ -252,9 +248,13 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                 justify="space-between"
                 gap={{ base: 3, md: 6 }}
               >
+                {/* Mobile top bar */}
                 <HStack display={{ base: "flex", md: "none" }} gap="3" flex="1" justify="flex-start" minW="0">
                   <IconButton
-                    aria-label={isMobileMenuOpen ? "关闭菜单" : "打开菜单"}
+                    data-site-menu-toggle
+                    aria-label="打开菜单"
+                    aria-controls="site-mobile-menu"
+                    aria-expanded="false"
                     variant="ghost"
                     rounded="full"
                     size="sm"
@@ -262,7 +262,6 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                     color="var(--site-fg)"
                     _hover={{ bg: "var(--site-hover-bg)" }}
                     _active={{ bg: "var(--site-active-bg)" }}
-                    onClick={() => setIsMobileMenuOpen((open) => !open)}
                   >
                     <Icon as={FaBars} boxSize="4" />
                   </IconButton>
@@ -281,7 +280,7 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                   </Heading>
                 </HStack>
 
-                <ColorModeButton
+                <ThemeToggleButton
                   display={{ base: "inline-flex", md: "none" }}
                   rounded="full"
                   color="var(--site-fg)"
@@ -295,6 +294,7 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                   </Link>
                 </Heading>
 
+                {/* Desktop navigation and utilities */}
                 <Flex
                   flex="1"
                   align="center"
@@ -339,7 +339,7 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                   </HStack>
 
                   <HStack gap="2" color="var(--site-muted-fg)" fontSize="sm" justify="center" flexShrink={0}>
-                    <ColorModeButton
+                    <ThemeToggleButton
                       rounded="full"
                       color="var(--site-fg)"
                       _hover={{ bg: "var(--site-hover-bg)" }}
@@ -376,25 +376,33 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
 
         <Box
           as="nav"
+          id="site-mobile-menu"
           aria-label="移动端菜单"
+          aria-hidden="true"
+          data-site-mobile-menu
           position="fixed"
           inset="0"
           zIndex="20"
           bg="var(--site-surface)"
-          display={{ base: isMobileMenuOpen ? "block" : "none", md: "none" }}
+          display={{ base: "block", md: "none" }}
+          hidden
         >
           <Container maxW="6xl" px="4" py="4" minH="100dvh">
+            {/* Mobile hamburger menu content */}
             <Flex direction="column" minH="calc(100dvh - 2rem)">
               <Flex align="center" justify="flex-start" gap="3">
-                <CloseButton
+                <IconButton
+                  data-site-menu-close
                   aria-label="关闭菜单"
+                  variant="ghost"
                   size="sm"
                   rounded="full"
                   color="var(--site-fg)"
                   bg="var(--site-surface)"
                   _hover={{ bg: "var(--site-hover-bg)" }}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                />
+                >
+                  <Icon as={FaBars} boxSize="4" />
+                </IconButton>
 
                 <Heading as="p" size="lg" letterSpacing="tight" textAlign="left">
                   {SITE_TITLE}
@@ -408,6 +416,7 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                     return (
                       <Box as="li" key={item.href}>
                         <Link
+                          data-site-menu-link
                           href={item.href}
                           display="inline-flex"
                           alignItems="center"
@@ -419,7 +428,6 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                           bg={active ? "var(--site-nav-active-bg)" : "transparent"}
                           color={active ? "var(--site-accent)" : "var(--site-fg)"}
                           _hover={{ textDecoration: "none", bg: "var(--site-hover-bg)" }}
-                          onClick={() => setIsMobileMenuOpen(false)}
                         >
                           <Box
                             as="span"

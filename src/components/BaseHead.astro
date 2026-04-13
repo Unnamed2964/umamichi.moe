@@ -31,6 +31,22 @@ const { title, description, image = FallbackImage } = Astro.props;
 />
 <meta name="generator" content={Astro.generator} />
 
+<script is:inline>
+	(() => {
+		const storageKey = 'site-theme';
+		const stored = window.localStorage.getItem(storageKey);
+		const preference = stored === 'light' || stored === 'dark' ? stored : 'system';
+		const resolved = preference === 'system'
+			? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+			: preference;
+
+		document.documentElement.classList.toggle('dark', resolved === 'dark');
+		document.documentElement.dataset.themePreference = preference;
+		document.documentElement.dataset.themeResolved = resolved;
+		document.documentElement.style.colorScheme = resolved;
+	})();
+</script>
+
 <!-- CSS for Katex -->
 <link
   rel="stylesheet"

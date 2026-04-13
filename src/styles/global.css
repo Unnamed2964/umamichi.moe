@@ -61,6 +61,18 @@ body {
 	color: var(--site-fg);
 }
 
+[data-site-theme-icon='dark'] {
+	display: none;
+}
+
+html.dark [data-site-theme-icon='light'] {
+	display: none;
+}
+
+html.dark [data-site-theme-icon='dark'] {
+	display: inline-flex;
+}
+
 @media screen and (min-width: 30rem) {
 	html {
 		--site-header-offset: 7rem;
