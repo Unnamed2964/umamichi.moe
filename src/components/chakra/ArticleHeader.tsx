@@ -11,12 +11,12 @@ export function ArticleHeader({ title, description, pubDate, updatedDate }: Arti
   return (
     <Stack as="header" gap="3" align="start" textAlign="left" w="full">
       {pubDate && (
-        <Text color="gray.500" fontWeight="600">
+        <Text color="var(--article-muted-fg)" fontWeight="600">
           {pubDate}
         </Text>
       )}
       {updatedDate && (
-        <Text color="gray.500" fontSize="sm" fontStyle="italic">
+        <Text color="var(--article-muted-fg)" fontSize="sm" fontStyle="italic">
           最后更新于 {updatedDate}
         </Text>
       )}

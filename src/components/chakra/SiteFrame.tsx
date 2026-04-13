@@ -13,6 +13,7 @@ import {
   Text,
 } from "@chakra-ui/react"
 import { FaBars, FaGithub, FaXTwitter } from "react-icons/fa6"
+import { ColorModeButton } from "../ui/color-mode"
 import { Provider } from "../ui/provider"
 import { SITE_TITLE } from "../../consts"
 
@@ -231,7 +232,7 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
 
   return (
     <Provider>
-      <Box minH="100vh" bg="white">
+      <Box minH="100vh" bg="var(--site-bg)" color="var(--site-fg)">
         <Box
           as="header"
           data-site-header
@@ -239,8 +240,8 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
           top="0"
           zIndex="10"
           borderBottomWidth="1px"
-          borderColor="blackAlpha.100"
-          bg="white"
+          borderColor="var(--site-border)"
+          bg="var(--site-surface)"
         >
           <Container maxW="6xl" px={{ base: 4, md: 6 }}>
             <Stack gap={{ base: 3, md: 0 }} py={{ base: 3, md: 0 }}>
@@ -257,10 +258,10 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                     variant="ghost"
                     rounded="full"
                     size="sm"
-                    bg="white"
-                    color="gray.700"
-                    _hover={{ bg: "blackAlpha.50" }}
-                    _active={{ bg: "blackAlpha.100" }}
+                    bg="var(--site-surface)"
+                    color="var(--site-fg)"
+                    _hover={{ bg: "var(--site-hover-bg)" }}
+                    _active={{ bg: "var(--site-active-bg)" }}
                     onClick={() => setIsMobileMenuOpen((open) => !open)}
                   >
                     <Icon as={FaBars} boxSize="4" />
@@ -274,14 +275,22 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                     flex="1"
                     minW="0"
                   >
-                    <Link href="/" _hover={{ textDecoration: "none", color: "cyan.700" }}>
+                    <Link href="/" _hover={{ textDecoration: "none", color: "var(--site-accent)" }}>
                       {SITE_TITLE}
                     </Link>
                   </Heading>
                 </HStack>
 
+                <ColorModeButton
+                  display={{ base: "inline-flex", md: "none" }}
+                  rounded="full"
+                  color="var(--site-fg)"
+                  _hover={{ bg: "var(--site-hover-bg)" }}
+                  _active={{ bg: "var(--site-active-bg)" }}
+                />
+
                 <Heading as="h1" size="lg" letterSpacing="tight" textAlign="left" flex="0 0 auto" display={{ base: "none", md: "block" }}>
-                  <Link href="/" _hover={{ textDecoration: "none", color: "cyan.700" }}>
+                  <Link href="/" _hover={{ textDecoration: "none", color: "var(--site-accent)" }}>
                     {SITE_TITLE}
                   </Link>
                 </Heading>
@@ -308,9 +317,9 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                           py="2"
                           rounded="full"
                           fontWeight={active ? "700" : "500"}
-                          bg={active ? "cyan.50" : "transparent"}
-                          color={active ? "cyan.700" : "gray.700"}
-                          _hover={{ textDecoration: "none", bg: "blackAlpha.50" }}
+                          bg={active ? "var(--site-nav-active-bg)" : "transparent"}
+                          color={active ? "var(--site-accent)" : "var(--site-fg)"}
+                          _hover={{ textDecoration: "none", bg: "var(--site-hover-bg)" }}
                         >
                           <Box
                             as="span"
@@ -329,7 +338,13 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                     })}
                   </HStack>
 
-                  <HStack gap="4" color="gray.600" fontSize="sm" justify="center" flexShrink={0}>
+                  <HStack gap="2" color="var(--site-muted-fg)" fontSize="sm" justify="center" flexShrink={0}>
+                    <ColorModeButton
+                      rounded="full"
+                      color="var(--site-fg)"
+                      _hover={{ bg: "var(--site-hover-bg)" }}
+                      _active={{ bg: "var(--site-active-bg)" }}
+                    />
                     <Link
                       href="https://twitter.com/Umamichiz"
                       target="_blank"
@@ -337,7 +352,7 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                       aria-label="X"
                       display="inline-flex"
                       alignItems="center"
-                      _hover={{ color: "cyan.700" }}
+                      _hover={{ color: "var(--site-accent)" }}
                     >
                       <Icon as={FaXTwitter} boxSize="5" />
                     </Link>
@@ -348,7 +363,7 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                       aria-label="GitHub"
                       display="inline-flex"
                       alignItems="center"
-                      _hover={{ color: "cyan.700" }}
+                      _hover={{ color: "var(--site-accent)" }}
                     >
                       <Icon as={FaGithub} boxSize="5" />
                     </Link>
@@ -365,7 +380,7 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
           position="fixed"
           inset="0"
           zIndex="20"
-          bg="white"
+          bg="var(--site-surface)"
           display={{ base: isMobileMenuOpen ? "block" : "none", md: "none" }}
         >
           <Container maxW="6xl" px="4" py="4" minH="100dvh">
@@ -375,9 +390,9 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                   aria-label="关闭菜单"
                   size="sm"
                   rounded="full"
-                  color="gray.700"
-                  bg="white"
-                  _hover={{ bg: "blackAlpha.50" }}
+                  color="var(--site-fg)"
+                  bg="var(--site-surface)"
+                  _hover={{ bg: "var(--site-hover-bg)" }}
                   onClick={() => setIsMobileMenuOpen(false)}
                 />
 
@@ -401,9 +416,9 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                           py="2"
                           rounded="full"
                           fontWeight={active ? "700" : "500"}
-                          bg={active ? "cyan.50" : "transparent"}
-                          color={active ? "cyan.700" : "gray.700"}
-                          _hover={{ textDecoration: "none", bg: "blackAlpha.50" }}
+                          bg={active ? "var(--site-nav-active-bg)" : "transparent"}
+                          color={active ? "var(--site-accent)" : "var(--site-fg)"}
+                          _hover={{ textDecoration: "none", bg: "var(--site-hover-bg)" }}
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           <Box
@@ -427,7 +442,7 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                 </Stack>
               </Flex>
 
-              <HStack gap="4" justify="center" color="gray.600" pb="2">
+              <HStack gap="4" justify="center" color="var(--site-muted-fg)" pb="2">
                 <Link
                   href="https://twitter.com/Umamichiz"
                   target="_blank"
@@ -439,8 +454,8 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                   boxSize="10"
                   rounded="full"
                   borderWidth="1px"
-                  borderColor="blackAlpha.200"
-                  _hover={{ color: "cyan.700", bg: "blackAlpha.50", textDecoration: "none" }}
+                  borderColor="var(--site-border-strong)"
+                  _hover={{ color: "var(--site-accent)", bg: "var(--site-hover-bg)", textDecoration: "none" }}
                 >
                   <Icon as={FaXTwitter} boxSize="4" />
                 </Link>
@@ -455,8 +470,8 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                   boxSize="10"
                   rounded="full"
                   borderWidth="1px"
-                  borderColor="blackAlpha.200"
-                  _hover={{ color: "cyan.700", bg: "blackAlpha.50", textDecoration: "none" }}
+                  borderColor="var(--site-border-strong)"
+                  _hover={{ color: "var(--site-accent)", bg: "var(--site-hover-bg)", textDecoration: "none" }}
                 >
                   <Icon as={FaGithub} boxSize="4" />
                 </Link>
@@ -485,13 +500,13 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
           as="footer"
           mt="16"
           borderTopWidth="1px"
-          borderColor="blackAlpha.100"
-          bg="white"
+          borderColor="var(--site-border)"
+          bg="var(--site-bg)"
         >
           <Container maxW="6xl" px={{ base: 4, md: 6 }} py="10">
             <Stack gap="2" align="center" textAlign="center">
               <Text
-                color="gray.600"
+                color="var(--site-muted-fg)"
                 fontSize={{ base: "md", md: "lg" }}
                 display="inline-flex"
                 alignItems="center"
@@ -501,11 +516,11 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
               >
                 <Box as="span">© {new Date().getFullYear()} Umamichi/Unnamed2964.</Box>
                 <Box as="span">Powered by</Box>
-                <Link href="https://astro.build/" target="_blank" rel="noreferrer" color="cyan.700">
+                <Link href="https://astro.build/" target="_blank" rel="noreferrer" color="var(--site-accent)">
                   Astro
                 </Link>
                 <Box as="span">and</Box>
-                <Link href="https://chakra-ui.com/" target="_blank" rel="noreferrer" color="cyan.700">
+                <Link href="https://chakra-ui.com/" target="_blank" rel="noreferrer" color="var(--site-accent)">
                   Chakra UI
                 </Link>
               </Text>

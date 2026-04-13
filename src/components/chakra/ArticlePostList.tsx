@@ -21,9 +21,9 @@ export function ArticlePostList({ posts, currentPostId }: ArticlePostListProps) 
       as="nav"
       aria-label="文章列表"
       rounded="xl"
-      bg="white"
+      bg="var(--site-surface)"
       borderWidth="1px"
-      borderColor="blackAlpha.100"
+      borderColor="var(--site-border)"
       maxH="calc(100vh - var(--site-header-offset) - 4rem)"
       overflowX="hidden"
       display="flex"
@@ -32,7 +32,7 @@ export function ArticlePostList({ posts, currentPostId }: ArticlePostListProps) 
       pt="4"
       pb="5"
     >
-      <Text fontSize="sm" fontWeight="700" letterSpacing="wide" color="gray.500">
+      <Text fontSize="sm" fontWeight="700" letterSpacing="wide" color="var(--site-subtle-fg)">
         文章
       </Text>
 
@@ -61,15 +61,15 @@ export function ArticlePostList({ posts, currentPostId }: ArticlePostListProps) 
                 href={post.href}
                 aria-current={isCurrent ? "page" : undefined}
                 display="block"
-                color="gray.700"
+                color="var(--article-fg)"
                 fontSize="sm"
                 fontWeight="600"
                 lineHeight="1.6"
                 transition="color 0.2s ease, font-weight 0.2s ease"
-                _hover={{ color: "cyan.700", textDecoration: "none" }}
+                _hover={{ color: "var(--site-accent)", textDecoration: "none" }}
                 css={{
                   '&[aria-current="page"]': {
-                    color: 'var(--chakra-colors-cyan-700)',
+                    color: 'var(--site-accent)',
                     fontWeight: 700,
                   },
                 }}

@@ -23,9 +23,9 @@ export function ArticleToc({ headings }: ArticleTocProps) {
       aria-label="文章目录"
       data-toc
       rounded="xl"
-      bg="white"
+      bg="var(--site-surface)"
       borderWidth="1px"
-      borderColor="blackAlpha.100"
+      borderColor="var(--site-border)"
       maxH="calc(100vh - var(--site-header-offset) - 4rem)"
       overflowX="hidden"
       display="flex"
@@ -34,7 +34,7 @@ export function ArticleToc({ headings }: ArticleTocProps) {
       pt="4"
       pb="5"
     >
-      <Text fontSize="sm" fontWeight="700" letterSpacing="wide" color="gray.500">
+      <Text fontSize="sm" fontWeight="700" letterSpacing="wide" color="var(--site-subtle-fg)">
         目录
       </Text>
 
@@ -61,16 +61,16 @@ export function ArticleToc({ headings }: ArticleTocProps) {
               data-toc-link={heading.slug}
               display="block"
               ps={heading.depth === 3 ? "4" : "0"}
-              color={heading.depth === 2 ? "gray.700" : "gray.600"}
+              color={heading.depth === 2 ? "var(--article-fg)" : "var(--site-muted-fg)"}
               fontSize={heading.depth === 2 ? "sm" : "xs"}
               fontWeight={heading.depth === 2 ? "600" : "500"}
               lineHeight="1.6"
               transition="color 0.2s ease, font-weight 0.2s ease"
-              _hover={{ color: "cyan.700", textDecoration: "none" }}
-              _currentPage={{ color: "cyan.700", fontWeight: "700" }}
+              _hover={{ color: "var(--site-accent)", textDecoration: "none" }}
+              _currentPage={{ color: "var(--site-accent)", fontWeight: "700" }}
               css={{
                 '&[aria-current="location"]': {
-                  color: 'var(--chakra-colors-cyan-700)',
+                  color: 'var(--site-accent)',
                   fontWeight: 700,
                 },
               }}

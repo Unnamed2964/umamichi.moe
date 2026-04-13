@@ -4,7 +4,7 @@ import { Box } from "@chakra-ui/react"
 export function ArticleContent({ children }: PropsWithChildren) {
   return (
     <Box
-      color="gray.700"
+      color="var(--article-fg)"
       className="prose"
       fontSize="var(--site-content-font-size)"
       lineHeight="var(--site-content-line-height)"
@@ -25,7 +25,7 @@ export function ArticleContent({ children }: PropsWithChildren) {
           lineHeight: 1.24,
           borderBottomWidth: "1px",
           borderBottomStyle: "solid",
-          borderBottomColor: "var(--chakra-colors-border-muted)",
+          borderBottomColor: "var(--article-border)",
         },
         "& h2": {
           marginTop: "1.32em",
@@ -36,7 +36,7 @@ export function ArticleContent({ children }: PropsWithChildren) {
           lineHeight: 1.32,
           borderBottomWidth: "1px",
           borderBottomStyle: "solid",
-          borderBottomColor: "var(--chakra-colors-border-muted)",
+          borderBottomColor: "var(--article-border)",
         },
         "& h3": {
           marginTop: "1.26em",
@@ -94,7 +94,7 @@ export function ArticleContent({ children }: PropsWithChildren) {
         "& li": { marginTop: "0.25em" },
         "& li > p": { marginTop: "0.25em", marginBottom: "0.25em" },
         "& li::marker": {
-          color: "var(--chakra-colors-fg-muted)",
+          color: "var(--article-list-marker)",
         },
         "& .contains-task-list": {
           paddingInlineStart: 0,
@@ -111,11 +111,12 @@ export function ArticleContent({ children }: PropsWithChildren) {
           verticalAlign: "middle",
         },
         "& a": {
-          color: "cyan.700",
+          color: "var(--article-link)",
           textDecoration: "none",
+          textUnderlineOffset: "0.15em",
         },
         "& a:hover": {
-          color: "cyan.800",
+          color: "var(--article-link-hover)",
           textDecoration: "underline",
         },
         "& strong": {
@@ -135,25 +136,25 @@ export function ArticleContent({ children }: PropsWithChildren) {
           padding: "6px 13px",
           borderWidth: "1px",
           borderStyle: "solid",
-          borderColor: "var(--chakra-colors-border-muted)",
+          borderColor: "var(--article-border)",
         },
         "& tr": {
-          backgroundColor: "var(--chakra-colors-bg)",
+          backgroundColor: "var(--article-table-bg)",
           borderTopWidth: "1px",
           borderTopStyle: "solid",
-          borderTopColor: "var(--chakra-colors-border-muted)",
+          borderTopColor: "var(--article-border)",
         },
         "& tr:nth-of-type(2n)": {
-          backgroundColor: "var(--chakra-colors-bg-subtle)",
+          backgroundColor: "var(--article-table-stripe-bg)",
         },
         "& blockquote": {
           marginTop: 0,
           marginBottom: "1rem",
           paddingInline: "1em",
-          color: "var(--chakra-colors-fg-muted)",
+          color: "var(--article-quote-fg)",
           borderLeftWidth: "0.25em",
           borderLeftStyle: "solid",
-          borderLeftColor: "var(--chakra-colors-border-muted)",
+          borderLeftColor: "var(--article-border)",
         },
         "& blockquote > :first-of-type": {
           marginTop: 0,
@@ -166,7 +167,7 @@ export function ArticleContent({ children }: PropsWithChildren) {
           margin: 0,
           borderRadius: "6px",
           fontSize: "0.875em",
-          backgroundColor: "var(--chakra-colors-bg-muted)",
+          backgroundColor: "var(--article-inline-code-bg)",
         },
         "& pre": {
           overflowX: "auto",
@@ -176,7 +177,7 @@ export function ArticleContent({ children }: PropsWithChildren) {
           borderRadius: "6px",
           fontSize: "0.9em",
           lineHeight: 1.45,
-          backgroundColor: "var(--chakra-colors-bg-subtle)",
+          backgroundColor: "var(--article-code-block-bg)",
         },
         "& pre code": {
           backgroundColor: "transparent",
@@ -188,7 +189,7 @@ export function ArticleContent({ children }: PropsWithChildren) {
           height: "0.25em",
           margin: "24px 0",
           border: "0",
-          backgroundColor: "var(--chakra-colors-border-muted)",
+          backgroundColor: "var(--article-border)",
         },
         "& img": {
           maxWidth: "100%",
