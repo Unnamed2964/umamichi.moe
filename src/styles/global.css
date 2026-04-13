@@ -12,18 +12,6 @@ html {
 	--site-nav-active-bg: var(--chakra-colors-cyan-50);
 	--site-accent: var(--chakra-colors-cyan-700);
 	--site-accent-hover: var(--chakra-colors-cyan-800);
-	--article-fg: var(--chakra-colors-gray-700);
-	--article-muted-fg: var(--chakra-colors-gray-500);
-	--article-border: var(--chakra-colors-border-muted);
-	--article-table-bg: var(--chakra-colors-bg);
-	--article-table-stripe-bg: var(--chakra-colors-bg-subtle);
-	--article-inline-code-bg: var(--chakra-colors-bg-muted);
-	--article-code-block-bg: var(--chakra-colors-bg-subtle);
-	--article-quote-fg: var(--chakra-colors-fg-muted);
-	--article-list-marker: var(--chakra-colors-fg-muted);
-	--article-link: var(--chakra-colors-cyan-700);
-	--article-link-hover: var(--chakra-colors-cyan-800);
-	--article-title-bar: var(--chakra-colors-cyan-200);
 	scroll-padding-top: var(--site-header-offset);
 }
 
@@ -41,18 +29,6 @@ html.dark {
 	--site-nav-active-bg: color-mix(in srgb, var(--chakra-colors-cyan-400) 20%, transparent);
 	--site-accent: var(--chakra-colors-cyan-300);
 	--site-accent-hover: var(--chakra-colors-cyan-200);
-	--article-fg: #c9d1d9;
-	--article-muted-fg: #8b949e;
-	--article-border: #30363d;
-	--article-table-bg: #0d1117;
-	--article-table-stripe-bg: #161b22;
-	--article-inline-code-bg: rgba(110, 118, 129, 0.4);
-	--article-code-block-bg: #161b22;
-	--article-quote-fg: #8b949e;
-	--article-list-marker: #7d8590;
-	--article-link: var(--chakra-colors-cyan-300);
-	--article-link-hover: var(--chakra-colors-cyan-200);
-	--article-title-bar: var(--chakra-colors-cyan-700);
 }
 
 body {
