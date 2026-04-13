@@ -46,7 +46,7 @@ const navItems: ReadonlyArray<{
 function MetroNavIcon({ kind, active }: { kind: NavIconKind; active: boolean }) {
   const scale = 0.16
   const baselineHeight = 100
-  const accent = active ? "var(--chakra-colors-cyan-700)" : "var(--chakra-colors-cyan-500)"
+  const accent = active ? "var(--site-accent)" : "var(--chakra-colors-cyan-500)"
   const iconStyle = {
     display: "block",
     overflow: "visible",
