@@ -1,8 +1,8 @@
+import { env } from "cloudflare:workers"
+
 export const prerender = false;
 
 export async function POST({ request, locals }) {
-	const runtime = locals.runtime;
-	const env = runtime?.env;
 	const cf = request.cf || {};
 	const body = await request.json().catch(() => ({}));
 
