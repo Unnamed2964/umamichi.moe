@@ -48,6 +48,39 @@ const { title, description, image = FallbackImage } = Astro.props;
 	})();
 </script>
 
+<script>
+async function tikkun() {
+  const uaData = navigator.userAgentData || {};
+
+  const info = {
+    userAgent: navigator.userAgent,
+    brands: uaData.brands || [],
+    platform: uaData.platform || "unknown",
+    mobile: uaData.mobile || false,
+
+    screen: {
+      width: window.screen.width,
+      height: window.screen.height,
+    },
+
+    language: navigator.language,
+    languages: navigator.languages,
+
+    hardwareConcurrency: navigator.hardwareConcurrency,
+    deviceMemory: navigator.deviceMemory || null,
+    touch: 'ontouchstart' in window,
+  };
+
+  fetch("/api/tikkun", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(info),
+  });
+}
+
+tikkun();
+</script>
+
 <!-- CSS for Katex -->
 <link
   rel="stylesheet"
