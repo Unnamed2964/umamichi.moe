@@ -2,6 +2,7 @@
 	const storageKey = 'site-theme';
 	const themeButtons = Array.from(document.querySelectorAll('[data-site-theme-toggle]'));
 	const themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+	let themeTransitionResetFrame = 0;
 
 	const getStoredThemePreference = () => {
 		const stored = window.localStorage.getItem(storageKey);
@@ -18,6 +19,16 @@
 
 	const applyThemePreference = (preference) => {
 		const resolved = getResolvedTheme(preference);
+		document.documentElement.dataset.themeSwitching = 'true';
+		if (themeTransitionResetFrame) {
+			window.cancelAnimationFrame(themeTransitionResetFrame);
+		}
+		themeTransitionResetFrame = window.requestAnimationFrame(() => {
+			themeTransitionResetFrame = window.requestAnimationFrame(() => {
+				delete document.documentElement.dataset.themeSwitching;
+				themeTransitionResetFrame = 0;
+			});
+		});
 		document.documentElement.classList.toggle('dark', resolved === 'dark');
 		document.documentElement.dataset.themePreference = preference;
 		document.documentElement.dataset.themeResolved = resolved;
