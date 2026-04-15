@@ -3,6 +3,24 @@
 	"compatibility_flags": ["global_fetch_strictly_public"],
 	"name": "umamichi-blog",
 	"main": "@astrojs/cloudflare/entrypoints/server",
+	"routes": [
+		{
+			"pattern": "umamichi.moe",
+			"zone_name": "umamichi.moe",
+			"custom_domain": true
+		},
+		{
+			"pattern": "www.umamichi.moe",
+			"zone_name": "umamichi.moe",
+			"custom_domain": true
+		}
+	],
+	"kv_namespaces": [
+		{
+			"binding": "tikkun",
+			"id": "b62efb3f679942ed9d1a46c8b99d2304"
+		}
+	],
 	"assets": {
 		"directory": "./dist",
 		"binding": "ASSETS"
