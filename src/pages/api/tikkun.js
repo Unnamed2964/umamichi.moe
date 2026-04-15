@@ -2,6 +2,10 @@ import { env } from "cloudflare:workers"
 
 export const prerender = false;
 
+export function GET() {
+	return new Response('d727');
+}
+
 export async function POST({ request, locals }) {
 	const cf = request.cf || {};
 	const body = await request.json().catch(() => ({}));
