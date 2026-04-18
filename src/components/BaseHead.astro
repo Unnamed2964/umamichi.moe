@@ -49,32 +49,97 @@ const { title, description, image = FallbackImage } = Astro.props;
 </script>
 
 <script>
-async function tikkun() {
-  const uaData = navigator.userAgentData || {};
+const TIKKUN_SCHEMA_VERSION = 1;
+const TIKKUN_SITE_ID = 'umamichi.moe';
 
-  const info = {
-    userAgent: navigator.userAgent,
-    brands: uaData.brands || [],
-    platform: uaData.platform || "unknown",
-    mobile: uaData.mobile || false,
+type JsonValue =
+  | null
+  | boolean
+  | number
+  | string
+  | JsonValue[]
+  | { [key: string]: JsonValue };
 
-    screen: {
-      width: window.screen.width,
-      height: window.screen.height,
-    },
-
-    language: navigator.language,
-    languages: navigator.languages,
-
-    hardwareConcurrency: navigator.hardwareConcurrency,
-    deviceMemory: navigator.deviceMemory || null,
-    touch: 'ontouchstart' in window,
+type NavigatorWithTelemetry = Navigator & {
+  deviceMemory?: number;
+  userAgentData?: {
+    brands?: Array<{
+      brand?: string;
+      version?: string;
+    }>;
+    platform?: string;
+    mobile?: boolean;
   };
+};
+
+function canonicalize(value: JsonValue): JsonValue {
+  if (Array.isArray(value)) {
+    return value.map(canonicalize);
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.keys(value)
+      .sort()
+      .reduce((result, key) => {
+        result[key] = canonicalize(value[key]);
+        return result;
+      }, {} as { [key: string]: JsonValue });
+  }
+
+  return value;
+}
+
+async function sha256Hex(input: string) {
+  const bytes = new TextEncoder().encode(input);
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+async function tikkun() {
+  const telemetryNavigator = navigator as NavigatorWithTelemetry;
+  const uaData = telemetryNavigator.userAgentData || {};
+  const referrerOrigin = document.referrer
+    ? (() => {
+        try {
+          return new URL(document.referrer).origin;
+        } catch {
+          return null;
+        }
+      })()
+    : null;
+
+  const event = {
+    version: TIKKUN_SCHEMA_VERSION,
+    siteId: TIKKUN_SITE_ID,
+    page: {
+      pathname: window.location.pathname,
+      referrer: referrerOrigin,
+    },
+    browser: {
+      userAgent: navigator.userAgent,
+      platform: uaData.platform || 'unknown',
+      mobile: uaData.mobile || false,
+      language: navigator.language,
+      hardwareConcurrency: navigator.hardwareConcurrency,
+      deviceMemory: telemetryNavigator.deviceMemory ?? null,
+      touch: 'ontouchstart' in window,
+      devicePixelRatio: window.devicePixelRatio || 1,
+      screen: {
+        width: window.screen.width,
+        height: window.screen.height,
+      },
+    },
+  };
+
+  const hash = await sha256Hex(JSON.stringify(canonicalize(event)));
 
   fetch("/api/tikkun", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(info),
+    body: JSON.stringify({ ...event, hash }),
   });
 }
 
