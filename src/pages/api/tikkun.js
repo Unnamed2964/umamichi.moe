@@ -8,8 +8,40 @@ const ALLOWED_ORIGINS = new Set([
 	'https://umamichi.moe',
 	'https://www.umamichi.moe',
 ]);
-const GET_MESSAGE = `🌟感谢您对本网站的技术细节的关注🥺
-您正在使用 GET 方法访问，在 umamichi.moe/* 使用 POST 方法访问本 URL 时，以下内容将会被发送到 Cloudflare KV 中，作为了解用户体验的参考`;
+const GET_MESSAGE = `<p>🌟</p>
+<p>感谢您对本网站的技术细节的关注🥺</p>
+<p>您正在使用 GET 方法访问。在 umamichi.moe/* 使用 POST 方法访问本 URL 时，以下内容将会被发送到 Cloudflare KV 中，作为了解用户体验的参考：</p>
+<pre><code>{
+	"version": 1,
+	"siteId": "umamichi.moe",
+	"page": {
+		"pathname": "/blog/first-post/",
+		"referrer": "https://example.com"
+	},
+	"browser": {
+		"userAgent": "Mozilla/5.0 ...",
+		"platform": "Windows",
+		"mobile": false,
+		"language": "zh-CN",
+		"hardwareConcurrency": 8,
+		"deviceMemory": 8,
+		"touch": false,
+		"devicePixelRatio": 1.25,
+		"screen": {
+			"width": 2560,
+			"height": 1440
+		}
+	},
+	"client": {
+		"country": "JP",
+		"city": "Tokyo",
+		"asn": 13335,
+		"asOrganization": "Cloudflare, Inc.",
+		"deviceType": "desktop",
+		"timezone": "Asia/Tokyo"
+	},
+	"hash": "sha256-hex"
+}</code></pre>`;
 
 function canonicalize(value) {
 	if (Array.isArray(value)) {
@@ -76,7 +108,7 @@ function normalizeBrowser(browser) {
 export function GET() {
 	return new Response(GET_MESSAGE, {
 		headers: {
-			'content-type': 'text/plain; charset=utf-8',
+			'content-type': 'text/html; charset=utf-8',
 		},
 	});
 }
