@@ -23,9 +23,9 @@ export function ArticleToc({ headings }: ArticleTocProps) {
       aria-label="文章目录"
       data-toc
       rounded="xl"
-      bg="var(--site-surface)"
+      bg="var(--site-sidebar-bg)"
       borderWidth="1px"
-      borderColor="var(--site-border)"
+      borderColor="var(--site-sidebar-border)"
       maxH="calc(100vh - var(--site-header-offset) - 4rem)"
       overflowX="hidden"
       display="flex"

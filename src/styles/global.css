@@ -5,11 +5,15 @@ html {
 	--site-muted-fg: var(--chakra-colors-gray-600);
 	--site-subtle-fg: var(--chakra-colors-gray-500);
 	--site-surface: #ffffff;
+	--site-header-bg: var(--chakra-colors-cyan-50);
+	--site-sidebar-bg: var(--chakra-colors-gray-50);
 	--site-border: rgba(0, 0, 0, 0.08);
+	--site-header-border: var(--chakra-colors-cyan-200);
+	--site-sidebar-border: var(--chakra-colors-gray-300);
 	--site-border-strong: rgba(0, 0, 0, 0.16);
 	--site-hover-bg: rgba(0, 0, 0, 0.04);
 	--site-active-bg: rgba(0, 0, 0, 0.08);
-	--site-nav-active-bg: var(--chakra-colors-cyan-50);
+	--site-nav-active-bg: #ffffff;
 	--site-accent: var(--chakra-colors-cyan-700);
 	--site-accent-hover: var(--chakra-colors-cyan-800);
 	scroll-padding-top: var(--site-header-offset);
@@ -22,7 +26,11 @@ html.dark {
 	--site-muted-fg: #8b949e;
 	--site-subtle-fg: #7d8590;
 	--site-surface: #161b22;
+	--site-header-bg: var(--chakra-colors-cyan-950);
+	--site-sidebar-bg: var(--chakra-colors-gray-900);
 	--site-border: #30363d;
+	--site-header-border: var(--chakra-colors-cyan-800);
+	--site-sidebar-border: var(--chakra-colors-gray-700);
 	--site-border-strong: #30363d;
 	--site-hover-bg: rgba(177, 186, 196, 0.12);
 	--site-active-bg: rgba(177, 186, 196, 0.2);
