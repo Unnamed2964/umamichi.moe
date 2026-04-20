@@ -206,8 +206,8 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           top="0"
           zIndex="10"
           borderBottomWidth="1px"
-          borderColor="var(--site-border)"
-          bg="var(--site-surface)"
+          borderColor="var(--site-header-border)"
+          bg="var(--site-header-bg)"
         >
           <Container maxW="6xl" px={{ base: 4, md: 6 }}>
             <Stack gap={{ base: 3, md: 0 }} py={{ base: 3, md: 0 }}>
