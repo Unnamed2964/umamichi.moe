@@ -96,6 +96,11 @@ export type GeneratedFolderRoute = {
 	routePath: string;
 };
 
+export type FolderListData = {
+	childItems: FolderPageListItem[];
+	routePath: string;
+};
+
 export type DocRoute = {
 	entry: DocEntry;
 	routePath: string;
@@ -173,6 +178,10 @@ function joinPosixPath(...parts: string[]) {
 
 function toHref(routePath: string) {
 	return routePath ? `/${routePath}/` : '/';
+}
+
+function normalizeRoutePath(routePath: string) {
+	return routePath.replace(/^\/+|\/+$/g, '');
 }
 
 function formatFolderSegment(segment: string) {
@@ -288,6 +297,31 @@ export function toTagSlug(tag: string) {
 
 export function toTagHref(tag: string) {
 	return `/tag/${toTagSlug(tag)}/`;
+}
+
+export function getFolderListData(docsStructure: DocsStructure, folder: string): FolderListData {
+	const routePath = normalizeRoutePath(folder);
+	const folderRoute = docsStructure.folderRoutes.find((route) => route.routePath === routePath);
+
+	if (folderRoute) {
+		return {
+			childItems: folderRoute.childItems,
+			routePath: folderRoute.routePath,
+		};
+	}
+
+	const generatedFolderRoute = docsStructure.routes.find(
+		(route): route is GeneratedFolderRoute => 'generatedPage' in route && route.routePath === routePath,
+	);
+
+	if (generatedFolderRoute) {
+		return {
+			childItems: generatedFolderRoute.childItems,
+			routePath: generatedFolderRoute.routePath,
+		};
+	}
+
+	throw new Error(`Unable to resolve folder list data for ${routePath || '/'}.`);
 }
 
 function compareTimedItems(left: Pick<FolderPageListItem, 'fixOrder' | 'pubDate' | 'timeless' | 'title'>, right: Pick<FolderPageListItem, 'fixOrder' | 'pubDate' | 'timeless' | 'title'>) {

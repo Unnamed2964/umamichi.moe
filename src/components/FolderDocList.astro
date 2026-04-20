@@ -1,0 +1,16 @@
+---
+import { getCollection } from 'astro:content';
+import FolderDocListView from './FolderDocListView.astro';
+import { buildDocsStructure, getFolderListData } from '../lib/docs';
+
+type Props = {
+	folder: string;
+};
+
+const { folder } = Astro.props as Props;
+const docs = await getCollection('docs');
+const docsStructure = buildDocsStructure(docs);
+const { childItems } = getFolderListData(docsStructure, folder);
+---
+
+<FolderDocListView childItems={childItems} />
