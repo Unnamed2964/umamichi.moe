@@ -1,11 +1,12 @@
 ---
+import { getCollection } from 'astro:content';
 import ArticleTocScript from '../components/ArticleTocScript.astro';
 import BaseHead from '../components/BaseHead.astro';
 import SiteChromeScripts from '../components/SiteChromeScripts.astro';
 import { ArticleLayout } from '../components/chakra/ArticleLayout';
 import type { ArticleTag } from '../components/chakra/ArticleTags';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-import { toTagHref } from '../lib/docs';
+import { buildDocsStructure, toTagHref } from '../lib/docs';
 
 type LayoutData = {
 	title?: string;
@@ -45,6 +46,11 @@ const tags: ArticleTag[] = (pageData.tags ?? []).map((tag) => ({
 	label: tag,
 }));
 const currentPath = Astro.url.pathname;
+const routePath = currentPath.replace(/^\/+|\/+$/g, '');
+const topLevelFolderPath = routePath.split('/').filter(Boolean)[0] ?? '';
+const docs = await getCollection('docs');
+const docsStructure = buildDocsStructure(docs);
+const sidebarTree = docsStructure.topLevelFolderTrees.get(topLevelFolderPath);
 const formattedPubDate = pubDate
 	? new Intl.DateTimeFormat('zh-CN', {
 		year: 'numeric',
@@ -68,10 +74,11 @@ const formattedUpdatedDate = updatedDate
 
 	<body>
 		<ArticleLayout
-			articleList={articleList}
 			currentPostId={currentEntryId}
 			currentPath={currentPath}
 			headings={headings}
+			navItems={docsStructure.topLevelNavItems}
+			sidebarTree={sidebarTree}
 			title={title}
 			tags={tags}
 			pubDate={formattedPubDate}
