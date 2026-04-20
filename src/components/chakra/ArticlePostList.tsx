@@ -7,6 +7,7 @@ type ArticlePostListProps = {
   currentPath: string
   currentPostId?: string
   tree?: ArticleSidebarTree
+  variant?: "desktop" | "mobile"
 }
 
 function isCurrentLink(href: string, currentPath: string, currentPostId?: string, nodeId?: string) {
@@ -72,26 +73,28 @@ function renderTreeNode(node: SidebarNode, currentPath: string, currentPostId?: 
   )
 }
 
-export function ArticlePostList({ currentPath, currentPostId, tree }: ArticlePostListProps) {
+export function ArticlePostList({ currentPath, currentPostId, tree, variant = "desktop" }: ArticlePostListProps) {
   if (!tree) {
     return null
   }
+
+  const isMobileVariant = variant === "mobile"
 
   return (
     <Box
       as="nav"
       aria-label="文章列表"
-      rounded="xl"
+      rounded={isMobileVariant ? "2xl" : "xl"}
       bg="var(--site-surface)"
       borderWidth="1px"
       borderColor="var(--site-border)"
-      maxH="calc(100vh - var(--site-header-offset) - 4rem)"
+      maxH={isMobileVariant ? "10rem" : "calc(100vh - var(--site-header-offset) - 4rem)"}
       overflowX="hidden"
       display="flex"
       flexDirection="column"
-      px="5"
-      pt="4"
-      pb="5"
+      px={isMobileVariant ? "4" : "5"}
+      pt={isMobileVariant ? "3" : "4"}
+      pb={isMobileVariant ? "4" : "5"}
     >
       <Text fontSize="sm" fontWeight="700" letterSpacing="wide" color="var(--site-subtle-fg)">
         导航

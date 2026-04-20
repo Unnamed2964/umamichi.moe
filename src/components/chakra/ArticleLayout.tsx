@@ -77,6 +77,17 @@ export function ArticleLayout({
 
         <Stack as="article" gap="10" w="full">
           <Stack gap="6" w="full">
+            {hasSidebarTree && sidebarTree && (
+              <Box display={{ base: "block", xl: "none" }}>
+                <ArticlePostList
+                  currentPath={currentPath}
+                  currentPostId={currentPostId}
+                  tree={sidebarTree}
+                  variant="mobile"
+                />
+              </Box>
+            )}
+
             <ArticleHeader title={title} pubDate={pubDate} updatedDate={updatedDate} />
             <ArticleTags tags={tags} />
 
