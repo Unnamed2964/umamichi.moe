@@ -43,8 +43,7 @@ const navItems: ReadonlyArray<{
 ]
 
 function MetroNavIcon({ kind, active }: { kind: NavIconKind; active: boolean }) {
-  const scale = 0.16
-  const baselineHeight = 100
+  const height = 16
   const accent = active ? "var(--site-accent)" : "var(--chakra-colors-cyan-500)"
   const iconStyle = {
     display: "block",
@@ -56,34 +55,117 @@ function MetroNavIcon({ kind, active }: { kind: NavIconKind; active: boolean }) 
       <svg
         aria-hidden="true"
         viewBox="0 0 43 100"
-        width={43 * scale}
-        height={baselineHeight * scale}
+        height={height}
         focusable="false"
         style={iconStyle}
       >
         <path
-          d="M 120,100 H 77 V 0 H 120 Z"
-          transform="translate(-77 0)"
+          d="M 43,100 H 0 V 0 H 43 Z"
           fill={accent}
           fillRule="evenodd"
         />
       </svg>
     )
-  }
-
-  if (kind === "transfer") {
+  } else if (kind === "transfer") {
     return (
       <svg
         aria-hidden="true"
         viewBox="0 0 47 100"
-        width={47 * scale}
-        height={baselineHeight * scale}
+        height={height}
         focusable="false"
         style={iconStyle}
       >
         <path
-          d="m 164,4 c 11,0 20,9 20,20 v 53 c 0,11 -9,20 -20,20 -11,0 -20,-9 -20,-20 v -53 c 0,-11 9,-20 20,-20 z"
-          transform="translate(-140.5 -0.5)"
+          d="m 23.5,3.5 c 11,0 20,9 20,20 v 53 c 0,11 -9,20 -20,20 -11,0 -20,-9 -20,-20 v -53 c 0,-11 9,-20 20,-20 z"
+          stroke={accent}
+          strokeWidth="7"
+          strokeMiterlimit="8"
+          fill="white"
+          fillRule="evenodd"
+        />
+      </svg>
+    )
+  } else if (kind === "transfer-and-out-of-station-transfer") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 39 100"
+        height={height}
+        focusable="false"
+        style={iconStyle}
+      >
+        <path
+          d="m 19.5,96.5 c -9,0 -16,-7 -16,-16 v -17 c 0,-9 7,-16 16,-16 9,0 16,7 16,16 v 17 c 0,9 -7,16 -16,16 z"
+          stroke={accent}
+          strokeWidth="7"
+          strokeMiterlimit="8"
+          fill="white"
+          fillRule="evenodd"
+        />
+        <path
+          d="m 19.5,35.5 c -8,0 -15,-7 -15,-16 0,-8 7,-15 15,-15 9,0 16,7 16,15 0,9 -7,16 -16,16 z"
+          stroke={accent}
+          strokeWidth="7"
+          strokeMiterlimit="8"
+          fill="white"
+          fillRule="evenodd"
+        />
+      </svg>
+    )
+  } else if (kind === "out-of-station-transfer") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 49 100"
+        height={height}
+        focusable="false"
+        style={iconStyle}
+      >
+        <path
+          d="m 24.5,4.5 c 11,0 21,10 21,20 0,11 -10,21 -21,21 -11,0 -21,-10 -21,-21 0,-10 10,-20 21,-20 z"
+          stroke={accent}
+          strokeWidth="7"
+          strokeMiterlimit="8"
+          fill="white"
+          fillRule="evenodd"
+        />
+        <path
+          d="m 24.5,55.5 c 11,0 21,10 21,20 0,11 -10,21 -21,21 -11,0 -21,-10 -21,-21 0,-10 10,-20 21,-20 z"
+          stroke={accent}
+          strokeWidth="7"
+          strokeMiterlimit="8"
+          fill="white"
+          fillRule="evenodd"
+        />
+      </svg>
+    )
+  } else if (kind === "out-of-station-transfer-and-out-of-station-transfer") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 33 100"
+        height={height}
+        focusable="false"
+        style={iconStyle}
+      >
+        <path
+          d="m 16.5,0.5 c 7,0 13,6 13,13 0,8 -6,14 -13,14 -7,0 -13,-6 -13,-14 0,-7 6,-13 13,-13 z"
+          stroke={accent}
+          strokeWidth="7"
+          strokeMiterlimit="8"
+          fill="white"
+          fillRule="evenodd"
+        />
+        <path
+          d="m 16.5,35.5 c 7,0 13,6 13,13 0,8 -6,14 -13,14 -7,0 -13,-6 -13,-14 0,-7 6,-13 13,-13 z"
+          stroke={accent}
+          strokeWidth="7"
+          strokeMiterlimit="8"
+          fill="white"
+          fillRule="evenodd"
+        />
+        <path
+          d="m 16.5,70.5 c 7,0 13,6 13,13 0,7 -6,13 -13,13 -7,0 -13,-6 -13,-13 0,-7 6,-13 13,-13 z"
           stroke={accent}
           strokeWidth="7"
           strokeMiterlimit="8"
@@ -94,102 +176,7 @@ function MetroNavIcon({ kind, active }: { kind: NavIconKind; active: boolean }) 
     )
   }
 
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox={
-        kind === "transfer-and-out-of-station-transfer"
-          ? "0 0 39 100"
-          : kind === "out-of-station-transfer"
-            ? "0 0 49 100"
-            : "0 0 33 100"
-      }
-      width={
-        kind === "transfer-and-out-of-station-transfer"
-          ? 39 * scale
-          : kind === "out-of-station-transfer"
-            ? 49 * scale
-            : 33 * scale
-      }
-      height={baselineHeight * scale}
-      focusable="false"
-      style={iconStyle}
-    >
-      {kind === "transfer-and-out-of-station-transfer" ? (
-        <>
-          <path
-            d="m 35,99 c -9,0 -16,-7 -16,-16 v -17 c 0,-9 7,-16 16,-16 9,0 16,7 16,16 v 17 c 0,9 -7,16 -16,16 z"
-            transform="translate(-15.5 -2.5)"
-            stroke={accent}
-            strokeWidth="7"
-            strokeMiterlimit="8"
-            fill="white"
-            fillRule="evenodd"
-          />
-          <path
-            d="m 35,38 c -8,0 -15,-7 -15,-16 0,-8 7,-15 15,-15 9,0 16,7 16,15 0,9 -7,16 -16,16 z"
-            transform="translate(-15.5 -2.5)"
-            stroke={accent}
-            strokeWidth="7"
-            strokeMiterlimit="8"
-            fill="white"
-            fillRule="evenodd"
-          />
-        </>
-      ) : kind === "out-of-station-transfer" ? (
-        <>
-          <path
-            d="m 229,4 c 11,0 21,10 21,20 0,11 -10,21 -21,21 -11,0 -21,-10 -21,-21 0,-10 10,-20 21,-20 z"
-            transform="translate(-204.5 0.5)"
-            stroke={accent}
-            strokeWidth="7"
-            strokeMiterlimit="8"
-            fill="white"
-            fillRule="evenodd"
-          />
-          <path
-            d="m 229,55 c 11,0 21,10 21,20 0,11 -10,21 -21,21 -11,0 -21,-10 -21,-21 0,-10 10,-20 21,-20 z"
-            transform="translate(-204.5 0.5)"
-            stroke={accent}
-            strokeWidth="7"
-            strokeMiterlimit="8"
-            fill="white"
-            fillRule="evenodd"
-          />
-        </>
-      ) : (
-        <>
-          <path
-            d="m 294,4 c 7,0 13,6 13,13 0,8 -6,14 -13,14 -7,0 -13,-6 -13,-14 0,-7 6,-13 13,-13 z"
-            transform="translate(-277.5 -3.5)"
-            stroke={accent}
-            strokeWidth="7"
-            strokeMiterlimit="8"
-            fill="white"
-            fillRule="evenodd"
-          />
-          <path
-            d="m 294,39 c 7,0 13,6 13,13 0,8 -6,14 -13,14 -7,0 -13,-6 -13,-14 0,-7 6,-13 13,-13 z"
-            transform="translate(-277.5 -3.5)"
-            stroke={accent}
-            strokeWidth="7"
-            strokeMiterlimit="8"
-            fill="white"
-            fillRule="evenodd"
-          />
-          <path
-            d="m 294,74 c 7,0 13,6 13,13 0,7 -6,13 -13,13 -7,0 -13,-6 -13,-13 0,-7 6,-13 13,-13 z"
-            transform="translate(-277.5 -3.5)"
-            stroke={accent}
-            strokeWidth="7"
-            strokeMiterlimit="8"
-            fill="white"
-            fillRule="evenodd"
-          />
-        </>
-      )}
-    </svg>
-  )
+  throw new Error(`Unknown MetroNavIcon kind: ${kind}`)
 }
 
 function isActiveLink(href: string, currentPath: string) {
