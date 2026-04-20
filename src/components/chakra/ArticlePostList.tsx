@@ -1,18 +1,79 @@
 import { Box, Link, Stack, Text } from "@chakra-ui/react"
+import type { SidebarFolderNode, SidebarNode } from "../../lib/docs"
 
-export type ArticlePostListItem = {
-  href: string
-  id: string
-  title: string
-}
+export type ArticleSidebarTree = SidebarFolderNode
 
 type ArticlePostListProps = {
-  posts: ArticlePostListItem[]
+  currentPath: string
   currentPostId?: string
+  tree?: ArticleSidebarTree
 }
 
-export function ArticlePostList({ posts, currentPostId }: ArticlePostListProps) {
-  if (posts.length === 0) {
+function isCurrentLink(href: string, currentPath: string, currentPostId?: string, nodeId?: string) {
+  if (currentPostId && nodeId) {
+    return currentPostId === nodeId
+  }
+
+  if (href === "/") {
+    return currentPath === "/"
+  }
+
+  return currentPath === href || currentPath.startsWith(`${href}/`)
+}
+
+function renderTreeNode(node: SidebarNode, currentPath: string, currentPostId?: string): JSX.Element {
+  if (node.kind === "folder") {
+    const isCurrent = isCurrentLink(node.href, currentPath)
+    const headingSize = node.level <= 1 ? "sm" : "xs"
+    const childPadding = node.level <= 1 ? "3" : "4"
+
+    return (
+      <Stack key={node.routePath || node.href} gap="1.5">
+        <Link
+          href={node.href}
+          aria-current={isCurrent ? "page" : undefined}
+          display="block"
+          color={isCurrent ? "var(--site-accent)" : "var(--article-fg)"}
+          fontSize={headingSize}
+          fontWeight="700"
+          lineHeight="1.6"
+          _hover={{ color: "var(--site-accent)", textDecoration: "none" }}
+        >
+          {node.title}
+        </Link>
+
+        {node.children.length > 0 && (
+          <Stack gap="1.5" ps={childPadding}>
+            {node.children.map((child) => renderTreeNode(child, currentPath, currentPostId))}
+          </Stack>
+        )}
+      </Stack>
+    )
+  }
+
+  const isCurrent = isCurrentLink(node.href, currentPath, currentPostId, node.id)
+  const fontSize = node.level <= 2 ? "sm" : "xs"
+
+  return (
+    <Link
+      key={node.id}
+      href={node.href}
+      aria-current={isCurrent ? "page" : undefined}
+      display="block"
+      color={isCurrent ? "var(--site-accent)" : "var(--site-muted-fg)"}
+      fontSize={fontSize}
+      fontWeight={isCurrent ? "700" : "500"}
+      lineHeight="1.6"
+      transition="color 0.2s ease, font-weight 0.2s ease"
+      _hover={{ color: "var(--site-accent)", textDecoration: "none" }}
+    >
+      {node.title}
+    </Link>
+  )
+}
+
+export function ArticlePostList({ currentPath, currentPostId, tree }: ArticlePostListProps) {
+  if (!tree) {
     return null
   }
 
@@ -33,7 +94,7 @@ export function ArticlePostList({ posts, currentPostId }: ArticlePostListProps) 
       pb="5"
     >
       <Text fontSize="sm" fontWeight="700" letterSpacing="wide" color="var(--site-subtle-fg)">
-        文章
+        导航
       </Text>
 
       <Box
@@ -51,33 +112,8 @@ export function ArticlePostList({ posts, currentPostId }: ArticlePostListProps) 
           },
         }}
       >
-        <Stack gap="1.5">
-          {posts.map((post) => {
-            const isCurrent = post.id === currentPostId
-
-            return (
-              <Link
-                key={post.id}
-                href={post.href}
-                aria-current={isCurrent ? "page" : undefined}
-                display="block"
-                color="var(--article-fg)"
-                fontSize="sm"
-                fontWeight="600"
-                lineHeight="1.6"
-                transition="color 0.2s ease, font-weight 0.2s ease"
-                _hover={{ color: "var(--site-accent)", textDecoration: "none" }}
-                css={{
-                  '&[aria-current="page"]': {
-                    color: 'var(--site-accent)',
-                    fontWeight: 700,
-                  },
-                }}
-              >
-                {post.title}
-              </Link>
-            )
-          })}
+        <Stack gap="2.5">
+          {renderTreeNode(tree, currentPath, currentPostId)}
         </Stack>
       </Box>
     </Box>

@@ -15,32 +15,15 @@ import { FaBars, FaGithub, FaXTwitter } from "react-icons/fa6"
 import { LuMoon, LuSun } from "react-icons/lu"
 import { Provider } from "../ui/provider"
 import { SITE_TITLE } from "../../consts"
+import type { NavIconKind, TopLevelNavItem } from "../../lib/docs"
 
 export const SITE_MAIN_MAX_W = "4xl"
 export const SITE_MAIN_HALF_W = `calc(var(--chakra-sizes-${SITE_MAIN_MAX_W}) / 2)`
 
 type SiteFrameProps = PropsWithChildren<{
   currentPath: string
+  navItems: TopLevelNavItem[]
 }>
-
-type NavIconKind =
-  | "normal"
-  | "transfer"
-  | "transfer-and-out-of-station-transfer"
-  | "out-of-station-transfer"
-  | "out-of-station-transfer-and-out-of-station-transfer"
-
-const navItems: ReadonlyArray<{
-  href: string
-  label: string
-  icon: NavIconKind
-}> = [
-  { href: "/", label: "首页", icon: "normal" },
-  { href: "/blog", label: "文章", icon: "normal" },
-  { href: "/tools", label: "工具", icon: "transfer" },
-  { href: "/friends", label: "友情链接", icon: "out-of-station-transfer-and-out-of-station-transfer" },
-  { href: "/about", label: "关于", icon: "normal" },
-]
 
 function MetroNavIcon({ kind, active }: { kind: NavIconKind; active: boolean }) {
   const height = 16
@@ -212,7 +195,7 @@ function ThemeToggleButton(props: Omit<ComponentProps<typeof IconButton>, "aria-
   )
 }
 
-export function SiteFrame({ children, currentPath }: SiteFrameProps) {
+export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
   return (
     <Provider>
       <Box minH="100vh" bg="var(--site-bg)" color="var(--site-fg)">
@@ -295,7 +278,7 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                       const active = isActiveLink(item.href, currentPath)
                       return (
                         <Link
-                          key={item.href}
+                          key={item.folderPath}
                           href={item.href}
                           display="inline-flex"
                           alignItems="center"
@@ -401,7 +384,7 @@ export function SiteFrame({ children, currentPath }: SiteFrameProps) {
                   {navItems.map((item) => {
                     const active = isActiveLink(item.href, currentPath)
                     return (
-                      <Box as="li" key={item.href}>
+                      <Box as="li" key={item.folderPath}>
                         <Link
                           data-site-menu-link
                           href={item.href}

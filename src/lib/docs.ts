@@ -1,16 +1,36 @@
 import type { CollectionEntry } from 'astro:content';
+import { parse as parseYaml } from 'yaml';
 
 type DocEntry = CollectionEntry<'docs'>;
 
-export type DocListItem = {
-	id: string;
+export type NavIconKind =
+	| 'normal'
+	| 'transfer'
+	| 'transfer-and-out-of-station-transfer'
+	| 'out-of-station-transfer'
+	| 'out-of-station-transfer-and-out-of-station-transfer';
+
+export type FolderListItem = {
+	fixOrder?: number;
 	href: string;
+	id: string;
+	kind: 'folder';
+	timeless: true;
+	title: string;
+	icon?: NavIconKind;
+};
+
+export type DocListItem = {
+	fixOrder?: number;
+	href: string;
+	id: string;
+	kind: 'doc';
+	pubDate?: Date;
+	timeless: boolean;
 	title: string;
 };
 
-export type DocListItemWithPubDate = DocListItem & {
-	pubDate?: Date;
-};
+export type FolderPageListItem = FolderListItem | DocListItem;
 
 type SourceDocMeta = {
 	folderPath: string;
@@ -19,12 +39,48 @@ type SourceDocMeta = {
 	routePath: string;
 };
 
-type FolderDocMeta = SourceDocMeta & {
+type RawFolderMeta = {
+	fixOrder?: number;
+	icon?: string;
+	name?: string;
+	timeless?: boolean;
+	title?: string;
+};
+
+type FolderMeta = {
+	fixOrder?: number;
+	icon?: NavIconKind;
+	timelessEffectToFile: boolean;
+	title?: string;
+};
+
+type ResolvedDocMeta = SourceDocMeta & {
 	entry: DocEntry;
+	fixOrder?: number;
+	timeless: boolean;
+};
+
+type FolderState = {
+	childItems: FolderPageListItem[];
+	depth: number;
+	directChildFolders: string[];
+	displayTitle: string;
+	folderPath: string;
+	indexDoc?: ResolvedDocMeta;
+	meta: FolderMeta;
+	nonIndexDocs: ResolvedDocMeta[];
+	parentPath?: string;
+	routePath: string;
+};
+
+type ScannedContent = {
+	folderPaths: string[];
+	rawFolderMetaMap: Map<string, RawFolderMeta>;
+	sourceDocs: SourceDocMeta[];
 };
 
 export type FolderRoute = {
-	articleList: DocListItem[];
+	childItems: FolderPageListItem[];
 	entry: DocEntry;
 	routePath: string;
 };
@@ -35,13 +91,12 @@ export type GeneratedFolderPageData = {
 };
 
 export type GeneratedFolderRoute = {
-	articleList: DocListItem[];
+	childItems: FolderPageListItem[];
 	generatedPage: GeneratedFolderPageData;
 	routePath: string;
 };
 
 export type DocRoute = {
-	articleList: DocListItem[];
 	entry: DocEntry;
 	routePath: string;
 };
@@ -49,9 +104,35 @@ export type DocRoute = {
 export type SiteRoute = FolderRoute | GeneratedFolderRoute | DocRoute;
 
 export type TagRoute = {
-	items: DocListItemWithPubDate[];
+	items: DocListItem[];
 	param: string;
 	tag: string;
+};
+
+export type SidebarDocNode = {
+	href: string;
+	id: string;
+	kind: 'doc';
+	level: number;
+	title: string;
+};
+
+export type SidebarFolderNode = {
+	children: SidebarNode[];
+	href: string;
+	kind: 'folder';
+	level: number;
+	routePath: string;
+	title: string;
+};
+
+export type SidebarNode = SidebarFolderNode | SidebarDocNode;
+
+export type TopLevelNavItem = {
+	folderPath: string;
+	href: string;
+	icon: NavIconKind;
+	label: string;
 };
 
 export type DocsStructure = {
@@ -59,12 +140,28 @@ export type DocsStructure = {
 	folderRoutes: FolderRoute[];
 	routes: SiteRoute[];
 	tagRoutes: TagRoute[];
+	topLevelFolderTrees: Map<string, SidebarFolderNode>;
+	topLevelNavItems: TopLevelNavItem[];
 };
 
 const SOURCE_DOC_FILES = [
 	...Object.keys(import.meta.glob('../content/**/*.md')),
 	...Object.keys(import.meta.glob('../content/**/*.mdx')),
 ];
+
+const SOURCE_FOLDER_META_FILES = import.meta.glob('../content/**/_meta.{yml,yaml}', {
+	eager: true,
+	import: 'default',
+	query: '?raw',
+}) as Record<string, string>;
+
+const VALID_NAV_ICON_KINDS = new Set<NavIconKind>([
+	'normal',
+	'transfer',
+	'transfer-and-out-of-station-transfer',
+	'out-of-station-transfer',
+	'out-of-station-transfer-and-out-of-station-transfer',
+]);
 
 function toPosixPath(path: string) {
 	return path.replaceAll('\\', '/');
@@ -86,14 +183,101 @@ function formatFolderSegment(segment: string) {
 		.join(' ');
 }
 
-function buildGeneratedFolderPage(folderPath: string): GeneratedFolderPageData {
-	const pathSegments = folderPath.split('/').filter(Boolean);
-	const fallbackTitle = pathSegments.length > 0
-		? pathSegments.map(formatFolderSegment).join(' / ')
-		: '文章列表';
+function getFolderDepth(folderPath: string) {
+	return folderPath ? folderPath.split('/').length : 0;
+}
+
+function getParentFolderPath(folderPath: string) {
+	if (!folderPath) {
+		return undefined;
+	}
+
+	const segments = folderPath.split('/');
+	segments.pop();
+
+	return segments.join('/');
+}
+
+function addFolderPathWithAncestors(folderPathSet: Set<string>, folderPath: string) {
+	folderPathSet.add(folderPath);
+
+	let currentPath = folderPath;
+	while (currentPath) {
+		const parentPath = getParentFolderPath(currentPath);
+
+		if (parentPath === undefined) {
+			break;
+		}
+
+		folderPathSet.add(parentPath);
+		currentPath = parentPath;
+	}
+	folderPathSet.add('');
+}
+
+function parseFolderMeta(sourcePath: string, rawContent: string): RawFolderMeta {
+	const parsed = parseYaml(rawContent);
+
+	if (parsed === null || parsed === undefined) {
+		return {};
+	}
+
+	if (typeof parsed !== 'object' || Array.isArray(parsed)) {
+		throw new Error(`Folder meta file ${sourcePath} must contain a YAML object.`);
+	}
+
+	const { icon, name, timeless, title } = parsed as Record<string, unknown>;
+	const fixOrder = (parsed as Record<string, unknown>)['fix-order'];
+
+	if (icon !== undefined && typeof icon !== 'string') {
+		throw new Error(`Folder meta file ${sourcePath} has an invalid icon value.`);
+	}
+
+	if (name !== undefined && typeof name !== 'string') {
+		throw new Error(`Folder meta file ${sourcePath} has an invalid name value.`);
+	}
+
+	if (timeless !== undefined && typeof timeless !== 'boolean') {
+		throw new Error(`Folder meta file ${sourcePath} has an invalid timeless value.`);
+	}
+
+	if (title !== undefined && typeof title !== 'string') {
+		throw new Error(`Folder meta file ${sourcePath} has an invalid title value.`);
+	}
+
+	if (fixOrder !== undefined && (typeof fixOrder !== 'number' || !Number.isInteger(fixOrder) || fixOrder >= 0)) {
+		throw new Error(`Folder meta file ${sourcePath} has an invalid fix-order value.`);
+	}
 
 	return {
-		description: `按发布时间整理的 ${fallbackTitle} 文章列表。`,
+		fixOrder: fixOrder as number | undefined,
+		icon,
+		name,
+		timeless,
+		title,
+	};
+}
+
+function resolveFolderMeta(folderPath: string, rawMeta: RawFolderMeta | undefined, parentMeta: FolderMeta | undefined): FolderMeta {
+	const resolvedIcon = rawMeta?.icon;
+
+	if (resolvedIcon !== undefined && !VALID_NAV_ICON_KINDS.has(resolvedIcon as NavIconKind)) {
+		throw new Error(`Folder ${folderPath || '/'} has an unsupported icon value: ${resolvedIcon}.`);
+	}
+
+	return {
+		fixOrder: rawMeta?.fixOrder,
+		icon: resolvedIcon as NavIconKind | undefined,
+		timelessEffectToFile: rawMeta?.timeless ?? parentMeta?.timelessEffectToFile ?? false,
+		title: rawMeta?.title ?? rawMeta?.name,
+	};
+}
+
+function buildGeneratedFolderPage(folder: FolderState): GeneratedFolderPageData {
+	const fallbackTitle = folder.displayTitle || '文章列表';
+
+	return {
+		description: `这里收录了 ${fallbackTitle} 下的文件与子目录。`,
 		title: fallbackTitle,
 	};
 }
@@ -106,7 +290,29 @@ export function toTagHref(tag: string) {
 	return `/tag/${toTagSlug(tag)}/`;
 }
 
-function compareDocListItems(left: DocListItemWithPubDate, right: DocListItemWithPubDate) {
+function compareTimedItems(left: Pick<FolderPageListItem, 'fixOrder' | 'pubDate' | 'timeless' | 'title'>, right: Pick<FolderPageListItem, 'fixOrder' | 'pubDate' | 'timeless' | 'title'>) {
+	if (left.fixOrder !== undefined || right.fixOrder !== undefined) {
+		if (left.fixOrder === undefined) {
+			return 1;
+		}
+
+		if (right.fixOrder === undefined) {
+			return -1;
+		}
+
+		if (left.fixOrder !== right.fixOrder) {
+			return left.fixOrder - right.fixOrder;
+		}
+	}
+
+	if (left.timeless !== right.timeless) {
+		return left.timeless ? -1 : 1;
+	}
+
+	if (left.timeless) {
+		return left.title.localeCompare(right.title, 'zh-CN');
+	}
+
 	const leftTime = left.pubDate?.valueOf() ?? Number.NEGATIVE_INFINITY;
 	const rightTime = right.pubDate?.valueOf() ?? Number.NEGATIVE_INFINITY;
 
@@ -117,29 +323,61 @@ function compareDocListItems(left: DocListItemWithPubDate, right: DocListItemWit
 	return left.title.localeCompare(right.title, 'zh-CN');
 }
 
-function compareEntriesByDateAndTitle(left: DocEntry, right: DocEntry) {
-	const leftTime = left.data.pubDate?.valueOf() ?? Number.NEGATIVE_INFINITY;
-	const rightTime = right.data.pubDate?.valueOf() ?? Number.NEGATIVE_INFINITY;
-
-	if (leftTime !== rightTime) {
-		return rightTime - leftTime;
-	}
-
-	return left.data.title.localeCompare(right.data.title, 'zh-CN');
+function compareFolderPageItems(left: FolderPageListItem, right: FolderPageListItem) {
+	return compareTimedItems(left, right);
 }
 
-function compareDocs(left: FolderDocMeta, right: FolderDocMeta) {
-	if (left.isIndex !== right.isIndex) {
-		return left.isIndex ? -1 : 1;
-	}
-
-	return compareEntriesByDateAndTitle(left.entry, right.entry);
+function compareTagItems(left: DocListItem, right: DocListItem) {
+	return compareTimedItems(left, right);
 }
 
-function scanContentDirectory(): SourceDocMeta[] {
+function assertUniqueFixOrders(items: Array<Pick<FolderPageListItem, 'fixOrder' | 'title'>>, contextLabel: string) {
+	const seenFixOrders = new Map<number, string>();
+
+	for (const item of items) {
+		if (item.fixOrder === undefined) {
+			continue;
+		}
+
+		const existingItemTitle = seenFixOrders.get(item.fixOrder);
+		if (existingItemTitle) {
+			throw new Error(`${contextLabel} contains duplicate fix-order ${item.fixOrder}: ${existingItemTitle}, ${item.title}.`);
+		}
+
+		seenFixOrders.set(item.fixOrder, item.title);
+	}
+}
+
+function buildFolderListItem(folder: FolderState): FolderListItem {
+	return {
+		fixOrder: folder.meta.fixOrder,
+		href: toHref(folder.routePath),
+		id: `folder:${folder.routePath || 'index'}`,
+		icon: folder.depth === 1 ? folder.meta.icon : undefined,
+		kind: 'folder',
+		timeless: true,
+		title: folder.displayTitle,
+	};
+}
+
+function buildDocListItem(doc: ResolvedDocMeta): DocListItem {
+	return {
+		fixOrder: doc.fixOrder,
+		href: toHref(doc.routePath),
+		id: doc.entry.id,
+		kind: 'doc',
+		pubDate: doc.entry.data.pubDate,
+		timeless: doc.timeless,
+		title: doc.entry.data.title,
+	};
+}
+
+function scanContentDirectory(): ScannedContent {
+	const folderPathSet = new Set<string>(['']);
 	const idSourceMap = new Map<string, string[]>();
 	const indexSourceMap = new Map<string, string[]>();
-	const docs = SOURCE_DOC_FILES.map<SourceDocMeta>((sourcePath) => {
+	const rawFolderMetaMap = new Map<string, RawFolderMeta>();
+	const sourceDocs = SOURCE_DOC_FILES.map<SourceDocMeta>((sourcePath) => {
 		const normalizedPath = toPosixPath(sourcePath);
 		const relativePath = normalizedPath.replace(/^\.\.\/content\//, '');
 		const pathWithoutExtension = relativePath.replace(/\.mdx?$/, '');
@@ -153,6 +391,7 @@ function scanContentDirectory(): SourceDocMeta[] {
 
 		duplicateSources.push(relativePath);
 		idSourceMap.set(id, duplicateSources);
+		addFolderPathWithAncestors(folderPathSet, folderPath);
 
 		if (isIndex) {
 			const indexSources = indexSourceMap.get(folderPath) ?? [];
@@ -168,6 +407,20 @@ function scanContentDirectory(): SourceDocMeta[] {
 		};
 	});
 
+	for (const [sourcePath, rawContent] of Object.entries(SOURCE_FOLDER_META_FILES)) {
+		const normalizedPath = toPosixPath(sourcePath);
+		const relativePath = normalizedPath.replace(/^\.\.\/content\/?/, '');
+		const folderPath = relativePath.replace(/(?:^|\/)_meta\.ya?ml$/u, '');
+		const normalizedFolderPath = folderPath === relativePath ? '' : folderPath;
+
+		if (rawFolderMetaMap.has(normalizedFolderPath)) {
+			throw new Error(`Folder ${normalizedFolderPath || '/'} cannot contain multiple meta files.`);
+		}
+
+		rawFolderMetaMap.set(normalizedFolderPath, parseFolderMeta(relativePath, rawContent));
+		addFolderPathWithAncestors(folderPathSet, normalizedFolderPath);
+	}
+
 	for (const [folderPath, indexSources] of indexSourceMap) {
 		if (indexSources.length > 1) {
 			const displayPath = folderPath || '/';
@@ -181,81 +434,160 @@ function scanContentDirectory(): SourceDocMeta[] {
 		}
 	}
 
-	return docs;
+	return {
+		folderPaths: [...folderPathSet].sort((left, right) => {
+			const depthDiff = getFolderDepth(left) - getFolderDepth(right);
+
+			return depthDiff !== 0 ? depthDiff : left.localeCompare(right, 'zh-CN');
+		}),
+		rawFolderMetaMap,
+		sourceDocs,
+	};
+}
+
+function buildSidebarTree(folderPath: string, folderStateMap: Map<string, FolderState>): SidebarFolderNode {
+	const folder = folderStateMap.get(folderPath);
+
+	if (!folder) {
+		throw new Error(`Unable to build sidebar tree for folder ${folderPath || '/'}.`);
+	}
+
+	return {
+		children: folder.childItems.map((item) => {
+			if (item.kind === 'folder') {
+				const childFolderPath = item.href.replace(/^\//, '').replace(/\/$/, '');
+				return buildSidebarTree(childFolderPath, folderStateMap);
+			}
+
+			return {
+				href: item.href,
+				id: item.id,
+				kind: 'doc',
+				level: folder.depth + 1,
+				title: item.title,
+			} satisfies SidebarDocNode;
+		}),
+		href: toHref(folder.routePath),
+		kind: 'folder',
+		level: folder.depth,
+		routePath: folder.routePath,
+		title: folder.displayTitle,
+	};
 }
 
 export function buildDocsStructure(entries: DocEntry[]): DocsStructure {
 	const docsById = new Map(entries.map((entry) => [entry.id, entry]));
-	const sourceDocs = scanContentDirectory();
-	const folderMap = new Map<string, FolderDocMeta[]>();
+	const scannedContent = scanContentDirectory();
 	const entryRouteMap = new Map<string, string>();
+	const folderMetaMap = new Map<string, FolderMeta>();
+	const folderStateMap = new Map<string, FolderState>();
+	const folderRoutes: FolderRoute[] = [];
+	const generatedFolderRoutes: GeneratedFolderRoute[] = [];
+	const articleRoutes: DocRoute[] = [];
+	const tagMap = new Map<string, DocListItem[]>();
 
-	for (const sourceDoc of sourceDocs) {
+	for (const folderPath of scannedContent.folderPaths) {
+		const parentPath = getParentFolderPath(folderPath);
+		const parentMeta = parentPath === undefined ? undefined : folderMetaMap.get(parentPath);
+		const meta = resolveFolderMeta(folderPath, scannedContent.rawFolderMetaMap.get(folderPath), parentMeta);
+
+		folderMetaMap.set(folderPath, meta);
+		folderStateMap.set(folderPath, {
+			childItems: [],
+			depth: getFolderDepth(folderPath),
+			directChildFolders: [],
+			displayTitle: meta.title ?? (folderPath ? formatFolderSegment(folderPath.split('/').at(-1) ?? folderPath) : '首页'),
+			folderPath,
+			meta,
+			nonIndexDocs: [],
+			parentPath,
+			routePath: folderPath,
+		});
+	}
+
+	for (const folderPath of scannedContent.folderPaths) {
+		const parentPath = getParentFolderPath(folderPath);
+
+		if (parentPath === undefined) {
+			continue;
+		}
+
+		folderStateMap.get(parentPath)?.directChildFolders.push(folderPath);
+	}
+
+	const resolvedDocs: ResolvedDocMeta[] = scannedContent.sourceDocs.map((sourceDoc) => {
 		const entry = docsById.get(sourceDoc.id);
 
 		if (!entry) {
 			throw new Error(`Unable to resolve content entry for ${sourceDoc.id}.`);
 		}
 
-		const folderDocs = folderMap.get(sourceDoc.folderPath) ?? [];
-		folderDocs.push({ ...sourceDoc, entry });
-		folderMap.set(sourceDoc.folderPath, folderDocs);
+		const folderMeta = folderMetaMap.get(sourceDoc.folderPath);
+		const fixOrder = entry.data['fix-order'];
+		const timeless = entry.data.timeless ?? folderMeta?.timelessEffectToFile ?? false;
+		const resolvedDoc = {
+			...sourceDoc,
+			entry,
+			fixOrder,
+			timeless,
+		};
+
 		entryRouteMap.set(sourceDoc.id, sourceDoc.routePath);
-	}
 
-	const folderRoutes: FolderRoute[] = [];
-	const generatedFolderRoutes: GeneratedFolderRoute[] = [];
-	const articleRoutes: DocRoute[] = [];
-	const tagMap = new Map<string, DocListItemWithPubDate[]>();
+		const folderState = folderStateMap.get(sourceDoc.folderPath);
+		if (!folderState) {
+			throw new Error(`Unable to resolve folder state for ${sourceDoc.folderPath || '/'}.`);
+		}
 
-	for (const [folderPath, folderDocs] of folderMap) {
-		const sortedDocs = [...folderDocs].sort(compareDocs);
-		const nonIndexDocs = sortedDocs.filter((doc) => !doc.isIndex);
-		const indexDoc = sortedDocs.find((doc) => doc.isIndex);
+		if (sourceDoc.isIndex) {
+			folderState.indexDoc = resolvedDoc;
+		} else {
+			folderState.nonIndexDocs.push(resolvedDoc);
+		}
 
-		if (!indexDoc && nonIndexDocs.length === 0) {
+		return resolvedDoc;
+	});
+
+	for (const folderState of folderStateMap.values()) {
+		const childFolderItems = folderState.directChildFolders
+			.map((childPath) => folderStateMap.get(childPath))
+			.filter((childFolder): childFolder is FolderState => Boolean(childFolder))
+			.filter((childFolder) => childFolder.indexDoc !== undefined || childFolder.nonIndexDocs.length > 0 || childFolder.directChildFolders.length > 0)
+			.map(buildFolderListItem);
+		const childDocItems = folderState.nonIndexDocs.map(buildDocListItem);
+
+		folderState.nonIndexDocs.sort((left, right) => compareTagItems(buildDocListItem(left), buildDocListItem(right)));
+		assertUniqueFixOrders([...childFolderItems, ...childDocItems], `Folder ${folderState.routePath || '/'}`);
+		folderState.childItems = [...childFolderItems, ...childDocItems].sort(compareFolderPageItems);
+
+		if (!folderState.indexDoc && folderState.childItems.length === 0) {
 			continue;
 		}
 
-		const articleList = nonIndexDocs.length > 0
-			? nonIndexDocs.map((doc) => ({
-				id: doc.entry.id,
-				href: toHref(doc.routePath),
-				title: doc.entry.data.title,
-			}))
-			: [];
-
-		if (indexDoc) {
+		if (folderState.indexDoc) {
 			folderRoutes.push({
-				articleList,
-				entry: indexDoc.entry,
-				routePath: folderPath === 'index' ? '' : folderPath,
+				childItems: folderState.childItems,
+				entry: folderState.indexDoc.entry,
+				routePath: folderState.routePath,
 			});
 		} else {
 			generatedFolderRoutes.push({
-				articleList,
-				generatedPage: buildGeneratedFolderPage(folderPath),
-				routePath: folderPath === 'index' ? '' : folderPath,
-			});
-		}
-
-		for (const doc of nonIndexDocs) {
-			articleRoutes.push({
-				articleList,
-				entry: doc.entry,
-				routePath: doc.routePath,
+				childItems: folderState.childItems,
+				generatedPage: buildGeneratedFolderPage(folderState),
+				routePath: folderState.routePath,
 			});
 		}
 	}
 
-	for (const entry of entries) {
-		const routePath = entryRouteMap.get(entry.id);
-
-		if (routePath === undefined) {
-			continue;
+	for (const resolvedDoc of resolvedDocs) {
+		if (!resolvedDoc.isIndex) {
+			articleRoutes.push({
+				entry: resolvedDoc.entry,
+				routePath: resolvedDoc.routePath,
+			});
 		}
 
-		for (const rawTag of new Set(entry.data.tags)) {
+		for (const rawTag of new Set(resolvedDoc.entry.data.tags)) {
 			const tag = rawTag.trim();
 
 			if (!tag) {
@@ -263,31 +595,53 @@ export function buildDocsStructure(entries: DocEntry[]): DocsStructure {
 			}
 
 			const taggedDocs = tagMap.get(tag) ?? [];
-			taggedDocs.push({
-				id: entry.id,
-				href: toHref(routePath),
-				pubDate: entry.data.pubDate,
-				title: entry.data.title,
-			});
+			taggedDocs.push(buildDocListItem(resolvedDoc));
 			tagMap.set(tag, taggedDocs);
 		}
 	}
 
-	const routes = [...folderRoutes, ...generatedFolderRoutes, ...articleRoutes].filter(
-		(route, index, allRoutes) => allRoutes.findIndex((candidate) => candidate.routePath === route.routePath) === index,
-	);
+	const topLevelFolderTrees = new Map<string, SidebarFolderNode>();
+	const rootFolderState = folderStateMap.get('');
+	const topLevelNavSourceItems = [
+		...(rootFolderState?.indexDoc ? [buildDocListItem(rootFolderState.indexDoc)] : []),
+		...(rootFolderState?.childItems ?? []),
+	];
+	assertUniqueFixOrders(topLevelNavSourceItems, 'Top-level navigation');
+	const topLevelNavItems = [...topLevelNavSourceItems]
+		.sort(compareFolderPageItems)
+		.map((item) => {
+			const folderPath = item.href.replace(/^\//, '').replace(/\/$/, '');
+
+			if (item.kind === 'folder') {
+				topLevelFolderTrees.set(folderPath, buildSidebarTree(folderPath, folderStateMap));
+			}
+
+			return {
+				folderPath,
+				href: item.href,
+				icon: item.kind === 'folder' ? item.icon ?? 'normal' : 'normal',
+				label: item.title,
+			};
+		});
+
 	const tagRoutes = [...tagMap.entries()]
 		.sort(([leftTag], [rightTag]) => leftTag.localeCompare(rightTag, 'zh-CN'))
-		.map(([tag, items]) => ({
-			items: [...items].sort(compareDocListItems),
-			param: tag,
-			tag,
-		}));
+		.map(([tag, items]) => {
+			assertUniqueFixOrders(items, `Tag ${tag}`);
+
+			return {
+				items: [...items].sort(compareTagItems),
+				param: tag,
+				tag,
+			};
+		});
 
 	return {
 		entryRouteMap,
 		folderRoutes,
-		routes,
+		routes: [...folderRoutes, ...generatedFolderRoutes, ...articleRoutes],
 		tagRoutes,
+		topLevelFolderTrees,
+		topLevelNavItems,
 	};
 }

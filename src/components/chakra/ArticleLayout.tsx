@@ -3,10 +3,11 @@ import { Box, Stack } from "@chakra-ui/react"
 import { ArticleContent } from "./ArticleContent"
 import { ArticleHeader } from "./ArticleHeader"
 import { ArticleHeroImage } from "./ArticleHeroImage"
-import { ArticlePostList, type ArticlePostListItem } from "./ArticlePostList"
+import { ArticlePostList, type ArticleSidebarTree } from "./ArticlePostList"
 import { ArticleTags, type ArticleTag } from "./ArticleTags"
 import { ArticleToc, type ArticleTocHeading } from "./ArticleToc"
 import { SiteFrame, SITE_MAIN_HALF_W, SITE_MAIN_MAX_W } from "./SiteFrame"
+import type { TopLevelNavItem } from "../../lib/docs"
 
 const ARTICLE_SIDEBAR_W = "12rem"
 const ARTICLE_SIDEBAR_GAP = "0.5rem"
@@ -21,8 +22,9 @@ type ArticleLayoutProps = PropsWithChildren<{
     src: string
   }
   headings?: ArticleTocHeading[]
-  articleList?: ArticlePostListItem[]
   currentPostId?: string
+  navItems: TopLevelNavItem[]
+  sidebarTree?: ArticleSidebarTree
 }>
 
 export function ArticleLayout({
@@ -34,17 +36,18 @@ export function ArticleLayout({
   updatedDate,
   heroImage,
   headings = [],
-  articleList = [],
   currentPostId,
+  navItems,
+  sidebarTree,
 }: ArticleLayoutProps) {
   const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3)
   const hasToc = tocHeadings.length > 0
-  const hasArticleList = articleList.length > 0
+  const hasSidebarTree = Boolean(sidebarTree)
 
   return (
-    <SiteFrame currentPath={currentPath}>
+    <SiteFrame currentPath={currentPath} navItems={navItems}>
       <Box maxW={SITE_MAIN_MAX_W} mx="auto" position="relative">
-        {hasArticleList && (
+        {hasSidebarTree && sidebarTree && (
           <Box
             as="aside"
             display={{ base: "none", xl: "block" }}
@@ -54,7 +57,7 @@ export function ArticleLayout({
             w={ARTICLE_SIDEBAR_W}
             zIndex="1"
           >
-            <ArticlePostList posts={articleList} currentPostId={currentPostId} />
+            <ArticlePostList currentPath={currentPath} currentPostId={currentPostId} tree={sidebarTree} />
           </Box>
         )}
 
