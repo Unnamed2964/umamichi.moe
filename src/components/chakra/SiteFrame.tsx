@@ -228,7 +228,6 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                     variant="ghost"
                     rounded="full"
                     size="sm"
-                    bg="var(--site-surface)"
                     color="var(--site-fg)"
                     _hover={{ bg: "var(--site-hover-bg)" }}
                     _active={{ bg: "var(--site-active-bg)" }}
@@ -353,7 +352,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           position="fixed"
           inset="0"
           zIndex="20"
-          bg="var(--site-surface)"
+          bg="var(--site-header-bg)"
           display={{ base: "block", md: "none" }}
           hidden
         >
@@ -368,8 +367,8 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                   size="sm"
                   rounded="full"
                   color="var(--site-fg)"
-                  bg="var(--site-surface)"
                   _hover={{ bg: "var(--site-hover-bg)" }}
+                  _active={{ bg: "var(--site-active-bg)" }}
                 >
                   <Icon as={FaBars} boxSize="4" />
                 </IconButton>
