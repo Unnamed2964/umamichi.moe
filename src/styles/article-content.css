@@ -35,7 +35,7 @@ html.dark {
 	word-break: break-word;
 }
 
-.article-content > :first-of-type {
+.article-content > :first-child {
 	margin-top: 0;
 }
 
@@ -224,7 +224,7 @@ html.dark {
 	border-left: 0.25em solid var(--article-border);
 }
 
-.article-content blockquote > :first-of-type {
+.article-content blockquote > :first-child {
 	margin-top: 0;
 }
 
