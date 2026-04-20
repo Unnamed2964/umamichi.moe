@@ -1,0 +1,24 @@
+---
+import BlogPost from '../layouts/BlogPost.astro';
+import type { DocListItem } from '../lib/docs';
+
+type Props = {
+	articleList: DocListItem[];
+	description: string;
+	title: string;
+};
+
+const { articleList, description, title } = Astro.props as Props;
+---
+
+<BlogPost title={title} description={description} articleList={articleList}>
+	<p>这里收录了该目录下发布的文章，按发布时间倒序排列。</p>
+
+	<ul>
+		{articleList.map((item) => (
+			<li>
+				<a href={item.href}>{item.title}</a>
+			</li>
+		))}
+	</ul>
+</BlogPost>

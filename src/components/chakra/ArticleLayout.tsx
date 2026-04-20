@@ -4,6 +4,7 @@ import { ArticleContent } from "./ArticleContent"
 import { ArticleHeader } from "./ArticleHeader"
 import { ArticleHeroImage } from "./ArticleHeroImage"
 import { ArticlePostList, type ArticlePostListItem } from "./ArticlePostList"
+import { ArticleTags, type ArticleTag } from "./ArticleTags"
 import { ArticleToc, type ArticleTocHeading } from "./ArticleToc"
 import { SiteFrame, SITE_MAIN_HALF_W, SITE_MAIN_MAX_W } from "./SiteFrame"
 
@@ -13,6 +14,7 @@ const ARTICLE_SIDEBAR_GAP = "0.5rem"
 type ArticleLayoutProps = PropsWithChildren<{
   currentPath: string
   title: string
+  tags?: ArticleTag[]
   pubDate?: string
   updatedDate?: string
   heroImage?: {
@@ -27,6 +29,7 @@ export function ArticleLayout({
   children,
   currentPath,
   title,
+  tags = [],
   pubDate,
   updatedDate,
   heroImage,
@@ -72,6 +75,7 @@ export function ArticleLayout({
         <Stack as="article" gap="10" w="full">
           <Stack gap="6" w="full">
             <ArticleHeader title={title} pubDate={pubDate} updatedDate={updatedDate} />
+            <ArticleTags tags={tags} />
 
             {heroImage && <ArticleHeroImage src={heroImage.src} />}
 
