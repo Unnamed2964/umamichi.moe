@@ -1,5 +1,6 @@
 ---
 import BlogPost from '../layouts/BlogPost.astro';
+import FolderDocListView from './FolderDocListView.astro';
 import type { FolderPageListItem } from '../lib/docs';
 
 type Props = {
@@ -14,13 +15,5 @@ const { childItems, description, title } = Astro.props as Props;
 <BlogPost title={title} description={description}>
 	<p>这里收录了该目录下的文件与子目录，排序规则与左侧导航保持一致。</p>
 
-	<ul>
-		{childItems.map((item) => (
-			<li>
-				<a href={item.href}>{item.title}</a>
-				{' '}
-				<small>({item.kind === 'folder' ? '目录' : item.timeless ? '常设文件' : '文章'})</small>
-			</li>
-		))}
-	</ul>
+	<FolderDocListView childItems={childItems} />
 </BlogPost>

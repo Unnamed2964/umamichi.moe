@@ -1,0 +1,19 @@
+---
+import type { FolderPageListItem } from '../lib/docs';
+
+type Props = {
+	childItems: FolderPageListItem[];
+};
+
+const { childItems } = Astro.props as Props;
+---
+
+<ul>
+	{childItems.map((item) => (
+		<li>
+			<a href={item.href}>{item.title}</a>
+			{' '}
+			<small>({item.kind === 'folder' ? '目录' : item.timeless ? '常设文件' : '文章'})</small>
+		</li>
+	))}
+</ul>
