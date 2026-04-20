@@ -1,12 +1,20 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import DocEntryPage from '../components/DocEntryPage.astro';
-import { buildDocsStructure, type DocListItem } from '../lib/docs';
+import GeneratedDocListPage from '../components/GeneratedDocListPage.astro';
+import { buildDocsStructure, type DocListItem, type GeneratedFolderPageData } from '../lib/docs';
 
-type RouteProps = {
+type EntryRouteProps = {
 	articleList: DocListItem[];
 	entry: CollectionEntry<'docs'>;
 };
+
+type GeneratedRouteProps = {
+	articleList: DocListItem[];
+	generatedPage: GeneratedFolderPageData;
+};
+
+type RouteProps = EntryRouteProps | GeneratedRouteProps;
 
 export async function getStaticPaths() {
 	const docs = await getCollection('docs');
@@ -18,7 +26,9 @@ export async function getStaticPaths() {
 		},
 		props: {
 			articleList: route.articleList,
-			entry: route.entry,
+			...( 'entry' in route
+				? { entry: route.entry }
+				: { generatedPage: route.generatedPage }),
 		},
 	}));
 }
@@ -26,4 +36,12 @@ export async function getStaticPaths() {
 const props = Astro.props as RouteProps;
 ---
 
-<DocEntryPage entry={props.entry} articleList={props.articleList} />
+{'entry' in props ? (
+	<DocEntryPage entry={props.entry} articleList={props.articleList} />
+) : (
+	<GeneratedDocListPage
+		articleList={props.articleList}
+		description={props.generatedPage.description}
+		title={props.generatedPage.title}
+	/>
+)}

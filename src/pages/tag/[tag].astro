@@ -1,0 +1,43 @@
+---
+import { getCollection } from 'astro:content';
+import BlogPost from '../../layouts/BlogPost.astro';
+import { buildDocsStructure } from '../../lib/docs';
+
+type RouteProps = {
+	items: {
+		href: string;
+		id: string;
+		title: string;
+	}[];
+	tag: string;
+};
+
+export async function getStaticPaths() {
+	const docs = await getCollection('docs');
+	const { tagRoutes } = buildDocsStructure(docs);
+
+	return tagRoutes.map((route) => ({
+		params: {
+			tag: route.param,
+		},
+		props: {
+			items: route.items.map(({ href, id, title }) => ({ href, id, title })),
+			tag: route.tag,
+		},
+	}));
+}
+
+const { items, tag } = Astro.props as RouteProps;
+---
+
+<BlogPost title={`标签：${tag}`} description={`收录了带有「${tag}」标签的所有页面。`}>
+	<p>共 {items.length} 篇内容。</p>
+
+	<ul>
+		{items.map((item) => (
+			<li>
+				<a href={item.href}>{item.title}</a>
+			</li>
+		))}
+	</ul>
+</BlogPost>

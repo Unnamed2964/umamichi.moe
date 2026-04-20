@@ -3,11 +3,14 @@ import ArticleTocScript from '../components/ArticleTocScript.astro';
 import BaseHead from '../components/BaseHead.astro';
 import SiteChromeScripts from '../components/SiteChromeScripts.astro';
 import { ArticleLayout } from '../components/chakra/ArticleLayout';
+import type { ArticleTag } from '../components/chakra/ArticleTags';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { toTagHref } from '../lib/docs';
 
 type LayoutData = {
 	title?: string;
 	description?: string;
+	tags?: string[];
 	pubDate?: Date;
 	updatedDate?: Date;
 	heroImage?: {
@@ -37,6 +40,10 @@ const currentEntryId = 'currentEntryId' in Astro.props ? (Astro.props.currentEnt
 const title = pageData.title ?? SITE_TITLE;
 const description = pageData.description ?? SITE_DESCRIPTION;
 const { pubDate, updatedDate, heroImage } = pageData;
+const tags: ArticleTag[] = (pageData.tags ?? []).map((tag) => ({
+	href: toTagHref(tag),
+	label: tag,
+}));
 const currentPath = Astro.url.pathname;
 const formattedPubDate = pubDate
 	? new Intl.DateTimeFormat('zh-CN', {
@@ -66,6 +73,7 @@ const formattedUpdatedDate = updatedDate
 			currentPath={currentPath}
 			headings={headings}
 			title={title}
+			tags={tags}
 			pubDate={formattedPubDate}
 			updatedDate={formattedUpdatedDate}
 			heroImage={heroImage ? { src: heroImage.src } : undefined}

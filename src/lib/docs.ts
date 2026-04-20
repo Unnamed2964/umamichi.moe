@@ -8,6 +8,10 @@ export type DocListItem = {
 	title: string;
 };
 
+export type DocListItemWithPubDate = DocListItem & {
+	pubDate?: Date;
+};
+
 type SourceDocMeta = {
 	folderPath: string;
 	id: string;
@@ -25,16 +29,36 @@ export type FolderRoute = {
 	routePath: string;
 };
 
+export type GeneratedFolderPageData = {
+	description: string;
+	title: string;
+};
+
+export type GeneratedFolderRoute = {
+	articleList: DocListItem[];
+	generatedPage: GeneratedFolderPageData;
+	routePath: string;
+};
+
 export type DocRoute = {
 	articleList: DocListItem[];
 	entry: DocEntry;
 	routePath: string;
 };
 
+export type SiteRoute = FolderRoute | GeneratedFolderRoute | DocRoute;
+
+export type TagRoute = {
+	items: DocListItemWithPubDate[];
+	param: string;
+	tag: string;
+};
+
 export type DocsStructure = {
 	entryRouteMap: Map<string, string>;
 	folderRoutes: FolderRoute[];
-	routes: DocRoute[];
+	routes: SiteRoute[];
+	tagRoutes: TagRoute[];
 };
 
 const SOURCE_DOC_FILES = [
@@ -54,19 +78,62 @@ function toHref(routePath: string) {
 	return routePath ? `/${routePath}/` : '/';
 }
 
-function compareDocs(left: FolderDocMeta, right: FolderDocMeta) {
-	if (left.isIndex !== right.isIndex) {
-		return left.isIndex ? -1 : 1;
-	}
+function formatFolderSegment(segment: string) {
+	return segment
+		.split(/[-_]/)
+		.filter(Boolean)
+		.map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+		.join(' ');
+}
 
-	const leftTime = left.entry.data.pubDate?.valueOf() ?? Number.NEGATIVE_INFINITY;
-	const rightTime = right.entry.data.pubDate?.valueOf() ?? Number.NEGATIVE_INFINITY;
+function buildGeneratedFolderPage(folderPath: string): GeneratedFolderPageData {
+	const pathSegments = folderPath.split('/').filter(Boolean);
+	const fallbackTitle = pathSegments.length > 0
+		? pathSegments.map(formatFolderSegment).join(' / ')
+		: '文章列表';
+
+	return {
+		description: `按发布时间整理的 ${fallbackTitle} 文章列表。`,
+		title: fallbackTitle,
+	};
+}
+
+export function toTagSlug(tag: string) {
+	return encodeURIComponent(tag.trim());
+}
+
+export function toTagHref(tag: string) {
+	return `/tag/${toTagSlug(tag)}/`;
+}
+
+function compareDocListItems(left: DocListItemWithPubDate, right: DocListItemWithPubDate) {
+	const leftTime = left.pubDate?.valueOf() ?? Number.NEGATIVE_INFINITY;
+	const rightTime = right.pubDate?.valueOf() ?? Number.NEGATIVE_INFINITY;
 
 	if (leftTime !== rightTime) {
 		return rightTime - leftTime;
 	}
 
-	return left.entry.data.title.localeCompare(right.entry.data.title, 'zh-CN');
+	return left.title.localeCompare(right.title, 'zh-CN');
+}
+
+function compareEntriesByDateAndTitle(left: DocEntry, right: DocEntry) {
+	const leftTime = left.data.pubDate?.valueOf() ?? Number.NEGATIVE_INFINITY;
+	const rightTime = right.data.pubDate?.valueOf() ?? Number.NEGATIVE_INFINITY;
+
+	if (leftTime !== rightTime) {
+		return rightTime - leftTime;
+	}
+
+	return left.data.title.localeCompare(right.data.title, 'zh-CN');
+}
+
+function compareDocs(left: FolderDocMeta, right: FolderDocMeta) {
+	if (left.isIndex !== right.isIndex) {
+		return left.isIndex ? -1 : 1;
+	}
+
+	return compareEntriesByDateAndTitle(left.entry, right.entry);
 }
 
 function scanContentDirectory(): SourceDocMeta[] {
@@ -137,31 +204,40 @@ export function buildDocsStructure(entries: DocEntry[]): DocsStructure {
 	}
 
 	const folderRoutes: FolderRoute[] = [];
+	const generatedFolderRoutes: GeneratedFolderRoute[] = [];
 	const articleRoutes: DocRoute[] = [];
+	const tagMap = new Map<string, DocListItemWithPubDate[]>();
 
 	for (const [folderPath, folderDocs] of folderMap) {
 		const sortedDocs = [...folderDocs].sort(compareDocs);
 		const nonIndexDocs = sortedDocs.filter((doc) => !doc.isIndex);
 		const indexDoc = sortedDocs.find((doc) => doc.isIndex);
-		const defaultDoc = indexDoc ?? nonIndexDocs[0];
 
-		if (!defaultDoc) {
+		if (!indexDoc && nonIndexDocs.length === 0) {
 			continue;
 		}
 
 		const articleList = nonIndexDocs.length > 0
-			? sortedDocs.map((doc) => ({
+			? nonIndexDocs.map((doc) => ({
 				id: doc.entry.id,
 				href: toHref(doc.routePath),
 				title: doc.entry.data.title,
 			}))
 			: [];
 
-		folderRoutes.push({
-			articleList,
-			entry: defaultDoc.entry,
-			routePath: folderPath === 'index' ? '' : folderPath,
-		});
+		if (indexDoc) {
+			folderRoutes.push({
+				articleList,
+				entry: indexDoc.entry,
+				routePath: folderPath === 'index' ? '' : folderPath,
+			});
+		} else {
+			generatedFolderRoutes.push({
+				articleList,
+				generatedPage: buildGeneratedFolderPage(folderPath),
+				routePath: folderPath === 'index' ? '' : folderPath,
+			});
+		}
 
 		for (const doc of nonIndexDocs) {
 			articleRoutes.push({
@@ -172,13 +248,46 @@ export function buildDocsStructure(entries: DocEntry[]): DocsStructure {
 		}
 	}
 
-	const routes = [...folderRoutes, ...articleRoutes].filter(
+	for (const entry of entries) {
+		const routePath = entryRouteMap.get(entry.id);
+
+		if (routePath === undefined) {
+			continue;
+		}
+
+		for (const rawTag of new Set(entry.data.tags)) {
+			const tag = rawTag.trim();
+
+			if (!tag) {
+				continue;
+			}
+
+			const taggedDocs = tagMap.get(tag) ?? [];
+			taggedDocs.push({
+				id: entry.id,
+				href: toHref(routePath),
+				pubDate: entry.data.pubDate,
+				title: entry.data.title,
+			});
+			tagMap.set(tag, taggedDocs);
+		}
+	}
+
+	const routes = [...folderRoutes, ...generatedFolderRoutes, ...articleRoutes].filter(
 		(route, index, allRoutes) => allRoutes.findIndex((candidate) => candidate.routePath === route.routePath) === index,
 	);
+	const tagRoutes = [...tagMap.entries()]
+		.sort(([leftTag], [rightTag]) => leftTag.localeCompare(rightTag, 'zh-CN'))
+		.map(([tag, items]) => ({
+			items: [...items].sort(compareDocListItems),
+			param: tag,
+			tag,
+		}));
 
 	return {
 		entryRouteMap,
 		folderRoutes,
 		routes,
+		tagRoutes,
 	};
 }
