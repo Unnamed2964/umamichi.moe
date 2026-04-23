@@ -167,7 +167,10 @@ function isActiveLink(href: string, currentPath: string) {
     return currentPath === "/"
   }
 
-  return currentPath === href || currentPath.startsWith(`${href}/`)
+  const normalizedHref = href.replace(/\/+$/, "")
+  const normalizedCurrentPath = currentPath.replace(/\/+$/, "")
+
+  return normalizedCurrentPath === normalizedHref || normalizedCurrentPath.startsWith(`${normalizedHref}/`)
 }
 
 function ThemeToggleButton(props: Omit<ComponentProps<typeof IconButton>, "aria-label">) {
