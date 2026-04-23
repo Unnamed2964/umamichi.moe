@@ -267,5 +267,6 @@ html.dark {
 
 .article-content img {
 	max-width: 100%;
+	border: 1px solid var(--article-border);
 	border-radius: 6px;
 }
