@@ -4,6 +4,7 @@ import { ArticleContent } from "./ArticleContent"
 import { ArticleHeader } from "./ArticleHeader"
 import { ArticleHeroImage } from "./ArticleHeroImage"
 import { ArticlePostList, type ArticleSidebarTree } from "./ArticlePostList"
+import { ArticlePrevNext, type AdjacentArticleLink } from "./ArticlePrevNext"
 import { ArticleTags, type ArticleTag } from "./ArticleTags"
 import { ArticleToc, type ArticleTocHeading } from "./ArticleToc"
 import { SiteFrame, SITE_MAIN_HALF_W, SITE_MAIN_MAX_W } from "./SiteFrame"
@@ -23,6 +24,8 @@ type ArticleLayoutProps = PropsWithChildren<{
   }
   headings?: ArticleTocHeading[]
   currentPostId?: string
+  previousPost?: AdjacentArticleLink
+  nextPost?: AdjacentArticleLink
   navItems: TopLevelNavItem[]
   sidebarTree?: ArticleSidebarTree
 }>
@@ -37,6 +40,8 @@ export function ArticleLayout({
   heroImage,
   headings = [],
   currentPostId,
+  previousPost,
+  nextPost,
   navItems,
   sidebarTree,
 }: ArticleLayoutProps) {
@@ -94,6 +99,7 @@ export function ArticleLayout({
             {heroImage && <ArticleHeroImage src={heroImage.src} />}
 
             <ArticleContent>{children}</ArticleContent>
+            <ArticlePrevNext previousPost={previousPost} nextPost={nextPost} />
           </Stack>
         </Stack>
       </Box>

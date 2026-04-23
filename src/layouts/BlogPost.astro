@@ -6,7 +6,7 @@ import SiteChromeScripts from '../components/SiteChromeScripts.astro';
 import { ArticleLayout } from '../components/chakra/ArticleLayout';
 import type { ArticleTag } from '../components/chakra/ArticleTags';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-import { buildDocsStructure, toTagHref } from '../lib/docs';
+import { buildDocsStructure, toTagHref, type SidebarNode } from '../lib/docs';
 
 type LayoutData = {
 	title?: string;
@@ -31,6 +31,20 @@ type PostListItem = {
 	title: string;
 };
 
+function flattenSidebarDocs(nodes: SidebarNode[]): PostListItem[] {
+	return nodes.flatMap((node) => {
+		if (node.kind === 'doc') {
+			return [{
+				href: node.href,
+				id: node.id,
+				title: node.title,
+			}];
+		}
+
+		return flattenSidebarDocs(node.children);
+	});
+}
+
 const pageData: LayoutData = 'frontmatter' in Astro.props
 	? Astro.props.frontmatter
 	: Astro.props;
@@ -51,6 +65,12 @@ const topLevelFolderPath = routePath.split('/').filter(Boolean)[0] ?? '';
 const docs = await getCollection('docs');
 const docsStructure = buildDocsStructure(docs);
 const sidebarTree = docsStructure.topLevelFolderTrees.get(topLevelFolderPath);
+const orderedPosts = sidebarTree ? flattenSidebarDocs(sidebarTree.children) : [];
+const currentPostIndex = currentEntryId ? orderedPosts.findIndex((item) => item.id === currentEntryId) : -1;
+const previousPost = currentPostIndex > 0 ? orderedPosts[currentPostIndex - 1] : undefined;
+const nextPost = currentPostIndex >= 0 && currentPostIndex < orderedPosts.length - 1
+	? orderedPosts[currentPostIndex + 1]
+	: undefined;
 const formattedPubDate = pubDate
 	? new Intl.DateTimeFormat('zh-CN', {
 		year: 'numeric',
@@ -78,6 +98,8 @@ const formattedUpdatedDate = updatedDate
 			currentPath={currentPath}
 			headings={headings}
 			navItems={docsStructure.topLevelNavItems}
+			nextPost={nextPost}
+			previousPost={previousPost}
 			sidebarTree={sidebarTree}
 			title={title}
 			tags={tags}
