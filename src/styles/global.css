@@ -51,6 +51,9 @@ html {
 	--site-nav-active-bg: #ffffff;
 	--site-accent: var(--chakra-colors-cyan-700);
 	--site-accent-hover: var(--chakra-colors-cyan-800);
+	--site-copy-toast-bg: #ffffff;
+	--site-copy-toast-fg: var(--chakra-colors-gray-700);
+	--site-copy-toast-border: var(--chakra-colors-gray-300);
 	scroll-padding-top: var(--site-header-offset);
 }
 
@@ -72,6 +75,9 @@ html.dark {
 	--site-nav-active-bg: color-mix(in srgb, var(--chakra-colors-cyan-400) 20%, transparent);
 	--site-accent: var(--chakra-colors-cyan-300);
 	--site-accent-hover: var(--chakra-colors-cyan-200);
+	--site-copy-toast-bg: #ffffff;
+	--site-copy-toast-fg: var(--chakra-colors-gray-700);
+	--site-copy-toast-border: var(--chakra-colors-gray-300);
 }
 
 body {
@@ -89,6 +95,35 @@ html[data-theme-switching='true'] *::before,
 html[data-theme-switching='true'] *::after {
 	transition: none !important;
 	animation: none !important;
+}
+
+.site-copy-toast {
+	position: fixed;
+	left: 16px;
+	top: 16px;
+	z-index: 40;
+	max-width: min(calc(100vw - 32px), 36rem);
+	padding: 0.35rem 0.65rem;
+	box-sizing: border-box;
+	border: 1px solid var(--site-copy-toast-border);
+	border-radius: 999px;
+	background: var(--site-copy-toast-bg);
+	color: var(--site-copy-toast-fg);
+	font-size: 0.875rem;
+	font-weight: 500;
+	line-height: 1.4;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	pointer-events: none;
+	opacity: 0;
+	transform: translateY(2px);
+	transition: opacity 90ms ease, transform 90ms ease;
+}
+
+.site-copy-toast.is-visible {
+	opacity: 1;
+	transform: translateY(0);
 }
 
 [data-site-theme-icon='dark'] {
