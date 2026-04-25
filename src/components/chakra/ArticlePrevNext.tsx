@@ -26,7 +26,7 @@ function ArticleNavCard({
       maxW={{ base: "full", md: "22rem" }}
       rounded="2xl"
       borderWidth="1px"
-      borderColor="var(--site-sidebar-border)"
+      borderColor="var(--site-border)"
       bg="white"
       px={{ base: "4", md: "5" }}
       py="3.5"
