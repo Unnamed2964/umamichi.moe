@@ -8,6 +8,7 @@ export type AdjacentArticleLink = {
 type ArticlePrevNextProps = {
   previousPost?: AdjacentArticleLink
   nextPost?: AdjacentArticleLink
+  showDivider?: boolean
 }
 
 function ArticleNavCard({
@@ -48,13 +49,20 @@ function ArticleNavCard({
   )
 }
 
-export function ArticlePrevNext({ previousPost, nextPost }: ArticlePrevNextProps) {
+export function ArticlePrevNext({ previousPost, nextPost, showDivider = true }: ArticlePrevNextProps) {
   if (!previousPost && !nextPost) {
     return null
   }
 
   return (
-    <Stack as="nav" aria-label="上一篇和下一篇" gap="3" pt="6" borderTopWidth="1px" borderColor="var(--site-border)">
+    <Stack
+      as="nav"
+      aria-label="上一篇和下一篇"
+      gap="3"
+      pt="6"
+      borderTopWidth={showDivider ? "1px" : "0"}
+      borderColor="var(--site-border)"
+    >
       <Box display="flex" gap="3" flexDirection={{ base: "column", md: "row" }}>
         <Box flex="1" display="flex" justifyContent="flex-start">
           {previousPost ? <ArticleNavCard {...previousPost} direction="previous" /> : null}
