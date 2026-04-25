@@ -1,5 +1,6 @@
 import type { CollectionEntry } from 'astro:content';
 import { parse as parseYaml } from 'yaml';
+import { parseCopyrightConfig, type CopyrightConfig } from './copyright';
 
 type DocEntry = CollectionEntry<'docs'>;
 
@@ -40,6 +41,7 @@ type SourceDocMeta = {
 };
 
 type RawFolderMeta = {
+	copyright?: CopyrightConfig;
 	fixOrder?: number;
 	icon?: string;
 	name?: string;
@@ -48,6 +50,7 @@ type RawFolderMeta = {
 };
 
 type FolderMeta = {
+	copyright?: CopyrightConfig;
 	fixOrder?: number;
 	icon?: NavIconKind;
 	timelessEffectToFile: boolean;
@@ -55,6 +58,7 @@ type FolderMeta = {
 };
 
 type ResolvedDocMeta = SourceDocMeta & {
+	copyright?: CopyrightConfig;
 	entry: DocEntry;
 	fixOrder?: number;
 	timeless: boolean;
@@ -141,6 +145,7 @@ export type TopLevelNavItem = {
 };
 
 export type DocsStructure = {
+	docDataById: Map<string, { copyright?: CopyrightConfig; routePath: string }>;
 	entryRouteMap: Map<string, string>;
 	folderRoutes: FolderRoute[];
 	routes: SiteRoute[];
@@ -235,7 +240,7 @@ function parseFolderMeta(sourcePath: string, rawContent: string): RawFolderMeta 
 		throw new Error(`Folder meta file ${sourcePath} must contain a YAML object.`);
 	}
 
-	const { icon, name, timeless, title } = parsed as Record<string, unknown>;
+	const { copyright, icon, name, timeless, title } = parsed as Record<string, unknown>;
 	const fixOrder = (parsed as Record<string, unknown>)['fix-order'];
 
 	if (icon !== undefined && typeof icon !== 'string') {
@@ -259,6 +264,7 @@ function parseFolderMeta(sourcePath: string, rawContent: string): RawFolderMeta 
 	}
 
 	return {
+		copyright: parseCopyrightConfig(copyright, `Folder meta file ${sourcePath}`),
 		fixOrder: fixOrder as number | undefined,
 		icon,
 		name,
@@ -275,6 +281,7 @@ function resolveFolderMeta(folderPath: string, rawMeta: RawFolderMeta | undefine
 	}
 
 	return {
+		copyright: rawMeta?.copyright ?? parentMeta?.copyright,
 		fixOrder: rawMeta?.fixOrder,
 		icon: resolvedIcon as NavIconKind | undefined,
 		timelessEffectToFile: rawMeta?.timeless ?? parentMeta?.timelessEffectToFile ?? false,
@@ -512,6 +519,7 @@ function buildSidebarTree(folderPath: string, folderStateMap: Map<string, Folder
 export function buildDocsStructure(entries: DocEntry[]): DocsStructure {
 	const docsById = new Map(entries.map((entry) => [entry.id, entry]));
 	const scannedContent = scanContentDirectory();
+	const docDataById = new Map<string, { copyright?: CopyrightConfig; routePath: string }>();
 	const entryRouteMap = new Map<string, string>();
 	const folderMetaMap = new Map<string, FolderMeta>();
 	const folderStateMap = new Map<string, FolderState>();
@@ -557,14 +565,21 @@ export function buildDocsStructure(entries: DocEntry[]): DocsStructure {
 		}
 
 		const folderMeta = folderMetaMap.get(sourceDoc.folderPath);
+		const copyright = entry.data.copyright ?? folderMeta?.copyright;
 		const fixOrder = entry.data['fix-order'];
 		const timeless = entry.data.timeless ?? folderMeta?.timelessEffectToFile ?? false;
 		const resolvedDoc = {
+			copyright,
 			...sourceDoc,
 			entry,
 			fixOrder,
 			timeless,
 		};
+
+		docDataById.set(sourceDoc.id, {
+			copyright,
+			routePath: sourceDoc.routePath,
+		});
 
 		entryRouteMap.set(sourceDoc.id, sourceDoc.routePath);
 
@@ -671,6 +686,7 @@ export function buildDocsStructure(entries: DocEntry[]): DocsStructure {
 		});
 
 	return {
+		docDataById,
 		entryRouteMap,
 		folderRoutes,
 		routes: [...folderRoutes, ...generatedFolderRoutes, ...articleRoutes],

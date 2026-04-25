@@ -1,3 +1,6 @@
 title: 文章
 icon: transfer
 fix-order: -4
+copyright:
+  kind: cc
+  license: cc-by-nc-sa-4.0

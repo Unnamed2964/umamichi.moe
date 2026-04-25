@@ -1,6 +1,7 @@
 import type { PropsWithChildren } from "react"
 import { Box, Stack } from "@chakra-ui/react"
 import { ArticleContent } from "./ArticleContent"
+import { ArticleCopyright } from "./ArticleCopyright"
 import { ArticleHeader } from "./ArticleHeader"
 import { ArticleHeroImage } from "./ArticleHeroImage"
 import { ArticlePostList, type ArticleSidebarTree } from "./ArticlePostList"
@@ -8,12 +9,14 @@ import { ArticlePrevNext, type AdjacentArticleLink } from "./ArticlePrevNext"
 import { ArticleTags, type ArticleTag } from "./ArticleTags"
 import { ArticleToc, type ArticleTocHeading } from "./ArticleToc"
 import { SiteFrame, SITE_MAIN_HALF_W, SITE_MAIN_MAX_W } from "./SiteFrame"
+import type { CopyrightConfig } from "../../lib/copyright"
 import type { TopLevelNavItem } from "../../lib/docs"
 
 const ARTICLE_SIDEBAR_W = "12rem"
 const ARTICLE_SIDEBAR_GAP = "0.5rem"
 
 type ArticleLayoutProps = PropsWithChildren<{
+  copyright?: CopyrightConfig
   currentPath: string
   title: string
   tags?: ArticleTag[]
@@ -32,6 +35,7 @@ type ArticleLayoutProps = PropsWithChildren<{
 
 export function ArticleLayout({
   children,
+  copyright,
   currentPath,
   title,
   tags = [],
@@ -99,7 +103,8 @@ export function ArticleLayout({
             {heroImage && <ArticleHeroImage src={heroImage.src} />}
 
             <ArticleContent>{children}</ArticleContent>
-            <ArticlePrevNext previousPost={previousPost} nextPost={nextPost} />
+            <ArticleCopyright copyright={copyright} />
+            <ArticlePrevNext previousPost={previousPost} nextPost={nextPost} showDivider={!copyright} />
           </Stack>
         </Stack>
       </Box>
