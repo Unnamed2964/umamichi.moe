@@ -1,0 +1,27 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import ErrorRecoveryExperience from '../components/ErrorRecoveryExperience.astro';
+import { getErrorPageRecoveryLink } from '../lib/error-page';
+
+Astro.response.status = 500;
+
+const requestPath = Astro.url.pathname;
+const recoveryLink = await getErrorPageRecoveryLink(requestPath);
+---
+
+<html lang="zh-CN">
+	<head>
+		<BaseHead title="500 | 服务器发生错误" description="服务器暂时无法完成这次请求。" />
+		<meta name="robots" content="noindex" />
+	</head>
+	<body>
+		<ErrorRecoveryExperience
+			recoveryHref={recoveryLink.href}
+			recoveryLabel={recoveryLink.label}
+			requestPath={requestPath}
+			statusCode={500}
+			statusDescription="站点在处理这次请求时出了问题，你可以先回到稳定页面，再稍后重试。"
+			statusTitle="Internal Server Error"
+		/>
+	</body>
+</html>

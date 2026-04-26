@@ -1,0 +1,572 @@
+---
+import WindowsProgressRing from './WindowsProgressRing.astro';
+
+interface Props {
+	recoveryHref: string;
+	recoveryLabel: string;
+	requestPath: string;
+	statusCode: number;
+	statusDescription: string;
+	statusTitle: string;
+}
+
+const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription, statusTitle } = Astro.props;
+---
+
+<div class="error-experience" data-error-screen data-phase="collecting">
+	<section class="phase phase-collecting" data-phase-panel="collecting" aria-live="polite">
+		<div class="phase-inner">
+			<p class="phase-face">:(</p>
+			<p class="phase-copy">你的访问遇到问题，需要重启。我们只是在收集一些错误信息，然后会尝试重新带你回到可用页面。(<span data-progress-value>0</span>% 完成)</p>
+			<div class="phase-meta">
+				<p>如果你想了解更多，可以稍后在线搜索此错误：{statusCode} {statusTitle.toUpperCase()}</p>
+				<p>请求地址：{requestPath}</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="phase phase-boot" data-phase-panel="boot" aria-live="polite">
+		<div class="boot-shell">
+			<div class="boot-stack">
+				<div class="boot-brand">
+					<img class="boot-logo" src="/favicon.ico" alt="站点图标" width="128" height="128" />
+				</div>
+				<div class="boot-loader-wrap">
+					<!--
+						The real Windows 8 startup circle could not be extracted as a reusable
+						asset from the inspected boot media resources. The current substitute is
+						based on the Windows Development Kit ProgressRing template, not on a
+						successful bootmgr animation extraction.
+					-->
+					<WindowsProgressRing className="boot-loader" size={43} label="正在启动恢复环境" foreground="#ffffff" />
+				</div>
+				<p class="boot-status">正在启动恢复环境</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="phase phase-choice" data-phase-panel="choice" aria-live="polite">
+		<div class="choice-shell">
+			<div class="choice-header">
+				<h1 data-choice-heading hidden>选择一个选项</h1>
+				<p class="choice-subtitle" data-choice-subtitle hidden>继续前，请先选择要执行的操作。</p>
+				<p class="choice-description" data-choice-copy hidden>{statusDescription}</p>
+			</div>
+
+			<nav class="choice-actions" data-choice-actions hidden aria-label="恢复导航">
+				<a class="choice-link" href="/">
+					<span class="choice-link-arrow" aria-hidden="true">
+						<svg viewBox="0 0 158 100" focusable="false">
+							<path d="m 37,50 v 0 0 z m 0,0 v 0 z M 55,0 H 92 L 52,36 H 158 V 64 H 52 l 40,36 v 0 H 55 v 0 L 0,50 H 0 L 0,50 0,50 h 0 l 55,-50 z" fill="currentColor"/>
+						</svg>
+					</span>
+					<span class="choice-link-copy">
+						<strong>返回主页</strong>
+						<span>离开恢复环境并回到站点入口</span>
+					</span>
+				</a>
+				<a class="choice-link" href="/about/">
+					<span class="choice-link-arrow" aria-hidden="true">
+						<svg viewBox="0 0 158 100" focusable="false">
+							<path d="m 37,50 v 0 0 z m 0,0 v 0 z M 55,0 H 92 L 52,36 H 158 V 64 H 52 l 40,36 v 0 H 55 v 0 L 0,50 H 0 L 0,50 0,50 h 0 l 55,-50 z" fill="currentColor"/>
+						</svg>
+					</span>
+					<span class="choice-link-copy">
+						<strong>前往关于页</strong>
+						<span>查看站点说明与作者信息</span>
+					</span>
+				</a>
+				<a class="choice-link choice-link-wide" href={recoveryHref}>
+					<span class="choice-link-arrow" aria-hidden="true">
+						<svg viewBox="0 0 158 100" focusable="false">
+							<path d="m 37,50 v 0 0 z m 0,0 v 0 z M 55,0 H 92 L 52,36 H 158 V 64 H 52 l 40,36 v 0 H 55 v 0 L 0,50 H 0 L 0,50 0,50 h 0 l 55,-50 z" fill="currentColor"/>
+						</svg>
+					</span>
+					<span class="choice-link-copy">
+						<strong>{recoveryLabel}</strong>
+						<span>尝试回到 {requestPath} 附近仍然可用的页面</span>
+						<span class="choice-link-meta">{recoveryHref}</span>
+					</span>
+				</a>
+			</nav>
+		</div>
+	</section>
+</div>
+
+<script is:inline>
+	(() => {
+		const root = document.querySelector('[data-error-screen]');
+
+		if (!root) {
+			return;
+		}
+
+		const progressValue = root.querySelector('[data-progress-value]');
+		const choiceHeading = root.querySelector('[data-choice-heading]');
+		const choiceSubtitle = root.querySelector('[data-choice-subtitle]');
+		const choiceCopy = root.querySelector('[data-choice-copy]');
+		const choicePath = root.querySelector('[data-choice-path]');
+		const choiceActions = root.querySelector('[data-choice-actions]');
+		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const progressDuration = reducedMotion ? 1 : 920;
+		const bootDuration = reducedMotion ? 120 : 2400;
+		const choiceDelay = reducedMotion ? 40 : 120;
+
+		const revealChoice = () => {
+			root.dataset.phase = 'choice';
+			choiceHeading?.removeAttribute('hidden');
+			choiceSubtitle?.removeAttribute('hidden');
+			choiceCopy?.removeAttribute('hidden');
+			choicePath?.removeAttribute('hidden');
+			choiceActions?.removeAttribute('hidden');
+		};
+
+		const startChoiceSequence = () => {
+			root.dataset.phase = 'choice';
+			window.setTimeout(revealChoice, choiceDelay);
+		};
+
+		const startBoot = () => {
+			root.dataset.phase = 'boot';
+			window.setTimeout(startChoiceSequence, bootDuration);
+		};
+
+		const start = window.performance.now();
+		let lastProgress = -1;
+
+		const animateProgress = (now) => {
+			const ratio = Math.min(1, (now - start) / progressDuration);
+			const nextProgress = Math.round(ratio * 100);
+
+			if (progressValue && nextProgress !== lastProgress) {
+				progressValue.textContent = String(nextProgress);
+				lastProgress = nextProgress;
+			}
+
+			if (ratio < 1) {
+				window.requestAnimationFrame(animateProgress);
+				return;
+			}
+
+			window.setTimeout(startBoot, reducedMotion ? 30 : 90);
+		};
+
+		window.requestAnimationFrame(animateProgress);
+	})();
+</script>
+
+<style>
+	:global(html),
+	:global(body) {
+		min-height: 100%;
+	}
+
+	:global(body) {
+		margin: 0;
+		background: #000;
+		color: #fff;
+		font-family: 'Segoe UI', 'Noto Sans SC', 'Microsoft YaHei UI', sans-serif;
+	}
+
+	:global(body > .site-copy-toast) {
+		display: none;
+	}
+
+	.error-experience {
+		min-height: 100vh;
+		background: #000;
+		color: #fff;
+	}
+
+	.phase {
+		position: fixed;
+		inset: 0;
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity 120ms linear, visibility 0s linear 120ms;
+	}
+
+	.error-experience[data-phase='collecting'] .phase-collecting,
+	.error-experience[data-phase='boot'] .phase-boot,
+	.error-experience[data-phase='choice'] .phase-choice {
+		opacity: 1;
+		visibility: visible;
+		transition-delay: 0s;
+	}
+
+	.phase-collecting {
+		display: grid;
+		align-items: start;
+		background: #2067b2;
+		padding: clamp(5.5rem, 16vh, 8.75rem) clamp(4rem, 11vw, 9rem) 3rem clamp(4.75rem, 15vw, 12rem);
+		box-sizing: border-box;
+	}
+
+	.phase-inner {
+		width: min(52rem, 100%);
+	}
+
+	.phase-face {
+		margin: 0 0 2.8rem;
+		font-size: clamp(6.4rem, 14.5vw, 10.75rem);
+		font-weight: 200;
+		line-height: 0.92;
+	}
+
+	h1 {
+		margin: 0;
+		font-size: clamp(2.4rem, 6.7vw, 4.8rem);
+		font-weight: 300;
+		letter-spacing: -0.03em;
+		line-height: 1.08;
+	}
+
+	.phase-copy {
+		margin: 0;
+		max-width: 45rem;
+		font-size: clamp(1.95rem, 3.75vw, 2.35rem);
+		font-weight: 300;
+		letter-spacing: -0.018em;
+		line-height: 1.28;
+		color: rgba(255, 255, 255, 0.96);
+	}
+
+	.phase-meta {
+		margin-top: 0.95rem;
+		max-width: 47rem;
+		font-size: clamp(1rem, 1.28vw, 1.08rem);
+		font-weight: 300;
+		line-height: 1.48;
+		color: rgba(255, 255, 255, 0.9);
+	}
+
+	.phase-meta p {
+		margin: 0;
+		word-break: break-all;
+	}
+
+	.phase-meta p + p {
+		margin-top: 0.2rem;
+	}
+
+	.phase-boot {
+		display: block;
+		background: #000;
+	}
+
+	.boot-shell {
+		position: relative;
+		min-height: 100vh;
+		padding: 0 2rem;
+		box-sizing: border-box;
+	}
+
+	.boot-stack {
+		position: absolute;
+		left: 50%;
+		top: 38.5%;
+		display: grid;
+		justify-items: center;
+		grid-auto-flow: row;
+		gap: 0;
+		transform: translate(-50%, 0);
+	}
+
+	.boot-brand {
+		display: grid;
+		place-items: center;
+	}
+
+	.boot-logo {
+		display: block;
+		width: 8rem;
+		height: 8rem;
+		border-radius: 0;
+		image-rendering: pixelated;
+		image-rendering: crisp-edges;
+		shape-rendering: crispEdges;
+	}
+
+	.boot-loader-wrap {
+		display: grid;
+		place-items: center;
+		width: 2.6875rem;
+		height: 2.6875rem;
+		margin-top: clamp(6.1rem, 14vh, 8.4rem);
+	}
+
+	:global(.boot-loader) {
+		margin: 0;
+	}
+
+	.boot-status {
+		margin: 0.55rem 0 0;
+		font-size: 0.92rem;
+		font-weight: 300;
+		letter-spacing: 0.01em;
+		color: rgba(255, 255, 255, 0.72);
+		white-space: nowrap;
+	}
+
+	.phase-choice {
+		display: grid;
+		place-items: start;
+		padding: clamp(3rem, 9vh, 5.8rem) clamp(2rem, 7vw, 5rem) clamp(2.8rem, 8vh, 4.8rem) clamp(4.5rem, 13vw, 9.75rem);
+		box-sizing: border-box;
+		background: #2067b2;
+		font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', 'Microsoft YaHei UI', sans-serif;
+	}
+
+	.choice-shell {
+		width: min(30rem, 100%);
+		display: grid;
+		gap: 2rem;
+		justify-self: start;
+	}
+
+	.choice-header {
+		display: grid;
+		gap: 0.38rem;
+		justify-items: start;
+		text-align: left;
+	}
+
+	.choice-header h1 {
+		margin-bottom: 1.35rem;
+		font-size: clamp(2.2rem, 4.6vw, 3.35rem);
+		line-height: 1.04;
+	}
+
+	.choice-subtitle {
+		margin: 0;
+		word-break: break-word;
+	}
+
+	.choice-description,
+	.choice-path {
+		margin: 0;
+		max-width: 40rem;
+		word-break: break-word;
+	}
+
+	.choice-path {
+		word-break: break-all;
+	}
+
+	.choice-actions {
+		--choice-control-font-size: 0.9167rem;
+		--choice-panel-width: 23.75rem;
+		--choice-tile-size: 6.1rem;
+		--choice-tile-gap: 1.06rem;
+		--choice-inline-padding: 0.5rem;
+		width: min(var(--choice-panel-width), 100%);
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 0.68rem;
+	}
+
+	.choice-link {
+		position: relative;
+		display: block;
+		min-height: 6.84rem;
+		padding: 0.34rem var(--choice-inline-padding) 0.34rem calc(var(--choice-inline-padding) + var(--choice-tile-size) + var(--choice-tile-gap));
+		border: none;
+		border-radius: 0;
+		background: transparent;
+		color: #ffffff;
+		text-decoration: none;
+		transition: background-color 120ms ease, color 120ms ease;
+	}
+
+	.choice-link:hover,
+	.choice-link:focus-visible {
+		background: rgba(255, 255, 255, 0.12);
+		outline: none;
+	}
+
+	.choice-link-wide {
+		grid-column: auto;
+		min-height: 6.84rem;
+	}
+
+	.choice-link-arrow {
+		display: grid;
+		place-items: center;
+		position: absolute;
+		left: var(--choice-inline-padding);
+		top: 50%;
+		width: var(--choice-tile-size);
+		height: var(--choice-tile-size);
+		margin-top: 0;
+		transform: translateY(-50%);
+		border-radius: 0;
+		background: #3fa9ea;
+		box-sizing: border-box;
+		color: #ffffff;
+	}
+
+	.choice-link-arrow svg {
+		width: 2.86rem;
+		height: auto;
+		display: block;
+	}
+
+	.choice-link-copy {
+		display: grid;
+		gap: 0.22rem;
+		min-width: 0;
+		align-content: start;
+		padding-top: 0.46rem;
+	}
+
+	.choice-header h1,
+	.choice-subtitle,
+	.choice-description,
+	.choice-path,
+	.choice-link,
+	.choice-link strong,
+	.choice-link-copy span,
+	.choice-link-meta {
+		font-family: inherit;
+	}
+
+	.choice-subtitle,
+	.choice-description,
+	.choice-path {
+		font-size: 0.95rem;
+		font-weight: 300;
+		line-height: 1.4;
+		letter-spacing: 0;
+		color: rgba(255, 255, 255, 0.88);
+	}
+
+	.choice-link strong {
+		font-size: calc(var(--choice-control-font-size) * 1.296);
+		font-weight: 300;
+		letter-spacing: -0.015em;
+		line-height: 1.08;
+	}
+
+	.choice-link-copy span,
+	.choice-link-meta {
+		font-size: calc(var(--choice-control-font-size) * 1.056);
+		line-height: 1.28;
+		color: rgba(255, 255, 255, 0.82);
+	}
+
+	.choice-link-meta {
+		display: block;
+		max-width: 100%;
+		margin-top: 0.1rem;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		word-break: normal;
+	}
+
+	@media (max-width: 40rem) {
+		.phase-collecting {
+			padding: clamp(4rem, 12vh, 5rem) 1.75rem 2.5rem;
+		}
+
+		.phase-inner {
+			width: min(24rem, 100%);
+		}
+
+		.phase-copy {
+			max-width: 22rem;
+			font-size: clamp(1.65rem, 7vw, 2rem);
+			line-height: 1.3;
+		}
+
+		.phase-face {
+			margin-bottom: 2rem;
+			font-size: clamp(5.6rem, 18vw, 8.25rem);
+		}
+
+		.phase-meta {
+			max-width: 22rem;
+			font-size: 0.98rem;
+			line-height: 1.5;
+		}
+
+		.choice-shell {
+			width: min(22.5rem, 100%);
+		}
+
+		.phase-choice {
+			padding: 2.25rem 1.75rem 2.75rem;
+		}
+
+		.boot-stack {
+			top: 34%;
+		}
+
+		.boot-status {
+			margin-top: 0.4rem;
+			font-size: 0.88rem;
+		}
+
+		.boot-logo {
+			width: 6rem;
+			height: 6rem;
+		}
+
+		.boot-loader-wrap {
+			width: 2.25rem;
+			height: 2.25rem;
+			margin-top: clamp(4.7rem, 11vh, 6rem);
+		}
+
+		.choice-link {
+			--choice-panel-width: 22.5rem;
+			--choice-tile-size: 5.22rem;
+			--choice-tile-gap: 0.86rem;
+			--choice-inline-padding: 0.34rem;
+			min-height: 5.88rem;
+			padding: 0.26rem var(--choice-inline-padding) 0.26rem calc(var(--choice-inline-padding) + var(--choice-tile-size) + var(--choice-tile-gap));
+		}
+
+		.choice-actions {
+			width: min(calc(var(--choice-panel-width) - var(--choice-tile-size)), 100%);
+		}
+
+		.choice-link-wide {
+			grid-column: auto;
+			min-height: 5.88rem;
+		}
+
+		.choice-link-arrow {
+			width: var(--choice-tile-size);
+			height: var(--choice-tile-size);
+		}
+
+		.choice-link-arrow svg {
+			width: 2.42rem;
+		}
+
+		.choice-link strong {
+			font-size: calc(var(--choice-control-font-size) * 1.18);
+		}
+
+		.choice-link-copy span,
+		.choice-link-meta {
+			font-size: calc(var(--choice-control-font-size) * 0.96);
+		}
+
+		.choice-link-copy {
+			padding-top: 0.34rem;
+		}
+
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.phase {
+			transition: none;
+		}
+
+		.choice-link {
+			transition: none;
+		}
+	}
+</style>

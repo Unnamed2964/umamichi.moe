@@ -1,0 +1,27 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import ErrorRecoveryExperience from '../components/ErrorRecoveryExperience.astro';
+import { getErrorPageRecoveryLink } from '../lib/error-page';
+
+Astro.response.status = 504;
+
+const requestPath = Astro.url.pathname;
+const recoveryLink = await getErrorPageRecoveryLink(requestPath);
+---
+
+<html lang="zh-CN">
+	<head>
+		<BaseHead title="504 | 网关超时" description="上游服务响应超时。" />
+		<meta name="robots" content="noindex" />
+	</head>
+	<body>
+		<ErrorRecoveryExperience
+			recoveryHref={recoveryLink.href}
+			recoveryLabel={recoveryLink.label}
+			requestPath={requestPath}
+			statusCode={504}
+			statusDescription="这次请求等待得太久了，先回到附近页面会更合适。"
+			statusTitle="Gateway Timeout"
+		/>
+	</body>
+</html>
