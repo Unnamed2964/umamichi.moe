@@ -13,7 +13,14 @@ interface Props {
 const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription, statusTitle } = Astro.props;
 ---
 
-<div class="error-experience" data-error-screen data-phase="collecting">
+<div
+	class="error-experience"
+	data-error-screen
+	data-phase="collecting"
+	data-status-code={String(statusCode)}
+	data-status-title={statusTitle}
+	data-request-path={requestPath}
+>
 	<section class="phase phase-collecting" data-phase-panel="collecting" aria-live="polite">
 		<div class="phase-inner">
 			<p class="phase-face">:(</p>
@@ -93,12 +100,32 @@ const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription,
 	</section>
 </div>
 
-<script is:inline>
+
+
+<script>
+	import { createBaseTelemetryEvent, postTelemetry } from '../lib/client-telemetry';
+	import { HESTER_SCHEMA_VERSION, SITE_ID } from '../lib/telemetry';
+
 	(() => {
-		const root = document.querySelector('[data-error-screen]');
+		const root = document.querySelector<HTMLElement>('[data-error-screen]');
 
 		if (!root) {
 			return;
+		}
+
+		const errorRoot = root;
+
+		async function hester() {
+			const event = {
+				...createBaseTelemetryEvent(HESTER_SCHEMA_VERSION, SITE_ID),
+				error: {
+					statusCode: Number.parseInt(errorRoot.dataset.statusCode || '', 10) || null,
+					statusTitle: errorRoot.dataset.statusTitle || null,
+					requestPath: errorRoot.dataset.requestPath || null,
+				},
+			};
+
+			await postTelemetry('/api/hester', event);
 		}
 
 		const progressValue = root.querySelector('[data-progress-value]');
@@ -134,7 +161,7 @@ const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription,
 		const start = window.performance.now();
 		let lastProgress = -1;
 
-		const animateProgress = (now) => {
+		const animateProgress = (now: number) => {
 			const ratio = Math.min(1, (now - start) / progressDuration);
 			const nextProgress = Math.round(ratio * 100);
 
@@ -151,6 +178,7 @@ const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription,
 			window.setTimeout(startBoot, reducedMotion ? 30 : 90);
 		};
 
+		hester();
 		window.requestAnimationFrame(animateProgress);
 	})();
 </script>
