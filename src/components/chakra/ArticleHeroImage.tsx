@@ -6,7 +6,7 @@ type ArticleHeroImageProps = {
 
 export function ArticleHeroImage({ src }: ArticleHeroImageProps) {
   return (
-    <Box overflow="hidden" rounded="2xl">
+    <Box overflow="hidden">
       <Image src={src} alt="" w="full" maxH="20rem" objectFit="cover" />
     </Box>
   )
