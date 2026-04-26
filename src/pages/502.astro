@@ -1,0 +1,27 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import ErrorRecoveryExperience from '../components/ErrorRecoveryExperience.astro';
+import { getErrorPageRecoveryLink } from '../lib/error-page';
+
+Astro.response.status = 502;
+
+const requestPath = Astro.url.pathname;
+const recoveryLink = await getErrorPageRecoveryLink(requestPath);
+---
+
+<html lang="zh-CN">
+	<head>
+		<BaseHead title="502 | 网关响应无效" description="上游服务返回了无效响应。" />
+		<meta name="robots" content="noindex" />
+	</head>
+	<body>
+		<ErrorRecoveryExperience
+			recoveryHref={recoveryLink.href}
+			recoveryLabel={recoveryLink.label}
+			requestPath={requestPath}
+			statusCode={502}
+			statusDescription="上游服务没有正确响应，先回到可用页面会更稳妥。"
+			statusTitle="Bad Gateway"
+		/>
+	</body>
+</html>

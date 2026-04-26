@@ -1,0 +1,202 @@
+---
+// This loading indicator is a hand-authored replacement for the Windows 8/8.1
+// startup circle. Its motion model is based on the ProgressRing template found
+// in the Windows Development Kit XAML resources that were inspected earlier,
+// especially the Windows 8/8.1 generic.xaml ProgressRing timing and angles.
+//
+// The later bootres.dll / bootmgr.efi extraction work helped confirm boot logos
+// and boot UI metadata, but it did not yield a reusable original startup circle
+// asset or frame sequence. The actual Windows 8 startup dot animation appears
+// to be runtime-drawn by boot code, so this component remains an approximation
+// rather than extracted Microsoft animation assets.
+//
+// Windows, Windows Boot Manager, and related original boot resources remain the
+// property and trademarks of Microsoft. This project does not redistribute the
+// original startup circle assets and only uses a recreated substitute.
+
+interface Props {
+	active?: boolean;
+	className?: string;
+	foreground?: string;
+	label?: string;
+	size?: number | string;
+}
+
+const {
+	active = true,
+	className = '',
+	foreground = '#0078d7',
+	label = '正在处理中',
+	size = 64,
+} = Astro.props;
+
+const resolvedSize = typeof size === 'number' ? `${size}px` : size;
+const numericSize = typeof size === 'number' ? size : Number.parseFloat(size);
+const showSixthCircle = Number.isNaN(numericSize) || numericSize >= 40;
+const orbitAngles = [
+	['-110deg', '10deg', '93deg', '205deg', '357deg', '439deg', '585deg'],
+	['-116deg', '4deg', '87deg', '199deg', '351deg', '433deg', '579deg'],
+	['-122deg', '-2deg', '81deg', '193deg', '345deg', '427deg', '573deg'],
+	['-128deg', '-8deg', '75deg', '187deg', '339deg', '421deg', '567deg'],
+	['-134deg', '-14deg', '69deg', '181deg', '331deg', '415deg', '561deg'],
+	['-140deg', '-20deg', '63deg', '175deg', '325deg', '409deg', '555deg'],
+];
+const classes = ['windows-progress-ring', className, active ? 'is-active' : 'is-inactive'].filter(Boolean).join(' ');
+---
+
+<span
+	class={classes}
+	role="progressbar"
+	aria-label={label}
+	aria-valuetext={label}
+	aria-busy={active ? 'true' : 'false'}
+	style={{
+		'--progress-ring-size': resolvedSize,
+		'--progress-ring-foreground': foreground,
+	}}
+>
+	<span class="progress-ring-dots" aria-hidden="true">
+		{orbitAngles.slice(0, showSixthCircle ? 6 : 5).map((angles, index) => (
+			<span
+				class="progress-ring-orbit"
+				style={{
+					'--progress-ring-index': String(index),
+					'--angle-0': angles[0],
+					'--angle-1': angles[1],
+					'--angle-2': angles[2],
+					'--angle-3': angles[3],
+					'--angle-4': angles[4],
+					'--angle-5': angles[5],
+					'--angle-6': angles[6],
+				}}
+			>
+				<span class="progress-ring-dot"></span>
+			</span>
+		))}
+	</span>
+</span>
+
+<style>
+	.windows-progress-ring {
+		position: relative;
+		display: inline-block;
+		width: var(--progress-ring-size);
+		height: var(--progress-ring-size);
+	}
+
+	.windows-progress-ring.is-inactive {
+		opacity: 0;
+	}
+
+	.progress-ring-dots {
+		position: relative;
+		display: block;
+		width: 100%;
+		height: 100%;
+		transform: translateY(calc(var(--progress-ring-size) * 0.045));
+	}
+
+	.progress-ring-orbit {
+		position: absolute;
+		inset: 0;
+		animation-name: progress-ring-orbit;
+		animation-duration: 3.47s;
+		animation-timing-function: linear;
+		animation-iteration-count: infinite;
+		animation-delay: calc(var(--progress-ring-index) * 167ms);
+		animation-fill-mode: both;
+	}
+
+	.progress-ring-dot {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		width: clamp(0.18rem, calc(var(--progress-ring-size) * 0.09), 0.38rem);
+		height: clamp(0.18rem, calc(var(--progress-ring-size) * 0.09), 0.38rem);
+		border-radius: 999px;
+		background: var(--progress-ring-foreground);
+		transform: translate(-50%, -50%) translateY(calc(var(--progress-ring-size) * -0.395));
+		opacity: 0;
+		animation-name: progress-ring-opacity;
+		animation-duration: 3.47s;
+		animation-timing-function: steps(1, end);
+		animation-iteration-count: infinite;
+		animation-delay: calc(var(--progress-ring-index) * 167ms);
+		animation-fill-mode: both;
+	}
+
+	.is-inactive .progress-ring-orbit,
+	.is-inactive .progress-ring-dot {
+		animation: none;
+	}
+
+	@keyframes progress-ring-orbit {
+		0% {
+			transform: rotate(var(--angle-0));
+			animation-timing-function: cubic-bezier(0.13, 0.21, 0.1, 0.7);
+		}
+
+		12.478% {
+			transform: rotate(var(--angle-1));
+			animation-timing-function: cubic-bezier(0.02, 0.33, 0.38, 0.77);
+		}
+
+		34.582% {
+			transform: rotate(var(--angle-2));
+			animation-timing-function: linear;
+		}
+
+		46.599% {
+			transform: rotate(var(--angle-3));
+			animation-timing-function: cubic-bezier(0.57, 0.17, 0.95, 0.75);
+		}
+
+		58.127% {
+			transform: rotate(var(--angle-4));
+			animation-timing-function: cubic-bezier(0, 0.19, 0.07, 0.72);
+		}
+
+		80.202% {
+			transform: rotate(var(--angle-5));
+			animation-timing-function: linear;
+		}
+
+		92.709% {
+			transform: rotate(var(--angle-6));
+			animation-timing-function: cubic-bezier(0, 0, 0.95, 0.37);
+		}
+
+		100% {
+			transform: rotate(var(--angle-6));
+		}
+	}
+
+	@keyframes progress-ring-opacity {
+		0% {
+			opacity: 1;
+		}
+
+		92.507% {
+			opacity: 1;
+		}
+
+		92.795% {
+			opacity: 0;
+		}
+
+		100% {
+			opacity: 0;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.progress-ring-dots {
+			transform: translateY(calc(var(--progress-ring-size) * 0.035));
+		}
+
+		.progress-ring-orbit,
+		.progress-ring-dot {
+			animation-duration: 4.2s;
+		}
+	}
+</style>
