@@ -135,9 +135,10 @@ const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription,
 		const choicePath = root.querySelector('[data-choice-path]');
 		const choiceActions = root.querySelector('[data-choice-actions]');
 		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		const progressDuration = reducedMotion ? 1 : 920;
-		const bootDuration = reducedMotion ? 120 : 2400;
+		const progressDuration = 9000;
+		const bootDuration = reducedMotion ? 120 : 4000;
 		const choiceDelay = reducedMotion ? 40 : 120;
+		const progressSteps = [0, 10, 30, 70, 100];
 
 		const revealChoice = () => {
 			root.dataset.phase = 'choice';
@@ -158,28 +159,28 @@ const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription,
 			window.setTimeout(startChoiceSequence, bootDuration);
 		};
 
-		const start = window.performance.now();
-		let lastProgress = -1;
-
-		const animateProgress = (now: number) => {
-			const ratio = Math.min(1, (now - start) / progressDuration);
-			const nextProgress = Math.round(ratio * 100);
-
-			if (progressValue && nextProgress !== lastProgress) {
-				progressValue.textContent = String(nextProgress);
-				lastProgress = nextProgress;
+		const runProgressSequence = () => {
+			if (progressValue) {
+				progressValue.textContent = String(progressSteps[0]);
 			}
 
-			if (ratio < 1) {
-				window.requestAnimationFrame(animateProgress);
-				return;
-			}
+			progressSteps.slice(1).forEach((step, index, steps) => {
+				const delay = index === steps.length - 1 ? progressDuration : (progressDuration * step) / 100;
 
-			window.setTimeout(startBoot, reducedMotion ? 30 : 90);
+				window.setTimeout(() => {
+					if (progressValue) {
+						progressValue.textContent = String(step);
+					}
+
+					if (step === 100) {
+						window.setTimeout(startBoot, reducedMotion ? 30 : 90);
+					}
+				}, delay);
+			});
 		};
 
 		hester();
-		window.requestAnimationFrame(animateProgress);
+		runProgressSequence();
 	})();
 </script>
 
