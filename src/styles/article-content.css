@@ -35,14 +35,6 @@ html.dark {
 	word-break: break-word;
 }
 
-.article-content > :first-child {
-	margin-top: 0;
-}
-
-.article-content > :last-child {
-	margin-bottom: 0;
-}
-
 .article-content h1,
 .article-content h2,
 .article-content h3,
@@ -50,6 +42,14 @@ html.dark {
 .article-content h5,
 .article-content h6 {
 	scroll-margin-top: calc(var(--site-header-offset) + 1.5rem);
+}
+
+.article-content > :first-child {
+	margin-top: 0;
+}
+
+.article-content > :last-child {
+	margin-bottom: 0;
 }
 
 .article-content p {
@@ -189,6 +189,7 @@ html.dark {
 .article-content strong {
 	font-weight: 600;
 }
+
 
 .article-content table {
 	display: block;
