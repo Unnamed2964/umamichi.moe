@@ -1,5 +1,6 @@
 ---
 import WindowsProgressRing from './WindowsProgressRing.astro';
+import { SITE_GITHUB_ERROR_FLOW_SOURCE_URL } from '../consts';
 
 interface Props {
 	recoveryHref: string;
@@ -70,6 +71,18 @@ const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription,
 					<span class="choice-link-copy">
 						<strong>返回主页</strong>
 						<span>离开恢复环境并回到站点入口</span>
+					</span>
+				</a>
+				<a class="choice-link choice-link-github" href={SITE_GITHUB_ERROR_FLOW_SOURCE_URL} target="_blank" rel="noreferrer">
+					<span class="choice-link-arrow choice-link-arrow-github" aria-hidden="true">
+						<svg viewBox="0 0 98 96" focusable="false">
+							<path d="M49 0C21.922 0 0 21.922 0 49c0 21.658 14.037 40.037 33.488 46.52 2.45.455 3.345-1.064 3.345-2.362 0-1.167-.043-4.267-.067-8.377-13.62 2.96-16.495-6.563-16.495-6.563-2.228-5.66-5.44-7.165-5.44-7.165-4.448-3.041.337-2.98.337-2.98 4.919.346 7.508 5.05 7.508 5.05 4.37 7.49 11.465 5.325 14.263 4.073.444-3.166 1.711-5.326 3.112-6.55-10.874-1.237-22.307-5.438-22.307-24.205 0-5.347 1.913-9.716 5.048-13.141-.506-1.238-2.188-6.218.48-12.963 0 0 4.116-1.317 13.49 5.02 3.912-1.087 8.105-1.631 12.272-1.65 4.167.019 8.36.563 12.279 1.65 9.366-6.337 13.474-5.02 13.474-5.02 2.675 6.745.994 11.725.488 12.963 3.144 3.425 5.04 7.794 5.04 13.141 0 18.814-11.453 22.954-22.359 24.166 1.76 1.516 3.328 4.506 3.328 9.08 0 6.55-.059 11.833-.059 13.442 0 1.31.883 2.839 3.37 2.357C83.979 89.022 98 70.648 98 49 98 21.922 76.078 0 49 0Z" fill="currentColor"/>
+						</svg>
+					</span>
+					<span class="choice-link-copy">
+						<strong>往 GitHub</strong>
+						<span>查看 Windows 恢复环境 UI Web 模拟的实现源码</span>
+						<span class="choice-link-meta">src/components/ErrorRecoveryExperience.astro</span>
 					</span>
 				</a>
 				<a class="choice-link" href="/about/">
@@ -388,7 +401,7 @@ const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription,
 		--choice-tile-size: 6.1rem;
 		--choice-tile-gap: 1.06rem;
 		--choice-inline-padding: 0.5rem;
-		width: min(var(--choice-panel-width), 100%);
+		width: min(calc(var(--choice-panel-width) * 2 + 0.68rem), 100%);
 		display: grid;
 		grid-template-columns: 1fr;
 		gap: 0.68rem;
@@ -439,6 +452,15 @@ const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription,
 		height: auto;
 		display: block;
 		transform: rotate(180deg);
+	}
+
+	.choice-link-arrow-github {
+		background: #3fa9ea;
+	}
+
+	.choice-link-arrow-github svg {
+		width: 2.52rem;
+		transform: none;
 	}
 
 	.choice-link-copy {
@@ -492,6 +514,20 @@ const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription,
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		word-break: normal;
+	}
+
+	@media (min-width: 41rem) {
+		.choice-shell {
+			width: min(48.18rem, 100%);
+		}
+
+		.choice-actions {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.choice-link-wide {
+			grid-column: 1 / -1;
+		}
 	}
 
 	@media (max-width: 40rem) {
