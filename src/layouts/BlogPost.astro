@@ -49,6 +49,13 @@ function flattenSidebarDocs(nodes: SidebarNode[]): PostListItem[] {
 	});
 }
 
+function formatExportMarkdown(rawContent: string | undefined, title: string) {
+	const contentWithoutFrontmatter = rawContent?.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '');
+	const body = contentWithoutFrontmatter?.replace(/^(\r?\n)+/, '') ?? '';
+
+	return `# ${title}\n\n${body}`;
+}
+
 const pageData: LayoutData = 'frontmatter' in Astro.props
 	? Astro.props.frontmatter
 	: Astro.props;
@@ -71,9 +78,12 @@ const docsStructure = buildDocsStructure(docs);
 const sourcePath = currentEntryId
 	? docsStructure.docDataById.get(currentEntryId)?.sourcePath
 	: undefined;
-const sourceMarkdown = currentEntryId
-	? docsStructure.docDataById.get(currentEntryId)?.rawContent
-	: undefined;
+const sourceMarkdown = formatExportMarkdown(
+	currentEntryId
+		? docsStructure.docDataById.get(currentEntryId)?.rawContent
+		: undefined,
+	title,
+);
 const sourceUrl = sourcePath ? `${SITE_GITHUB_SOURCE_BASE_URL}/${sourcePath}` : undefined;
 const comment = currentEntryId
 	? docsStructure.docDataById.get(currentEntryId)?.comment ?? pageData.comment
