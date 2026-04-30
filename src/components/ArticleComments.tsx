@@ -24,7 +24,7 @@ export default function ArticleComments() {
         inputPosition="top"
         theme="light"
         lang="zh-CN"
-        loading="lazy"
+        loading="eager"
       />
     </section>
   )
