@@ -27,14 +27,14 @@ function ArticleNavCard({
       rounded="2xl"
       borderWidth="1px"
       borderColor="var(--site-border)"
-      bg="white"
+      bg="var(--site-surface)"
       px={{ base: "4", md: "5" }}
       py="3.5"
       transition="background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease"
       _hover={{
         textDecoration: "none",
         borderColor: "var(--site-accent)",
-        bg: "white",
+        bg: "var(--site-hover-bg)",
       }}
     >
       <Stack gap="1" align={isNext ? "end" : "start"} textAlign={isNext ? "right" : "left"}>
