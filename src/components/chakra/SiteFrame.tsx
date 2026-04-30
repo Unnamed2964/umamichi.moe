@@ -275,7 +275,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                   direction="row"
                   display={{ base: "none", md: "flex" }}
                 >
-                  <HStack gap={{ base: 1, md: 2 }} flexWrap="wrap" justify="flex-start">
+                  <HStack as="nav" aria-label="主导航" gap={{ base: 1, md: 2 }} flexWrap="wrap" justify="flex-start">
                     {navItems.map((item) => {
                       const active = isActiveLink(item.href, currentPath)
                       return (
@@ -362,7 +362,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           <Container maxW="6xl" px="4" py="4" minH="100dvh">
             {/* Mobile hamburger menu content */}
             <Flex direction="column" minH="calc(100dvh - 2rem)">
-              <Flex align="center" justify="flex-start" gap="3">
+              <Flex as="header" align="center" justify="flex-start" gap="3">
                 <IconButton
                   data-site-menu-close
                   aria-label="关闭菜单"
@@ -422,7 +422,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                 </Stack>
               </Flex>
 
-              <HStack gap="4" justify="center" color="var(--site-muted-fg)" pb="2">
+              <HStack as="footer" gap="4" justify="center" color="var(--site-muted-fg)" pb="2">
                 <Link
                   href="https://twitter.com/Umamichiz"
                   target="_blank"

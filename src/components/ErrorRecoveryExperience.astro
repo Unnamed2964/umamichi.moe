@@ -14,7 +14,7 @@ interface Props {
 const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription, statusTitle } = Astro.props;
 ---
 
-<div
+<main
 	class="error-experience"
 	data-error-screen
 	data-phase="collecting"
@@ -26,10 +26,10 @@ const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription,
 		<div class="phase-inner">
 			<p class="phase-face">:(</p>
 			<p class="phase-copy">你的访问遇到问题，需要重启。我们只是在收集一些错误信息，然后会尝试重新带你回到可用页面。(<span data-progress-value>0</span>% 完成)</p>
-			<div class="phase-meta">
+			<aside class="phase-meta" aria-label="错误详情">
 				<p>如果你想了解更多，可以稍后在线搜索此错误：{statusCode} {statusTitle.toUpperCase()}</p>
 				<p>请求地址：{requestPath}</p>
-			</div>
+			</aside>
 		</div>
 	</section>
 
@@ -55,11 +55,11 @@ const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription,
 
 	<section class="phase phase-choice" data-phase-panel="choice" aria-live="polite">
 		<div class="choice-shell">
-			<div class="choice-header">
+			<header class="choice-header">
 				<h1 data-choice-heading hidden>选择一个选项</h1>
 				<p class="choice-subtitle" data-choice-subtitle hidden>继续前，请先选择要执行的操作。</p>
 				<p class="choice-description" data-choice-copy hidden>{statusDescription}</p>
-			</div>
+			</header>
 
 			<nav class="choice-actions" data-choice-actions hidden aria-label="恢复导航">
 				<a class="choice-link" href="/">
@@ -111,7 +111,7 @@ const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription,
 			</nav>
 		</div>
 	</section>
-</div>
+</main>
 
 
 
