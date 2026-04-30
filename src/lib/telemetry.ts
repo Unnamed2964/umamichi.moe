@@ -114,12 +114,12 @@ export function normalizeBrowser(browser: unknown): BrowserTelemetry {
 	return {
 		userAgent: typeof candidate?.userAgent === 'string' ? candidate.userAgent : null,
 		platform: typeof candidate?.platform === 'string' ? candidate.platform : 'unknown',
-		mobile: Boolean(candidate?.mobile),
+		mobile: typeof candidate?.mobile === 'boolean' ? candidate.mobile : false,
 		language: typeof candidate?.language === 'string' ? candidate.language : null,
 		hardwareConcurrency:
 			typeof candidate?.hardwareConcurrency === 'number' ? candidate.hardwareConcurrency : null,
 		deviceMemory: typeof candidate?.deviceMemory === 'number' ? candidate.deviceMemory : null,
-		touch: Boolean(candidate?.touch),
+		touch: typeof candidate?.touch === 'boolean' ? candidate.touch : false,
 		devicePixelRatio:
 			typeof candidate?.devicePixelRatio === 'number' ? candidate.devicePixelRatio : null,
 		screen: {

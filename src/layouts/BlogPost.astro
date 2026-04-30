@@ -50,8 +50,9 @@ function flattenSidebarDocs(nodes: SidebarNode[]): PostListItem[] {
 }
 
 function formatExportMarkdown(rawContent: string | undefined, title: string) {
-	const contentWithoutFrontmatter = rawContent?.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '');
-	const body = contentWithoutFrontmatter?.replace(/^(\r?\n)+/, '') ?? '';
+	const body = (rawContent ?? '')
+		.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '')
+		.replace(/^(\r?\n)+/, '');
 
 	return `# ${title}\n\n${body}`;
 }
