@@ -9,6 +9,12 @@ rss: false
 
 参考实拍的9号线站台门线路图（2020样式）和2号线竖立线路图（2025样式）制作的上海地铁线路号方块生成器。详细介绍、相关仓库与 NPM 包见[单独页面](/tools/shmetro-line-id-block-generator/)。
 
+示例：
+
+![上海地铁线路号方块生成器2020样式输出示例](/tools/shmetro-idblock/output-example.webp)
+
+![上海地铁线路号方块生成器2025样式输出示例](/tools/shmetro-idblock/output-example-2025.webp)
+
 ## [南京地铁屏蔽门上方贴纸生成器（Alpha）](https://njmetro-railmap-creator.umamichi.moe/)
 
 用于生成南京地铁屏蔽门上方贴纸样式线路图的工具，目前仍处于 Alpha 阶段。
