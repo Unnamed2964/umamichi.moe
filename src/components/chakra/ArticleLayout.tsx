@@ -56,13 +56,11 @@ export function ArticleLayout({
 }: ArticleLayoutProps) {
   const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3)
   const hasToc = tocHeadings.length > 0
-  const hasSidebarTree = Boolean(sidebarTree)
-  const hasSourceActions = Boolean(sourceUrl && sourceMarkdown)
 
   return (
     <SiteFrame currentPath={currentPath} navItems={navItems}>
       <Box maxW={SITE_MAIN_MAX_W} mx="auto" position="relative">
-        {hasSidebarTree && sidebarTree && (
+        {sidebarTree && (
           <Box
             as="aside"
             display={{ base: "none", xl: "block" }}
@@ -87,12 +85,12 @@ export function ArticleLayout({
             zIndex="1"
           >
             <Stack gap="3">
-              {hasSourceActions && sourceUrl && sourceMarkdown && (
+              {sourceUrl && sourceMarkdown && (
                 <ArticleSourceActions sourceMarkdown={sourceMarkdown} sourceUrl={sourceUrl} />
               )}
               <ArticleToc
                 headings={tocHeadings}
-                maxH={hasSourceActions ? "calc(100vh - var(--site-header-offset) - 9rem)" : undefined}
+                maxH={sourceUrl && sourceMarkdown ? "calc(100vh - var(--site-header-offset) - 9rem)" : undefined}
               />
             </Stack>
           </Box>
@@ -100,7 +98,7 @@ export function ArticleLayout({
 
         <Stack as="article" gap="10" w="full">
           <Stack gap="6" w="full">
-            {hasSidebarTree && sidebarTree && (
+            {sidebarTree && (
               <Box display={{ base: "block", xl: "none" }}>
                 <ArticlePostList
                   currentPath={currentPath}
@@ -114,7 +112,7 @@ export function ArticleLayout({
             <ArticleHeader title={title} pubDate={pubDate} updatedDate={updatedDate} />
             <ArticleTags tags={tags} />
 
-            {hasSourceActions && sourceUrl && sourceMarkdown && (
+            {sourceUrl && sourceMarkdown && (
               <Box display={{ base: "block", xl: "none" }}>
                 <ArticleSourceActions sourceMarkdown={sourceMarkdown} sourceUrl={sourceUrl} />
               </Box>

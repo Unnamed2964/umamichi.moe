@@ -31,7 +31,7 @@ function getReferrerOrigin() {
 
 export function createBaseTelemetryEvent(version: number, siteId: string): BaseTelemetryEvent {
 	const telemetryNavigator = navigator as NavigatorWithTelemetry;
-	const uaData = telemetryNavigator.userAgentData || {};
+	const uaData = telemetryNavigator.userAgentData ?? {};
 
 	return {
 		version,
@@ -42,13 +42,13 @@ export function createBaseTelemetryEvent(version: number, siteId: string): BaseT
 		},
 		browser: {
 			userAgent: navigator.userAgent,
-			platform: uaData.platform || 'unknown',
-			mobile: uaData.mobile || false,
+			platform: uaData.platform ?? 'unknown',
+			mobile: uaData.mobile ?? false,
 			language: navigator.language,
 			hardwareConcurrency: navigator.hardwareConcurrency,
 			deviceMemory: telemetryNavigator.deviceMemory ?? null,
 			touch: 'ontouchstart' in window,
-			devicePixelRatio: window.devicePixelRatio || 1,
+			devicePixelRatio: window.devicePixelRatio,
 			screen: {
 				width: window.screen.width,
 				height: window.screen.height,
