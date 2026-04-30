@@ -41,6 +41,7 @@ type SourceDocMeta = {
 };
 
 type RawFolderMeta = {
+	comment?: boolean;
 	copyright?: CopyrightConfig;
 	fixOrder?: number;
 	icon?: string;
@@ -50,6 +51,7 @@ type RawFolderMeta = {
 };
 
 type FolderMeta = {
+	comment?: boolean;
 	copyright?: CopyrightConfig;
 	fixOrder?: number;
 	icon?: NavIconKind;
@@ -58,6 +60,7 @@ type FolderMeta = {
 };
 
 type ResolvedDocMeta = SourceDocMeta & {
+	comment?: boolean;
 	copyright?: CopyrightConfig;
 	entry: DocEntry;
 	fixOrder?: number;
@@ -90,6 +93,7 @@ export type FolderRoute = {
 };
 
 export type GeneratedFolderPageData = {
+	comment?: boolean;
 	description: string;
 	title: string;
 };
@@ -145,13 +149,20 @@ export type TopLevelNavItem = {
 };
 
 export type DocsStructure = {
-	docDataById: Map<string, { copyright?: CopyrightConfig; routePath: string }>;
+	docDataById: Map<string, { comment?: boolean; copyright?: CopyrightConfig; routePath: string }>;
 	entryRouteMap: Map<string, string>;
 	folderRoutes: FolderRoute[];
 	routes: SiteRoute[];
 	tagRoutes: TagRoute[];
 	topLevelFolderTrees: Map<string, SidebarFolderNode>;
 	topLevelNavItems: TopLevelNavItem[];
+};
+
+type TimedComparableItem = {
+	fixOrder?: number;
+	pubDate?: Date;
+	timeless: boolean;
+	title: string;
 };
 
 const SOURCE_DOC_FILES = [
@@ -240,8 +251,12 @@ function parseFolderMeta(sourcePath: string, rawContent: string): RawFolderMeta 
 		throw new Error(`Folder meta file ${sourcePath} must contain a YAML object.`);
 	}
 
-	const { copyright, icon, name, timeless, title } = parsed as Record<string, unknown>;
+	const { comment, copyright, icon, name, timeless, title } = parsed as Record<string, unknown>;
 	const fixOrder = (parsed as Record<string, unknown>)['fix-order'];
+
+	if (comment !== undefined && typeof comment !== 'boolean') {
+		throw new Error(`Folder meta file ${sourcePath} has an invalid comment value.`);
+	}
 
 	if (icon !== undefined && typeof icon !== 'string') {
 		throw new Error(`Folder meta file ${sourcePath} has an invalid icon value.`);
@@ -264,6 +279,7 @@ function parseFolderMeta(sourcePath: string, rawContent: string): RawFolderMeta 
 	}
 
 	return {
+		comment,
 		copyright: parseCopyrightConfig(copyright, `Folder meta file ${sourcePath}`),
 		fixOrder: fixOrder as number | undefined,
 		icon,
@@ -281,6 +297,7 @@ function resolveFolderMeta(folderPath: string, rawMeta: RawFolderMeta | undefine
 	}
 
 	return {
+		comment: rawMeta?.comment ?? parentMeta?.comment,
 		copyright: rawMeta?.copyright ?? parentMeta?.copyright,
 		fixOrder: rawMeta?.fixOrder,
 		icon: resolvedIcon as NavIconKind | undefined,
@@ -293,6 +310,7 @@ function buildGeneratedFolderPage(folder: FolderState): GeneratedFolderPageData 
 	const fallbackTitle = folder.displayTitle || '文章列表';
 
 	return {
+		comment: folder.meta.comment,
 		description: `这里收录了 ${fallbackTitle} 下的文件与子目录。`,
 		title: fallbackTitle,
 	};
@@ -331,7 +349,7 @@ export function getFolderListData(docsStructure: DocsStructure, folder: string):
 	throw new Error(`Unable to resolve folder list data for ${routePath || '/'}.`);
 }
 
-function compareTimedItems(left: Pick<FolderPageListItem, 'fixOrder' | 'pubDate' | 'timeless' | 'title'>, right: Pick<FolderPageListItem, 'fixOrder' | 'pubDate' | 'timeless' | 'title'>) {
+function compareTimedItems(left: TimedComparableItem, right: TimedComparableItem) {
 	if (left.fixOrder !== undefined || right.fixOrder !== undefined) {
 		if (left.fixOrder === undefined) {
 			return 1;
@@ -354,8 +372,8 @@ function compareTimedItems(left: Pick<FolderPageListItem, 'fixOrder' | 'pubDate'
 		return left.title.localeCompare(right.title, 'zh-CN');
 	}
 
-	const leftTime = left.pubDate?.valueOf() ?? Number.NEGATIVE_INFINITY;
-	const rightTime = right.pubDate?.valueOf() ?? Number.NEGATIVE_INFINITY;
+	const leftTime: number = left.pubDate?.valueOf() ?? Number.NEGATIVE_INFINITY;
+	const rightTime: number = right.pubDate?.valueOf() ?? Number.NEGATIVE_INFINITY;
 
 	if (leftTime !== rightTime) {
 		return rightTime - leftTime;
@@ -519,7 +537,7 @@ function buildSidebarTree(folderPath: string, folderStateMap: Map<string, Folder
 export function buildDocsStructure(entries: DocEntry[]): DocsStructure {
 	const docsById = new Map(entries.map((entry) => [entry.id, entry]));
 	const scannedContent = scanContentDirectory();
-	const docDataById = new Map<string, { copyright?: CopyrightConfig; routePath: string }>();
+	const docDataById = new Map<string, { comment?: boolean; copyright?: CopyrightConfig; routePath: string }>();
 	const entryRouteMap = new Map<string, string>();
 	const folderMetaMap = new Map<string, FolderMeta>();
 	const folderStateMap = new Map<string, FolderState>();
@@ -565,10 +583,12 @@ export function buildDocsStructure(entries: DocEntry[]): DocsStructure {
 		}
 
 		const folderMeta = folderMetaMap.get(sourceDoc.folderPath);
+		const comment = entry.data.comment ?? folderMeta?.comment;
 		const copyright = entry.data.copyright ?? folderMeta?.copyright;
 		const fixOrder = entry.data['fix-order'];
 		const timeless = entry.data.timeless ?? folderMeta?.timelessEffectToFile ?? false;
 		const resolvedDoc = {
+			comment,
 			copyright,
 			...sourceDoc,
 			entry,
@@ -577,6 +597,7 @@ export function buildDocsStructure(entries: DocEntry[]): DocsStructure {
 		};
 
 		docDataById.set(sourceDoc.id, {
+			comment,
 			copyright,
 			routePath: sourceDoc.routePath,
 		});
