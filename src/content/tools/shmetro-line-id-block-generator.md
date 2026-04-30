@@ -12,6 +12,3 @@ GitHub 仓库链接：[kyuri-metro/shmetro-line-id-block-ui](https://github.com/
 
 2025 样式 NPM 包：[@kyuri-metro/shmetro-line-id-block-2025-svg-generator](https://www.npmjs.com/package/@kyuri-metro/shmetro-line-id-block-2025-svg-generator)
 
-示例：
-
-![上海地铁线路号方块生成器输出示例](/tools/shmetro-idblock/output-example.webp)
