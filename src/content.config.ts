@@ -19,6 +19,7 @@ const docs = defineCollection({
 	schema: ({ image }) =>
 		z.object({
 			copyright: copyrightSchema.optional(),
+			comment: z.boolean().optional(),
 			title: z.string(),
 			tags: z.array(z.string().trim().min(1)).default([]),
 			'fix-order': z.number().int().lt(0).optional(),
