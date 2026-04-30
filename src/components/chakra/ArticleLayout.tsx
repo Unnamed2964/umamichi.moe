@@ -6,6 +6,7 @@ import { ArticleHeader } from "./ArticleHeader"
 import { ArticleHeroImage } from "./ArticleHeroImage"
 import { ArticlePostList, type ArticleSidebarTree } from "./ArticlePostList"
 import { ArticlePrevNext, type AdjacentArticleLink } from "./ArticlePrevNext"
+import ArticleSourceActions from "./ArticleSourceActions"
 import { ArticleTags, type ArticleTag } from "./ArticleTags"
 import { ArticleToc, type ArticleTocHeading } from "./ArticleToc"
 import { SiteFrame, SITE_MAIN_HALF_W, SITE_MAIN_MAX_W } from "./SiteFrame"
@@ -31,6 +32,8 @@ type ArticleLayoutProps = PropsWithChildren<{
   nextPost?: AdjacentArticleLink
   navItems: TopLevelNavItem[]
   sidebarTree?: ArticleSidebarTree
+  sourceMarkdown?: string
+  sourceUrl?: string
 }>
 
 export function ArticleLayout({
@@ -48,10 +51,13 @@ export function ArticleLayout({
   nextPost,
   navItems,
   sidebarTree,
+  sourceMarkdown,
+  sourceUrl,
 }: ArticleLayoutProps) {
   const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3)
   const hasToc = tocHeadings.length > 0
   const hasSidebarTree = Boolean(sidebarTree)
+  const hasSourceActions = Boolean(sourceUrl && sourceMarkdown)
 
   return (
     <SiteFrame currentPath={currentPath} navItems={navItems}>
@@ -80,7 +86,15 @@ export function ArticleLayout({
             w={ARTICLE_SIDEBAR_W}
             zIndex="1"
           >
-            <ArticleToc headings={tocHeadings} />
+            <Stack gap="3">
+              {hasSourceActions && sourceUrl && sourceMarkdown && (
+                <ArticleSourceActions sourceMarkdown={sourceMarkdown} sourceUrl={sourceUrl} />
+              )}
+              <ArticleToc
+                headings={tocHeadings}
+                maxH={hasSourceActions ? "calc(100vh - var(--site-header-offset) - 9rem)" : undefined}
+              />
+            </Stack>
           </Box>
         )}
 
@@ -99,6 +113,12 @@ export function ArticleLayout({
 
             <ArticleHeader title={title} pubDate={pubDate} updatedDate={updatedDate} />
             <ArticleTags tags={tags} />
+
+            {hasSourceActions && sourceUrl && sourceMarkdown && (
+              <Box display={{ base: "block", xl: "none" }}>
+                <ArticleSourceActions sourceMarkdown={sourceMarkdown} sourceUrl={sourceUrl} />
+              </Box>
+            )}
 
             {heroImage && <ArticleHeroImage src={heroImage.src} />}
 
