@@ -11,9 +11,13 @@ rss: false
 
 示例：
 
-![上海地铁线路号方块生成器2020样式输出示例](/tools/shmetro-idblock/output-example.webp)
+- 2020
 
-![上海地铁线路号方块生成器2025样式输出示例](/tools/shmetro-idblock/output-example-2025.webp)
+  ![上海地铁线路号方块生成器2020样式输出示例](/tools/shmetro-idblock/output-example.webp)
+
+- 2025
+
+  ![上海地铁线路号方块生成器2025样式输出示例](/tools/shmetro-idblock/output-example-2025.webp)
 
 ## [南京地铁屏蔽门上方贴纸生成器（Alpha）](https://njmetro-railmap-creator.umamichi.moe/)
 
