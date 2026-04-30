@@ -381,4 +381,107 @@
 
 		showSiteCopyToast('已复制');
 	}, true);
+
+	const copyTextToClipboard = async (value) => {
+		if (!value) {
+			return false;
+		}
+
+		if (navigator.clipboard?.writeText) {
+			await navigator.clipboard.writeText(value);
+			return true;
+		}
+
+		const fallback = document.createElement('textarea');
+		fallback.value = value;
+		fallback.setAttribute('readonly', '');
+		fallback.style.position = 'fixed';
+		fallback.style.left = '-9999px';
+		fallback.style.top = '0';
+		document.body.append(fallback);
+		fallback.select();
+
+		try {
+			return document.execCommand('copy');
+		} finally {
+			fallback.remove();
+		}
+	};
+
+	const closeArticleSourceMenu = (container) => {
+		const toggle = container.querySelector('[data-article-source-menu-toggle]');
+		const menu = container.querySelector('[data-article-source-menu]');
+
+		if (!(toggle instanceof HTMLButtonElement) || !(menu instanceof HTMLElement)) {
+			return;
+		}
+
+		toggle.setAttribute('aria-expanded', 'false');
+		menu.hidden = true;
+	};
+
+	for (const container of document.querySelectorAll('[data-article-source-tools]')) {
+		const toggle = container.querySelector('[data-article-source-menu-toggle]');
+		const menu = container.querySelector('[data-article-source-menu]');
+		const copyButton = container.querySelector('[data-article-copy-markdown]');
+		const source = container.querySelector('[data-article-markdown-source]');
+
+		if (!(toggle instanceof HTMLButtonElement) || !(menu instanceof HTMLElement) || !(copyButton instanceof HTMLButtonElement)) {
+			continue;
+		}
+
+		closeArticleSourceMenu(container);
+
+		toggle.addEventListener('click', (event) => {
+			event.preventDefault();
+			const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+
+			for (const otherContainer of document.querySelectorAll('[data-article-source-tools]')) {
+				if (otherContainer !== container) {
+					closeArticleSourceMenu(otherContainer);
+				}
+			}
+
+			toggle.setAttribute('aria-expanded', String(!isOpen));
+			menu.hidden = isOpen;
+		});
+
+		copyButton.addEventListener('click', async () => {
+			const markdown = source instanceof HTMLTextAreaElement ? source.value : '';
+
+			try {
+				const copied = await copyTextToClipboard(markdown);
+
+				showSiteCopyToast(copied ? '已复制 Markdown' : '复制失败');
+			} catch {
+				showSiteCopyToast('复制失败');
+			}
+
+			closeArticleSourceMenu(container);
+		});
+	}
+
+	document.addEventListener('pointerdown', (event) => {
+		const target = event.target;
+
+		if (!(target instanceof Node)) {
+			return;
+		}
+
+		for (const container of document.querySelectorAll('[data-article-source-tools]')) {
+			if (!container.contains(target)) {
+				closeArticleSourceMenu(container);
+			}
+		}
+	});
+
+	window.addEventListener('keydown', (event) => {
+		if (event.key !== 'Escape') {
+			return;
+		}
+
+		for (const container of document.querySelectorAll('[data-article-source-tools]')) {
+			closeArticleSourceMenu(container);
+		}
+	});
 </script>

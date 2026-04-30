@@ -37,7 +37,9 @@ type SourceDocMeta = {
 	folderPath: string;
 	id: string;
 	isIndex: boolean;
+	rawContent: string;
 	routePath: string;
+	sourcePath: string;
 };
 
 type RawFolderMeta = {
@@ -149,7 +151,7 @@ export type TopLevelNavItem = {
 };
 
 export type DocsStructure = {
-	docDataById: Map<string, { comment?: boolean; copyright?: CopyrightConfig; routePath: string }>;
+	docDataById: Map<string, { comment?: boolean; copyright?: CopyrightConfig; rawContent: string; routePath: string; sourcePath: string }>;
 	entryRouteMap: Map<string, string>;
 	folderRoutes: FolderRoute[];
 	routes: SiteRoute[];
@@ -169,6 +171,12 @@ const SOURCE_DOC_FILES = [
 	...Object.keys(import.meta.glob('../content/**/*.md')),
 	...Object.keys(import.meta.glob('../content/**/*.mdx')),
 ];
+
+const SOURCE_DOC_RAW_FILES = import.meta.glob('../content/**/*.{md,mdx}', {
+	eager: true,
+	import: 'default',
+	query: '?raw',
+}) as Record<string, string>;
 
 const SOURCE_FOLDER_META_FILES = import.meta.glob('../content/**/_meta.{yml,yaml}', {
 	eager: true,
@@ -439,6 +447,7 @@ function scanContentDirectory(): ScannedContent {
 	const sourceDocs = SOURCE_DOC_FILES.map<SourceDocMeta>((sourcePath) => {
 		const normalizedPath = toPosixPath(sourcePath);
 		const relativePath = normalizedPath.replace(/^\.\.\/content\//, '');
+		const rawContent = SOURCE_DOC_RAW_FILES[sourcePath];
 		const pathWithoutExtension = relativePath.replace(/\.mdx?$/, '');
 		const pathSegments = pathWithoutExtension.split('/');
 		const baseName = pathSegments.pop() ?? '';
@@ -462,7 +471,9 @@ function scanContentDirectory(): ScannedContent {
 			folderPath,
 			id,
 			isIndex,
+			rawContent,
 			routePath,
+			sourcePath: `src/content/${relativePath}`,
 		};
 	});
 
@@ -537,7 +548,7 @@ function buildSidebarTree(folderPath: string, folderStateMap: Map<string, Folder
 export function buildDocsStructure(entries: DocEntry[]): DocsStructure {
 	const docsById = new Map(entries.map((entry) => [entry.id, entry]));
 	const scannedContent = scanContentDirectory();
-	const docDataById = new Map<string, { comment?: boolean; copyright?: CopyrightConfig; routePath: string }>();
+	const docDataById = new Map<string, { comment?: boolean; copyright?: CopyrightConfig; rawContent: string; routePath: string; sourcePath: string }>();
 	const entryRouteMap = new Map<string, string>();
 	const folderMetaMap = new Map<string, FolderMeta>();
 	const folderStateMap = new Map<string, FolderState>();
@@ -599,7 +610,9 @@ export function buildDocsStructure(entries: DocEntry[]): DocsStructure {
 		docDataById.set(sourceDoc.id, {
 			comment,
 			copyright,
+			rawContent: sourceDoc.rawContent,
 			routePath: sourceDoc.routePath,
+			sourcePath: sourceDoc.sourcePath,
 		});
 
 		entryRouteMap.set(sourceDoc.id, sourceDoc.routePath);

@@ -8,9 +8,10 @@ export type ArticleTocHeading = {
 
 type ArticleTocProps = {
   headings: ArticleTocHeading[]
+  maxH?: string
 }
 
-export function ArticleToc({ headings }: ArticleTocProps) {
+export function ArticleToc({ headings, maxH = "calc(100vh - var(--site-header-offset) - 4rem)" }: ArticleTocProps) {
   const items = headings.filter((heading) => heading.depth === 2 || heading.depth === 3)
 
   if (items.length === 0) {
@@ -26,7 +27,7 @@ export function ArticleToc({ headings }: ArticleTocProps) {
       bg="var(--site-sidebar-bg)"
       borderWidth="1px"
       borderColor="var(--site-sidebar-border)"
-      maxH="calc(100vh - var(--site-header-offset) - 4rem)"
+      maxH={maxH}
       overflowX="hidden"
       display="flex"
       flexDirection="column"
