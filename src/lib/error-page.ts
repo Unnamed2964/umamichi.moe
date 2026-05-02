@@ -1,7 +1,7 @@
 import { getCollection } from 'astro:content';
 import { buildDocsStructure } from './docs';
 
-const ERROR_PAGE_PATHS = new Set(['/404/', '/500/', '/502/', '/503/', '/504/']);
+const ERROR_PAGE_PATHS = new Set(['/404/', '/418/', '/500/', '/502/', '/503/', '/504/']);
 
 function normalizePathname(pathname: string) {
 	if (!pathname || pathname === '/') {
