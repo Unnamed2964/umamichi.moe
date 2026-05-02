@@ -7,9 +7,13 @@ rss: false
 
 ## [上海地铁线路号方块生成器](https://shmetro-line-id-block-generator-v2.umamichi.moe)
 
-参考实拍的9号线站台门线路图（2020样式）和2号线竖立线路图（2025样式）制作的上海地铁线路号方块生成器。详细介绍、相关仓库与 NPM 包见[单独页面](/tools/shmetro-line-id-block-generator/)。
+参考实拍的13号线竖立线路图等（2020样式2）、9号线站台门线路图（2020样式）、和2号线竖立线路图（2025样式）制作的上海地铁线路号方块生成器。详细介绍、相关仓库与 NPM 包见[单独页面](/tools/shmetro-line-id-block-generator/)。
 
 示例：
+
+- 2020样式2
+
+  ![上海地铁线路号方块生成器2020样式2输出示例](/tools/shmetro-idblock/output-example-2020-type2.webp)
 
 - 2020
 
