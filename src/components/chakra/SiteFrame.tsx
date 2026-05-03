@@ -260,13 +260,13 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                   _active={{ bg: "var(--site-active-bg)" }}
                 />
 
+                {/* Desktop top bar */}
                 <Heading as="h1" size="lg" letterSpacing="tight" textAlign="left" flex="0 0 auto" display={{ base: "none", md: "block" }}>
                   <Link href="/" _hover={{ textDecoration: "none", color: "var(--site-accent)" }}>
                     {SITE_TITLE}
                   </Link>
                 </Heading>
-
-                {/* Desktop navigation and utilities */}
+                
                 <Flex
                   flex="1"
                   align="center"
