@@ -103,7 +103,7 @@ export function ArticleLayout({
         )}
 
         {/* HELP NEEDED: transition:animate="slide" doesn't work here */}
-        <Stack as="article" gap="10" w="full" data-transition-name="article" data-transition-animate="slide">
+        <Stack as="article" gap="10" w="full" data-transition-name="article" data-transition-animate="slide" data-transition-persist>
           <Stack gap="6" w="full">
             {sidebarTree && (
               <Box display={{ base: "block", xl: "none" }}>
@@ -112,24 +112,25 @@ export function ArticleLayout({
                   currentPostId={currentPostId}
                   tree={sidebarTree}
                   variant="mobile"
+                  data-transition-name="top-sidebar"
                 />
               </Box>
             )}
 
-            <ArticleHeader title={title} pubDate={pubDate} updatedDate={updatedDate} />
-            <ArticleTags tags={tags} />
+            <ArticleHeader title={title} pubDate={pubDate} updatedDate={updatedDate} data-transition-name="title" />
+            <ArticleTags tags={tags} data-transition-name="tags" />
 
             {sourceUrl && sourceMarkdown && (
               <Box display={{ base: "block", xl: "none" }}>
-                <ArticleSourceActions sourceMarkdown={sourceMarkdown} sourceUrl={sourceUrl} />
+                <ArticleSourceActions sourceMarkdown={sourceMarkdown} sourceUrl={sourceUrl} data-transition-name="source-actions" />
               </Box>
             )}
 
-            {heroImage && <ArticleHeroImage src={heroImage.src} />}
+            {heroImage && <ArticleHeroImage src={heroImage.src} data-transition-name="hero-image" />}
 
             <ArticleContent>{children}</ArticleContent>
-            <ArticleCopyright copyright={copyright} />
-            <ArticlePrevNext previousPost={previousPost} nextPost={nextPost} showDivider={!copyright} />
+            <ArticleCopyright copyright={copyright} data-transition-name="copyright" />
+            <ArticlePrevNext previousPost={previousPost} nextPost={nextPost} showDivider={!copyright} data-transition-name="prev-next" />
           </Stack>
         </Stack>
       </Box>
