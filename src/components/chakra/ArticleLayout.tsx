@@ -69,7 +69,9 @@ export function ArticleLayout({
             left={`max(1rem, calc(50vw - ${SITE_MAIN_HALF_W} - ${ARTICLE_SIDEBAR_W} - ${ARTICLE_SIDEBAR_GAP}))`}
             w={ARTICLE_SIDEBAR_W}
             zIndex="1"
+            data-transition-name="sidebar"
             data-transition-animate="slide"
+            data-transition-persist
           >
             <ArticlePostList currentPath={currentPath} currentPostId={currentPostId} tree={sidebarTree} />
           </Box>
@@ -84,7 +86,9 @@ export function ArticleLayout({
             right={`max(1rem, calc(50vw - ${SITE_MAIN_HALF_W} - ${ARTICLE_SIDEBAR_W} - ${ARTICLE_SIDEBAR_GAP}))`}
             w={ARTICLE_SIDEBAR_W}
             zIndex="1"
+            data-transition-name="toc"
             data-transition-animate="slide"
+            data-transition-persist
           >
             <Stack gap="3">
               {sourceUrl && sourceMarkdown && (
@@ -98,7 +102,8 @@ export function ArticleLayout({
           </Box>
         )}
 
-        <Stack as="article" gap="10" w="full" data-transition-animate="slide">
+        {/* HELP NEEDED: transition:animate="slide" doesn't work here */}
+        <Stack as="article" gap="10" w="full" data-transition-name="article" data-transition-animate="slide">
           <Stack gap="6" w="full">
             {sidebarTree && (
               <Box display={{ base: "block", xl: "none" }}>
