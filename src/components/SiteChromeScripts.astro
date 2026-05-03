@@ -485,14 +485,3 @@
 		}
 	});
 </script>
-
-<script is:inline>
-	document.addEventListener("astro:before-swap", () => {
-    document
-      .querySelectorAll("[data-transition-name]")
-      .forEach(el => {
-        const name = el.getAttribute("data-transition-name");
-        el.setAttribute("transition:name", name);
-      });
-  });
-</script>
