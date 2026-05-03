@@ -211,6 +211,8 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           borderBottomWidth="1px"
           borderColor="var(--site-header-border)"
           bg="var(--site-header-bg)"
+          data-transition-persist
+          data-transition-name="header"
         >
           <Container maxW="6xl" px={{ base: 4, md: 6 }}>
             <Stack gap={{ base: 3, md: 0 }} py={{ base: 3, md: 0 }}>
@@ -482,6 +484,8 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           borderTopWidth="1px"
           borderColor="var(--site-border)"
           bg="var(--site-bg)"
+          data-transition-persist
+          data-transition-name="footer"
         >
           <Container maxW="6xl" px={{ base: 4, md: 6 }} py="10">
             <Stack gap="2" align="center" textAlign="center">
