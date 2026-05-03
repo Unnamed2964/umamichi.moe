@@ -114,6 +114,15 @@ html.dark {
 	transform: translateY(0);
 }
 
+.navbar-running-line {
+	position: absolute;
+	background: var(--site-header-border);
+	bottom: 0;
+	left: 0;
+	height: 8px;
+	transition: width 2000ms ease;
+}
+
 [data-site-theme-icon='dark'] {
 	display: none;
 }
