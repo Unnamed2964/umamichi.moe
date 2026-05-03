@@ -214,6 +214,9 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           data-transition-persist
           data-transition-name="header"
         >
+          {/* todo: 无障碍 */}
+          <div className="navbar-running-line" data-nav-running-line></div>
+
           <Container maxW="6xl" px={{ base: 4, md: 6 }}>
             <Stack gap={{ base: 3, md: 0 }} py={{ base: 3, md: 0 }}>
               <Flex
@@ -294,6 +297,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                           bg={active ? "var(--site-nav-active-bg)" : "transparent"}
                           color={active ? "var(--site-accent)" : "var(--site-fg)"}
                           _hover={{ textDecoration: "none", bg: "var(--site-hover-bg)" }}
+                          data-nav-active-item={ active ? true : undefined }
                         >
                           <Box
                             as="span"

@@ -485,3 +485,32 @@
 		}
 	});
 </script>
+
+<script is:inline>
+	let activeNavItem = null, runningLine = null;
+
+	function resolveNavElements() {
+		activeNavItem = document.querySelector('[data-nav-active-item]');
+		runningLine = document.querySelector('[data-nav-running-line]');
+	}
+
+	function updateNavRunningLine() {
+		if (activeNavItem && runningLine) {
+			const rect = activeNavItem.getBoundingClientRect();
+			
+			const width = (rect.left + rect.right) / 2;
+			runningLine.style.width = `${width}px`;
+		}
+	}
+	
+	resolveNavElements();
+	requestAnimationFrame(updateNavRunningLine);
+
+	document.addEventListener('astro:after-swap', () => {
+		resolveNavElements();
+		requestAnimationFrame(updateNavRunningLine);
+	});
+
+	const observer = new ResizeObserver(updateNavRunningLine);
+	observer.observe(document.body);
+</script>
