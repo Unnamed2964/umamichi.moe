@@ -55,6 +55,7 @@ html {
 	--site-copy-toast-fg: var(--chakra-colors-gray-700);
 	--site-copy-toast-border: var(--chakra-colors-gray-300);
 	scroll-padding-top: var(--site-header-offset);
+	overflow-y: scroll;
 }
 
 html.dark {
