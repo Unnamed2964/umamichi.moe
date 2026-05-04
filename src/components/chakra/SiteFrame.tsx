@@ -344,7 +344,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                     })}
                   </HStack>
 
-                  <HStack gap="2" color="var(--site-muted-fg)" fontSize="sm" justify="center" flexShrink={0}>
+                  <HStack gap="2" color="var(--site-fg)" fontSize="sm" justify="center" flexShrink={0}>
                     <ThemeToggleButton
                       rounded="full"
                       color="var(--site-fg)"
@@ -358,7 +358,12 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                       aria-label="X"
                       display="inline-flex"
                       alignItems="center"
-                      _hover={{ color: "var(--site-accent)" }}
+                      justifyContent="center"
+                      boxSize="8"
+                      rounded="full"
+                      color="var(--site-fg)"
+                      _hover={{ bg: "var(--site-hover-bg)", textDecoration: "none" }}
+                      _active={{ bg: "var(--site-active-bg)" }}
                     >
                       <Icon as={FaXTwitter} boxSize="5" />
                     </Link>
@@ -369,7 +374,12 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                       aria-label="GitHub"
                       display="inline-flex"
                       alignItems="center"
-                      _hover={{ color: "var(--site-accent)" }}
+                      justifyContent="center"
+                      boxSize="8"
+                      rounded="full"
+                      color="var(--site-fg)"
+                      _hover={{ bg: "var(--site-hover-bg)", textDecoration: "none" }}
+                      _active={{ bg: "var(--site-active-bg)" }}
                     >
                       <Icon as={FaGithub} boxSize="5" />
                     </Link>
@@ -471,7 +481,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                 </Stack>
               </Flex>
 
-              <HStack as="footer" gap="4" justify="center" color="var(--site-muted-fg)" pb="2">
+              <HStack as="footer" gap="2" justify="center" color="var(--site-fg)" pb="2">
                 <Link
                   href="https://twitter.com/Umamichiz"
                   target="_blank"
@@ -480,13 +490,13 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                   display="inline-flex"
                   alignItems="center"
                   justifyContent="center"
-                  boxSize="10"
+                  boxSize="8"
                   rounded="full"
-                  borderWidth="1px"
-                  borderColor="var(--site-border-strong)"
-                  _hover={{ color: "var(--site-accent)", bg: "var(--site-hover-bg)", textDecoration: "none" }}
+                  color="var(--site-fg)"
+                  _hover={{ bg: "var(--site-hover-bg)", textDecoration: "none" }}
+                  _active={{ bg: "var(--site-active-bg)" }}
                 >
-                  <Icon as={FaXTwitter} boxSize="4" />
+                  <Icon as={FaXTwitter} boxSize="5" />
                 </Link>
                 <Link
                   href="https://github.com/Unnamed2964"
@@ -496,13 +506,13 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                   display="inline-flex"
                   alignItems="center"
                   justifyContent="center"
-                  boxSize="10"
+                  boxSize="8"
                   rounded="full"
-                  borderWidth="1px"
-                  borderColor="var(--site-border-strong)"
-                  _hover={{ color: "var(--site-accent)", bg: "var(--site-hover-bg)", textDecoration: "none" }}
+                  color="var(--site-fg)"
+                  _hover={{ bg: "var(--site-hover-bg)", textDecoration: "none" }}
+                  _active={{ bg: "var(--site-active-bg)" }}
                 >
-                  <Icon as={FaGithub} boxSize="4" />
+                  <Icon as={FaGithub} boxSize="5" />
                 </Link>
               </HStack>
             </Flex>
