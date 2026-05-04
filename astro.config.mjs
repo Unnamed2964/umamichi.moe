@@ -19,6 +19,12 @@ export default defineConfig({
   integrations: [mdx({ rehypePlugins: [rehypeWrapEmoji] }), sitemap(), react(), TransitionRewrite()],
   adapter: cloudflare(),
   markdown: {
+    shikiConfig: {
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
+    },
     remarkPlugins: [remarkGfm, remarkMath],
     rehypePlugins: [rehypeKatex, rehypeWrapEmoji],
   },
