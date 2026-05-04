@@ -39,6 +39,17 @@ GitHub 仓库链接：[Unnamed2964/njmetro-railmap-creator](https://github.com/U
 
 ![南京地铁屏蔽门上方贴纸生成器终点站牌示例](/tools/njmetro-railmap-creator/terminus-badge.webp)
 
+## [南京地铁线路号方块生成器](https://njmetro-line-id-block-generator.umamichi.moe)
+
+参考上节所述实拍图片和其他参考资料制作的南京地铁线路号方块生成器。附有 NPM 包。
+
+GitHub 仓库：[kyuri-metro/njmetro-line-id-block-ui](https://github.com/kyuri-metro/njmetro-line-id-block-ui)
+NPM 包：[@kyuri-metro/njmetro-line-id-block-svg-generator](https://www.npmjs.com/package/@kyuri-metro/njmetro-line-id-block-svg-generator)
+
+示例：
+
+![南京地铁线路号方块生成器输出示例](/tools/njmetro-idblock/output-example.webp)
+
 ## [铁路缓和曲线交互实验（未检查）](https://railroad-spline-experiment.umamichi.moe/)
 
 一个用于观察“二点约束 + 两端切线 + 首尾允许补直线”时铁路曲线求解结果的交互式小实验，可在美国常用的欧拉缓和曲线和中国大陆常用的三次抛物线缓和曲线之间切换，并实时查看补直线长度、缓和曲线长度、圆曲线长度、总长、转角和终点误差。
