@@ -151,7 +151,10 @@ html.dark [data-site-theme-icon='dark'] {
 	display: inline-flex;
 }
 
-html[data-theme-switching='true'] [data-article-source-menu-chevron] {
+html[data-theme-switching='true'],
+html[data-theme-switching='true'] *,
+html[data-theme-switching='true'] *::before,
+html[data-theme-switching='true'] *::after {
 	transition: none !important;
 }
 
