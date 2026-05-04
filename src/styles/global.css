@@ -69,7 +69,7 @@ html.dark {
 	--site-header-bg: var(--chakra-colors-cyan-950);
 	--site-sidebar-bg: var(--chakra-colors-gray-900);
 	--site-border: #30363d;
-	--site-header-border: var(--chakra-colors-cyan-800);
+	--site-header-border: var(--chakra-colors-cyan-600);
 	--site-sidebar-border: var(--chakra-colors-gray-700);
 	--site-border-strong: #30363d;
 	--site-nav-future-icon: var(--chakra-colors-gray-600);
