@@ -35,6 +35,7 @@
 			document.documentElement.dataset.themePreference = preference;
 			document.documentElement.dataset.themeResolved = resolved;
 			document.documentElement.style.colorScheme = resolved;
+			document.dispatchEvent(new CustomEvent('site:theme-change', { detail: { preference, resolved } }));
 
 			for (const button of document.querySelectorAll('[data-site-theme-toggle]')) {
 				button.setAttribute('aria-label', resolved === 'dark' ? '切换到浅色模式' : '切换到深色模式');

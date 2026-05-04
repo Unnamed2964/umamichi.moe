@@ -1,6 +1,28 @@
 import Giscus from "@giscus/react"
+import { useEffect, useState } from "react"
+
+function getResolvedGiscusTheme() {
+  if (typeof document === "undefined") {
+    return "light"
+  }
+
+  return document.documentElement.dataset.themeResolved === "dark" ? "dark" : "light"
+}
 
 export default function ArticleComments() {
+  const [giscusTheme, setGiscusTheme] = useState(getResolvedGiscusTheme)
+
+  useEffect(() => {
+    const syncGiscusTheme = () => setGiscusTheme(getResolvedGiscusTheme())
+
+    syncGiscusTheme()
+    document.addEventListener("site:theme-change", syncGiscusTheme)
+
+    return () => {
+      document.removeEventListener("site:theme-change", syncGiscusTheme)
+    }
+  }, [])
+
   return (
     <section aria-label="评论区" style={{ marginTop: "3rem" }}>
       <Giscus
@@ -13,7 +35,7 @@ export default function ArticleComments() {
         reactionsEnabled="1"
         emitMetadata="0"
         inputPosition="top"
-        theme="light"
+        theme={giscusTheme}
         lang="zh-CN"
         loading="eager"
       />
