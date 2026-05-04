@@ -125,6 +125,20 @@ html.dark {
 	transition: width 2000ms ease;
 }
 
+.mobile-navbar-running-line {
+	position: absolute;
+	top: 0;
+	left: 4px;
+	width: 8px;
+	height: 0;
+	background: var(--site-header-border);
+	transition: height 2000ms ease;
+}
+
+[data-mobile-nav-list] {
+	transform: translateX(var(--mobile-nav-inline-shift, 0px));
+}
+
 [data-site-theme-icon='dark'] {
 	display: none;
 }

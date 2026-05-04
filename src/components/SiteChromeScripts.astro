@@ -85,6 +85,8 @@
 				button.setAttribute('aria-expanded', String(isOpen));
 				button.setAttribute('aria-label', isOpen ? '关闭菜单' : '打开菜单');
 			}
+
+			document.dispatchEvent(new Event('site:nav-layout-change'));
 		};
 
 		document.addEventListener('click', (event) => {
@@ -543,6 +545,7 @@
 		window.siteNavRunningLineInitialized = true;
 
 	let navItems = [], navIcons = [], activeNavItem = null, runningLine = null, siteHeader = null;
+	let mobileNavItems = [], mobileNavIcons = [], mobileActiveNavItem = null, mobileRunningLine = null, mobileMenu = null;
 	let navUpdateFrame = 0;
 	const transferIconBaselineY = 100;
 
@@ -552,6 +555,11 @@
 		activeNavItem = document.querySelector('[data-nav-active-item]');
 		runningLine = document.querySelector('[data-nav-running-line]');
 		siteHeader = document.querySelector('[data-site-header]');
+		mobileNavItems = Array.from(document.querySelectorAll('[data-mobile-nav-item]'));
+		mobileNavIcons = Array.from(document.querySelectorAll('[data-mobile-nav-icon]'));
+		mobileActiveNavItem = document.querySelector('[data-mobile-nav-active-item]');
+		mobileRunningLine = document.querySelector('[data-mobile-nav-running-line]');
+		mobileMenu = document.querySelector('[data-site-mobile-menu]');
 	}
 
 	function getSvgNavAnchorScreenPoint(svg) {
@@ -604,6 +612,59 @@
 
 			runningLine.style.width = `${anchorX - headerRect.left}px`;
 		}
+
+		if (mobileMenu instanceof HTMLElement) {
+			const menuRect = mobileMenu.getBoundingClientRect();
+
+			if (menuRect.width === 0 && menuRect.height === 0) {
+				return;
+			}
+
+			if (mobileRunningLine) {
+				const menuToggle = mobileMenu.querySelector('[data-site-menu-close]');
+				const toggleRect = menuToggle?.getBoundingClientRect();
+				const lineRect = mobileRunningLine.getBoundingClientRect();
+
+				if (toggleRect && lineRect.width > 0) {
+					const toggleCenterX = (toggleRect.left + toggleRect.right) / 2;
+					const lineLeft = toggleCenterX - menuRect.left - lineRect.width / 2;
+					mobileRunningLine.style.left = `${lineLeft}px`;
+					mobileMenu.style.setProperty('--mobile-nav-inline-shift', `${lineLeft - 4}px`);
+				}
+			}
+
+			const lineRect = mobileRunningLine?.getBoundingClientRect();
+			const anchorX = lineRect && (lineRect.width > 0 || lineRect.height > 0)
+				? lineRect.left
+				: menuRect.left + 4;
+
+			mobileNavIcons.forEach((navIcon, index) => {
+				const navItem = mobileNavItems[index];
+				const svg = navIcon.querySelector('svg');
+
+				if (!navItem || !svg) {
+					return;
+				}
+
+				const rect = navItem.getBoundingClientRect();
+				const anchorY = (rect.top + rect.bottom) / 2;
+
+				navIcon.style.transform = '';
+
+				const baselinePoint = getSvgNavAnchorScreenPoint(svg);
+
+				if (baselinePoint) {
+					navIcon.style.transform = `translate(${anchorX - baselinePoint.x}px, ${anchorY - baselinePoint.y}px)`;
+				}
+			});
+
+			if (mobileActiveNavItem && mobileRunningLine) {
+				const rect = mobileActiveNavItem.getBoundingClientRect();
+				const anchorY = (rect.top + rect.bottom) / 2;
+
+				mobileRunningLine.style.height = `${anchorY - menuRect.top}px`;
+			}
+		}
 	}
 
 	function scheduleNavRunningLineUpdate() {
@@ -611,7 +672,7 @@
 			navUpdateFrame = requestAnimationFrame(updateNavRunningLine);
 		}
 	}
-	
+
 	resolveNavElements();
 	scheduleNavRunningLineUpdate();
 
@@ -619,6 +680,7 @@
 		resolveNavElements();
 		scheduleNavRunningLineUpdate();
 	});
+	document.addEventListener('site:nav-layout-change', scheduleNavRunningLineUpdate);
 
 	window.addEventListener('resize', scheduleNavRunningLineUpdate, { passive: true });
 	window.visualViewport?.addEventListener('resize', scheduleNavRunningLineUpdate, { passive: true });
