@@ -1,95 +1,111 @@
 <script is:inline>
-	const storageKey = 'site-theme';
-	const themeButtons = Array.from(document.querySelectorAll('[data-site-theme-toggle]'));
-	const themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-	let themeTransitionResetFrame = 0;
+	if (!window.siteThemeControlsInitialized) {
+		window.siteThemeControlsInitialized = true;
 
-	const getStoredThemePreference = () => {
-		const stored = window.localStorage.getItem(storageKey);
-		return stored === 'light' || stored === 'dark' ? stored : 'system';
-	};
+		const storageKey = 'site-theme';
+		const themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+		let themeTransitionResetFrame = 0;
 
-	const getResolvedTheme = (preference) => {
-		if (preference === 'system') {
-			return themeMediaQuery.matches ? 'dark' : 'light';
-		}
+		const getStoredThemePreference = () => {
+			const stored = window.localStorage.getItem(storageKey);
+			return stored === 'light' || stored === 'dark' ? stored : 'system';
+		};
 
-		return preference;
-	};
+		const getResolvedTheme = (preference) => {
+			if (preference === 'system') {
+				return themeMediaQuery.matches ? 'dark' : 'light';
+			}
 
-	const applyThemePreference = (preference) => {
-		const resolved = getResolvedTheme(preference);
-		document.documentElement.dataset.themeSwitching = 'true';
-		if (themeTransitionResetFrame) {
-			window.cancelAnimationFrame(themeTransitionResetFrame);
-		}
-		themeTransitionResetFrame = window.requestAnimationFrame(() => {
+			return preference;
+		};
+
+		const applyThemePreference = (preference) => {
+			const resolved = getResolvedTheme(preference);
+			document.documentElement.dataset.themeSwitching = 'true';
+			if (themeTransitionResetFrame) {
+				window.cancelAnimationFrame(themeTransitionResetFrame);
+			}
 			themeTransitionResetFrame = window.requestAnimationFrame(() => {
-				delete document.documentElement.dataset.themeSwitching;
-				themeTransitionResetFrame = 0;
+				themeTransitionResetFrame = window.requestAnimationFrame(() => {
+					delete document.documentElement.dataset.themeSwitching;
+					themeTransitionResetFrame = 0;
+				});
 			});
-		});
-		document.documentElement.classList.toggle('dark', resolved === 'dark');
-		document.documentElement.dataset.themePreference = preference;
-		document.documentElement.dataset.themeResolved = resolved;
-		document.documentElement.style.colorScheme = resolved;
+			document.documentElement.classList.toggle('dark', resolved === 'dark');
+			document.documentElement.dataset.themePreference = preference;
+			document.documentElement.dataset.themeResolved = resolved;
+			document.documentElement.style.colorScheme = resolved;
 
-		for (const button of themeButtons) {
-			button.setAttribute('aria-label', resolved === 'dark' ? '切换到浅色模式' : '切换到深色模式');
-			button.setAttribute('title', resolved === 'dark' ? '切换到浅色模式' : '切换到深色模式');
-		}
-	};
+			for (const button of document.querySelectorAll('[data-site-theme-toggle]')) {
+				button.setAttribute('aria-label', resolved === 'dark' ? '切换到浅色模式' : '切换到深色模式');
+				button.setAttribute('title', resolved === 'dark' ? '切换到浅色模式' : '切换到深色模式');
+			}
+		};
 
-	applyThemePreference(getStoredThemePreference());
+		document.addEventListener('click', (event) => {
+			const target = event.target;
 
-	for (const button of themeButtons) {
-		button.addEventListener('click', () => {
+			if (!(target instanceof Element) || !target.closest('[data-site-theme-toggle]')) {
+				return;
+			}
+
 			const currentResolved = document.documentElement.dataset.themeResolved === 'dark' ? 'dark' : 'light';
 			const nextPreference = currentResolved === 'dark' ? 'light' : 'dark';
 			window.localStorage.setItem(storageKey, nextPreference);
 			applyThemePreference(nextPreference);
 		});
-	}
 
-	themeMediaQuery.addEventListener('change', () => {
-		if (getStoredThemePreference() === 'system') {
-			applyThemePreference('system');
-		}
-	});
+		themeMediaQuery.addEventListener('change', () => {
+			if (getStoredThemePreference() === 'system') {
+				applyThemePreference('system');
+			}
+		});
+
+		document.addEventListener('astro:after-swap', () => applyThemePreference(getStoredThemePreference()));
+		applyThemePreference(getStoredThemePreference());
+	}
 </script>
 
 <script is:inline>
-	const mobileMenu = document.querySelector('[data-site-mobile-menu]');
-	const menuToggleButtons = Array.from(document.querySelectorAll('[data-site-menu-toggle]'));
-	const menuCloseButtons = Array.from(document.querySelectorAll('[data-site-menu-close]'));
-	const menuLinks = Array.from(document.querySelectorAll('[data-site-menu-link]'));
+	if (!window.siteMobileMenuInitialized) {
+		window.siteMobileMenuInitialized = true;
 
-	if (mobileMenu instanceof HTMLElement) {
 		const setMenuOpen = (isOpen) => {
+			const mobileMenu = document.querySelector('[data-site-mobile-menu]');
+
+			if (!(mobileMenu instanceof HTMLElement)) {
+				return;
+			}
+
 			mobileMenu.hidden = !isOpen;
 			mobileMenu.setAttribute('aria-hidden', String(!isOpen));
 			document.body.style.overflow = isOpen ? 'hidden' : '';
 
-			for (const button of menuToggleButtons) {
+			for (const button of document.querySelectorAll('[data-site-menu-toggle]')) {
 				button.setAttribute('aria-expanded', String(isOpen));
 				button.setAttribute('aria-label', isOpen ? '关闭菜单' : '打开菜单');
 			}
 		};
 
-		for (const button of menuToggleButtons) {
-			button.addEventListener('click', () => {
-				const isCurrentlyOpen = button.getAttribute('aria-expanded') === 'true';
+		document.addEventListener('click', (event) => {
+			const target = event.target;
+
+			if (!(target instanceof Element)) {
+				return;
+			}
+
+			const toggleButton = target.closest('[data-site-menu-toggle]');
+
+			if (toggleButton) {
+				const isCurrentlyOpen = toggleButton.getAttribute('aria-expanded') === 'true';
 				setMenuOpen(!isCurrentlyOpen);
-			});
-		}
+				return;
+			}
 
-		for (const button of menuCloseButtons) {
-			button.addEventListener('click', () => setMenuOpen(false));
-		}
-
-		for (const link of menuLinks) {
-			link.addEventListener('click', () => setMenuOpen(false));
-		}
+			if (target.closest('[data-site-menu-close]') || target.closest('[data-site-menu-link]')) {
+				setMenuOpen(false);
+			}
+		});
 
 		window.addEventListener('keydown', (event) => {
 			if (event.key === 'Escape') {
@@ -103,31 +119,49 @@
 			}
 		}, { passive: true });
 
+		document.addEventListener('astro:after-swap', () => setMenuOpen(false));
 		setMenuOpen(false);
 	}
 </script>
 
 <script is:inline>
-	const header = document.querySelector('[data-site-header]');
+	if (!window.siteHeaderOffsetInitialized) {
+		window.siteHeaderOffsetInitialized = true;
+		let headerOffsetObserver = null;
 
-	if (header instanceof HTMLElement) {
 		const syncHeaderOffset = () => {
-			const headerHeight = Math.ceil(header.getBoundingClientRect().height);
-			document.documentElement.style.setProperty('--site-header-offset', `${headerHeight}px`);
+			const header = document.querySelector('[data-site-header]');
+
+			if (header instanceof HTMLElement) {
+				const headerHeight = Math.ceil(header.getBoundingClientRect().height);
+				document.documentElement.style.setProperty('--site-header-offset', `${headerHeight}px`);
+			}
 		};
 
-		syncHeaderOffset();
+		const observeHeaderOffset = () => {
+			const header = document.querySelector('[data-site-header]');
 
-		const observer = new ResizeObserver(() => {
+			headerOffsetObserver?.disconnect();
+			headerOffsetObserver = null;
+
+			if (header instanceof HTMLElement) {
+				headerOffsetObserver = new ResizeObserver(syncHeaderOffset);
+				headerOffsetObserver.observe(header);
+			}
+
 			syncHeaderOffset();
-		});
+		};
 
-		observer.observe(header);
+		observeHeaderOffset();
+		document.addEventListener('astro:after-swap', observeHeaderOffset);
 		window.addEventListener('resize', syncHeaderOffset, { passive: true });
 	}
 </script>
 
 <script is:inline>
+	if (!window.siteCopyToolsInitialized) {
+		window.siteCopyToolsInitialized = true;
+
 	const siteCopyToastId = 'site-copy-toast';
 	const siteCopyToastViewportPadding = 16;
 	const siteCopyToastOffset = 12;
@@ -420,20 +454,31 @@
 		menu.hidden = true;
 	};
 
-	for (const container of document.querySelectorAll('[data-article-source-tools]')) {
-		const toggle = container.querySelector('[data-article-source-menu-toggle]');
-		const menu = container.querySelector('[data-article-source-menu]');
-		const copyButton = container.querySelector('[data-article-copy-markdown]');
-		const source = container.querySelector('[data-article-markdown-source]');
+	const closeArticleSourceMenus = () => {
+		for (const container of document.querySelectorAll('[data-article-source-tools]')) {
+			closeArticleSourceMenu(container);
+		}
+	};
 
-		if (!(toggle instanceof HTMLButtonElement) || !(menu instanceof HTMLElement) || !(copyButton instanceof HTMLButtonElement)) {
-			continue;
+	document.addEventListener('click', async (event) => {
+		const target = event.target;
+
+		if (!(target instanceof Element)) {
+			return;
 		}
 
-		closeArticleSourceMenu(container);
+		const toggle = target.closest('[data-article-source-menu-toggle]');
+		const copyButton = target.closest('[data-article-copy-markdown]');
 
-		toggle.addEventListener('click', (event) => {
+		if (toggle instanceof HTMLButtonElement) {
 			event.preventDefault();
+			const container = toggle.closest('[data-article-source-tools]');
+			const menu = container?.querySelector('[data-article-source-menu]');
+
+			if (!(container instanceof Element) || !(menu instanceof HTMLElement)) {
+				return;
+			}
+
 			const isOpen = toggle.getAttribute('aria-expanded') === 'true';
 
 			for (const otherContainer of document.querySelectorAll('[data-article-source-tools]')) {
@@ -444,9 +489,12 @@
 
 			toggle.setAttribute('aria-expanded', String(!isOpen));
 			menu.hidden = isOpen;
-		});
+			return;
+		}
 
-		copyButton.addEventListener('click', async () => {
+		if (copyButton instanceof HTMLButtonElement) {
+			const container = copyButton.closest('[data-article-source-tools]');
+			const source = container?.querySelector('[data-article-markdown-source]');
 			const markdown = source instanceof HTMLTextAreaElement ? source.value : '';
 
 			try {
@@ -457,9 +505,14 @@
 				showSiteCopyToast('复制失败');
 			}
 
-			closeArticleSourceMenu(container);
-		});
-	}
+			if (container instanceof Element) {
+				closeArticleSourceMenu(container);
+			}
+		}
+	});
+
+	document.addEventListener('astro:after-swap', closeArticleSourceMenus);
+	closeArticleSourceMenus();
 
 	document.addEventListener('pointerdown', (event) => {
 		const target = event.target;
@@ -480,13 +533,15 @@
 			return;
 		}
 
-		for (const container of document.querySelectorAll('[data-article-source-tools]')) {
-			closeArticleSourceMenu(container);
-		}
+		closeArticleSourceMenus();
 	});
+	}
 </script>
 
 <script is:inline>
+	if (!window.siteNavRunningLineInitialized) {
+		window.siteNavRunningLineInitialized = true;
+
 	let navItems = [], navIcons = [], activeNavItem = null, runningLine = null, siteHeader = null;
 	let navUpdateFrame = 0;
 	const transferIconBaselineY = 100;
@@ -567,4 +622,5 @@
 
 	window.addEventListener('resize', scheduleNavRunningLineUpdate, { passive: true });
 	window.visualViewport?.addEventListener('resize', scheduleNavRunningLineUpdate, { passive: true });
+	}
 </script>
