@@ -25,9 +25,15 @@ type SiteFrameProps = PropsWithChildren<{
   navItems: TopLevelNavItem[]
 }>
 
-function MetroNavIcon({ kind, active }: { kind: NavIconKind; active: boolean }) {
-  const height = 16
-  const accent = active ? "var(--site-accent)" : "var(--chakra-colors-cyan-500)"
+type MetroNavIconTone = "past" | "current" | "future"
+
+function MetroNavIcon({ kind, tone }: { kind: NavIconKind; tone: MetroNavIconTone }) {
+  const height = (8 / 43) * 100
+  const color = tone === "future"
+    ? "var(--site-nav-future-icon)"
+    : tone === "current"
+      ? "var(--site-accent)"
+      : "var(--site-header-border)"
   const iconStyle = {
     display: "block",
     overflow: "visible",
@@ -44,7 +50,7 @@ function MetroNavIcon({ kind, active }: { kind: NavIconKind; active: boolean }) 
       >
         <path
           d="M 43,100 H 0 V 0 H 43 Z"
-          fill={accent}
+          fill={color}
           fillRule="evenodd"
         />
       </svg>
@@ -60,7 +66,7 @@ function MetroNavIcon({ kind, active }: { kind: NavIconKind; active: boolean }) 
       >
         <path
           d="m 23.5,3.5 c 11,0 20,9 20,20 v 53 c 0,11 -9,20 -20,20 -11,0 -20,-9 -20,-20 v -53 c 0,-11 9,-20 20,-20 z"
-          stroke={accent}
+          stroke={color}
           strokeWidth="7"
           strokeMiterlimit="8"
           fill="white"
@@ -79,7 +85,7 @@ function MetroNavIcon({ kind, active }: { kind: NavIconKind; active: boolean }) 
       >
         <path
           d="m 19.5,96.5 c -9,0 -16,-7 -16,-16 v -17 c 0,-9 7,-16 16,-16 9,0 16,7 16,16 v 17 c 0,9 -7,16 -16,16 z"
-          stroke={accent}
+          stroke={color}
           strokeWidth="7"
           strokeMiterlimit="8"
           fill="white"
@@ -87,7 +93,7 @@ function MetroNavIcon({ kind, active }: { kind: NavIconKind; active: boolean }) 
         />
         <path
           d="m 19.5,35.5 c -8,0 -15,-7 -15,-16 0,-8 7,-15 15,-15 9,0 16,7 16,15 0,9 -7,16 -16,16 z"
-          stroke={accent}
+          stroke={color}
           strokeWidth="7"
           strokeMiterlimit="8"
           fill="white"
@@ -106,7 +112,7 @@ function MetroNavIcon({ kind, active }: { kind: NavIconKind; active: boolean }) 
       >
         <path
           d="m 24.5,4.5 c 11,0 21,10 21,20 0,11 -10,21 -21,21 -11,0 -21,-10 -21,-21 0,-10 10,-20 21,-20 z"
-          stroke={accent}
+          stroke={color}
           strokeWidth="7"
           strokeMiterlimit="8"
           fill="white"
@@ -114,7 +120,7 @@ function MetroNavIcon({ kind, active }: { kind: NavIconKind; active: boolean }) 
         />
         <path
           d="m 24.5,55.5 c 11,0 21,10 21,20 0,11 -10,21 -21,21 -11,0 -21,-10 -21,-21 0,-10 10,-20 21,-20 z"
-          stroke={accent}
+          stroke={color}
           strokeWidth="7"
           strokeMiterlimit="8"
           fill="white"
@@ -133,7 +139,7 @@ function MetroNavIcon({ kind, active }: { kind: NavIconKind; active: boolean }) 
       >
         <path
           d="m 16.5,0.5 c 7,0 13,6 13,13 0,8 -6,14 -13,14 -7,0 -13,-6 -13,-14 0,-7 6,-13 13,-13 z"
-          stroke={accent}
+          stroke={color}
           strokeWidth="7"
           strokeMiterlimit="8"
           fill="white"
@@ -141,7 +147,7 @@ function MetroNavIcon({ kind, active }: { kind: NavIconKind; active: boolean }) 
         />
         <path
           d="m 16.5,35.5 c 7,0 13,6 13,13 0,8 -6,14 -13,14 -7,0 -13,-6 -13,-14 0,-7 6,-13 13,-13 z"
-          stroke={accent}
+          stroke={color}
           strokeWidth="7"
           strokeMiterlimit="8"
           fill="white"
@@ -149,7 +155,7 @@ function MetroNavIcon({ kind, active }: { kind: NavIconKind; active: boolean }) 
         />
         <path
           d="m 16.5,70.5 c 7,0 13,6 13,13 0,7 -6,13 -13,13 -7,0 -13,-6 -13,-13 0,-7 6,-13 13,-13 z"
-          stroke={accent}
+          stroke={color}
           strokeWidth="7"
           strokeMiterlimit="8"
           fill="white"
@@ -199,6 +205,8 @@ function ThemeToggleButton(props: Omit<ComponentProps<typeof IconButton>, "aria-
 }
 
 export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
+  const activeNavIndex = navItems.findIndex((item) => isActiveLink(item.href, currentPath))
+
   return (
     <Provider>
       <Box minH="100vh" bg="var(--site-bg)" color="var(--site-fg)">
@@ -214,8 +222,33 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           data-transition-persist
           data-transition-name="header"
         >
-          {/* todo: 无障碍 */}
-          <div className="navbar-running-line" data-nav-running-line></div>
+          <div className="navbar-running-line" data-nav-running-line aria-hidden="true"></div>
+          {navItems.map((item, index) => {
+            const tone = index === activeNavIndex
+              ? "current"
+              : activeNavIndex !== -1 && index > activeNavIndex
+                ? "future"
+                : "past"
+
+            return (
+              <Box
+                as="span"
+                key={item.folderPath}
+                data-nav-icon
+                data-nav-icon-current={tone === "current" ? true : undefined}
+                aria-hidden="true"
+                position="absolute"
+                left="0"
+                top="0"
+                zIndex="1"
+                display={{ base: "none", md: "inline-flex" }}
+                lineHeight="0"
+                pointerEvents="none"
+              >
+                <MetroNavIcon kind={item.icon} tone={tone} />
+              </Box>
+            )
+          })}
 
           <Container maxW="6xl" px={{ base: 4, md: 6 }}>
             <Stack gap={{ base: 3, md: 0 }} py={{ base: 3, md: 0 }}>
@@ -271,7 +304,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                     {SITE_TITLE}
                   </Link>
                 </Heading>
-                
+
                 <Flex
                   flex="1"
                   align="center"
@@ -297,19 +330,10 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                           bg={active ? "var(--site-nav-active-bg)" : "transparent"}
                           color={active ? "var(--site-accent)" : "var(--site-fg)"}
                           _hover={{ textDecoration: "none", bg: "var(--site-hover-bg)" }}
+                          data-nav-item
                           data-nav-active-item={ active ? true : undefined }
+                          aria-current={active ? "page" : undefined}
                         >
-                          <Box
-                            as="span"
-                            display="inline-flex"
-                            alignItems="flex-end"
-                            justifyContent="center"
-                            flexShrink={0}
-                            minH="16px"
-                            lineHeight="0"
-                          >
-                            <MetroNavIcon kind={item.icon} active={active} />
-                          </Box>
                           <Box as="span">{item.label}</Box>
                         </Link>
                       )
@@ -406,20 +430,8 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                           bg={active ? "var(--site-nav-active-bg)" : "transparent"}
                           color={active ? "var(--site-accent)" : "var(--site-fg)"}
                           _hover={{ textDecoration: "none", bg: "var(--site-hover-bg)" }}
+                          aria-current={active ? "page" : undefined}
                         >
-                          <Box
-                            as="span"
-                            display="inline-flex"
-                            alignItems="center"
-                            justifyContent="center"
-                            flexShrink={0}
-                            minW="20px"
-                            lineHeight="0"
-                            transform="rotate(90deg)"
-                            transformOrigin="center"
-                          >
-                            <MetroNavIcon kind={item.icon} active={active} />
-                          </Box>
                           <Box as="span">{item.label}</Box>
                         </Link>
                       </Box>
