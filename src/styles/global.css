@@ -151,6 +151,10 @@ html.dark [data-site-theme-icon='dark'] {
 	display: inline-flex;
 }
 
+html[data-theme-switching='true'] [data-article-source-menu-chevron] {
+	transition: none !important;
+}
+
 @media screen and (min-width: 30rem) {
 	html {
 		--site-header-offset: 7rem;
