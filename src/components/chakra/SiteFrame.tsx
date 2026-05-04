@@ -179,6 +179,14 @@ function isActiveLink(href: string, currentPath: string) {
   return normalizedCurrentPath === normalizedHref || normalizedCurrentPath.startsWith(`${normalizedHref}/`)
 }
 
+function getMetroNavIconTone(index: number, activeNavIndex: number): MetroNavIconTone {
+  return index === activeNavIndex
+    ? "current"
+    : activeNavIndex !== -1 && index > activeNavIndex
+      ? "future"
+      : "past"
+}
+
 function ThemeToggleButton(props: Omit<ComponentProps<typeof IconButton>, "aria-label">) {
   return (
     <IconButton
@@ -224,11 +232,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
         >
           <div className="navbar-running-line" data-nav-running-line aria-hidden="true"></div>
           {navItems.map((item, index) => {
-            const tone = index === activeNavIndex
-              ? "current"
-              : activeNavIndex !== -1 && index > activeNavIndex
-                ? "future"
-                : "past"
+            const tone = getMetroNavIconTone(index, activeNavIndex)
 
             return (
               <Box
@@ -389,7 +393,32 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           display={{ base: "block", md: "none" }}
           hidden
         >
-          <Container maxW="6xl" px="4" py="4" minH="100dvh">
+          <div className="mobile-navbar-running-line" data-mobile-nav-running-line aria-hidden="true"></div>
+          {navItems.map((item, index) => {
+            const tone = getMetroNavIconTone(index, activeNavIndex)
+
+            return (
+              <Box
+                as="span"
+                key={item.folderPath}
+                data-mobile-nav-icon
+                aria-hidden="true"
+                position="absolute"
+                left="0"
+                top="0"
+                zIndex="1"
+                display={{ base: "inline-flex", md: "none" }}
+                lineHeight="0"
+                pointerEvents="none"
+              >
+                <Box as="span" display="inline-flex" lineHeight="0" transform="rotate(90deg)" transformOrigin="center">
+                  <MetroNavIcon kind={item.icon} tone={tone} />
+                </Box>
+              </Box>
+            )
+          })}
+
+          <Container maxW="6xl" px="4" py="4" minH="100dvh" position="relative" zIndex="2">
             {/* Mobile hamburger menu content */}
             <Flex direction="column" minH="calc(100dvh - 2rem)">
               <Flex as="header" align="center" justify="flex-start" gap="3">
@@ -411,7 +440,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                 </Heading>
               </Flex>
 
-              <Flex flex="1" align="flex-start" justify="flex-start" px="2" pt="8">
+              <Flex data-mobile-nav-list flex="1" align="flex-start" justify="flex-start" px="2" pt="8">
                 <Stack as="ul" listStyleType="none" gap="3" w="full" maxW="sm" p="0" m="0" align="flex-start">
                   {navItems.map((item) => {
                     const active = isActiveLink(item.href, currentPath)
@@ -419,6 +448,8 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                       <Box as="li" key={item.folderPath}>
                         <Link
                           data-site-menu-link
+                          data-mobile-nav-item
+                          data-mobile-nav-active-item={ active ? true : undefined }
                           href={item.href}
                           display="inline-flex"
                           alignItems="center"
