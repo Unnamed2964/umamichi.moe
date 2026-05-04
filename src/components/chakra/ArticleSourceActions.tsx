@@ -60,11 +60,11 @@ export default function ArticleSourceActions({ sourceMarkdown, sourceUrl }: Arti
           fontSize="sm"
           fontWeight="500"
           color="var(--site-fg)"
-          transition="background-color 0.2s ease, color 0.2s ease"
+          transition="background-color 0.2s ease"
           _hover={{ bg: "var(--site-hover-bg)" }}
           _active={{ bg: "var(--site-active-bg)" }}
         >
-          <Icon as={LuChevronDown} boxSize="4" flexShrink={0} />
+          <Icon as={LuChevronDown} data-article-source-menu-chevron boxSize="4" flexShrink={0} />
         </chakra.button>
       </HStack>
 
