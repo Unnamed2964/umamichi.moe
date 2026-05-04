@@ -487,30 +487,84 @@
 </script>
 
 <script is:inline>
-	let activeNavItem = null, runningLine = null;
+	let navItems = [], navIcons = [], activeNavItem = null, runningLine = null, siteHeader = null;
+	let navUpdateFrame = 0;
+	const transferIconBaselineY = 100;
 
 	function resolveNavElements() {
+		navItems = Array.from(document.querySelectorAll('[data-nav-item]'));
+		navIcons = Array.from(document.querySelectorAll('[data-nav-icon]'));
 		activeNavItem = document.querySelector('[data-nav-active-item]');
 		runningLine = document.querySelector('[data-nav-running-line]');
+		siteHeader = document.querySelector('[data-site-header]');
+	}
+
+	function getSvgNavAnchorScreenPoint(svg) {
+		const viewBox = svg.viewBox.baseVal;
+		const matrix = svg.getScreenCTM();
+
+		if (!matrix) {
+			return null;
+		}
+
+		const point = svg.createSVGPoint();
+		point.x = viewBox.x + viewBox.width / 2;
+		point.y = viewBox.y + transferIconBaselineY;
+
+		return point.matrixTransform(matrix);
 	}
 
 	function updateNavRunningLine() {
-		if (activeNavItem && runningLine) {
+		navUpdateFrame = 0;
+
+		if (siteHeader) {
+			const headerRect = siteHeader.getBoundingClientRect();
+			const navBottomY = headerRect.bottom;
+
+			navIcons.forEach((navIcon, index) => {
+				const navItem = navItems[index];
+				const svg = navIcon.querySelector('svg');
+
+				if (!navItem || !svg) {
+					return;
+				}
+
+				const rect = navItem.getBoundingClientRect();
+				const anchorX = (rect.left + rect.right) / 2;
+
+				navIcon.style.transform = '';
+
+				const baselinePoint = getSvgNavAnchorScreenPoint(svg);
+
+				if (baselinePoint) {
+					navIcon.style.transform = `translate(${anchorX - baselinePoint.x}px, ${navBottomY - baselinePoint.y}px)`;
+				}
+			});
+		}
+
+		if (activeNavItem && runningLine && siteHeader) {
 			const rect = activeNavItem.getBoundingClientRect();
-			
-			const width = (rect.left + rect.right) / 2;
-			runningLine.style.width = `${width}px`;
+			const headerRect = siteHeader.getBoundingClientRect();
+			const anchorX = (rect.left + rect.right) / 2;
+
+			runningLine.style.width = `${anchorX - headerRect.left}px`;
+		}
+	}
+
+	function scheduleNavRunningLineUpdate() {
+		if (!navUpdateFrame) {
+			navUpdateFrame = requestAnimationFrame(updateNavRunningLine);
 		}
 	}
 	
 	resolveNavElements();
-	requestAnimationFrame(updateNavRunningLine);
+	scheduleNavRunningLineUpdate();
 
 	document.addEventListener('astro:after-swap', () => {
 		resolveNavElements();
-		requestAnimationFrame(updateNavRunningLine);
+		scheduleNavRunningLineUpdate();
 	});
 
-	const observer = new ResizeObserver(updateNavRunningLine);
-	observer.observe(document.body);
+	window.addEventListener('resize', scheduleNavRunningLineUpdate, { passive: true });
+	window.visualViewport?.addEventListener('resize', scheduleNavRunningLineUpdate, { passive: true });
 </script>
