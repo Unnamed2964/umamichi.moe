@@ -3,6 +3,54 @@
 		window.siteArticleTocInitialized = true;
 		let headings = [];
 		let observer = null;
+		const anchorButtonClass = 'article-heading-anchor-copy';
+		const copiedLabel = '已复制';
+
+		const buildAnchorUrl = (slug) => `${window.location.origin}${window.location.pathname}${window.location.search}#${slug}`;
+
+		const copyHeadingAnchor = async (slug, button) => {
+			try {
+				await navigator.clipboard.writeText(buildAnchorUrl(slug));
+				button.dataset.label = copiedLabel;
+				window.setTimeout(() => {
+					button.dataset.label = '';
+				}, 1200);
+			} catch {
+				button.dataset.label = '';
+			}
+		};
+
+		const setupHeadingAnchorCopy = () => {
+			const contentRoot = document.querySelector('.article-content');
+
+			if (!contentRoot) {
+				return;
+			}
+
+			const contentHeadings = contentRoot.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
+
+			for (const heading of contentHeadings) {
+				if (heading.querySelector(`.${anchorButtonClass}`)) {
+					continue;
+				}
+
+				const slug = heading.id;
+				if (!slug) {
+					continue;
+				}
+
+				const button = document.createElement('button');
+				button.type = 'button';
+				button.className = anchorButtonClass;
+				button.setAttribute('aria-label', `复制标题链接 #${slug}`);
+				button.title = `复制链接 #${slug}`;
+				button.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10.59 13.41a1 1 0 0 0 1.41 1.41l3.83-3.83a3 3 0 1 0-4.24-4.24L9.88 8.46a1 1 0 0 0 1.41 1.42l1.71-1.72a1 1 0 1 1 1.41 1.42zM13.41 10.59a1 1 0 0 0-1.41-1.41l-3.83 3.83a3 3 0 1 0 4.24 4.24l1.71-1.71a1 1 0 0 0-1.41-1.42L11 15.83a1 1 0 1 1-1.41-1.42z"/></svg>';
+				button.addEventListener('click', () => {
+					void copyHeadingAnchor(slug, button);
+				});
+				heading.prepend(button);
+			}
+		};
 
 		const setActive = (slug) => {
 			for (const item of headings) {
@@ -47,6 +95,7 @@
 		};
 
 		const setupToc = () => {
+			setupHeadingAnchorCopy();
 			const toc = document.querySelector('[data-toc]');
 			observer?.disconnect();
 			observer = null;

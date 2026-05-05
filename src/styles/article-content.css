@@ -41,7 +41,69 @@ html.dark {
 .article-content h4,
 .article-content h5,
 .article-content h6 {
+	position: relative;
 	scroll-margin-top: calc(var(--site-header-offset) + 1.5rem);
+}
+
+.article-content h1::before,
+.article-content h2::before,
+.article-content h3::before,
+.article-content h4::before,
+.article-content h5::before,
+.article-content h6::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: -0.95em;
+	width: 0.95em;
+}
+
+.article-content .article-heading-anchor-copy {
+	position: absolute;
+	left: -0.85em;
+	top: 50%;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 0.8em;
+	height: 0.8em;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: var(--theme-400);
+	cursor: pointer;
+	opacity: 0;
+	transform: translateY(-50%);
+	transition: opacity 120ms ease;
+	pointer-events: none;
+}
+
+.article-content .article-heading-anchor-copy svg {
+	width: 1em;
+	height: 1em;
+	fill: currentColor;
+}
+
+.article-content h1:hover > .article-heading-anchor-copy,
+.article-content h2:hover > .article-heading-anchor-copy,
+.article-content h3:hover > .article-heading-anchor-copy,
+.article-content h4:hover > .article-heading-anchor-copy,
+.article-content h5:hover > .article-heading-anchor-copy,
+.article-content h6:hover > .article-heading-anchor-copy,
+.article-content h1:focus-within > .article-heading-anchor-copy,
+.article-content h2:focus-within > .article-heading-anchor-copy,
+.article-content h3:focus-within > .article-heading-anchor-copy,
+.article-content h4:focus-within > .article-heading-anchor-copy,
+.article-content h5:focus-within > .article-heading-anchor-copy,
+.article-content h6:focus-within > .article-heading-anchor-copy {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.article-content .article-heading-anchor-copy:hover,
+.article-content .article-heading-anchor-copy:focus-visible {
+	color: var(--theme-300);
 }
 
 .article-content > :first-child {
