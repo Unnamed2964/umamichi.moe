@@ -331,7 +331,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                           py="2"
                           rounded="full"
                           fontWeight={active ? "700" : "500"}
-                          bg={active ? "var(--site-nav-active-bg)" : "transparent"}
+                          bg="transparent"
                           color={active ? "var(--site-accent)" : "var(--site-fg)"}
                           _hover={{ textDecoration: "none", bg: "var(--site-hover-bg)" }}
                           data-nav-item
@@ -468,7 +468,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                           py="2"
                           rounded="full"
                           fontWeight={active ? "700" : "500"}
-                          bg={active ? "var(--site-nav-active-bg)" : "transparent"}
+                          bg="transparent"
                           color={active ? "var(--site-accent)" : "var(--site-fg)"}
                           _hover={{ textDecoration: "none", bg: "var(--site-hover-bg)" }}
                           aria-current={active ? "page" : undefined}
