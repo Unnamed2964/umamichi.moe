@@ -465,10 +465,6 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                 >
                   <Icon as={FaBars} boxSize="4" />
                 </IconButton>
-
-                <Heading as="p" size="lg" letterSpacing="tight" textAlign="left">
-                  {SITE_TITLE}
-                </Heading>
               </Flex>
 
               <Flex data-mobile-nav-list flex="1" align="flex-start" justify="flex-end" px="2" pt="8">
