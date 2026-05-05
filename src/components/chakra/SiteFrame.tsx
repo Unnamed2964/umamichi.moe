@@ -32,7 +32,7 @@ function MetroNavIcon({ kind, tone }: { kind: NavIconKind; tone: MetroNavIconTon
   const color = tone === "future"
     ? "var(--site-nav-future-icon)"
     : tone === "current"
-      ? "var(--site-header-border)"
+      ? "var(--site-accent)"
       : "var(--site-header-border)"
   const iconStyle = {
     display: "block",
