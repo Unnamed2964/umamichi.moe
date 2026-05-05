@@ -332,8 +332,15 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                           rounded="full"
                           fontWeight={active ? "700" : "500"}
                           bg="transparent"
+                          textDecoration="none"
                           color={active ? "var(--site-accent)" : "var(--site-fg)"}
-                          _hover={{ textDecoration: "none", bg: "var(--site-hover-bg)" }}
+                          _hover={{
+                            textDecoration: "underline",
+                            textDecorationColor: "currentColor",
+                            textUnderlineOffset: "0.2em",
+                            textDecorationThickness: "1px",
+                            bg: "transparent",
+                          }}
                           data-nav-item
                           data-nav-active-item={ active ? true : undefined }
                           aria-current={active ? "page" : undefined}
@@ -484,8 +491,15 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                           fontWeight={active ? "700" : "500"}
                           bg="transparent"
                           textAlign="right"
+                          textDecoration="none"
                           color={active ? "var(--site-accent)" : "var(--site-fg)"}
-                          _hover={{ textDecoration: "none", bg: "var(--site-hover-bg)" }}
+                          _hover={{
+                            textDecoration: "underline",
+                            textDecorationColor: "currentColor",
+                            textUnderlineOffset: "0.2em",
+                            textDecorationThickness: "1px",
+                            bg: "transparent",
+                          }}
                           aria-current={active ? "page" : undefined}
                         >
                           <Box as="span">{item.label}</Box>
