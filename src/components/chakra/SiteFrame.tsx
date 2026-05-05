@@ -472,13 +472,15 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                   {navItems.map((item) => {
                     const active = isActiveLink(item.href, currentPath)
                     return (
-                      <Box as="li" key={item.folderPath}>
+                      <Box as="li" key={item.folderPath} w="full">
                         <Link
                           data-site-menu-link
                           data-mobile-nav-item
                           data-mobile-nav-active-item={ active ? true : undefined }
                           href={item.href}
-                          display="inline-flex"
+                          display="flex"
+                          w="full"
+                          justifyContent="flex-end"
                           alignItems="center"
                           gap="2"
                           px="3"
