@@ -545,8 +545,8 @@
 	if (!window.siteNavRunningLineInitialized) {
 		window.siteNavRunningLineInitialized = true;
 
-	let navItems = [], navIcons = [], activeNavItem = null, runningLine = null, siteHeader = null;
-	let mobileNavItems = [], mobileNavIcons = [], mobileActiveNavItem = null, mobileRunningLine = null, mobileMenu = null;
+	let navItems = [], navIcons = [], activeNavItem = null, runningLine = null, reverseRunningLine = null, siteHeader = null;
+	let mobileNavItems = [], mobileNavIcons = [], mobileActiveNavItem = null, mobileRunningLine = null, mobileReverseRunningLine = null, mobileMenu = null;
 	let navUpdateFrame = 0;
 	const transferIconBaselineY = 100;
 
@@ -555,11 +555,13 @@
 		navIcons = Array.from(document.querySelectorAll('[data-nav-icon]'));
 		activeNavItem = document.querySelector('[data-nav-active-item]');
 		runningLine = document.querySelector('[data-nav-running-line]');
+		reverseRunningLine = document.querySelector('[data-nav-running-line-reverse]');
 		siteHeader = document.querySelector('[data-site-header]');
 		mobileNavItems = Array.from(document.querySelectorAll('[data-mobile-nav-item]'));
 		mobileNavIcons = Array.from(document.querySelectorAll('[data-mobile-nav-icon]'));
 		mobileActiveNavItem = document.querySelector('[data-mobile-nav-active-item]');
 		mobileRunningLine = document.querySelector('[data-mobile-nav-running-line]');
+		mobileReverseRunningLine = document.querySelector('[data-mobile-nav-running-line-reverse]');
 		mobileMenu = document.querySelector('[data-site-mobile-menu]');
 	}
 
@@ -612,6 +614,11 @@
 			const anchorX = (rect.left + rect.right) / 2;
 
 			runningLine.style.width = `${anchorX - headerRect.left}px`;
+
+			if (reverseRunningLine) {
+				reverseRunningLine.style.left = `${anchorX - headerRect.left}px`;
+				reverseRunningLine.style.width = `${headerRect.right - anchorX}px`;
+			}
 		}
 
 		if (mobileMenu instanceof HTMLElement) {
@@ -664,6 +671,11 @@
 				const anchorY = (rect.top + rect.bottom) / 2;
 
 				mobileRunningLine.style.height = `${anchorY - menuRect.top}px`;
+
+				if (mobileReverseRunningLine) {
+					mobileReverseRunningLine.style.top = `${anchorY - menuRect.top}px`;
+					mobileReverseRunningLine.style.height = `${menuRect.bottom - anchorY}px`;
+				}
 			}
 		}
 	}
