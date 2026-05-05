@@ -32,7 +32,7 @@ function MetroNavIcon({ kind, tone }: { kind: NavIconKind; tone: MetroNavIconTon
   const color = tone === "future"
     ? "var(--site-nav-future-icon)"
     : tone === "current"
-      ? "var(--site-accent)"
+      ? "var(--site-header-border)"
       : "var(--site-header-border)"
   const iconStyle = {
     display: "block",
@@ -69,7 +69,7 @@ function MetroNavIcon({ kind, tone }: { kind: NavIconKind; tone: MetroNavIconTon
           stroke={color}
           strokeWidth="7"
           strokeMiterlimit="8"
-          fill="white"
+          fill="var(--site-bg)"
           fillRule="evenodd"
         />
       </svg>
@@ -88,7 +88,7 @@ function MetroNavIcon({ kind, tone }: { kind: NavIconKind; tone: MetroNavIconTon
           stroke={color}
           strokeWidth="7"
           strokeMiterlimit="8"
-          fill="white"
+          fill="var(--site-bg)"
           fillRule="evenodd"
         />
         <path
@@ -96,7 +96,7 @@ function MetroNavIcon({ kind, tone }: { kind: NavIconKind; tone: MetroNavIconTon
           stroke={color}
           strokeWidth="7"
           strokeMiterlimit="8"
-          fill="white"
+          fill="var(--site-bg)"
           fillRule="evenodd"
         />
       </svg>
@@ -115,7 +115,7 @@ function MetroNavIcon({ kind, tone }: { kind: NavIconKind; tone: MetroNavIconTon
           stroke={color}
           strokeWidth="7"
           strokeMiterlimit="8"
-          fill="white"
+          fill="var(--site-bg)"
           fillRule="evenodd"
         />
         <path
@@ -123,7 +123,7 @@ function MetroNavIcon({ kind, tone }: { kind: NavIconKind; tone: MetroNavIconTon
           stroke={color}
           strokeWidth="7"
           strokeMiterlimit="8"
-          fill="white"
+          fill="var(--site-bg)"
           fillRule="evenodd"
         />
       </svg>
@@ -142,7 +142,7 @@ function MetroNavIcon({ kind, tone }: { kind: NavIconKind; tone: MetroNavIconTon
           stroke={color}
           strokeWidth="7"
           strokeMiterlimit="8"
-          fill="white"
+          fill="var(--site-bg)"
           fillRule="evenodd"
         />
         <path
@@ -150,7 +150,7 @@ function MetroNavIcon({ kind, tone }: { kind: NavIconKind; tone: MetroNavIconTon
           stroke={color}
           strokeWidth="7"
           strokeMiterlimit="8"
-          fill="white"
+          fill="var(--site-bg)"
           fillRule="evenodd"
         />
         <path
@@ -158,7 +158,7 @@ function MetroNavIcon({ kind, tone }: { kind: NavIconKind; tone: MetroNavIconTon
           stroke={color}
           strokeWidth="7"
           strokeMiterlimit="8"
-          fill="white"
+          fill="var(--site-bg)"
           fillRule="evenodd"
         />
       </svg>
