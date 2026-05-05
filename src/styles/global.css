@@ -128,15 +128,51 @@ html.dark {
 .mobile-navbar-running-line {
 	position: absolute;
 	top: 0;
-	left: 4px;
+	right: 0;
 	width: 8px;
 	height: 0;
 	background: var(--site-header-border);
 	transition: height 2000ms ease;
 }
 
-[data-mobile-nav-list] {
-	transform: translateX(var(--mobile-nav-inline-shift, 0px));
+@media screen and (max-width: 47.999rem) {
+	[data-site-mobile-menu] {
+		visibility: hidden;
+		transform: translateX(-100%);
+		transition: transform 220ms ease, visibility 220ms step-end;
+		will-change: transform;
+	}
+
+	[data-site-mobile-dimmer] {
+		opacity: 0;
+		background: rgba(13, 17, 23, 0.42);
+		pointer-events: none;
+		transition: opacity 220ms ease;
+	}
+
+	html[data-mobile-menu-open='true'] [data-site-mobile-menu] {
+		visibility: visible;
+		transform: translateX(0);
+		transition: transform 220ms ease;
+	}
+
+	html[data-mobile-menu-open='true'] [data-site-mobile-dimmer] {
+		opacity: 1;
+		pointer-events: auto;
+	}
+
+	html[data-mobile-menu-open='true'] body > * [data-site-header],
+	html[data-mobile-menu-open='true'] body > * main,
+	html[data-mobile-menu-open='true'] body > * [data-transition-name='footer'] {
+		transform: translateX(50vw);
+		transition: transform 220ms ease;
+	}
+
+	[data-site-header],
+	main,
+	[data-transition-name='footer'] {
+		transition: transform 220ms ease;
+	}
 }
 
 [data-site-theme-icon='dark'] {

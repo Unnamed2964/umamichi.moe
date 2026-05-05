@@ -78,8 +78,13 @@
 				return;
 			}
 
-			mobileMenu.hidden = !isOpen;
+			mobileMenu.hidden = false;
 			mobileMenu.setAttribute('aria-hidden', String(!isOpen));
+			if (isOpen) {
+				document.documentElement.dataset.mobileMenuOpen = 'true';
+			} else {
+				delete document.documentElement.dataset.mobileMenuOpen;
+			}
 			document.body.style.overflow = isOpen ? 'hidden' : '';
 
 			for (const button of document.querySelectorAll('[data-site-menu-toggle]')) {
@@ -98,10 +103,22 @@
 			}
 
 			const toggleButton = target.closest('[data-site-menu-toggle]');
+			const dimmer = target.closest('[data-site-mobile-dimmer]');
+			const pageHeader = target.closest('[data-site-header]');
+			const pageMain = target.closest('main');
+			const pageFooter = target.closest('footer');
 
 			if (toggleButton) {
 				const isCurrentlyOpen = toggleButton.getAttribute('aria-expanded') === 'true';
 				setMenuOpen(!isCurrentlyOpen);
+				return;
+			}
+
+			if (
+				document.documentElement.dataset.mobileMenuOpen === 'true'
+				&& (dimmer || pageHeader || pageMain || pageFooter)
+			) {
+				setMenuOpen(false);
 				return;
 			}
 
@@ -628,23 +645,10 @@
 				return;
 			}
 
-			if (mobileRunningLine) {
-				const menuToggle = mobileMenu.querySelector('[data-site-menu-close]');
-				const toggleRect = menuToggle?.getBoundingClientRect();
-				const lineRect = mobileRunningLine.getBoundingClientRect();
-
-				if (toggleRect && lineRect.width > 0) {
-					const toggleCenterX = (toggleRect.left + toggleRect.right) / 2;
-					const lineLeft = toggleCenterX - menuRect.left - lineRect.width / 2;
-					mobileRunningLine.style.left = `${lineLeft}px`;
-					mobileMenu.style.setProperty('--mobile-nav-inline-shift', `${lineLeft - 4}px`);
-				}
-			}
-
 			const lineRect = mobileRunningLine?.getBoundingClientRect();
 			const anchorX = lineRect && (lineRect.width > 0 || lineRect.height > 0)
-				? lineRect.left
-				: menuRect.left + 4;
+				? lineRect.right
+				: menuRect.right;
 
 			mobileNavIcons.forEach((navIcon, index) => {
 				const navItem = mobileNavItems[index];

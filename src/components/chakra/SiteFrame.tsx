@@ -391,17 +391,31 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
         </Box>
 
         <Box
+          data-site-mobile-dimmer
+          position="fixed"
+          inset="0"
+          zIndex="15"
+          display={{ base: "block", md: "none" }}
+          aria-hidden="true"
+        />
+
+        <Box
           as="nav"
           id="site-mobile-menu"
           aria-label="移动端菜单"
           aria-hidden="true"
           data-site-mobile-menu
           position="fixed"
-          inset="0"
+          top="0"
+          left="0"
+          bottom="0"
+          w="50vw"
+          maxW="30rem"
           zIndex="20"
           bg="var(--site-header-bg)"
+          borderRightWidth="1px"
+          borderColor="var(--site-header-border)"
           display={{ base: "block", md: "none" }}
-          hidden
         >
           <div className="mobile-navbar-running-line" data-mobile-nav-running-line aria-hidden="true"></div>
           {navItems.map((item, index) => {
@@ -421,14 +435,14 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                 lineHeight="0"
                 pointerEvents="none"
               >
-                <Box as="span" display="inline-flex" lineHeight="0" transform="rotate(90deg)" transformOrigin="center">
+                <Box as="span" display="inline-flex" lineHeight="0" transform="rotate(-90deg)" transformOrigin="right center">
                   <MetroNavIcon kind={item.icon} tone={tone} />
                 </Box>
               </Box>
             )
           })}
 
-          <Container maxW="6xl" px="4" py="4" minH="100dvh" position="relative" zIndex="2">
+          <Container maxW="none" px="4" py="4" minH="100dvh" position="relative" zIndex="2">
             {/* Mobile hamburger menu content */}
             <Flex direction="column" minH="calc(100dvh - 2rem)">
               <Flex as="header" align="center" justify="flex-start" gap="3">
@@ -450,8 +464,8 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                 </Heading>
               </Flex>
 
-              <Flex data-mobile-nav-list flex="1" align="flex-start" justify="flex-start" px="2" pt="8">
-                <Stack as="ul" listStyleType="none" gap="3" w="full" maxW="sm" p="0" m="0" align="flex-start">
+              <Flex data-mobile-nav-list flex="1" align="flex-start" justify="flex-end" px="2" pt="8">
+                <Stack as="ul" listStyleType="none" gap="3" w="full" maxW="sm" p="0" m="0" align="flex-end">
                   {navItems.map((item) => {
                     const active = isActiveLink(item.href, currentPath)
                     return (
@@ -469,6 +483,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                           rounded="full"
                           fontWeight={active ? "700" : "500"}
                           bg="transparent"
+                          textAlign="right"
                           color={active ? "var(--site-accent)" : "var(--site-fg)"}
                           _hover={{ textDecoration: "none", bg: "var(--site-hover-bg)" }}
                           aria-current={active ? "page" : undefined}
