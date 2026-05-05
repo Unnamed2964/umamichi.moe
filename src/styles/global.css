@@ -50,8 +50,8 @@ html {
 	--site-hover-bg: rgba(0, 0, 0, 0.04);
 	--site-active-bg: rgba(0, 0, 0, 0.08);
 	--site-nav-active-bg: #ffffff;
-	--site-accent: var(--chakra-colors-cyan-700);
-	--site-accent-hover: var(--chakra-colors-cyan-800);
+	--site-accent: var(--chakra-colors-cyan-600);
+	--site-accent-hover: var(--chakra-colors-cyan-700);
 	--site-copy-toast-bg: #ffffff;
 	--site-copy-toast-fg: var(--chakra-colors-gray-700);
 	--site-copy-toast-border: var(--chakra-colors-gray-300);
