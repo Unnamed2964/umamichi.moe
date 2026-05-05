@@ -419,7 +419,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           w="50vw"
           maxW="30rem"
           zIndex="20"
-          bg="var(--site-header-bg)"
+          bg="var(--site-bg)"
           borderRightWidth="1px"
           borderColor="var(--site-header-border)"
           display={{ base: "block", md: "none" }}

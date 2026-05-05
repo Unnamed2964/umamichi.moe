@@ -40,8 +40,8 @@ html {
 	--site-muted-fg: var(--chakra-colors-gray-600);
 	--site-subtle-fg: var(--chakra-colors-gray-500);
 	--site-surface: #ffffff;
-	--site-header-bg: var(--chakra-colors-cyan-50);
-	--site-sidebar-bg: var(--chakra-colors-gray-50);
+	--site-header-bg: #f4fbff;
+	--site-sidebar-bg: var(--site-bg);
 	--site-border: rgba(0, 0, 0, 0.08);
 	--site-header-border: var(--chakra-colors-cyan-200);
 	--site-sidebar-border: var(--chakra-colors-gray-300);
@@ -67,7 +67,7 @@ html.dark {
 	--site-subtle-fg: #7d8590;
 	--site-surface: #161b22;
 	--site-header-bg: var(--chakra-colors-cyan-950);
-	--site-sidebar-bg: var(--chakra-colors-gray-950);
+	--site-sidebar-bg: var(--site-bg);
 	--site-border: #30363d;
 	--site-header-border: var(--chakra-colors-cyan-800);
 	--site-sidebar-border: var(--chakra-colors-gray-800);
