@@ -120,6 +120,15 @@ function Check-CPU {
 
 どうしてなぜかしら？
 
+## 轨道交通站名
+
+- <ruby>朝<rp>(</rp><rt>조</rt><rp>)</rp>阳<rp>(</rp><rt>양</rt><rp>)</rp>川<rp>(</rp><rt>천</rt><rp>)</rp></ruby>
+  + <ruby>龙<rp>(</rp><rt>룡</rt><rp>)</rp>井<rp>(</rp><rt>정</rt><rp>)</rp></ruby>
+  + ~~<ruby>东<rp>(</rp><rt>동</rt><rp>)</rp>盛<rp>(</rp><rt>성</rt><rp>)</rp>涌<rp>(</rp><rt>용</rt><rp>)</rp></ruby>~~
+- <ruby>延<rp>(</rp><rt>연</rt><rp>)</rp>吉<rp>(</rp><rt>길</rt><rp>)</rp></ruby>
+- <ruby>溪<rp>(</rp><rt>계</rt><rp>)</rp>洞<rp>(</rp><rt>동</rt><rp>)</rp></ruby>
+
+
 [^1]: 7号线由第三运营公司运营
 [^2]: 参考：<br />[1] [ピノキオピー - T氏の話を信じるな feat. 初音ミク・重音テト](https://www.bilibili.com/video/BV1SfK9zPEL3). 哔哩哔哩.<br />[2] [【4K/中文字幕】不要相信T氏的话/T氏の話を信じるな/Don’t Believe in T 初音ミク/重音テト 【ピノキオピー】](https://www.bilibili.com/video/BV14Qg6zTEZL). 哔哩哔哩.
 [^3]: 萌娘百科. [足立零：二次设定](https://mzh.moegirl.org.cn/%E8%B6%B3%E7%AB%8B%E9%9B%B6#.E4.BA.8C.E6.AC.A1.E8.AE.BE.E5.AE.9A).<br />该章将“笨蛋”列为足立零的常见二次设定之一。
