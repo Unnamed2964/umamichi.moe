@@ -46,7 +46,7 @@ html {
 	--site-header-border: var(--chakra-colors-cyan-200);
 	--site-sidebar-border: var(--chakra-colors-gray-300);
 	--site-border-strong: rgba(0, 0, 0, 0.16);
-	--site-nav-future-icon: var(--chakra-colors-gray-300);
+	--site-nav-future-icon: var(--chakra-colors-gray-200);
 	--site-hover-bg: rgba(0, 0, 0, 0.04);
 	--site-active-bg: rgba(0, 0, 0, 0.08);
 	--site-nav-active-bg: #ffffff;
@@ -67,20 +67,20 @@ html.dark {
 	--site-subtle-fg: #7d8590;
 	--site-surface: #161b22;
 	--site-header-bg: var(--chakra-colors-cyan-950);
-	--site-sidebar-bg: var(--chakra-colors-gray-900);
+	--site-sidebar-bg: var(--chakra-colors-gray-950);
 	--site-border: #30363d;
-	--site-header-border: var(--chakra-colors-cyan-600);
-	--site-sidebar-border: var(--chakra-colors-gray-700);
+	--site-header-border: var(--chakra-colors-cyan-800);
+	--site-sidebar-border: var(--chakra-colors-gray-800);
 	--site-border-strong: #30363d;
-	--site-nav-future-icon: var(--chakra-colors-gray-600);
+	--site-nav-future-icon: var(--chakra-colors-gray-800);
 	--site-hover-bg: rgba(177, 186, 196, 0.12);
 	--site-active-bg: rgba(177, 186, 196, 0.2);
 	--site-nav-active-bg: color-mix(in srgb, var(--chakra-colors-cyan-400) 20%, transparent);
 	--site-accent: var(--chakra-colors-cyan-300);
 	--site-accent-hover: var(--chakra-colors-cyan-200);
-	--site-copy-toast-bg: #ffffff;
-	--site-copy-toast-fg: var(--chakra-colors-gray-700);
-	--site-copy-toast-border: var(--chakra-colors-gray-300);
+	--site-copy-toast-bg: var(--chakra-colors-gray-800);
+	--site-copy-toast-fg: var(--chakra-colors-gray-100);
+	--site-copy-toast-border: var(--chakra-colors-gray-600);
 }
 
 .site-emoji {
