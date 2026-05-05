@@ -1,3 +1,9 @@
+/*!
+ * Modified from GitHub's Primer UI, licensed under the MIT License
+ * Copyright (c) 2018 GitHub Inc.
+ * https://github.com/primer/primitives/blob/main/LICENSE
+ */
+
 html {
 	--article-fg: var(--gray-700);
 	--article-muted-fg: var(--gray-500);
