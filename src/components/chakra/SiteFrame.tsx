@@ -226,7 +226,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           zIndex="10"
           borderBottomWidth="1px"
           borderColor="var(--site-header-border)"
-          bg="white"
+          bg="var(--site-bg)"
           data-transition-persist
           data-transition-name="header"
         >
