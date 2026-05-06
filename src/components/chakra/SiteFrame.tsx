@@ -113,6 +113,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
   return (
     <Provider>
       <Box minH="100vh" bg="var(--site-bg)" color="var(--site-fg)">
+        <Box data-site-rotatable-layer>
         <Box
           as="header"
           data-site-header
@@ -212,6 +213,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                   <HStack as="nav" aria-label="主导航" gap={{ base: 1, md: 2 }} flexWrap="wrap" justify="flex-start">
                     {navItems.map((item) => {
                       const active = isActiveLink(item.href, currentPath)
+                      const isFriendsEntry = item.href === "/friends/" || item.href.startsWith("/friends/")
                       return (
                         <Link
                           key={item.folderPath}
@@ -234,10 +236,11 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                             bg: "transparent",
                           }}
                           data-nav-item
+                          data-nav-friends-item={isFriendsEntry ? true : undefined}
                           data-nav-active-item={ active ? true : undefined }
                           aria-current={active ? "page" : undefined}
                         >
-                          <Box as="span">{item.label}</Box>
+                          <Box as="span" data-nav-friends-label={isFriendsEntry ? true : undefined}>{item.label}</Box>
                         </Link>
                       )
                     })}
@@ -482,6 +485,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
               </Text>
             </Stack>
           </Container>
+        </Box>
         </Box>
       </Box>
     </Provider>

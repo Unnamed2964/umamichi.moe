@@ -610,8 +610,12 @@
 
 	function updateNavRunningLine() {
 		navUpdateFrame = 0;
+		const freezeDesktopNavLayout = (
+			window.matchMedia('(min-width: 48rem)').matches
+			&& document.documentElement.dataset.friendsTransferOpen === 'true'
+		);
 
-		if (siteHeader) {
+		if (siteHeader && !freezeDesktopNavLayout) {
 			const headerRect = siteHeader.getBoundingClientRect();
 			const runningLineRect = runningLine instanceof HTMLElement ? runningLine.getBoundingClientRect() : null;
 			const navBottomY = runningLineRect && runningLineRect.height > 0 ? runningLineRect.bottom : headerRect.bottom;
@@ -637,7 +641,7 @@
 			});
 		}
 
-		if (activeNavItem && runningLine && siteHeader) {
+		if (activeNavItem && runningLine && siteHeader && !freezeDesktopNavLayout) {
 			const rect = activeNavItem.getBoundingClientRect();
 			const headerRect = siteHeader.getBoundingClientRect();
 			const anchorX = (rect.left + rect.right) / 2;

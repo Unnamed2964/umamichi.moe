@@ -1,9 +1,20 @@
 ---
 title: 友情链接
 rss: false
+special: friends-oos-transfer
 ---
 
 这里用来放友情链接。
+
+- （摸鱼喵）
+  icon: MF
+  description: 二次元碎碎念与绘画记录
+- （Aurora Lab）
+  icon: AU
+  description: 前端实验田和动效笔记
+- （磁浮线）
+  icon: MG
+  description: 高速度技术博客与周刊
 
 ## 交换友链
 
