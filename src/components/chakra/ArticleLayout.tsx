@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from "react"
+import type { PropsWithChildren, ReactNode } from "react"
 import { Box, Stack } from "@chakra-ui/react"
 import { ArticleContent } from "./ArticleContent"
 import { ArticleCopyright } from "./ArticleCopyright"
@@ -18,6 +18,7 @@ const ARTICLE_SIDEBAR_GAP = "0.5rem"
 
 type ArticleLayoutProps = PropsWithChildren<{
   copyright?: CopyrightConfig
+  comments?: ReactNode
   currentPath: string
   title: string
   tags?: ArticleTag[]
@@ -39,6 +40,7 @@ type ArticleLayoutProps = PropsWithChildren<{
 export function ArticleLayout({
   children,
   copyright,
+  comments,
   currentPath,
   title,
   tags = [],
@@ -56,6 +58,7 @@ export function ArticleLayout({
 }: ArticleLayoutProps) {
   const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3)
   const hasToc = tocHeadings.length > 0
+  const commentSlot = comments
 
   return (
     <SiteFrame currentPath={currentPath} navItems={navItems}>
@@ -131,6 +134,7 @@ export function ArticleLayout({
             <ArticleContent>{children}</ArticleContent>
             <ArticleCopyright copyright={copyright} data-transition-name="copyright" />
             <ArticlePrevNext previousPost={previousPost} nextPost={nextPost} showDivider={!copyright} data-transition-name="prev-next" />
+            {commentSlot}
           </Stack>
         </Stack>
       </Box>

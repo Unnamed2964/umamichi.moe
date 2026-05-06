@@ -139,7 +139,7 @@ const formattedUpdatedDate = updatedDate
 			heroImage={heroImage ? { src: heroImage.src } : undefined}
 		>
 			<slot />
-			{comment && <ArticleComments client:idle />}
+			{comment && <ArticleComments slot="comments" client:idle />}
 		</ArticleLayout>
 
 		<SiteChromeScripts />
