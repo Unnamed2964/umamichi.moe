@@ -602,7 +602,8 @@
 
 		if (siteHeader) {
 			const headerRect = siteHeader.getBoundingClientRect();
-			const navBottomY = headerRect.bottom;
+			const runningLineRect = runningLine instanceof HTMLElement ? runningLine.getBoundingClientRect() : null;
+			const navBottomY = runningLineRect && runningLineRect.height > 0 ? runningLineRect.bottom : headerRect.bottom;
 
 			navIcons.forEach((navIcon, index) => {
 				const navItem = navItems[index];
