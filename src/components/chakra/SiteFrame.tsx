@@ -1,4 +1,4 @@
-import type { ComponentProps, PropsWithChildren } from "react"
+import type { ComponentProps, ComponentType, PropsWithChildren, SVGProps } from "react"
 import {
   Box,
   Container,
@@ -16,6 +16,11 @@ import { LuMoon, LuSun } from "react-icons/lu"
 import { Provider } from "../ui/provider"
 import { SITE_TITLE } from "../../consts"
 import type { NavIconKind, TopLevelNavItem } from "../../lib/docs"
+import NormalNavIcon from "../../assets/metro-nav/normal.svg?react"
+import TransferNavIcon from "../../assets/metro-nav/transfer.svg?react"
+import TransferAndOutOfStationTransferNavIcon from "../../assets/metro-nav/transfer-and-out-of-station-transfer.svg?react"
+import OutOfStationTransferNavIcon from "../../assets/metro-nav/out-of-station-transfer.svg?react"
+import OutOfStationTransferAndOutOfStationTransferNavIcon from "../../assets/metro-nav/out-of-station-transfer-and-out-of-station-transfer.svg?react"
 
 export const SITE_MAIN_MAX_W = "4xl"
 export const SITE_MAIN_HALF_W = `calc(var(--chakra-sizes-${SITE_MAIN_MAX_W}) / 2)`
@@ -26,6 +31,15 @@ type SiteFrameProps = PropsWithChildren<{
 }>
 
 type MetroNavIconTone = "past" | "current" | "future"
+type MetroNavSvgComponent = ComponentType<SVGProps<SVGSVGElement>>
+
+const METRO_NAV_ICONS: Record<NavIconKind, MetroNavSvgComponent> = {
+  normal: NormalNavIcon,
+  transfer: TransferNavIcon,
+  "transfer-and-out-of-station-transfer": TransferAndOutOfStationTransferNavIcon,
+  "out-of-station-transfer": OutOfStationTransferNavIcon,
+  "out-of-station-transfer-and-out-of-station-transfer": OutOfStationTransferAndOutOfStationTransferNavIcon,
+}
 
 function MetroNavIcon({ kind, tone }: { kind: NavIconKind; tone: MetroNavIconTone }) {
   const height = (8 / 43) * 100
@@ -34,138 +48,21 @@ function MetroNavIcon({ kind, tone }: { kind: NavIconKind; tone: MetroNavIconTon
     : tone === "current"
       ? "var(--site-accent)"
       : "var(--site-nav-running-line-bg)"
+  const NavIcon = METRO_NAV_ICONS[kind]
   const iconStyle = {
     display: "block",
     overflow: "visible",
+    color,
   } as const
 
-  if (kind === "normal") {
-    return (
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 43 100"
-        height={height}
-        focusable="false"
-        style={iconStyle}
-      >
-        <path
-          d="M 43,100 H 0 V 0 H 43 Z"
-          fill={color}
-          fillRule="evenodd"
-        />
-      </svg>
-    )
-  } else if (kind === "transfer") {
-    return (
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 47 100"
-        height={height}
-        focusable="false"
-        style={iconStyle}
-      >
-        <path
-          d="m 23.5,3.5 c 11,0 20,9 20,20 v 53 c 0,11 -9,20 -20,20 -11,0 -20,-9 -20,-20 v -53 c 0,-11 9,-20 20,-20 z"
-          stroke={color}
-          strokeWidth="7"
-          strokeMiterlimit="8"
-          fill="var(--site-bg)"
-          fillRule="evenodd"
-        />
-      </svg>
-    )
-  } else if (kind === "transfer-and-out-of-station-transfer") {
-    return (
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 39 100"
-        height={height}
-        focusable="false"
-        style={iconStyle}
-      >
-        <path
-          d="m 19.5,96.5 c -9,0 -16,-7 -16,-16 v -17 c 0,-9 7,-16 16,-16 9,0 16,7 16,16 v 17 c 0,9 -7,16 -16,16 z"
-          stroke={color}
-          strokeWidth="7"
-          strokeMiterlimit="8"
-          fill="var(--site-bg)"
-          fillRule="evenodd"
-        />
-        <path
-          d="m 19.5,35.5 c -8,0 -15,-7 -15,-16 0,-8 7,-15 15,-15 9,0 16,7 16,15 0,9 -7,16 -16,16 z"
-          stroke={color}
-          strokeWidth="7"
-          strokeMiterlimit="8"
-          fill="var(--site-bg)"
-          fillRule="evenodd"
-        />
-      </svg>
-    )
-  } else if (kind === "out-of-station-transfer") {
-    return (
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 49 100"
-        height={height}
-        focusable="false"
-        style={iconStyle}
-      >
-        <path
-          d="m 24.5,4.5 c 11,0 21,10 21,20 0,11 -10,21 -21,21 -11,0 -21,-10 -21,-21 0,-10 10,-20 21,-20 z"
-          stroke={color}
-          strokeWidth="7"
-          strokeMiterlimit="8"
-          fill="var(--site-bg)"
-          fillRule="evenodd"
-        />
-        <path
-          d="m 24.5,55.5 c 11,0 21,10 21,20 0,11 -10,21 -21,21 -11,0 -21,-10 -21,-21 0,-10 10,-20 21,-20 z"
-          stroke={color}
-          strokeWidth="7"
-          strokeMiterlimit="8"
-          fill="var(--site-bg)"
-          fillRule="evenodd"
-        />
-      </svg>
-    )
-  } else if (kind === "out-of-station-transfer-and-out-of-station-transfer") {
-    return (
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 33 100"
-        height={height}
-        focusable="false"
-        style={iconStyle}
-      >
-        <path
-          d="m 16.5,0.5 c 7,0 13,6 13,13 0,8 -6,14 -13,14 -7,0 -13,-6 -13,-14 0,-7 6,-13 13,-13 z"
-          stroke={color}
-          strokeWidth="7"
-          strokeMiterlimit="8"
-          fill="var(--site-bg)"
-          fillRule="evenodd"
-        />
-        <path
-          d="m 16.5,35.5 c 7,0 13,6 13,13 0,8 -6,14 -13,14 -7,0 -13,-6 -13,-14 0,-7 6,-13 13,-13 z"
-          stroke={color}
-          strokeWidth="7"
-          strokeMiterlimit="8"
-          fill="var(--site-bg)"
-          fillRule="evenodd"
-        />
-        <path
-          d="m 16.5,70.5 c 7,0 13,6 13,13 0,7 -6,13 -13,13 -7,0 -13,-6 -13,-13 0,-7 6,-13 13,-13 z"
-          stroke={color}
-          strokeWidth="7"
-          strokeMiterlimit="8"
-          fill="var(--site-bg)"
-          fillRule="evenodd"
-        />
-      </svg>
-    )
-  }
-
-  throw new Error(`Unknown MetroNavIcon kind: ${kind}`)
+  return (
+    <NavIcon
+      aria-hidden="true"
+      height={height}
+      focusable="false"
+      style={iconStyle}
+    />
+  )
 }
 
 function isActiveLink(href: string, currentPath: string) {
