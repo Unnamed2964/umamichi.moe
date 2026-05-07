@@ -52,6 +52,47 @@ html.dark {
 	--site-copy-toast-border: var(--gray-600);
 }
 
+/*
+ * View transition group names (browser View Transitions API).
+ * Persisted shell regions use data-astro-transition-persist in markup; names live here only.
+ */
+.vt-header {
+	view-transition-name: header;
+}
+.vt-footer {
+	view-transition-name: footer;
+}
+.vt-sidebar {
+	view-transition-name: sidebar;
+}
+.vt-toc {
+	view-transition-name: toc;
+}
+.vt-top-sidebar {
+	view-transition-name: top-sidebar;
+}
+.vt-article {
+	view-transition-name: article;
+}
+.vt-title {
+	view-transition-name: title;
+}
+.vt-tags {
+	view-transition-name: tags;
+}
+.vt-source-actions {
+	view-transition-name: source-actions;
+}
+.vt-hero-image {
+	view-transition-name: hero-image;
+}
+.vt-copyright {
+	view-transition-name: copyright;
+}
+.vt-prev-next {
+	view-transition-name: prev-next;
+}
+
 .site-emoji {
 	font-family: 'Noto Color Emoji Web';
 }
@@ -132,14 +173,14 @@ html.dark {
 
 	html[data-mobile-menu-open='true'] body > * [data-site-header],
 	html[data-mobile-menu-open='true'] body > * main,
-	html[data-mobile-menu-open='true'] body > * [data-transition-name='footer'] {
+	html[data-mobile-menu-open='true'] body > * [data-astro-transition-persist='footer'] {
 		transform: translateX(50vw);
 		transition: transform 220ms ease;
 	}
 
 	[data-site-header],
 	main,
-	[data-transition-name='footer'] {
+	[data-astro-transition-persist='footer'] {
 		transition: transform 220ms ease;
 	}
 }
@@ -172,5 +213,12 @@ html[data-theme-switching='true'] *::after {
 @media screen and (min-width: 48rem) {
 	html {
 		--site-header-offset: 72px;
+	}
+
+	[data-site-header],
+	main,
+	[data-astro-transition-persist='footer'] {
+		transform-origin: left top;
+		transition: transform 420ms ease;
 	}
 }

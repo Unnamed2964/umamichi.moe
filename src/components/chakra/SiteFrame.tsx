@@ -123,9 +123,8 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           zIndex="10"
           borderBottomWidth="1px"
           borderColor="var(--site-header-border)"
-          bg="var(--site-bg)"
-          data-transition-persist
-          data-transition-name="header"
+          bg="var(--site-header-bg)"
+          className="vt-header"
         >
           <div className="navbar-running-line" data-nav-running-line aria-hidden="true"></div>
           {navItems.map((item, index) => {
@@ -465,8 +464,8 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           borderTopWidth="1px"
           borderColor="var(--site-border)"
           bg="var(--site-bg)"
-          data-transition-persist
-          data-transition-name="footer"
+          className="vt-footer"
+          data-astro-transition-persist="footer"
         >
           <Container maxW="6xl" px={{ base: 4, md: 6 }} py="10">
             <Stack gap="2" align="center" textAlign="center">
