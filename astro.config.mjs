@@ -8,6 +8,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeWrapEmoji from './scripts/rehype-wrap-emoji.mjs';
 import TransitionRewrite from './scripts/transition-rewrite.mjs';
+import svgr from "vite-plugin-svgr";
 
 import react from '@astrojs/react';
 
@@ -18,6 +19,9 @@ export default defineConfig({
   site: 'https://umamichi.moe',
   integrations: [mdx({ rehypePlugins: [rehypeWrapEmoji] }), sitemap(), react(), TransitionRewrite()],
   adapter: cloudflare(),
+  vite: {
+    plugins: [svgr()],
+  },
   markdown: {
     shikiConfig: {
       themes: {

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 47 100">
+  <path
+    d="m 23.5,3.5 c 11,0 20,9 20,20 v 53 c 0,11 -9,20 -20,20 -11,0 -20,-9 -20,-20 v -53 c 0,-11 9,-20 20,-20 z"
+    stroke="currentColor"
+    stroke-width="7"
+    stroke-miterlimit="8"
+    fill="var(--site-bg)"
+    fill-rule="evenodd"
+  />
+</svg>

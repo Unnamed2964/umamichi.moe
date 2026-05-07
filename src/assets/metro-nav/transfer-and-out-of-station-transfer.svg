@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 39 100">
+  <path
+    d="m 19.5,96.5 c -9,0 -16,-7 -16,-16 v -17 c 0,-9 7,-16 16,-16 9,0 16,7 16,16 v 17 c 0,9 -7,16 -16,16 z"
+    stroke="currentColor"
+    stroke-width="7"
+    stroke-miterlimit="8"
+    fill="var(--site-bg)"
+    fill-rule="evenodd"
+  />
+  <path
+    d="m 19.5,35.5 c -8,0 -15,-7 -15,-16 0,-8 7,-15 15,-15 9,0 16,7 16,15 0,9 -7,16 -16,16 z"
+    stroke="currentColor"
+    stroke-width="7"
+    stroke-miterlimit="8"
+    fill="var(--site-bg)"
+    fill-rule="evenodd"
+  />
+</svg>
