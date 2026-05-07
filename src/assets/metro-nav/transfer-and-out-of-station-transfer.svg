@@ -7,12 +7,13 @@
     fill="var(--site-bg)"
     fill-rule="evenodd"
   />
-  <path
-    d="m 19.5,35.5 c -8,0 -15,-7 -15,-16 0,-8 7,-15 15,-15 9,0 16,7 16,15 0,9 -7,16 -16,16 z"
+  <circle
+    cx="19.5"
+    cy="20"
+    r="15.5"
     stroke="currentColor"
     stroke-width="7"
     stroke-miterlimit="8"
     fill="var(--site-bg)"
-    fill-rule="evenodd"
   />
 </svg>
