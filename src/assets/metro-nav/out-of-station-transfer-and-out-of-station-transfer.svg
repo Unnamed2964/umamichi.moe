@@ -1,26 +1,29 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 100">
-  <path
-    d="m 16.5,0.5 c 7,0 13,6 13,13 0,8 -6,14 -13,14 -7,0 -13,-6 -13,-14 0,-7 6,-13 13,-13 z"
+  <circle
+    cx="16.5"
+    cy="14"
+    r="13"
     stroke="currentColor"
     stroke-width="7"
     stroke-miterlimit="8"
     fill="var(--site-bg)"
-    fill-rule="evenodd"
   />
-  <path
-    d="m 16.5,35.5 c 7,0 13,6 13,13 0,8 -6,14 -13,14 -7,0 -13,-6 -13,-14 0,-7 6,-13 13,-13 z"
+  <circle
+    cx="16.5"
+    cy="48.75"
+    r="13"
     stroke="currentColor"
     stroke-width="7"
     stroke-miterlimit="8"
     fill="var(--site-bg)"
-    fill-rule="evenodd"
   />
-  <path
-    d="m 16.5,70.5 c 7,0 13,6 13,13 0,7 -6,13 -13,13 -7,0 -13,-6 -13,-13 0,-7 6,-13 13,-13 z"
+  <circle
+    cx="16.5"
+    cy="83.5"
+    r="13"
     stroke="currentColor"
     stroke-width="7"
     stroke-miterlimit="8"
     fill="var(--site-bg)"
-    fill-rule="evenodd"
   />
 </svg>
