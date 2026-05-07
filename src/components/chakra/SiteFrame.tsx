@@ -45,9 +45,7 @@ function MetroNavIcon({ kind, tone }: { kind: NavIconKind; tone: MetroNavIconTon
   const height = (8 / 43) * 100
   const color = tone === "future"
     ? "var(--site-nav-future-icon)"
-    : tone === "current"
-      ? "var(--site-accent)"
-      : "var(--site-nav-running-line-bg)"
+    : "var(--site-nav-running-line-bg)"
   const NavIcon = METRO_NAV_ICONS[kind]
   const iconStyle = {
     display: "block",
