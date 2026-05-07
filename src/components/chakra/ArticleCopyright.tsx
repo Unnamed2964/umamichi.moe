@@ -15,7 +15,7 @@ export function ArticleCopyright({ copyright }: ArticleCopyrightProps) {
   return (
     <Stack as="section" aria-labelledby="article-copyright-heading" gap="3" pt="6">
       <Box
-        rounded="xl"
+        rounded="none"
         borderWidth="1px"
         borderColor="var(--site-sidebar-border)"
         bg="var(--site-sidebar-bg)"

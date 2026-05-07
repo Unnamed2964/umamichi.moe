@@ -23,7 +23,7 @@ export function ArticleToc({ headings, maxH = "calc(100vh - var(--site-header-of
       as="nav"
       aria-label="文章目录"
       data-toc
-      rounded="xl"
+      rounded="none"
       bg="var(--site-sidebar-bg)"
       borderWidth="1px"
       borderColor="var(--site-sidebar-border)"
