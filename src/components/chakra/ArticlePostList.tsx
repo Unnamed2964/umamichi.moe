@@ -84,7 +84,7 @@ export function ArticlePostList({ currentPath, currentPostId, tree, variant = "d
     <Box
       as="nav"
       aria-label="文章列表"
-      rounded={isMobileVariant ? "2xl" : "xl"}
+      rounded="none"
       bg="var(--site-sidebar-bg)"
       borderWidth="1px"
       borderColor="var(--site-sidebar-border)"
