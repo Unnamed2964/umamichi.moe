@@ -565,6 +565,9 @@
 	let navItems = [], navIcons = [], activeNavItem = null, runningLine = null, reverseRunningLine = null, siteHeader = null;
 	let mobileNavItems = [], mobileNavIcons = [], mobileActiveNavItem = null, mobileRunningLine = null, mobileReverseRunningLine = null, mobileMenu = null;
 	let navUpdateFrame = 0;
+	let pendingWidthTransition = false;
+	let fromWidth = null;
+	let toWidth = null;
 	const transferIconBaselineY = 100;
 
 	function resolveNavElements() {
@@ -630,11 +633,39 @@
 			const rect = activeNavItem.getBoundingClientRect();
 			const headerRect = siteHeader.getBoundingClientRect();
 			const anchorX = (rect.left + rect.right) / 2;
+			const nextWidth = Math.max(0, anchorX - headerRect.left);
 
-			runningLine.style.width = `${anchorX - headerRect.left}px`;
+			if (pendingWidthTransition && fromWidth !== null) {
+				toWidth = nextWidth;
+				runningLine.style.transition = 'none';
+				runningLine.style.width = `${fromWidth}px`;
+
+				requestAnimationFrame(() => {
+					const currentRunningLine = runningLine;
+					if (!(currentRunningLine instanceof HTMLElement)) {
+						return;
+					}
+
+					const cleanup = (event) => {
+						if (event.propertyName !== 'width') {
+							return;
+						}
+						currentRunningLine.style.removeProperty('transition');
+					};
+
+					currentRunningLine.addEventListener('transitionend', cleanup, { once: true });
+					currentRunningLine.style.transition = 'width 420ms cubic-bezier(0.22, 1, 0.36, 1)';
+					currentRunningLine.style.width = `${toWidth}px`;
+				});
+
+				pendingWidthTransition = false;
+				fromWidth = null;
+			} else {
+				runningLine.style.width = `${nextWidth}px`;
+			}
 
 			if (reverseRunningLine) {
-				reverseRunningLine.style.left = `${anchorX - headerRect.left}px`;
+				reverseRunningLine.style.left = `${nextWidth}px`;
 				reverseRunningLine.style.width = `${headerRect.right - anchorX}px`;
 			}
 		}
@@ -693,6 +724,12 @@
 
 	resolveNavElements();
 	scheduleNavRunningLineUpdate();
+
+	document.addEventListener('astro:before-preparation', () => {
+		const currentWidth = runningLine instanceof HTMLElement ? runningLine.getBoundingClientRect().width : 0;
+		fromWidth = Number.isFinite(currentWidth) ? currentWidth : 0;
+		pendingWidthTransition = true;
+	});
 
 	document.addEventListener('astro:after-swap', () => {
 		resolveNavElements();
