@@ -72,9 +72,8 @@ export function ArticleLayout({
             left={`max(1rem, calc(50vw - ${SITE_MAIN_HALF_W} - ${ARTICLE_SIDEBAR_W} - ${ARTICLE_SIDEBAR_GAP}))`}
             w={ARTICLE_SIDEBAR_W}
             zIndex="1"
-            data-transition-name="sidebar"
-            data-transition-animate="slide"
-            data-transition-persist
+            className="vt-sidebar"
+            data-astro-transition-persist="sidebar"
           >
             <ArticlePostList currentPath={currentPath} currentPostId={currentPostId} tree={sidebarTree} />
           </Box>
@@ -89,9 +88,8 @@ export function ArticleLayout({
             right={`max(1rem, calc(50vw - ${SITE_MAIN_HALF_W} - ${ARTICLE_SIDEBAR_W} - ${ARTICLE_SIDEBAR_GAP}))`}
             w={ARTICLE_SIDEBAR_W}
             zIndex="1"
-            data-transition-name="toc"
-            data-transition-animate="slide"
-            data-transition-persist
+            className="vt-toc"
+            data-astro-transition-persist="toc"
           >
             <Stack gap="3">
               {sourceUrl && sourceMarkdown && (
@@ -105,35 +103,59 @@ export function ArticleLayout({
           </Box>
         )}
 
-        {/* HELP NEEDED: transition:animate="slide" doesn't work here */}
-        <Stack as="article" gap="10" w="full" data-transition-name="article" data-transition-animate="slide" data-transition-persist>
+        <Stack as="article" gap="10" w="full" className="vt-article">
           <Stack gap="6" w="full">
             {sidebarTree && (
-              <Box display={{ base: "block", xl: "none" }}>
+              <Box
+                display={{ base: "block", xl: "none" }}
+                className="vt-top-sidebar"
+                data-astro-transition-persist="top-sidebar"
+              >
                 <ArticlePostList
                   currentPath={currentPath}
                   currentPostId={currentPostId}
                   tree={sidebarTree}
                   variant="mobile"
-                  data-transition-name="top-sidebar"
                 />
               </Box>
             )}
 
-            <ArticleHeader title={title} pubDate={pubDate} updatedDate={updatedDate} data-transition-name="title" />
-            <ArticleTags tags={tags} data-transition-name="tags" />
+            <Box className="vt-title" w="full">
+              <ArticleHeader title={title} pubDate={pubDate} updatedDate={updatedDate} />
+            </Box>
 
-            {sourceUrl && sourceMarkdown && (
-              <Box display={{ base: "block", xl: "none" }}>
-                <ArticleSourceActions sourceMarkdown={sourceMarkdown} sourceUrl={sourceUrl} data-transition-name="source-actions" />
+            {tags.length > 0 && (
+              <Box className="vt-tags" w="full">
+                <ArticleTags tags={tags} />
               </Box>
             )}
 
-            {heroImage && <ArticleHeroImage src={heroImage.src} data-transition-name="hero-image" />}
+            {sourceUrl && sourceMarkdown && (
+              <Box display={{ base: "block", xl: "none" }} className="vt-source-actions" w="full">
+                <ArticleSourceActions sourceMarkdown={sourceMarkdown} sourceUrl={sourceUrl} />
+              </Box>
+            )}
+
+            {heroImage && (
+              <Box className="vt-hero-image" w="full">
+                <ArticleHeroImage src={heroImage.src} />
+              </Box>
+            )}
 
             <ArticleContent>{children}</ArticleContent>
-            <ArticleCopyright copyright={copyright} data-transition-name="copyright" />
-            <ArticlePrevNext previousPost={previousPost} nextPost={nextPost} showDivider={!copyright} data-transition-name="prev-next" />
+
+            {copyright && (
+              <Box className="vt-copyright" w="full">
+                <ArticleCopyright copyright={copyright} />
+              </Box>
+            )}
+
+            {(previousPost || nextPost) && (
+              <Box className="vt-prev-next" w="full">
+                <ArticlePrevNext previousPost={previousPost} nextPost={nextPost} showDivider={!copyright} />
+              </Box>
+            )}
+
             {commentSlot}
           </Stack>
         </Stack>
