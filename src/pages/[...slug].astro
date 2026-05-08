@@ -20,7 +20,9 @@ export async function getStaticPaths() {
 	const docs = await getCollection('docs');
 	const { routes } = buildDocsStructure(docs);
 
-	return routes.map((route) => ({
+	return routes
+		.filter((route) => route.routePath !== 'friends')
+		.map((route) => ({
 		params: {
 			slug: route.routePath || undefined,
 		},

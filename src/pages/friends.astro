@@ -1,0 +1,326 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import SiteChromeScripts from '../components/SiteChromeScripts.astro';
+import { SiteFrame } from '../components/chakra/SiteFrame';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import rawFriendsContent from '../content/friends/index.md?raw';
+import { buildDocsStructure } from '../lib/docs';
+
+type FriendTransferItem = {
+	name: string;
+	icon: string;
+	description: string;
+};
+
+function parseFrontmatter(raw: string) {
+	const frontmatterMatch = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+	const frontmatter = frontmatterMatch?.[1] ?? '';
+	const modeMatch = frontmatter.match(/^special\s*:\s*(.+)$/m);
+	return {
+		displayMode: modeMatch ? modeMatch[1].trim() : 'list',
+	};
+}
+
+function parseFriendTransferItems(raw: string): FriendTransferItem[] {
+	const body = raw
+		.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '')
+		.trim();
+	const lines = body.split(/\r?\n/);
+	const items: FriendTransferItem[] = [];
+	let current: FriendTransferItem | null = null;
+
+	const pushCurrent = () => {
+		if (!current) {
+			return;
+		}
+		if (!current.name) {
+			current = null;
+			return;
+		}
+		current.icon = current.icon || current.name.slice(0, 2).toUpperCase();
+		current.description = current.description || '友链站点';
+		items.push(current);
+		current = null;
+	};
+
+	for (const rawLine of lines) {
+		const line = rawLine.trim();
+		if (!line) {
+			continue;
+		}
+
+		const itemTitleMatch = line.match(/^-+\s*[（(]?(.+?)[）)]?\s*$/);
+		if (itemTitleMatch) {
+			pushCurrent();
+			current = {
+				name: itemTitleMatch[1].trim(),
+				icon: '',
+				description: '',
+			};
+			continue;
+		}
+
+		if (!current) {
+			continue;
+		}
+
+		const iconMatch = line.match(/^icon\s*[：:]\s*(.+)$/i);
+		if (iconMatch) {
+			current.icon = iconMatch[1].trim();
+			continue;
+		}
+
+		const descriptionMatch = line.match(/^description\s*[：:]\s*(.+)$/i);
+		if (descriptionMatch) {
+			current.description = descriptionMatch[1].trim();
+		}
+	}
+
+	pushCurrent();
+	return items;
+}
+
+function hueFromText(text: string) {
+	let value = 0;
+	for (const char of text) {
+		value = (value * 31 + char.charCodeAt(0)) % 360;
+	}
+	return value;
+}
+
+const docs = await getCollection('docs');
+const docsStructure = buildDocsStructure(docs);
+const { displayMode } = parseFrontmatter(rawFriendsContent);
+const parsedItems = displayMode === 'friends'
+	? parseFriendTransferItems(rawFriendsContent)
+	: [];
+const fallbackItems: FriendTransferItem[] = [
+	{ name: '摸鱼喵', icon: 'MF', description: '二次元碎碎念与绘画记录' },
+	{ name: 'Aurora Lab', icon: 'AU', description: '前端实验田和动效笔记' },
+	{ name: '磁浮线', icon: 'MG', description: '高速度技术博客与周刊' },
+];
+const items = (parsedItems.length > 0 ? parsedItems : fallbackItems).slice(0, 6);
+const title = '友情链接';
+const description = SITE_DESCRIPTION;
+---
+
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={title} description={description} />
+	</head>
+	<body>
+		<SiteFrame currentPath="/friends/" navItems={docsStructure.topLevelNavItems}>
+			<div />
+		</SiteFrame>
+		<SiteChromeScripts />
+	<div data-friends-transfer-root aria-hidden="true">
+		<div data-friends-transfer-line></div>
+		<div data-friends-transfer-stack>
+			{items.map((item) => {
+				const hue = hueFromText(item.name);
+				const bgColor = `hsl(${hue} 70% 78%)`;
+				const fgColor = `hsl(${hue} 72% 16%)`;
+
+				return (
+					<div data-friends-transfer-row>
+						<div data-friends-transfer-avatar style={`background-color: ${bgColor}; color: ${fgColor};`}>
+							{item.icon}
+						</div>
+						<div data-friends-transfer-description>{item.name} | {item.description}</div>
+					</div>
+				);
+			})}
+		</div>
+	</div>
+
+	<script is:inline>
+		if (!window.siteFriendsTransferInitialized) {
+			window.siteFriendsTransferInitialized = true;
+			let friendsTransferUpdateFrame = 0;
+			let friendsTransferOpenFrame = 0;
+
+			const isDesktop = () => window.matchMedia('(min-width: 48rem)').matches;
+			const isFriendsRoute = () => window.location.pathname === '/friends/' || window.location.pathname.startsWith('/friends/');
+
+			const setFriendsTransferOpen = (isOpen) => {
+				if (!isDesktop()) {
+					delete document.documentElement.dataset.friendsTransferOpen;
+					return;
+				}
+
+				if (isOpen) {
+					document.documentElement.dataset.friendsTransferOpen = 'true';
+				} else {
+					delete document.documentElement.dataset.friendsTransferOpen;
+				}
+			};
+
+			const updateFriendsTransferLayout = () => {
+				friendsTransferUpdateFrame = 0;
+				const root = document.querySelector('[data-friends-transfer-root]');
+				const line = root?.querySelector('[data-friends-transfer-line]');
+				const stack = root?.querySelector('[data-friends-transfer-stack]');
+				const anchor = document.querySelector('[data-nav-friends-item]');
+				const anchorLabel = anchor instanceof HTMLElement
+					? anchor.querySelector('[data-nav-friends-label]')
+					: null;
+
+				if (
+					!(root instanceof HTMLElement)
+					|| !(line instanceof HTMLElement)
+					|| !(stack instanceof HTMLElement)
+					|| !(anchor instanceof HTMLElement)
+					|| !(anchorLabel instanceof HTMLElement)
+					|| document.documentElement.dataset.friendsTransferOpen !== 'true'
+				) {
+					return;
+				}
+
+				const anchorRect = anchorLabel.getBoundingClientRect();
+				const startX = anchorRect.right + 6;
+				const startY = anchorRect.bottom;
+				const lineLength = 240;
+
+				root.style.transform = `translate(${startX}px, ${startY}px)`;
+				line.style.transform = '';
+				stack.style.transform = `translate(${lineLength + 10}px, 0)`;
+			};
+
+			const scheduleFriendsTransferLayout = () => {
+				if (!friendsTransferUpdateFrame) {
+					friendsTransferUpdateFrame = window.requestAnimationFrame(updateFriendsTransferLayout);
+				}
+			};
+
+			const applyFriendsTransferAfterPageLoad = () => {
+				if (!isDesktop()) {
+					delete document.documentElement.dataset.friendsTransferOpen;
+					return;
+				}
+
+				if (isFriendsRoute()) {
+					if (friendsTransferOpenFrame) {
+						window.cancelAnimationFrame(friendsTransferOpenFrame);
+						friendsTransferOpenFrame = 0;
+					}
+
+					setFriendsTransferOpen(false);
+					document.dispatchEvent(new Event('site:nav-layout-change'));
+
+					friendsTransferOpenFrame = window.requestAnimationFrame(() => {
+						setFriendsTransferOpen(true);
+						scheduleFriendsTransferLayout();
+						friendsTransferOpenFrame = 0;
+					});
+				} else {
+					setFriendsTransferOpen(false);
+				}
+			};
+
+			document.addEventListener('astro:after-swap', () => {
+				if (!isFriendsRoute()) {
+					setFriendsTransferOpen(false);
+				}
+			});
+
+			document.addEventListener('astro:page-load', applyFriendsTransferAfterPageLoad);
+			document.addEventListener('site:nav-layout-change', scheduleFriendsTransferLayout);
+			window.addEventListener('resize', applyFriendsTransferAfterPageLoad, { passive: true });
+			queueMicrotask(applyFriendsTransferAfterPageLoad);
+		}
+	</script>
+
+	<style is:global>
+	@media screen and (min-width: 48rem) {
+		[data-site-rotatable-layer] {
+			transform-origin: left top;
+			transition: transform 420ms ease;
+		}
+
+		html[data-friends-transfer-open='true'] [data-site-rotatable-layer] {
+			transform: rotate(45deg);
+		}
+
+		[data-friends-transfer-root] {
+			position: fixed;
+			top: 0;
+			left: 0;
+			z-index: 25;
+			pointer-events: none;
+			display: block;
+			opacity: 0;
+			transition: opacity 180ms ease;
+		}
+
+		html[data-friends-transfer-open='true'] [data-friends-transfer-root] {
+			opacity: 1;
+		}
+
+		[data-friends-transfer-line] {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 0;
+			height: 1px;
+			background: var(--site-header-border);
+			transition: width 320ms ease;
+		}
+
+		html[data-friends-transfer-open='true'] [data-friends-transfer-line] {
+			width: 240px;
+		}
+
+		[data-friends-transfer-stack] {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			display: flex;
+			flex-direction: column-reverse;
+			gap: 0.75rem;
+			transform-origin: left bottom;
+			opacity: 0;
+			scale: 1 0;
+			transition: opacity 180ms ease, scale 240ms ease;
+		}
+
+		html[data-friends-transfer-open='true'] [data-friends-transfer-stack] {
+			opacity: 1;
+			scale: 1 1;
+		}
+
+		[data-friends-transfer-row] {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.75rem;
+		}
+
+		[data-friends-transfer-avatar] {
+			width: 3em;
+			height: 3em;
+			border-radius: 0;
+			font-size: var(--site-content-font-size);
+			line-height: 1;
+			font-weight: 700;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		[data-friends-transfer-description] {
+			font-size: var(--site-content-font-size);
+			line-height: var(--site-content-line-height);
+			font-weight: 500;
+			color: var(--site-fg);
+			white-space: nowrap;
+		}
+	}
+
+	@media screen and (max-width: 47.999rem) {
+		[data-friends-transfer-root] {
+			display: none;
+		}
+	}
+	</style>
+	</body>
+</html>

@@ -1,7 +1,7 @@
 ---
 title: 友情链接
 rss: false
-special: friends-oos-transfer
+special: friends
 ---
 
 这里用来放友情链接。

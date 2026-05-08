@@ -3,7 +3,6 @@ import { getCollection } from 'astro:content';
 import ArticleTocScript from '../components/ArticleTocScript.astro';
 import ArticleComments from '../components/ArticleComments';
 import BaseHead from '../components/BaseHead.astro';
-import FriendsTransferOverlay from '../components/FriendsTransferOverlay.astro';
 import SiteChromeScripts from '../components/SiteChromeScripts.astro';
 import { ArticleLayout } from '../components/chakra/ArticleLayout';
 import type { ArticleTag } from '../components/chakra/ArticleTags';
@@ -142,7 +141,6 @@ const formattedUpdatedDate = updatedDate
 			<slot />
 			{comment && <ArticleComments slot="comments" client:idle />}
 		</ArticleLayout>
-		<FriendsTransferOverlay />
 
 		<SiteChromeScripts />
 		<ArticleTocScript />
