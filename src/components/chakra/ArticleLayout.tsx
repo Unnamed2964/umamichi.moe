@@ -73,7 +73,6 @@ export function ArticleLayout({
             w={ARTICLE_SIDEBAR_W}
             zIndex="1"
             className="vt-sidebar"
-            data-astro-transition-persist="sidebar"
           >
             <ArticlePostList currentPath={currentPath} currentPostId={currentPostId} tree={sidebarTree} />
           </Box>
@@ -89,7 +88,6 @@ export function ArticleLayout({
             w={ARTICLE_SIDEBAR_W}
             zIndex="1"
             className="vt-toc"
-            data-astro-transition-persist="toc"
           >
             <Stack gap="3">
               {sourceUrl && sourceMarkdown && (
@@ -109,7 +107,6 @@ export function ArticleLayout({
               <Box
                 display={{ base: "block", xl: "none" }}
                 className="vt-top-sidebar"
-                data-astro-transition-persist="top-sidebar"
               >
                 <ArticlePostList
                   currentPath={currentPath}
