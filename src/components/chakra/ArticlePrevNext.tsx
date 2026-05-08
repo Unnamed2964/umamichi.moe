@@ -21,27 +21,27 @@ function ArticleNavCard({
   return (
     <Link
       href={href}
+      data-site-button
       display="block"
       w="full"
       maxW={{ base: "full", md: "22rem" }}
       rounded="2xl"
-      borderWidth="1px"
-      borderColor="var(--site-border)"
-      bg="var(--site-surface)"
+      bg="var(--site-button-bg)"
+      color="var(--site-button-fg)"
       px={{ base: "4", md: "5" }}
       py="3.5"
-      transition="background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease"
+      transition="background-color 0.2s ease, color 0.2s ease"
       _hover={{
         textDecoration: "none",
-        borderColor: "var(--site-accent)",
-        bg: "var(--site-hover-bg)",
+        bg: "var(--site-button-hover-bg)",
       }}
+      _active={{ bg: "var(--site-button-active-bg)" }}
     >
       <Stack gap="1" align={isNext ? "end" : "start"} textAlign={isNext ? "right" : "left"}>
         <Text fontSize="xs" fontWeight="600" color="var(--site-subtle-fg)">
           {isNext ? "下一篇" : "上一篇"}
         </Text>
-        <Text fontSize="sm" fontWeight="700" lineHeight="1.5" color="var(--site-fg)">
+        <Text fontSize="sm" fontWeight="700" lineHeight="1.5">
           {title}
         </Text>
       </Stack>

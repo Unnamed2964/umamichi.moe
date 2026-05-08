@@ -20,21 +20,20 @@ export function ArticleTags({ tags = [] }: ArticleTagsProps) {
         <Link
           key={tag.href}
           href={tag.href}
+          data-site-button
           rounded="full"
-          borderWidth="1px"
-          borderColor="var(--site-border)"
-          bg="var(--site-surface)"
+          bg="var(--site-button-bg)"
           px="3"
           py="1"
           fontSize="sm"
           fontWeight="600"
-          color="var(--site-subtle-fg)"
-          transition="all 0.2s ease"
+          color="var(--site-button-fg)"
+          transition="background-color 0.2s ease, color 0.2s ease"
           _hover={{
-            color: "var(--site-accent)",
-            borderColor: "var(--site-accent)",
+            bg: "var(--site-button-hover-bg)",
             textDecoration: "none",
           }}
+          _active={{ bg: "var(--site-button-active-bg)" }}
         >
           #{tag.label}
         </Link>

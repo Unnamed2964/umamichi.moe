@@ -25,8 +25,6 @@ export function ArticleToc({ headings, maxH = "calc(100vh - var(--site-header-of
       data-toc
       rounded="none"
       bg="var(--site-sidebar-bg)"
-      borderWidth="1px"
-      borderColor="var(--site-sidebar-border)"
       maxH={maxH}
       overflowX="hidden"
       display="flex"

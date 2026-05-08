@@ -15,6 +15,7 @@ export default function ArticleSourceActions({ sourceMarkdown, sourceUrl }: Arti
           href={sourceUrl}
           target="_blank"
           rel="noreferrer"
+          data-site-button
           display="inline-flex"
           alignItems="center"
           gap="2"
@@ -22,18 +23,17 @@ export default function ArticleSourceActions({ sourceMarkdown, sourceUrl }: Arti
           minW="0"
           minH="10"
           px="3.5"
-          borderWidth="1px"
-          borderColor="var(--site-border)"
-          borderRightWidth="0"
           roundedLeft="xl"
           roundedRight="none"
           fontSize="sm"
           fontWeight="500"
-          color="var(--site-fg)"
-          bg="var(--site-surface)"
+          color="var(--site-button-fg)"
+          bg="var(--site-button-bg)"
           lineHeight="1.4"
           whiteSpace="nowrap"
-          _hover={{ bg: "var(--site-hover-bg)", textDecoration: "none" }}
+          transition="background-color 0.2s ease"
+          _hover={{ bg: "var(--site-button-hover-bg)", textDecoration: "none" }}
+          _active={{ bg: "var(--site-button-active-bg)" }}
         >
           <Icon as={FaGithub} boxSize="4" flexShrink={0} />
           <Box as="span">GitHub 源文件</Box>
@@ -42,6 +42,7 @@ export default function ArticleSourceActions({ sourceMarkdown, sourceUrl }: Arti
         <chakra.button
           type="button"
           data-article-source-menu-toggle
+          data-site-button
           aria-label="展开 Markdown 操作"
           aria-haspopup="menu"
           aria-expanded="false"
@@ -51,18 +52,16 @@ export default function ArticleSourceActions({ sourceMarkdown, sourceUrl }: Arti
           flexShrink={0}
           minW="10"
           px="3"
-          borderWidth="1px"
-          borderColor="var(--site-border)"
           roundedLeft="none"
           roundedRight="xl"
-          bg="var(--site-surface)"
+          bg="var(--site-button-bg)"
           cursor="pointer"
           fontSize="sm"
           fontWeight="500"
-          color="var(--site-fg)"
+          color="var(--site-button-fg)"
           transition="background-color 0.2s ease"
-          _hover={{ bg: "var(--site-hover-bg)" }}
-          _active={{ bg: "var(--site-active-bg)" }}
+          _hover={{ bg: "var(--site-button-hover-bg)" }}
+          _active={{ bg: "var(--site-button-active-bg)" }}
         >
           <Icon as={LuChevronDown} data-article-source-menu-chevron boxSize="4" flexShrink={0} />
         </chakra.button>
@@ -70,16 +69,15 @@ export default function ArticleSourceActions({ sourceMarkdown, sourceUrl }: Arti
 
       <Box
         data-article-source-menu
+        data-site-button
         role="menu"
         hidden
         position="absolute"
         top="calc(100% + 0.375rem)"
         left="0"
         w="full"
-        borderWidth="1px"
-        borderColor="var(--site-border)"
         rounded="xl"
-        bg="var(--site-surface)"
+        bg="var(--site-button-bg)"
         overflow="hidden"
         zIndex="2"
       >
@@ -96,12 +94,12 @@ export default function ArticleSourceActions({ sourceMarkdown, sourceUrl }: Arti
           bg="transparent"
           textAlign="left"
           fontSize="sm"
-          color="var(--site-fg)"
+          color="var(--site-button-fg)"
           fontWeight="500"
           cursor="pointer"
           transition="background-color 0.2s ease"
-          _hover={{ bg: "var(--site-hover-bg)" }}
-          _active={{ bg: "var(--site-active-bg)" }}
+          _hover={{ bg: "var(--site-button-hover-bg)" }}
+          _active={{ bg: "var(--site-button-active-bg)" }}
         >
           <Icon as={LuCopy} boxSize="4" flexShrink={0} />
           <Box as="span">复制 Markdown</Box>
