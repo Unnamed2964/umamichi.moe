@@ -54,7 +54,8 @@ html.dark {
 
 /*
  * View transition group names (browser View Transitions API).
- * Persisted shell regions use data-astro-transition-persist in markup; names live here only.
+ * Only the footer is persisted via data-astro-transition-persist; other regions
+ * keep their view-transition-name only so they re-render per page.
  */
 .vt-header {
 	view-transition-name: header;
