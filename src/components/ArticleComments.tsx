@@ -24,7 +24,7 @@ export default function ArticleComments() {
   }, [])
 
   return (
-    <section aria-label="评论区" style={{ marginTop: "3rem" }}>
+    <section aria-label="评论区" data-out-of-site-ugc="giscus" style={{ marginTop: "3rem" }}>
       <Giscus
         repo="Unnamed2964/umamichi.moe"
         repoId="R_kgDOR3nnpw"
