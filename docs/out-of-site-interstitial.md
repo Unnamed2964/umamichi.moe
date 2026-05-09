@@ -8,7 +8,7 @@ timeless: true
 
 ## 行为概览
 
-- **Markdown / MDX（SSR 内容）**：`rehype-out-of-site-links` 仅为站外 `http` / `https` 链接设置 `target="_blank"`、`rel`（`noopener` `noreferrer`，并移除 `nofollow`）。若配置了 `OUT_OF_SITE_ED25519_PRIVATE_KEY`，还会写入可选属性 **`data-ssr-out-of-site-sig`**（Ed25519，Base64URL）。**不再使用** `data-out-of-site` 等标记属性。
+- **预渲染 HTML（构建完成后）**：集成 `out-of-site-html-postbuild` 在 `astro build` 结束后用 **parse5** 扫描输出目录下的 **`*.html`**（默认优先 `dist/client`，否则为 `dist`），对站外 `http` / `https` 的 `<a href>` 设置 `target="_blank"`、`rel`（`noopener` `noreferrer`，并移除 `nofollow`）。若配置了 `OUT_OF_SITE_ED25519_PRIVATE_KEY`，还会写入 **`data-ssr-out-of-site-sig`**（Ed25519，Base64URL）。这样 **Markdown、MDX、Astro、React SSR 等凡写入静态 HTML 的外链** 都会统一处理，而不只依赖 Markdown 管道。**不再使用** `data-out-of-site` 等标记属性。说明：parse5 面向 **HTML5**；RSS、sitemap 等 **XML** 不在扫描范围内。纯客户端岛（hydration 后才出现的 `href`）若未出现在预渲染 HTML 中，则不会被打上 `sig`。
 - **全站外链拦截**：`src/lib/out-of-site-click-client.ts` 在捕获阶段拦截**任意**指向异源 `http` / `https` 的 `<a href>`（不依赖上述 data 属性），在**新标签页**打开 `/out-of-site/`，再由页面脚本决定是否展示「继续访问」。
 - **评论区（Giscus）**：在 `ArticleComments` 根节点上设置 **`data-out-of-site-ugc="giscus"`**。落在此容器内的外链（见下文化限制）使用 **`kind=giscus`**，并附带查询参数 **`hash`**：其为**对称密钥**下的 **HMAC-SHA256**（普通对称 MAC，与 `PUBLIC_OUT_OF_SITE_LINK_HMAC_KEY` 共享同一秘密）。Giscus **不**使用非对称的 Ed25519 `sig`。
 
@@ -51,7 +51,8 @@ v1|<kind>|<toHref>
 
 ## 相关源码
 
-- `src/lib/rehype-out-of-site-links.mjs`
+- `src/integrations/out-of-site-html-postbuild.mjs`
+- `src/lib/out-of-site-sign-build.mjs`
 - `src/lib/out-of-site-payload.mjs`
 - `src/lib/out-of-site-click-client.ts`
 - `src/lib/out-of-site-giscus-hmac.ts`
@@ -63,4 +64,4 @@ v1|<kind>|<toHref>
 
 ## Astro 配置注意
 
-`rehype-out-of-site-links` 须注册为 `[rehypeOutOfSiteLinks, { site }]`，勿写成 `rehypeOutOfSiteLinks({ site })` 直接插入插件数组。
+出站链接的 `target` / `rel` / `data-ssr-out-of-site-sig` 由 **`astro.config.mjs` 中的 `outOfSiteHtmlPostbuildIntegration`** 在构建结束时写入；`astro dev` 不会运行该步骤，本地若要验证完整 `sig` 行为请使用 `npm run build` 后的产物（例如 `preview`）。

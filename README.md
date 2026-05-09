@@ -40,7 +40,7 @@ npm run dev
   - 可见性：前端可见（`PUBLIC_` 前缀）。
   - 本地开发建议：必须设置，否则点击外链会进入 `503` 恢复页。
 - `OUT_OF_SITE_ED25519_PRIVATE_KEY`
-  - 用途：构建期给 SSR 外链写入 `data-ssr-out-of-site-sig`（Ed25519 签名）。
+  - 用途：`astro build` 完成后扫描输出 HTML，给站外 `<a>` 写入 `data-ssr-out-of-site-sig`（Ed25519 签名）。
   - 可见性：仅构建侧使用，不应暴露到前端。
   - 可选性：可不设置；不设置时仅使用 `hash` 校验。
 - `PUBLIC_OUT_OF_SITE_ED25519_SPKI_B64`
@@ -61,7 +61,7 @@ PUBLIC_OUT_OF_SITE_LINK_HMAC_KEY=replace-with-your-local-secret
 - 若部署环境仍使用旧变量名 `PUBLIC_OUTBOUND_LINK_HMAC_KEY`，请改为 `PUBLIC_OUT_OF_SITE_LINK_HMAC_KEY` 并重新部署。
 - 修改系统环境变量后，通常需要重启终端/IDE，再重新执行 `npm run dev`。
 - 对于 Astro/Vite，最稳妥的方式是直接在项目内使用 `.env.local`。
-- 在 `npm run dev` 下，若出现 `安全警告：未期望的未知链接。该链接可能并不来自网站原本的内容。`，通常是因为 SSR 外链在预处理阶段没有写入 `sig`（最常见是未配置 `OUT_OF_SITE_ED25519_PRIVATE_KEY`）。
+- 在 `npm run dev` 下，若出现 `安全警告：未期望的未知链接。该链接可能并不来自网站原本的内容。`，常见原因包括：未配置 `OUT_OF_SITE_ED25519_PRIVATE_KEY`（开发模式不会跑构建后 HTML 扫描，故无 `sig`），或该链接来自未预渲染进 HTML 的客户端内容。
 
 ## 常用命令
 
