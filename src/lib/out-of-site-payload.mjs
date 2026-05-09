@@ -1,6 +1,6 @@
 /**
  * Canonical UTF-8 string: Ed25519 (`sig`, `kind=ssr` only) and symmetric HMAC-SHA256 (`hash`, both kinds) use the same message.
- * Keep in sync with `rehype-out-of-site-links.mjs` and `/out-of-site` verification.
+ * Keep in sync with `out-of-site-sign-build.mjs` / HTML postbuild and `/out-of-site` verification.
  */
 export const OUT_OF_SITE_SCHEME_VERSION = 'v1';
 

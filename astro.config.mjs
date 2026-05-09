@@ -7,7 +7,7 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeWrapEmoji from './scripts/rehype-wrap-emoji.mjs';
-import rehypeOutOfSiteLinks from './src/lib/rehype-out-of-site-links.mjs';
+import outOfSiteHtmlPostbuildIntegration from './src/integrations/out-of-site-html-postbuild.mjs';
 import { loadEnv } from 'vite';
 import svgr from "vite-plugin-svgr";
 
@@ -22,7 +22,12 @@ const outOfSitePrivateKey = env.OUT_OF_SITE_ED25519_PRIVATE_KEY ?? '';
 // https://astro.build/config
 export default defineConfig({
   site,
-  integrations: [mdx({ rehypePlugins: [rehypeWrapEmoji, [rehypeOutOfSiteLinks, { site, privateKeyPem: outOfSitePrivateKey }]] }), sitemap(), react()],
+  integrations: [
+    mdx({ rehypePlugins: [rehypeWrapEmoji] }),
+    outOfSiteHtmlPostbuildIntegration({ site, privateKeyPem: outOfSitePrivateKey }),
+    sitemap(),
+    react(),
+  ],
   adapter: cloudflare(),
   vite: {
     plugins: [svgr()],
@@ -35,6 +40,6 @@ export default defineConfig({
       },
     },
     remarkPlugins: [remarkGfm, remarkMath],
-    rehypePlugins: [rehypeKatex, rehypeWrapEmoji, [rehypeOutOfSiteLinks, { site, privateKeyPem: outOfSitePrivateKey }]],
+    rehypePlugins: [rehypeKatex, rehypeWrapEmoji],
   },
 });
