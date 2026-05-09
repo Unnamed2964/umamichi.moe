@@ -56,6 +56,15 @@ html {
 	overflow-y: scroll;
 }
 
+:root {
+	--chakra-colors-gray-focus-ring: var(--theme-300);
+	--chakra-colors-color-palette-focus-ring: var(--theme-300);
+}
+
+:focus-visible {
+	outline-color: var(--theme-300);
+}
+
 html.dark {
 	--site-nav-running-line-bg: var(--theme-800);
 	--site-text-selection-bg: var(--theme-900);
