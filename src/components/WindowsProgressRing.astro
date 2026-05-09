@@ -1,18 +1,16 @@
 ---
-// This loading indicator is a hand-authored replacement for the Windows 8/8.1
-// startup circle. Its motion model is based on the ProgressRing template found
-// in the Windows Development Kit XAML resources that were inspected earlier,
-// especially the Windows 8/8.1 generic.xaml ProgressRing timing and angles.
+// Loading ring reconstruction note:
+// - This animation is solved from frame-by-frame measurements captured from
+//   publicly available Windows 8 boot video footage (angle over time), then
+//   replayed as observed per-frame angle data in this component.
+// - It is a reverse-engineered behavioral reconstruction, not a redistribution
+//   of original Microsoft boot binaries, image assets, or animation files.
 //
-// The later bootres.dll / bootmgr.efi extraction work helped confirm boot logos
-// and boot UI metadata, but it did not yield a reusable original startup circle
-// asset or frame sequence. The actual Windows 8 startup dot animation appears
-// to be runtime-drawn by boot code, so this component remains an approximation
-// rather than extracted Microsoft animation assets.
-//
-// Windows, Windows Boot Manager, and related original boot resources remain the
-// property and trademarks of Microsoft. This project does not redistribute the
-// original startup circle assets and only uses a recreated substitute.
+// Copyright and trademark notice:
+// - "Windows" and related product names are trademarks of Microsoft.
+// - This project is not affiliated with, endorsed by, or sponsored by Microsoft.
+// - If rights holder requests adjustment/removal, this simulation should be
+//   updated or removed accordingly.
 
 interface Props {
 	active?: boolean;
@@ -31,16 +29,8 @@ const {
 } = Astro.props;
 
 const resolvedSize = typeof size === 'number' ? `${size}px` : size;
-const numericSize = typeof size === 'number' ? size : Number.parseFloat(size);
-const showSixthCircle = Number.isNaN(numericSize) || numericSize >= 40;
-const orbitAngles = [
-	['-110deg', '10deg', '93deg', '205deg', '357deg', '439deg', '585deg'],
-	['-116deg', '4deg', '87deg', '199deg', '351deg', '433deg', '579deg'],
-	['-122deg', '-2deg', '81deg', '193deg', '345deg', '427deg', '573deg'],
-	['-128deg', '-8deg', '75deg', '187deg', '339deg', '421deg', '567deg'],
-	['-134deg', '-14deg', '69deg', '181deg', '331deg', '415deg', '561deg'],
-	['-140deg', '-20deg', '63deg', '175deg', '325deg', '409deg', '555deg'],
-];
+const observedFrameAngles = [[],[],[],[],[],[145.4236],[159.716],[159.716],[169.7646],[73.2753,179.2968],[-171.1322,112.668],[-158.0496,142.9548],[-150.9759,154.5251],[-145.2604,58.9182,162.7681],[-139.867,95.7235,172.5096],[-136.2431,127.0438,179.6985],[-166.1204,-128.1078,136.3889],[-161.0379,-123.8392,147.4071],[-156.1259,-121.0527,79.8443,154.5251],[-156.1259,-121.0527,79.8443,154.5251],[-152.3785,-115.6726,97.4787,162.7681],[-148.5932,-113.8593,110.3499,171.1448],[-144.57,-109.1457,121.4998,176.0887],[-168.0241,-132.5727,-99.0307,81.0234,147.4071],[-164.1372,-128.4169,-95.8634,93.8777,154.6956],[-161.0379,-125.8688,-91.0217,105.6569,160.0914],[-156.1259,-121.7357,-87.8886,115.7586,164.7648],[-153.4547,-119.2172,-83.8094,122.8483,171.1448],[-148.8015,-114.2262,-79.8792,130.7623,176.0887],[-146.2506,-112.1348,-76.6993,138.6719,179.2968],[-177.0898,-141.733,-107.1292,-73.3323,150.5646],[-177.0898,-141.733,-107.1292,-73.3323,150.5646],[-169.3514,-135.1003,-99.0935,-65.1246,154.5251],[-166.1204,-130.6338,-95.8634,-62.6178,159.716],[-161.4195,-127.1643,-92.6597,-57.9994,164.6593],[-153.818,-119.4117,-86.2226,-50.9644,171.3282],[-150.9759,-116.1977,-81.4478,-47.4906,175.689],[-146.5859,-112.1348,-77.9976,-43.8173,178.8951],[-177.4907,-144.2933,-109.1457,-74.8655,-38.5166],[-171.1322,-135.3818,-101.2933,-66.2203,-26.0504],[-166.216,-131.6829,-98.0725,-62.6178,-20.501],[-162.932,-128.1078,-94.1487,-59.0218,-13.7099],[-159.5292,-124.7084,-90.63,-54.3725,-4.1172],[-159.5292,-124.7084,-90.63,-54.3725,-4.1172],[-155.9637,-121.3954,-86.2226,-48.685,5.5158],[-151.3231,-115.6726,-82.9806,-42.1062,16.4509],[-148.5932,-114.2262,-79.8792,-35.2474,29.0854],[-139.867,-106.7499,-69.8009,-20.501,73.2753],[-136.2431,-102.4838,-64.7636,-10.5173,122.8483],[-132.5727,-99.0307,-59.0218,-0.9051,140.9432],[-127.1643,-91.0217,-44.0983,29.0854,167.4112],[-121.7357,-86.2226,-36.3053,56.3465,176.0887],[-174.2939,-119.2172,-80.7999,-25.6919,106.0634],[-166.216,-114.2262,-74.8655,-15.5571,125.0517],[-159.1025,-111.2335,-67.7103,-4.1172,138.937],[-159.1025,-111.2335,-67.7103,-4.1172,138.937],[-153.818,-106.7499,-61.2051,13.4075,150.5646],[-146.5859,-102.4838,-53.225,40.3396,160.0914],[-144.3345,-95.9046,-42.9913,90.65,169.4757],[-175.8891,-135.1003,-85.1569,-20.0895,122.8483],[-169.3514,-130.892,-77.6017,-4.1172,134.3905],[-158.6436,-123.3925,-57.9994,74.8455,152.5562],[-155.7995,-120.0096,-48.3822,92.596,160.0914],[-150.9759,-116.1977,-35.0167,106.3586,167.9703],[-146.5859,-112.1348,-18.6046,118.2642,174.4925],[-143.0363,-109.1457,5.5158,127.2852,179.2968],[-174.2939,-139.867,-104.4434,58.9182,136.3889],[-174.2939,-139.867,-104.4434,58.9182,136.3889],[-171.1322,-137.1299,-101.2933,76.4684,145.4236],[-162.932,-128.1519,-94.1487,102.4401,159.3424],[-159.5292,-123.3925,-89.4394,112.668,164.6593],[-155.9637,-121.3954,-86.2226,120.6808,169.7646],[-148.8015,-114.2262,-79.8792,135.2405,176.0887],[-179.0962,-144.57,-109.1457,-75.2524,142.2149],[-175.8891,-140.7876,-106.7499,-71.45,147.4071],[-172.5525,-137.0673,-102.4838,-67.7103,152.5562],[-164.5318,-130.7678,-95.8634,-60.0665,160.0914],[-161.0379,-126.2197,-92.6597,-57.6636,164.7648],[-158.0496,-123.3925,-87.8886,-53.225,167.9703],[-158.0496,-123.3925,-87.8886,-53.225,167.9703],[-153.818,-118.9441,-85.1569,-48.9907,172.5096],[-150.9759,-115.3493,-80.7999,-44.3821,176.0887],[-146.5859,-112.7462,-76.6993,-41.8056,179.2968],[-173.8963,-139.5656,-104.0541,-69.8009,-27.6618],[-166.1204,-130.892,-97.2584,-60.4197,-15.5571],[-162.932,-127.1643,-92.6597,-57.3302,-7.3546],[-158.0496,-123.6145,-89.4394,-51.9595,2.2649],[-155.7995,-121.0527,-85.606,-44.0983,12.7453],[-150.9759,-116.3772,-81.6094,-38.5166,26.5843],[-147.7343,-112.1348,-76.6993,-30.833,40.8572],[-144.3106,-109.1457,-72.9838,-22.7467,63.9782],[-139.867,-105.6031,-68.312,-13.7099,88.2254],[-139.867,-105.6031,-68.312,-13.7099,88.2254],[-135.3818,-102.1433,-60.7754,-4.1172],[-131.6829,-96.8653,-54.3725,8.7453],[-128.7235,-92.6597,-46.6723,24.0522],[-119.2172,-76.4213,-18.6046],[-114.2262,-69.9383,-7.3546],[-109.1457,-62.6178,8.7453],[-104.4434,-55.4602,31.2803],[-99.0935,-46.3939,56.3465],[-92.6597,-35.0167],[-86.2226,-22.7467],[-79.8792,-7.3546],[-79.8792,-7.3546],[-71.45,16.9029],[-62.6178,40.3396],[-23.7485],[-0.9115],[24.0522],[],[],[],[],[],[]];
+const observedMaxDots = 5;
 const classes = ['windows-progress-ring', className, active ? 'is-active' : 'is-inactive'].filter(Boolean).join(' ');
 ---
 
@@ -50,31 +40,82 @@ const classes = ['windows-progress-ring', className, active ? 'is-active' : 'is-
 	aria-label={label}
 	aria-valuetext={label}
 	aria-busy={active ? 'true' : 'false'}
+	data-solved-ring
+	data-active={active ? 'true' : 'false'}
+	data-frame-angles={JSON.stringify(observedFrameAngles)}
 	style={{
 		'--progress-ring-size': resolvedSize,
 		'--progress-ring-foreground': foreground,
 	}}
 >
-	<span class="progress-ring-dots" aria-hidden="true">
-		{orbitAngles.slice(0, showSixthCircle ? 6 : 5).map((angles, index) => (
-			<span
-				class="progress-ring-orbit"
-				style={{
-					'--progress-ring-index': String(index),
-					'--angle-0': angles[0],
-					'--angle-1': angles[1],
-					'--angle-2': angles[2],
-					'--angle-3': angles[3],
-					'--angle-4': angles[4],
-					'--angle-5': angles[5],
-					'--angle-6': angles[6],
-				}}
-			>
-				<span class="progress-ring-dot"></span>
-			</span>
+	<span class="progress-ring-stage" aria-hidden="true">
+		{Array.from({ length: observedMaxDots }).map(() => (
+			<span class="progress-ring-dot"></span>
 		))}
 	</span>
 </span>
+
+<script>
+	const FPS = 30;
+	const FRAME_COUNT = 116;
+	const RADIUS_RATIO = 39.5;
+	const parseFrameAngles = (raw: string | null | undefined) => {
+		if (!raw) {
+			return [];
+		}
+		try {
+			const parsed = JSON.parse(raw);
+			if (!Array.isArray(parsed)) {
+				return [];
+			}
+			return parsed;
+		} catch {
+			return [];
+		}
+	};
+
+	const rings = Array.from(document.querySelectorAll<HTMLElement>('[data-solved-ring]'));
+	const states = rings
+		.map((root) => ({
+			active: root.dataset.active === 'true',
+			frameAngles: parseFrameAngles(root.dataset.frameAngles),
+			dots: Array.from(root.querySelectorAll<HTMLElement>('.progress-ring-dot')),
+		}))
+		.filter((state) => state.dots.length > 0 && state.frameAngles.length > 0);
+
+	const paint = (state: (typeof states)[number], frameIndex: number) => {
+		const angles = state.active ? state.frameAngles[frameIndex] ?? [] : [];
+		state.dots.forEach((dot, index) => {
+			const thetaDeg = angles[index];
+			if (typeof thetaDeg !== 'number') {
+				dot.style.opacity = '0';
+				return;
+			}
+			const thetaRad = (thetaDeg * Math.PI) / 180;
+			dot.style.left = `${50 + Math.cos(thetaRad) * RADIUS_RATIO}%`;
+			dot.style.top = `${50 + Math.sin(thetaRad) * RADIUS_RATIO}%`;
+			dot.style.opacity = '1';
+		});
+	};
+
+	let rafId = 0;
+	const tick = (timeMs: number) => {
+		const frameIndex = Math.floor(((timeMs / 1000) * FPS) % FRAME_COUNT);
+		states.forEach((state) => paint(state, frameIndex));
+		rafId = window.requestAnimationFrame(tick);
+	};
+
+	if (states.length > 0) {
+		rafId = window.requestAnimationFrame(tick);
+		window.addEventListener(
+			'beforeunload',
+			() => {
+				window.cancelAnimationFrame(rafId);
+			},
+			{ once: true },
+		);
+	}
+</script>
 
 <style>
 	.windows-progress-ring {
@@ -88,115 +129,30 @@ const classes = ['windows-progress-ring', className, active ? 'is-active' : 'is-
 		opacity: 0;
 	}
 
-	.progress-ring-dots {
+	.progress-ring-stage {
 		position: relative;
 		display: block;
 		width: 100%;
 		height: 100%;
-		transform: translateY(calc(var(--progress-ring-size) * 0.045));
-	}
-
-	.progress-ring-orbit {
-		position: absolute;
-		inset: 0;
-		animation-name: progress-ring-orbit;
-		animation-duration: 3.47s;
-		animation-timing-function: linear;
-		animation-iteration-count: infinite;
-		animation-delay: calc(var(--progress-ring-index) * 167ms);
-		animation-fill-mode: both;
 	}
 
 	.progress-ring-dot {
 		position: absolute;
-		left: 50%;
-		top: 50%;
 		width: clamp(0.18rem, calc(var(--progress-ring-size) * 0.09), 0.38rem);
 		height: clamp(0.18rem, calc(var(--progress-ring-size) * 0.09), 0.38rem);
 		border-radius: 999px;
 		background: var(--progress-ring-foreground);
-		transform: translate(-50%, -50%) translateY(calc(var(--progress-ring-size) * -0.395));
+		transform: translate(-50%, -50%);
 		opacity: 0;
-		animation-name: progress-ring-opacity;
-		animation-duration: 3.47s;
-		animation-timing-function: steps(1, end);
-		animation-iteration-count: infinite;
-		animation-delay: calc(var(--progress-ring-index) * 167ms);
-		animation-fill-mode: both;
 	}
 
-	.is-inactive .progress-ring-orbit,
 	.is-inactive .progress-ring-dot {
-		animation: none;
-	}
-
-	@keyframes progress-ring-orbit {
-		0% {
-			transform: rotate(var(--angle-0));
-			animation-timing-function: cubic-bezier(0.13, 0.21, 0.1, 0.7);
-		}
-
-		12.478% {
-			transform: rotate(var(--angle-1));
-			animation-timing-function: cubic-bezier(0.02, 0.33, 0.38, 0.77);
-		}
-
-		34.582% {
-			transform: rotate(var(--angle-2));
-			animation-timing-function: linear;
-		}
-
-		46.599% {
-			transform: rotate(var(--angle-3));
-			animation-timing-function: cubic-bezier(0.57, 0.17, 0.95, 0.75);
-		}
-
-		58.127% {
-			transform: rotate(var(--angle-4));
-			animation-timing-function: cubic-bezier(0, 0.19, 0.07, 0.72);
-		}
-
-		80.202% {
-			transform: rotate(var(--angle-5));
-			animation-timing-function: linear;
-		}
-
-		92.709% {
-			transform: rotate(var(--angle-6));
-			animation-timing-function: cubic-bezier(0, 0, 0.95, 0.37);
-		}
-
-		100% {
-			transform: rotate(var(--angle-6));
-		}
-	}
-
-	@keyframes progress-ring-opacity {
-		0% {
-			opacity: 1;
-		}
-
-		92.507% {
-			opacity: 1;
-		}
-
-		92.795% {
-			opacity: 0;
-		}
-
-		100% {
-			opacity: 0;
-		}
+		opacity: 0;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.progress-ring-dots {
-			transform: translateY(calc(var(--progress-ring-size) * 0.035));
-		}
-
-		.progress-ring-orbit,
 		.progress-ring-dot {
-			animation-duration: 4.2s;
+			transition: none;
 		}
 	}
 </style>

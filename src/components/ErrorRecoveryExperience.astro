@@ -41,10 +41,11 @@ const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription,
 				</div>
 				<div class="boot-loader-wrap">
 					<!--
-						The real Windows 8 startup circle could not be extracted as a reusable
-						asset from the inspected boot media resources. The current substitute is
-						based on the Windows Development Kit ProgressRing template, not on a
-						successful bootmgr animation extraction.
+						This loading ring is reconstructed from frame-by-frame angle data solved
+						from Windows 8 boot video capture, and replayed as observed timing data.
+						It is not a redistributed original Microsoft boot animation asset.
+						Windows is a Microsoft trademark. This project is an unaffiliated
+						behavioral simulation for web UI presentation.
 					-->
 					<WindowsProgressRing className="boot-loader" size={27.2} label="正在启动恢复环境" foreground="#ffffff" />
 				</div>
