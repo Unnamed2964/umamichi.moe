@@ -29,6 +29,39 @@ npm run dev
 
 默认开发服务器由 Astro 启动。
 
+## 环境变量
+
+本项目的环境变量模板见 `.env.example`。建议本地开发使用 `.env.local`（不要提交到仓库）。
+
+### 出站链接校验（out-of-site）
+
+- `PUBLIC_OUTBOUND_LINK_HMAC_KEY`
+  - 用途：`/out-of-site/` 页面校验 `hash`（HMAC-SHA256，对称密钥）。
+  - 可见性：前端可见（`PUBLIC_` 前缀）。
+  - 本地开发建议：必须设置，否则点击外链会进入 `503` 恢复页。
+- `OUT_OF_SITE_ED25519_PRIVATE_KEY`
+  - 用途：构建期给 SSR 外链写入 `data-ssr-out-of-site-sig`（Ed25519 签名）。
+  - 可见性：仅构建侧使用，不应暴露到前端。
+  - 可选性：可不设置；不设置时仅使用 `hash` 校验。
+- `PUBLIC_OUT_OF_SITE_ED25519_SPKI_B64`
+  - 用途：浏览器侧验证 `sig`（Ed25519 公钥，SPKI DER Base64）。
+  - 可见性：前端可见（`PUBLIC_` 前缀）。
+  - 可选性：当你启用了 `OUT_OF_SITE_ED25519_PRIVATE_KEY` 并希望前端验签时需要配置。
+
+示例（`.env.local`）：
+
+```env
+PUBLIC_OUTBOUND_LINK_HMAC_KEY=replace-with-your-local-secret
+# OUT_OF_SITE_ED25519_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----"
+# PUBLIC_OUT_OF_SITE_ED25519_SPKI_B64=
+```
+
+注意：
+
+- 修改系统环境变量后，通常需要重启终端/IDE，再重新执行 `npm run dev`。
+- 对于 Astro/Vite，最稳妥的方式是直接在项目内使用 `.env.local`。
+- 在 `npm run dev` 下，若出现 `安全警告：未期望的未知链接。该链接可能并不来自网站原本的内容。`，通常是因为 SSR 外链在预处理阶段没有写入 `sig`（最常见是未配置 `OUT_OF_SITE_ED25519_PRIVATE_KEY`）。
+
 ## 常用命令
 
 ```sh
