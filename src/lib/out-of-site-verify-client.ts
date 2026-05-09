@@ -10,6 +10,12 @@ function spkiB64ToUint8Array(b64: string) {
 	return out;
 }
 
+/** Exact-length buffer for `importKey` (avoids oversized underlying `ArrayBuffer` pools). */
+function spkiB64ToSpkiBuffer(b64: string): ArrayBuffer {
+	const view = spkiB64ToUint8Array(b64);
+	return view.buffer.slice(view.byteOffset, view.byteOffset + view.byteLength);
+}
+
 function base64UrlToUint8Array(value: string) {
 	const pad = '='.repeat((4 - (value.length % 4)) % 4);
 	const b64 = (value + pad).replace(/-/g, '+').replace(/_/g, '/');
@@ -63,14 +69,29 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 	const hash = params.get('hash');
 
 	const proceed = document.getElementById('out-of-site-proceed');
+	const lockProceed = () => {
+		if (proceed instanceof HTMLAnchorElement) {
+			proceed.hidden = true;
+			proceed.href = '#';
+			proceed.removeAttribute('target');
+			proceed.removeAttribute('rel');
+			proceed.setAttribute('aria-disabled', 'true');
+			proceed.setAttribute('tabindex', '-1');
+			proceed.classList.add('is-pending');
+		}
+	};
 	const showProceed = () => {
 		if (proceed instanceof HTMLAnchorElement) {
 			proceed.href = destination.href;
 			proceed.removeAttribute('target');
 			proceed.removeAttribute('rel');
+			proceed.removeAttribute('aria-disabled');
+			proceed.removeAttribute('tabindex');
+			proceed.classList.remove('is-pending');
 			proceed.hidden = false;
 		}
 	};
+	lockProceed();
 
 	if (!to || !kind) {
 		replaceWithErrorRecovery('/404/');
@@ -106,6 +127,7 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 	}
 
 	const hmacToken = buildCanonicalOutOfSiteMessage({ kind, toHref: destination.href });
+	setStatus('正在校验链接…');
 	const expectedHmac = await hmacSha256Base64Url(outOfSiteLinkHmacKey, hmacToken);
 	if (!timingSafeEqualUtf8(hash, expectedHmac)) {
 		replaceWithErrorRecovery('/404/');
@@ -126,6 +148,8 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 			return;
 		}
 
+		setStatus('正在校验签名…');
+
 		const message = buildCanonicalOutOfSiteMessage({
 			kind: 'ssr',
 			toHref: destination.href,
@@ -145,7 +169,7 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 		try {
 			publicKey = await crypto.subtle.importKey(
 				'spki',
-				spkiB64ToUint8Array(ed25519SpkiB64),
+				spkiB64ToSpkiBuffer(ed25519SpkiB64),
 				{ name: 'Ed25519' },
 				false,
 				['verify'],
