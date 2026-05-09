@@ -112,6 +112,13 @@ import BaseHead from '../components/BaseHead.astro';
 		filter: brightness(1.06);
 	}
 
+	.out-of-site-button.is-pending,
+	.out-of-site-button[aria-disabled='true'] {
+		pointer-events: none;
+		cursor: not-allowed;
+		opacity: 0.55;
+	}
+
 	html.dark .out-of-site-button {
 		color: var(--theme-900);
 	}
