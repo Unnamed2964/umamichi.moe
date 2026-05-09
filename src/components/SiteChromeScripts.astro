@@ -178,6 +178,14 @@
 	}
 </script>
 
+<script>
+	import { initOutOfSiteClickHandler } from '../lib/out-of-site-click-client.ts';
+
+	initOutOfSiteClickHandler({
+		outOfSiteLinkHmacKey: import.meta.env.PUBLIC_OUTBOUND_LINK_HMAC_KEY ?? '',
+	});
+</script>
+
 <script is:inline>
 	if (!window.siteCopyToolsInitialized) {
 		window.siteCopyToolsInitialized = true;
