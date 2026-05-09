@@ -314,7 +314,7 @@ html.dark {
 	margin-top: 0;
 	margin-bottom: 1rem;
 	padding: 16px;
-	border-radius: 6px;
+	border-radius: 0px;
 	font-size: 0.9em;
 	line-height: 1.45;
 	background-color: var(--article-code-block-bg);
