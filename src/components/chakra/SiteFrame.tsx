@@ -119,7 +119,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           position="sticky"
           top="0"
           zIndex="10"
-          bg="var(--theme-100)"
+          bg="var(--site-header-bg)"
           className="vt-header"
         >
           <div className="navbar-running-line" data-nav-running-line aria-hidden="true"></div>
@@ -311,7 +311,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           w="50vw"
           maxW="30rem"
           zIndex="20"
-          bg="var(--theme-100)"
+          bg="var(--site-header-bg)"
           display={{ base: "block", md: "none" }}
         >
           <div className="mobile-navbar-running-line" data-mobile-nav-running-line aria-hidden="true"></div>

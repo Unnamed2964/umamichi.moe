@@ -66,9 +66,9 @@ html {
 }
 
 html.dark {
-	--site-nav-running-line-bg: var(--theme-800);
+	--site-nav-running-line-bg: var(--theme-700);
 	--site-text-selection-bg: var(--theme-900);
-	--site-nav-future-icon: var(--gray-800);
+	--site-nav-future-icon: var(--gray-700);
 	--site-copy-toast-bg: var(--gray-800);
 	--site-copy-toast-fg: var(--gray-100);
 	--site-copy-toast-border: var(--gray-600);
