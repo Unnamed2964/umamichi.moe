@@ -180,7 +180,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                     flex="1"
                     minW="0"
                   >
-                    <Link href="/" _hover={{ textDecoration: "none", color: "var(--site-accent)" }}>
+                    <Link href="/" color="var(--site-fg)" _hover={{ textDecoration: "none", color: "var(--site-accent)" }}>
                       {SITE_TITLE}
                     </Link>
                   </Heading>
@@ -196,7 +196,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
 
                 {/* Desktop top bar */}
                 <Heading as="h1" size="lg" letterSpacing="tight" textAlign="left" flex="0 0 auto" display={{ base: "none", md: "block" }}>
-                  <Link href="/" _hover={{ textDecoration: "none", color: "var(--site-accent)" }}>
+                  <Link href="/" color="var(--site-fg)" _hover={{ textDecoration: "none", color: "var(--site-accent)" }}>
                     {SITE_TITLE}
                   </Link>
                 </Heading>
