@@ -85,7 +85,8 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 	let destination: URL;
 	try {
 		destination = new URL(to);
-	} catch {
+	} catch (err) {
+		console.log('[out-of-site]', 'invalid to URL', err);
 		replaceWithErrorRecovery('/404/');
 		return;
 	}
@@ -134,7 +135,8 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 		let signatureBytes: Uint8Array;
 		try {
 			signatureBytes = base64UrlToUint8Array(sig);
-		} catch {
+		} catch (err) {
+			console.log('[out-of-site]', 'sig base64url decode failed', err);
 			replaceWithErrorRecovery('/404/');
 			return;
 		}
@@ -148,7 +150,8 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 				false,
 				['verify'],
 			);
-		} catch {
+		} catch (err) {
+			console.log('[out-of-site]', 'crypto.subtle.importKey (Ed25519 SPKI) failed', err);
 			replaceWithErrorRecovery('/500/');
 			return;
 		}
@@ -160,7 +163,8 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 				toArrayBuffer(signatureBytes),
 				toArrayBuffer(messageBytes),
 			);
-		} catch {
+		} catch (err) {
+			console.log('[out-of-site]', 'crypto.subtle.verify (Ed25519) failed', err);
 			replaceWithErrorRecovery('/500/');
 			return;
 		}
