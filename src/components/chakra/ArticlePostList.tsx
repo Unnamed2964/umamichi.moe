@@ -78,21 +78,16 @@ export function ArticlePostList({ currentPath, currentPostId, tree, variant = "d
     return null
   }
 
-  const isMobileVariant = variant === "mobile"
-
   return (
     <Box
       as="nav"
       aria-label="文章列表"
       rounded="none"
       bg="var(--site-sidebar-bg)"
-      maxH={isMobileVariant ? "10rem" : "calc(100vh - var(--site-header-offset) - 4rem)"}
+      maxH={variant === "mobile" ? "10rem" : "calc(100vh - var(--site-header-offset) - 4rem)"}
       overflowX="hidden"
       display="flex"
       flexDirection="column"
-      px={isMobileVariant ? "4" : "5"}
-      pt={isMobileVariant ? "3" : "4"}
-      pb={isMobileVariant ? "4" : "5"}
     >
       <Text fontSize="sm" fontWeight="700" letterSpacing="wide" color="var(--site-subtle-fg)">
         导航

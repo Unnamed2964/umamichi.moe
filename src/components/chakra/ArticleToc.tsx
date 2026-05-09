@@ -29,9 +29,6 @@ export function ArticleToc({ headings, maxH = "calc(100vh - var(--site-header-of
       overflowX="hidden"
       display="flex"
       flexDirection="column"
-      px="5"
-      pt="4"
-      pb="5"
     >
       <Text fontSize="sm" fontWeight="700" letterSpacing="wide" color="var(--site-subtle-fg)">
         目录
