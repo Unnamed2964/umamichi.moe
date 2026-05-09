@@ -52,17 +52,19 @@ html {
 	--site-button-accent-active-bg: var(--theme-300);
 	--site-button-accent-fg: var(--theme-900);
 
+	--site-focus-visible-outline-color: var(--theme-200);
+
 	scroll-padding-top: var(--site-header-offset);
 	overflow-y: scroll;
 }
 
 :root {
-	--chakra-colors-gray-focus-ring: var(--theme-300);
-	--chakra-colors-color-palette-focus-ring: var(--theme-300);
+	--chakra-colors-gray-focus-ring: var(--site-focus-visible-outline-color);
+	--chakra-colors-color-palette-focus-ring: var(--site-focus-visible-outline-color);
 }
 
 :focus-visible {
-	outline-color: var(--theme-300);
+	outline-color: var(--site-focus-visible-outline-color);
 }
 
 html.dark {
@@ -82,6 +84,8 @@ html.dark {
 	--site-button-accent-hover-bg: var(--theme-800);
 	--site-button-accent-active-bg: var(--theme-700);
 	--site-button-accent-fg: var(--theme-100);
+
+	--site-focus-visible-outline-color: var(--theme-300);
 }
 
 ::selection {
