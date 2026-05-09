@@ -35,7 +35,7 @@ npm run dev
 
 ### 出站链接校验（out-of-site）
 
-- `PUBLIC_OUTBOUND_LINK_HMAC_KEY`
+- `PUBLIC_OUT_OF_SITE_LINK_HMAC_KEY`
   - 用途：`/out-of-site/` 页面校验 `hash`（HMAC-SHA256，对称密钥）。
   - 可见性：前端可见（`PUBLIC_` 前缀）。
   - 本地开发建议：必须设置，否则点击外链会进入 `503` 恢复页。
@@ -51,13 +51,14 @@ npm run dev
 示例（`.env.local`）：
 
 ```env
-PUBLIC_OUTBOUND_LINK_HMAC_KEY=replace-with-your-local-secret
+PUBLIC_OUT_OF_SITE_LINK_HMAC_KEY=replace-with-your-local-secret
 # OUT_OF_SITE_ED25519_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----"
 # PUBLIC_OUT_OF_SITE_ED25519_SPKI_B64=
 ```
 
 注意：
 
+- 若部署环境仍使用旧变量名 `PUBLIC_OUTBOUND_LINK_HMAC_KEY`，请改为 `PUBLIC_OUT_OF_SITE_LINK_HMAC_KEY` 并重新部署。
 - 修改系统环境变量后，通常需要重启终端/IDE，再重新执行 `npm run dev`。
 - 对于 Astro/Vite，最稳妥的方式是直接在项目内使用 `.env.local`。
 - 在 `npm run dev` 下，若出现 `安全警告：未期望的未知链接。该链接可能并不来自网站原本的内容。`，通常是因为 SSR 外链在预处理阶段没有写入 `sig`（最常见是未配置 `OUT_OF_SITE_ED25519_PRIVATE_KEY`）。
