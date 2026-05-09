@@ -455,9 +455,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
         <Box
           as="footer"
           mt="16"
-          borderTopWidth="1px"
-          borderColor="var(--site-border)"
-          bg="var(--site-bg)"
+          bg="var(--site-surface-muted)"
           className="vt-footer"
           data-astro-transition-persist="footer"
         >
