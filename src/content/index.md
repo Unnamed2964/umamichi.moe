@@ -14,6 +14,8 @@ rss: false
 - Windows 8-10、Office 2013-2017、Visual Studio 2012-2017：内容、语义中心，采用纯色色块，不使用阴影，采用隐喻的抽象图标，类似于城市轨道交通导向标识的视觉风格
 - 上海地铁：导航栏的具有隐喻含义的图标的来源
 
+  ![现实世界的上海地铁线路图的示例](/index/shanghai-metro-realworld-map-example.webp)
+
 以下是一些待办事项：
 
 近期正在推进：
