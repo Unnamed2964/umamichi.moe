@@ -608,14 +608,91 @@
 		return point.matrixTransform(matrix);
 	}
 
+	function translateNavIconToViewportPoint(navIcon, svg, targetX, targetY) {
+		navIcon.style.transform = '';
+
+		const baselinePoint = getSvgNavAnchorScreenPoint(svg);
+
+		if (!baselinePoint) {
+			return;
+		}
+
+		const dx = targetX - baselinePoint.x;
+		const dy = targetY - baselinePoint.y;
+
+		navIcon.style.transform = 'translate(1px, 0px)';
+		const afterEx = getSvgNavAnchorScreenPoint(svg);
+
+		if (!afterEx) {
+			navIcon.style.transform = `translate(${dx}px, ${dy}px)`;
+			return;
+		}
+
+		const ex = { x: afterEx.x - baselinePoint.x, y: afterEx.y - baselinePoint.y };
+
+		navIcon.style.transform = 'translate(0px, 1px)';
+		const afterEy = getSvgNavAnchorScreenPoint(svg);
+
+		if (!afterEy) {
+			navIcon.style.transform = `translate(${dx}px, ${dy}px)`;
+			return;
+		}
+
+		const ey = { x: afterEy.x - baselinePoint.x, y: afterEy.y - baselinePoint.y };
+
+		const det = ex.x * ey.y - ex.y * ey.x;
+
+		if (!Number.isFinite(det) || Math.abs(det) < 1e-6) {
+			navIcon.style.transform = `translate(${dx}px, ${dy}px)`;
+			return;
+		}
+
+		const tx = (dx * ey.y - dy * ey.x) / det;
+		const ty = (ex.x * dy - ex.y * dx) / det;
+
+		navIcon.style.transform = `translate(${tx}px, ${ty}px)`;
+	}
+
+	function measureRunningLineWidthToNavCenter(runningLineEl, activeItemEl, headerEl) {
+		const navRect = activeItemEl.getBoundingClientRect();
+		const nx = (navRect.left + navRect.right) / 2;
+		const ny = (navRect.top + navRect.bottom) / 2;
+
+		const prevTransition = runningLineEl.style.transition;
+		const prevWidth = runningLineEl.style.width;
+
+		runningLineEl.style.transition = 'none';
+
+		const probeBase = 48;
+		runningLineEl.style.width = `${probeBase}px`;
+		const r0 = runningLineEl.getBoundingClientRect();
+		runningLineEl.style.width = `${probeBase + 1}px`;
+		const r1 = runningLineEl.getBoundingClientRect();
+
+		runningLineEl.style.transition = prevTransition;
+		runningLineEl.style.width = prevWidth;
+
+		const ux = r1.right - r0.right;
+		const uy = (r1.top + r1.bottom - r0.top - r0.bottom) / 2;
+		const uu = ux * ux + uy * uy;
+
+		if (!Number.isFinite(uu) || uu < 1e-8) {
+			const headerRect = headerEl.getBoundingClientRect();
+			return Math.max(0, nx - headerRect.left);
+		}
+
+		const sx = r0.left;
+		const sy = (r0.top + r0.bottom) / 2;
+		const vx = nx - sx;
+		const vy = ny - sy;
+
+		return (vx * ux + vy * uy) / uu;
+	}
+
 	function updateNavRunningLine() {
 		navUpdateFrame = 0;
-		const freezeDesktopNavLayout = (
-			window.matchMedia('(min-width: 48rem)').matches
-			&& document.documentElement.dataset.friendsTransferOpen === 'true'
-		);
 
-		if (siteHeader && !freezeDesktopNavLayout) {
+		if (siteHeader) {
 			const headerRect = siteHeader.getBoundingClientRect();
 			const runningLineRect = runningLine instanceof HTMLElement ? runningLine.getBoundingClientRect() : null;
 			const navBottomY = runningLineRect && runningLineRect.height > 0 ? runningLineRect.bottom : headerRect.bottom;
@@ -631,21 +708,22 @@
 				const rect = navItem.getBoundingClientRect();
 				const anchorX = (rect.left + rect.right) / 2;
 
-				navIcon.style.transform = '';
-
-				const baselinePoint = getSvgNavAnchorScreenPoint(svg);
-
-				if (baselinePoint) {
-					navIcon.style.transform = `translate(${anchorX - baselinePoint.x}px, ${navBottomY - baselinePoint.y}px)`;
-				}
+				translateNavIconToViewportPoint(navIcon, svg, anchorX, navBottomY);
 			});
 		}
 
-		if (activeNavItem && runningLine && siteHeader && !freezeDesktopNavLayout) {
+		if (activeNavItem && runningLine && siteHeader) {
 			const rect = activeNavItem.getBoundingClientRect();
 			const headerRect = siteHeader.getBoundingClientRect();
 			const anchorX = (rect.left + rect.right) / 2;
-			const nextWidth = Math.max(0, anchorX - headerRect.left);
+			const headerW = siteHeader.clientWidth;
+			let nextWidth = measureRunningLineWidthToNavCenter(runningLine, activeNavItem, siteHeader);
+
+			if (!Number.isFinite(nextWidth)) {
+				nextWidth = Math.max(0, anchorX - headerRect.left);
+			}
+
+			nextWidth = Math.min(Math.max(0, nextWidth), headerW);
 
 			if (pendingWidthTransition && fromWidth !== null) {
 				toWidth = nextWidth;
@@ -678,7 +756,7 @@
 
 			if (reverseRunningLine) {
 				reverseRunningLine.style.left = `${nextWidth}px`;
-				reverseRunningLine.style.width = `${headerRect.right - anchorX}px`;
+				reverseRunningLine.style.width = `${Math.max(0, headerW - nextWidth)}px`;
 			}
 		}
 

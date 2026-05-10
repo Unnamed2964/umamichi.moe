@@ -218,6 +218,20 @@ const description = SITE_DESCRIPTION;
 				}
 			};
 
+			const reflowFriendsTransferOnResize = () => {
+				if (!isDesktop()) {
+					delete document.documentElement.dataset.friendsTransferOpen;
+					return;
+				}
+
+				if (!isFriendsRoute() || document.documentElement.dataset.friendsTransferOpen !== 'true') {
+					return;
+				}
+
+				document.dispatchEvent(new Event('site:nav-layout-change'));
+				scheduleFriendsTransferLayout();
+			};
+
 			document.addEventListener('astro:after-swap', () => {
 				if (!isFriendsRoute()) {
 					setFriendsTransferOpen(false);
@@ -226,7 +240,7 @@ const description = SITE_DESCRIPTION;
 
 			document.addEventListener('astro:page-load', applyFriendsTransferAfterPageLoad);
 			document.addEventListener('site:nav-layout-change', scheduleFriendsTransferLayout);
-			window.addEventListener('resize', applyFriendsTransferAfterPageLoad, { passive: true });
+			window.addEventListener('resize', reflowFriendsTransferOnResize, { passive: true });
 			queueMicrotask(applyFriendsTransferAfterPageLoad);
 		}
 	</script>
