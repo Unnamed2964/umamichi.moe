@@ -9,9 +9,9 @@ rss: false
 关于我的信息可见于 [/about](/about)。
 
 本博客受到许多其他项目和事物的启发，一些启发较深的包括：
-- MkDocs：导航、目录侧栏，层级式的目录结构，“上一篇/下一篇”按钮
-  + OI Wiki：版权信息、Giscus 评论区
-- Windows 8-10、Office 2013-2017、Visual Studio 2012-2017：内容、语义中心，采用纯色色块，不使用阴影，采用隐喻的抽象图标，类似于城市轨道交通导向标识的视觉风格
+- [MkDocs](https://www.mkdocs.org/)：导航、目录侧栏，层级式的目录结构，“上一篇/下一篇”按钮
+  + [OI Wiki](https://oi-wiki.org/)：版权信息、Giscus 评论区
+- Windows 8-10、Office 2013-2017、Visual Studio 2012-2017（Metro Design）：内容、语义中心，采用纯色色块，不使用阴影，采用隐喻的抽象图标，类似于城市轨道交通导向标识的视觉风格
 - 上海地铁：导航栏的具有隐喻含义的图标的来源
 
   ![现实世界的上海地铁线路图的示例](/index/shanghai-metro-realworld-map-example.webp)
