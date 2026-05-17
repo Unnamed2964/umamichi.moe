@@ -11,6 +11,7 @@ import { ArticleTags, type ArticleTag } from "./ArticleTags"
 import { ArticleToc, type ArticleTocHeading } from "./ArticleToc"
 import { SiteFrame, SITE_MAIN_HALF_W, SITE_MAIN_MAX_W } from "./SiteFrame"
 import type { CopyrightConfig } from "../../lib/copyright"
+import { filterArticleTocHeadings } from "../../lib/article-toc"
 import type { TopLevelNavItem } from "../../lib/docs"
 
 const ARTICLE_SIDEBAR_W = "12rem"
@@ -56,7 +57,7 @@ export function ArticleLayout({
   sourceMarkdown,
   sourceUrl,
 }: ArticleLayoutProps) {
-  const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3)
+  const tocHeadings = filterArticleTocHeadings(headings)
   const hasToc = tocHeadings.length > 0
   const commentSlot = comments
 
