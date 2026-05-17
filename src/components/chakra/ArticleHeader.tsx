@@ -30,7 +30,7 @@ export function ArticleHeader({ title, pubDate, updatedDate }: ArticleHeaderProp
         {title}
       </Heading>
 
-      <Box h="3px" w={{ base: "5rem", md: "6.5rem" }} rounded="full" bg="var(--article-title-bar)" />
+      <Box h="3px" w={{ base: "5rem", md: "6.5rem" }} rounded="none" bg="var(--article-title-bar)" />
     </Stack>
   )
 }
