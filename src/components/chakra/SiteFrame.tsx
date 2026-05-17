@@ -21,6 +21,7 @@ import TransferNavIcon from "../../assets/metro-nav/transfer.svg?react"
 import TransferAndOutOfStationTransferNavIcon from "../../assets/metro-nav/transfer-and-out-of-station-transfer.svg?react"
 import OutOfStationTransferNavIcon from "../../assets/metro-nav/out-of-station-transfer.svg?react"
 import OutOfStationTransferAndOutOfStationTransferNavIcon from "../../assets/metro-nav/out-of-station-transfer-and-out-of-station-transfer.svg?react"
+import { SiteNavTextOutlineFilter } from "./SiteNavTextOutlineFilter"
 
 export const SITE_MAIN_MAX_W = "4xl"
 export const SITE_MAIN_HALF_W = `calc(var(--chakra-sizes-${SITE_MAIN_MAX_W}) / 2)`
@@ -112,6 +113,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
 
   return (
     <Provider>
+      <SiteNavTextOutlineFilter />
       <Box minH="100vh" bg="var(--site-bg)" color="var(--site-fg)">
         <Box
           as="header"

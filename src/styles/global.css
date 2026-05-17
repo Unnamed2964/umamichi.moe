@@ -53,6 +53,7 @@ html {
 	--site-button-accent-fg: var(--theme-900);
 
 	--site-focus-visible-outline-color: var(--theme-200);
+	--site-nav-active-text-outline: #ffffff;
 
 	scroll-padding-top: var(--site-header-offset);
 	overflow-y: scroll;
@@ -193,6 +194,12 @@ html.dark {
 	height: 0;
 	background: var(--site-nav-running-line-bg);
 	transition: height 2000ms ease;
+}
+
+[data-nav-active-item] > span,
+[data-mobile-nav-active-item] > span {
+	filter: url(#site-nav-active-text-outline);
+	-webkit-filter: url(#site-nav-active-text-outline);
 }
 
 @media screen and (max-width: 47.999rem) {
