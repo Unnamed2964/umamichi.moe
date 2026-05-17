@@ -42,16 +42,6 @@ html {
 	--site-copy-toast-fg: var(--gray-700);
 	--site-copy-toast-border: var(--gray-300);
 
-	--site-button-bg: var(--gray-100);
-	--site-button-hover-bg: var(--gray-200);
-	--site-button-active-bg: var(--gray-300);
-	--site-button-fg: var(--site-fg);
-
-	--site-button-accent-bg: var(--theme-100);
-	--site-button-accent-hover-bg: var(--theme-200);
-	--site-button-accent-active-bg: var(--theme-300);
-	--site-button-accent-fg: var(--theme-900);
-
 	--site-focus-visible-outline-color: var(--theme-200);
 	--site-nav-active-text-outline: #ffffff;
 
@@ -75,16 +65,6 @@ html.dark {
 	--site-copy-toast-bg: var(--gray-800);
 	--site-copy-toast-fg: var(--gray-100);
 	--site-copy-toast-border: var(--gray-600);
-
-	--site-button-bg: var(--gray-800);
-	--site-button-hover-bg: var(--gray-700);
-	--site-button-active-bg: var(--gray-600);
-	--site-button-fg: var(--site-fg);
-
-	--site-button-accent-bg: var(--theme-900);
-	--site-button-accent-hover-bg: var(--theme-800);
-	--site-button-accent-active-bg: var(--theme-700);
-	--site-button-accent-fg: var(--theme-100);
 
 	--site-focus-visible-outline-color: var(--theme-300);
 }
