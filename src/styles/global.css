@@ -137,7 +137,6 @@ html.dark {
 	padding: 0.35rem 0.65rem;
 	box-sizing: border-box;
 	border: 1px solid var(--site-copy-toast-border);
-	border-radius: 999px;
 	background: var(--site-copy-toast-bg);
 	color: var(--site-copy-toast-fg);
 	font-size: 0.875rem;
