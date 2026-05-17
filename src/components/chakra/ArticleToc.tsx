@@ -1,4 +1,9 @@
 import { Box, Link, Stack, Text } from "@chakra-ui/react"
+import {
+  filterArticleTocHeadings,
+  getArticleTocIndent,
+  isArticleTocTopLevel,
+} from "../../lib/article-toc"
 
 export type ArticleTocHeading = {
   depth: number
@@ -12,7 +17,7 @@ type ArticleTocProps = {
 }
 
 export function ArticleToc({ headings, maxH = "calc(100vh - var(--site-header-offset) - 4rem)" }: ArticleTocProps) {
-  const items = headings.filter((heading) => heading.depth === 2 || heading.depth === 3)
+  const items = filterArticleTocHeadings(headings)
 
   if (items.length === 0) {
     return null
@@ -50,16 +55,19 @@ export function ArticleToc({ headings, maxH = "calc(100vh - var(--site-header-of
         }}
       >
         <Stack gap="2">
-          {items.map((heading) => (
+          {items.map((heading) => {
+            const topLevel = isArticleTocTopLevel(heading.depth)
+
+            return (
             <Link
               key={heading.slug}
               href={`#${heading.slug}`}
               data-toc-link={heading.slug}
               display="block"
-              ps={heading.depth === 3 ? "4" : "0"}
-              color={heading.depth === 2 ? "var(--article-fg)" : "var(--site-muted-fg)"}
-              fontSize={heading.depth === 2 ? "sm" : "xs"}
-              fontWeight={heading.depth === 2 ? "600" : "500"}
+              ps={getArticleTocIndent(heading.depth)}
+              color={topLevel ? "var(--article-fg)" : "var(--site-muted-fg)"}
+              fontSize={topLevel ? "sm" : "xs"}
+              fontWeight={topLevel ? "600" : "500"}
               lineHeight="1.6"
               transition="color 0.2s ease, font-weight 0.2s ease"
               _hover={{ color: "var(--site-accent)", textDecoration: "none" }}
@@ -73,7 +81,8 @@ export function ArticleToc({ headings, maxH = "calc(100vh - var(--site-header-of
             >
               {heading.text}
             </Link>
-          ))}
+            )
+          })}
         </Stack>
       </Box>
     </Box>
