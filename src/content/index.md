@@ -14,6 +14,7 @@ rss: false
 - Windows 8-10、Office 2013-2016、Visual Studio 2012-2017（Metro Design）：内容、语义中心，采用纯色色块，不使用阴影，采用隐喻的抽象图标，类似于城市轨道交通导向标识的视觉风格
   <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=3638545&bvid=BV19s411R7Tb&cid=5820574&p=1&autoplay=false" scrolling="yes" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="100%" style="aspect-ratio: 1.5; max-height: 600px;"></iframe>
   （遗憾的是，我认为构成这一体验的很重要的一部分的缓动动画部分还是没能得以复现）
+  ~~这也是希望能够借这一折腾的机会熟悉 CSS 和思考 UI 组件设计~~
 - 上海地铁：导航栏的具有隐喻含义的图标的来源
 
   ![现实世界的上海地铁线路图的示例](/index/shanghai-metro-realworld-map-example.webp)
