@@ -167,7 +167,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                     variant="ghost"
                     rounded="full"
                     size="sm"
-                    color="var(--site-fg)"
+                    color="var(--site-header-fg)"
                     _hover={{ bg: "var(--site-hover-bg)" }}
                     _active={{ bg: "var(--site-active-bg)" }}
                   >
@@ -182,7 +182,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                     flex="1"
                     minW="0"
                   >
-                    <Link href="/" color="var(--site-fg)" _hover={{ textDecoration: "none", color: "var(--site-accent)" }}>
+                    <Link href="/" color="var(--site-header-fg)" _hover={{ textDecoration: "none", color: "var(--site-header-emphasis-fg)" }}>
                       {SITE_TITLE}
                     </Link>
                   </Heading>
@@ -191,14 +191,14 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                 <ThemeToggleButton
                   display={{ base: "inline-flex", md: "none" }}
                   rounded="full"
-                  color="var(--site-fg)"
+                  color="var(--site-header-fg)"
                   _hover={{ bg: "var(--site-hover-bg)" }}
                   _active={{ bg: "var(--site-active-bg)" }}
                 />
 
                 {/* Desktop top bar */}
                 <Heading as="h1" size="lg" letterSpacing="tight" textAlign="left" flex="0 0 auto" display={{ base: "none", md: "block" }}>
-                  <Link href="/" color="var(--site-fg)" _hover={{ textDecoration: "none", color: "var(--site-accent)" }}>
+                  <Link href="/" color="var(--site-header-fg)" _hover={{ textDecoration: "none", color: "var(--site-header-emphasis-fg)" }}>
                     {SITE_TITLE}
                   </Link>
                 </Heading>
@@ -227,7 +227,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                           fontWeight={active ? "700" : "500"}
                           bg="transparent"
                           textDecoration="none"
-                          color={active ? "var(--site-accent)" : "var(--site-fg)"}
+                          color={active ? "var(--site-header-emphasis-fg)" : "var(--site-header-fg)"}
                           _hover={{
                             textDecoration: "underline",
                             textDecorationColor: "currentColor",
@@ -245,10 +245,10 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                     })}
                   </HStack>
 
-                  <HStack gap="2" color="var(--site-fg)" fontSize="sm" justify="center" flexShrink={0}>
+                  <HStack gap="2" color="var(--site-header-fg)" fontSize="sm" justify="center" flexShrink={0}>
                     <ThemeToggleButton
                       rounded="full"
-                      color="var(--site-fg)"
+                      color="var(--site-header-fg)"
                       _hover={{ bg: "var(--site-hover-bg)" }}
                       _active={{ bg: "var(--site-active-bg)" }}
                     />
@@ -262,7 +262,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                       justifyContent="center"
                       boxSize="8"
                       rounded="full"
-                      color="var(--site-fg)"
+                      color="var(--site-header-fg)"
                       _hover={{ bg: "var(--site-hover-bg)", textDecoration: "none" }}
                       _active={{ bg: "var(--site-active-bg)" }}
                     >
@@ -278,7 +278,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                       justifyContent="center"
                       boxSize="8"
                       rounded="full"
-                      color="var(--site-fg)"
+                      color="var(--site-header-fg)"
                       _hover={{ bg: "var(--site-hover-bg)", textDecoration: "none" }}
                       _active={{ bg: "var(--site-active-bg)" }}
                     >
@@ -351,7 +351,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                   variant="ghost"
                   size="sm"
                   rounded="full"
-                  color="var(--site-fg)"
+                  color="var(--site-header-fg)"
                   _hover={{ bg: "var(--site-hover-bg)" }}
                   _active={{ bg: "var(--site-active-bg)" }}
                 >
@@ -382,7 +382,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                           bg="transparent"
                           textAlign="right"
                           textDecoration="none"
-                          color={active ? "var(--site-accent)" : "var(--site-fg)"}
+                          color={active ? "var(--site-header-emphasis-fg)" : "var(--site-header-fg)"}
                           _hover={{
                             textDecoration: "underline",
                             textDecorationColor: "currentColor",
@@ -400,7 +400,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                 </Stack>
               </Flex>
 
-              <HStack as="footer" gap="2" justify="center" color="var(--site-fg)" pb="2">
+              <HStack as="footer" gap="2" justify="center" color="var(--site-header-fg)" pb="2">
                 <Link
                   href="https://twitter.com/Umamichiz"
                   target="_blank"
@@ -411,7 +411,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                   justifyContent="center"
                   boxSize="8"
                   rounded="full"
-                  color="var(--site-fg)"
+                  color="var(--site-header-fg)"
                   _hover={{ bg: "var(--site-hover-bg)", textDecoration: "none" }}
                   _active={{ bg: "var(--site-active-bg)" }}
                 >
@@ -427,7 +427,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                   justifyContent="center"
                   boxSize="8"
                   rounded="full"
-                  color="var(--site-fg)"
+                  color="var(--site-header-fg)"
                   _hover={{ bg: "var(--site-hover-bg)", textDecoration: "none" }}
                   _active={{ bg: "var(--site-active-bg)" }}
                 >
