@@ -45,6 +45,7 @@ const { title, description, image = FallbackImage, disableTikkun = false } = Ast
 			: preference;
 
 		document.documentElement.classList.toggle('dark', resolved === 'dark');
+		document.documentElement.classList.toggle('light', resolved === 'light');
 		document.documentElement.dataset.themePreference = preference;
 		document.documentElement.dataset.themeResolved = resolved;
 		document.documentElement.style.colorScheme = resolved;
