@@ -17,7 +17,7 @@ import BaseHead from '../components/BaseHead.astro';
 			<p id="out-of-site-status" class="out-of-site-status" hidden></p>
 			<p id="out-of-site-detail" class="out-of-site-detail" hidden></p>
 			<p class="out-of-site-actions">
-				<a id="out-of-site-proceed" class="out-of-site-button" href="#" hidden>继续访问</a>
+				<a id="out-of-site-proceed" class="primary-button" href="#" hidden>继续访问</a>
 				<a class="out-of-site-link" href="/">返回首页</a>
 			</p>
 		</main>
@@ -73,7 +73,7 @@ import BaseHead from '../components/BaseHead.astro';
 	}
 
 	.out-of-site-status.is-warning {
-		color: var(--site-danger, #b91c1c);
+		color: var(--site-danger);
 		font-weight: 700;
 	}
 
@@ -92,34 +92,21 @@ import BaseHead from '../components/BaseHead.astro';
 		align-items: center;
 	}
 
-	.out-of-site-button {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		min-height: var(--control-height, 38px);
-		padding: 0 1rem;
-		border-radius: var(--radius-sm, 10px);
-		background: var(--site-accent);
-		color: #fff;
+	.out-of-site-actions .primary-button {
 		text-decoration: none;
-		font-weight: 600;
-		font-size: 0.925rem;
-		transition: filter var(--transition-fast, 120ms ease);
 	}
 
-	.out-of-site-button:hover {
-		filter: brightness(1.06);
+	.out-of-site-actions .primary-button:hover,
+	.out-of-site-actions .primary-button:active {
+		text-decoration: none;
 	}
 
-	.out-of-site-button.is-pending,
-	.out-of-site-button[aria-disabled='true'] {
+	.out-of-site-actions .primary-button.is-pending,
+	.out-of-site-actions .primary-button[aria-disabled='true'] {
+		opacity: 0.5;
 		pointer-events: none;
 		cursor: not-allowed;
-		opacity: 0.55;
-	}
-
-	html.dark .out-of-site-button {
-		color: var(--theme-900);
+		transform: none;
 	}
 
 	.out-of-site-link {
