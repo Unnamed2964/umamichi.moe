@@ -16,7 +16,7 @@ html {
 	--article-list-marker: var(--site-subtle-fg);
 	--article-link: var(--site-link);
 	--article-link-hover: var(--site-link-hover);
-	--article-title-bar: var(--site-accent-border);
+	--article-title-bar: var(--site-header-bg);
 }
 
 .article-content {
