@@ -5,33 +5,18 @@
  */
 
 html {
-	--article-fg: var(--gray-700);
-	--article-muted-fg: var(--gray-500);
-	--article-border: var(--chakra-colors-border-muted);
-	--article-table-bg: var(--chakra-colors-bg);
-	--article-table-stripe-bg: var(--chakra-colors-bg-subtle);
-	--article-inline-code-bg: var(--chakra-colors-bg-muted);
-	--article-code-block-bg: var(--chakra-colors-bg-subtle);
-	--article-quote-fg: var(--chakra-colors-fg-muted);
-	--article-list-marker: var(--chakra-colors-fg-muted);
-	--article-link: var(--theme-700);
-	--article-link-hover: var(--theme-800);
-	--article-title-bar: var(--theme-300);
-}
-
-html.dark {
-	--article-fg: #c9d1d9;
-	--article-muted-fg: #8b949e;
-	--article-border: #30363d;
-	--article-table-bg: #0d1117;
-	--article-table-stripe-bg: #161b22;
-	--article-inline-code-bg: rgba(110, 118, 129, 0.4);
-	--article-code-block-bg: #161b22;
-	--article-quote-fg: #8b949e;
-	--article-list-marker: #7d8590;
-	--article-link: var(--theme-300);
-	--article-link-hover: var(--theme-200);
-	--article-title-bar: var(--theme-400);
+	--article-fg: var(--site-content-fg);
+	--article-muted-fg: var(--site-content-muted-fg);
+	--article-border: var(--site-content-border);
+	--article-table-bg: var(--site-surface);
+	--article-table-stripe-bg: var(--site-surface-muted);
+	--article-inline-code-bg: var(--site-hover-bg);
+	--article-code-block-bg: var(--site-surface-muted);
+	--article-quote-fg: var(--site-content-muted-fg);
+	--article-list-marker: var(--site-subtle-fg);
+	--article-link: var(--site-link);
+	--article-link-hover: var(--site-link-hover);
+	--article-title-bar: var(--site-accent-border);
 }
 
 .article-content {
@@ -77,7 +62,7 @@ html.dark {
 	padding: 0;
 	border: 0;
 	background: transparent;
-	color: var(--theme-400);
+	color: var(--site-subtle-fg);
 	cursor: pointer;
 	opacity: 0;
 	transform: translateY(-50%);
@@ -109,7 +94,7 @@ html.dark {
 
 .article-content .article-heading-anchor-copy:hover,
 .article-content .article-heading-anchor-copy:focus-visible {
-	color: var(--theme-300);
+	color: var(--site-link-hover);
 }
 
 .article-content > :first-child {
@@ -241,6 +226,7 @@ html.dark {
 .article-content .task-list-item input {
 	margin-inline-end: 0.6em;
 	vertical-align: middle;
+	accent-color: var(--site-accent);
 }
 
 .article-content a {
