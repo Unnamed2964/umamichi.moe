@@ -37,7 +37,7 @@ rss: false
 
 ### 南京地铁
 
-#### [屏蔽门上方贴纸生成器（Alpha）](https://njmetro-railmap-creator.umamichi.moe/)
+#### [屏蔽门上方贴纸生成器（Beta）](https://njmetro-railmap-creator.umamichi.moe/)
 
 用于生成南京地铁屏蔽门上方贴纸样式线路图，目前处于 Beta 阶段。
 
