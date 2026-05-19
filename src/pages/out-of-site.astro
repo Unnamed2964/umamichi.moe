@@ -15,7 +15,9 @@ import BaseHead from '../components/BaseHead.astro';
 		<main class="out-of-site-main">
 			<h1 class="out-of-site-title">即将离开本站</h1>
 			<p id="out-of-site-status" class="out-of-site-status" hidden></p>
-			<p id="out-of-site-detail" class="out-of-site-detail" hidden></p>
+			<p id="out-of-site-detail" class="out-of-site-detail" hidden>
+				<code id="out-of-site-url" class="out-of-site-url"></code>
+			</p>
 			<p class="out-of-site-actions">
 				<a id="out-of-site-proceed" class="primary-button" href="#" hidden>继续访问</a>
 				<a class="out-of-site-link" href="/">返回首页</a>
@@ -55,7 +57,7 @@ import BaseHead from '../components/BaseHead.astro';
 		margin: 0;
 		padding: clamp(1.5rem, 4vw, 2.25rem);
 		background: var(--site-bg);
-		border: 1px solid var(--site-border);
+		border: 1px solid var(--site-border-strong);
 	}
 
 	.out-of-site-title {
@@ -67,7 +69,7 @@ import BaseHead from '../components/BaseHead.astro';
 	}
 
 	.out-of-site-status {
-		margin: 0 0 0.625rem;
+		margin: 0;
 		line-height: 1.65;
 		font-size: 0.975rem;
 	}
@@ -78,10 +80,23 @@ import BaseHead from '../components/BaseHead.astro';
 	}
 
 	.out-of-site-detail {
-		margin: 0 0 1rem;
-		font-size: 0.875rem;
-		color: var(--site-muted-fg);
+		margin: 1rem 0 0;
+	}
+
+	.out-of-site-url {
+		display: block;
+		box-sizing: border-box;
+		width: 100%;
+		margin: 0;
+		padding: 0.45em 0.55em;
+		border: 1px solid var(--site-border);
+		border-radius: 6px;
+		font-family: var(--font-code);
+		font-size: 0.875em;
+		line-height: 1.45;
+		color: var(--site-fg);
 		word-break: break-all;
+		background: var(--site-surface-muted);
 	}
 
 	.out-of-site-actions {

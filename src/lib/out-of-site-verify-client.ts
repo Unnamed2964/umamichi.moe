@@ -40,11 +40,14 @@ function setStatus(message: string, detail?: string, tone: 'normal' | 'warning' 
 		status.classList.toggle('is-warning', tone === 'warning');
 	}
 	if (detailEl) {
-		if (detail) {
-			detailEl.textContent = detail;
+		const urlCode = document.getElementById('out-of-site-url');
+		if (detail && urlCode) {
+			urlCode.textContent = detail;
 			detailEl.hidden = false;
 		} else {
-			detailEl.textContent = '';
+			if (urlCode) {
+				urlCode.textContent = '';
+			}
 			detailEl.hidden = true;
 		}
 	}
