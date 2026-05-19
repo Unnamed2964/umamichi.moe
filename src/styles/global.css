@@ -43,8 +43,7 @@ html {
 	--site-copy-toast-border: var(--gray-300);
 
 	--site-focus-visible-outline-color: var(--theme-200);
-	--site-nav-active-text-outline: #ffffff;
-	--site-header-emphasis-fg: var(--theme-800);
+	--site-header-accent-fg: var(--theme-600);
 
 	scroll-padding-top: var(--site-header-offset);
 	overflow-y: scroll;
@@ -60,15 +59,15 @@ html {
 }
 
 html.dark {
-	--site-nav-running-line-bg: var(--theme-600);
+	--site-nav-running-line-bg: var(--theme-200);
 	--site-text-selection-bg: var(--theme-900);
-	--site-nav-future-icon: var(--gray-400);
+	--site-nav-future-icon: var(--gray-200);
 	--site-copy-toast-bg: var(--gray-800);
 	--site-copy-toast-fg: var(--gray-100);
 	--site-copy-toast-border: var(--gray-600);
 
 	--site-focus-visible-outline-color: var(--theme-300);
-	--site-header-emphasis-fg: var(--theme-200);
+	--site-header-accent-fg: var(--theme-100);
 }
 
 ::selection {

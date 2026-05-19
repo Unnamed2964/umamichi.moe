@@ -16,7 +16,7 @@ export function SiteNavTextOutlineFilter() {
           colorInterpolationFilters="sRGB"
         >
           <feMorphology in="SourceAlpha" operator="dilate" radius="1.25" result="stroke" />
-          <feFlood floodColor="var(--site-nav-active-text-outline, #ffffff)" result="flood" />
+          <feFlood floodColor="var(--site-bg)" result="flood" />
           <feComposite in="flood" in2="stroke" operator="in" result="outline" />
           <feMerge>
             <feMergeNode in="outline" />

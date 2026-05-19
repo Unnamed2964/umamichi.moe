@@ -182,7 +182,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                     flex="1"
                     minW="0"
                   >
-                    <Link href="/" color="var(--site-header-fg)" _hover={{ textDecoration: "none", color: "var(--site-header-emphasis-fg)" }}>
+                    <Link href="/" color="var(--site-header-fg)" _hover={{ textDecoration: "none", color: "var(--site-header-accent-fg)" }}>
                       {SITE_TITLE}
                     </Link>
                   </Heading>
@@ -198,7 +198,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
 
                 {/* Desktop top bar */}
                 <Heading as="h1" size="lg" letterSpacing="tight" textAlign="left" flex="0 0 auto" display={{ base: "none", md: "block" }}>
-                  <Link href="/" color="var(--site-header-fg)" _hover={{ textDecoration: "none", color: "var(--site-header-emphasis-fg)" }}>
+                  <Link href="/" color="var(--site-header-fg)" _hover={{ textDecoration: "none", color: "var(--site-header-accent-fg)" }}>
                     {SITE_TITLE}
                   </Link>
                 </Heading>
@@ -227,7 +227,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                           fontWeight={active ? "700" : "500"}
                           bg="transparent"
                           textDecoration="none"
-                          color={active ? "var(--site-header-emphasis-fg)" : "var(--site-header-fg)"}
+                          color={active ? "var(--site-header-accent-fg)" : "var(--site-header-fg)"}
                           _hover={{
                             textDecoration: "underline",
                             textDecorationColor: "currentColor",
@@ -382,7 +382,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                           bg="transparent"
                           textAlign="right"
                           textDecoration="none"
-                          color={active ? "var(--site-header-emphasis-fg)" : "var(--site-header-fg)"}
+                          color={active ? "var(--site-header-accent-fg)" : "var(--site-header-fg)"}
                           _hover={{
                             textDecoration: "underline",
                             textDecorationColor: "currentColor",
