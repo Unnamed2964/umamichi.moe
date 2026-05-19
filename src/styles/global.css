@@ -44,7 +44,6 @@ html {
 
 	--site-focus-visible-outline-color: var(--theme-200);
 	--site-nav-active-text-outline: #ffffff;
-	--site-header-fg: var(--gray-900);
 	--site-header-emphasis-fg: var(--theme-800);
 
 	scroll-padding-top: var(--site-header-offset);
@@ -69,7 +68,6 @@ html.dark {
 	--site-copy-toast-border: var(--gray-600);
 
 	--site-focus-visible-outline-color: var(--theme-300);
-	--site-header-fg: var(--gray-100);
 	--site-header-emphasis-fg: var(--theme-200);
 }
 
