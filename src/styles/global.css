@@ -208,7 +208,22 @@ html.dark {
 		pointer-events: auto;
 	}
 
-	html[data-mobile-menu-open='true'] body > * [data-site-header],
+	html[data-mobile-menu-open='true'] body > * [data-site-header] {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		width: 100%;
+		z-index: 10;
+		box-sizing: border-box;
+		transform: translateX(50vw);
+		transition: transform 220ms ease;
+	}
+
+	html[data-mobile-menu-open='true'] [data-site-header-spacer] {
+		height: var(--site-header-placeholder-height, 0);
+	}
+
 	html[data-mobile-menu-open='true'] body > * main,
 	html[data-mobile-menu-open='true'] body > * [data-astro-transition-persist='footer'] {
 		transform: translateX(50vw);
