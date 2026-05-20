@@ -292,6 +292,15 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
         </Box>
 
         <Box
+          data-site-header-spacer
+          aria-hidden="true"
+          display={{ base: "block", md: "none" }}
+          h="0"
+          overflow="hidden"
+          pointerEvents="none"
+        />
+
+        <Box
           data-site-mobile-dimmer
           position="fixed"
           inset="0"
