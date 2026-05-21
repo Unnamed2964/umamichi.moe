@@ -149,10 +149,10 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           })}
 
           <Container maxW="6xl" px={{ base: 4, md: 6 }}>
-            <Stack gap={{ base: 3, md: 0 }} py={{ base: 3, md: 0 }}>
+            <Stack gap={{ base: 3, md: 0 }} py="3">
               <Flex
-                minH={{ base: "auto", md: "72px" }}
-                direction={{ base: "row", md: "row" }}
+                minH="auto"
+                direction="row"
                 align="center"
                 justify="space-between"
                 gap={{ base: 3, md: 6 }}
