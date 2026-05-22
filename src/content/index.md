@@ -17,7 +17,7 @@ rss: false
   ~~这也是希望能够借这一折腾的机会熟悉 CSS 和思考 UI 组件设计~~
 - 上海地铁：导航栏的具有隐喻含义的图标的来源
 
-  ![现实世界的上海地铁线路图的示例](/index/shanghai-metro-realworld-map-example.webp)
+  ![现实世界的上海地铁线路图的示例](/index/shanghai-metro-realworld-map-example-line-2.webp)
 
 以下是一些待办事项：
 
