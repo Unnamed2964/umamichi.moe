@@ -18,6 +18,7 @@ rss: false
 - 上海地铁：导航栏的具有隐喻含义的图标的来源
 
   ![现实世界的上海地铁线路图的示例](/index/shanghai-metro-realworld-map-example-line-2.webp)
+  ![上海地铁站点图例](/index/shmetro-station-figure-legends.webp)
 
 以下是一些待办事项：
 
