@@ -34,7 +34,7 @@
 }
 
 html {
-	--site-header-offset: 4rem;
+	--site-header-offset: 9.5rem;
 	--site-nav-running-line-bg: var(--theme-400);
 	--site-text-selection-bg: var(--theme-100);
 	--site-nav-future-icon: var(--gray-300);
@@ -256,7 +256,17 @@ html[data-theme-switching='true'] *::after {
 	transition: none !important;
 }
 
+@media screen and (min-width: 30rem) {
+	html {
+		--site-header-offset: 7rem;
+	}
+}
+
 @media screen and (min-width: 48rem) {
+	html {
+		--site-header-offset: 72px;
+	}
+
 	[data-site-header],
 	main,
 	[data-astro-transition-persist='footer'] {
