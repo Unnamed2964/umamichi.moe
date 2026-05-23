@@ -107,17 +107,22 @@ import BaseHead from '../components/BaseHead.astro';
 		align-items: center;
 	}
 
-	.out-of-site-actions .primary-button {
+	.out-of-site-actions .primary-button,
+	.out-of-site-actions .danger-button {
 		text-decoration: none;
 	}
 
 	.out-of-site-actions .primary-button:hover,
-	.out-of-site-actions .primary-button:active {
+	.out-of-site-actions .primary-button:active,
+	.out-of-site-actions .danger-button:hover,
+	.out-of-site-actions .danger-button:active {
 		text-decoration: none;
 	}
 
 	.out-of-site-actions .primary-button.is-pending,
-	.out-of-site-actions .primary-button[aria-disabled='true'] {
+	.out-of-site-actions .primary-button[aria-disabled='true'],
+	.out-of-site-actions .danger-button.is-pending,
+	.out-of-site-actions .danger-button[aria-disabled='true'] {
 		opacity: 0.5;
 		pointer-events: none;
 		cursor: not-allowed;

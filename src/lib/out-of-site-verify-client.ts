@@ -72,6 +72,12 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 	const hash = params.get('hash');
 
 	const proceed = document.getElementById('out-of-site-proceed');
+	const setProceedButtonTone = (tone: 'primary' | 'danger') => {
+		if (proceed instanceof HTMLAnchorElement) {
+			proceed.classList.toggle('primary-button', tone === 'primary');
+			proceed.classList.toggle('danger-button', tone === 'danger');
+		}
+	};
 	const lockProceed = () => {
 		if (proceed instanceof HTMLAnchorElement) {
 			proceed.hidden = true;
@@ -81,9 +87,10 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 			proceed.setAttribute('aria-disabled', 'true');
 			proceed.setAttribute('tabindex', '-1');
 			proceed.classList.add('is-pending');
+			setProceedButtonTone('primary');
 		}
 	};
-	const showProceed = () => {
+	const showProceed = (tone: 'primary' | 'danger' = 'primary') => {
 		if (proceed instanceof HTMLAnchorElement) {
 			proceed.href = destination.href;
 			proceed.removeAttribute('target');
@@ -91,6 +98,7 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 			proceed.removeAttribute('aria-disabled');
 			proceed.removeAttribute('tabindex');
 			proceed.classList.remove('is-pending');
+			setProceedButtonTone(tone);
 			proceed.hidden = false;
 		}
 	};
@@ -199,7 +207,7 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 
 	if (!verified) {
 		setStatus('安全警告：未期望的未知链接。该链接可能并不来自网站原本的内容。', destination.href, 'warning');
-		showProceed();
+		showProceed('danger');
 		return;
 	}
 
