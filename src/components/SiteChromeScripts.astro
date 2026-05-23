@@ -288,10 +288,12 @@
 
 <script>
 	import { initOutOfSiteClickHandler } from '../lib/out-of-site-click-client.ts';
+	import { initSiteWindowsPhoneMotion } from '../lib/windows-phone-motion-client.ts';
 
 	initOutOfSiteClickHandler({
 		outOfSiteLinkHmacKey: import.meta.env.PUBLIC_OUT_OF_SITE_LINK_HMAC_KEY ?? '',
 	});
+	initSiteWindowsPhoneMotion();
 </script>
 
 <script is:inline>
@@ -857,10 +859,4 @@
 	window.addEventListener('resize', scheduleNavRunningLineUpdate, { passive: true });
 	window.visualViewport?.addEventListener('resize', scheduleNavRunningLineUpdate, { passive: true });
 	}
-</script>
-
-<script>
-	import { initSiteWindowsPhoneMotion } from '../lib/windows-phone-motion-client.ts';
-
-	initSiteWindowsPhoneMotion();
 </script>
