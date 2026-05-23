@@ -22,12 +22,14 @@
 		const applyThemePreference = (preference) => {
 			const resolved = getResolvedTheme(preference);
 			document.documentElement.dataset.themeSwitching = 'true';
+			document.documentElement.dataset.wpmMotionSuppressed = 'true';
 			if (themeTransitionResetFrame) {
 				window.cancelAnimationFrame(themeTransitionResetFrame);
 			}
 			themeTransitionResetFrame = window.requestAnimationFrame(() => {
 				themeTransitionResetFrame = window.requestAnimationFrame(() => {
 					delete document.documentElement.dataset.themeSwitching;
+					delete document.documentElement.dataset.wpmMotionSuppressed;
 					themeTransitionResetFrame = 0;
 				});
 			});
@@ -236,6 +238,12 @@
 			if (event.persisted) {
 				menuHistoryPushed = false;
 				setMenuOpen(false);
+			}
+		});
+
+		document.addEventListener('astro:before-preparation', () => {
+			if (isMenuOpen()) {
+				closeMenu({ forNavigation: true });
 			}
 		});
 
@@ -762,7 +770,8 @@
 					};
 
 					currentRunningLine.addEventListener('transitionend', cleanup, { once: true });
-					currentRunningLine.style.transition = 'width 420ms cubic-bezier(0.22, 1, 0.36, 1)';
+					currentRunningLine.style.transition =
+						'width var(--wpm-chrome-reposition-duration) var(--wpm-ease-out-exp6)';
 					currentRunningLine.style.width = `${toWidth}px`;
 				});
 
@@ -848,4 +857,10 @@
 	window.addEventListener('resize', scheduleNavRunningLineUpdate, { passive: true });
 	window.visualViewport?.addEventListener('resize', scheduleNavRunningLineUpdate, { passive: true });
 	}
+</script>
+
+<script>
+	import { initSiteWindowsPhoneMotion } from '../lib/windows-phone-motion-client.ts';
+
+	initSiteWindowsPhoneMotion();
 </script>

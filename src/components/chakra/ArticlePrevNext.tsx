@@ -21,6 +21,7 @@ function ArticleNavCard({
   return (
     <Link
       href={href}
+      data-wpm-route="slide"
       data-site-button
       display="block"
       w="full"
