@@ -53,6 +53,11 @@ const { title, description, image = FallbackImage, disableTikkun = false } = Ast
 	})();
 </script>
 
+<script is:inline>
+	document.documentElement.dataset.wpmRoute = 'turnstile';
+	document.documentElement.dataset.wpmNavDirection = 'forward';
+</script>
+
 {!disableTikkun && (
 	<script>
 		import { createBaseTelemetryEvent, postTelemetry } from '../lib/client-telemetry';

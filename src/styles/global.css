@@ -84,45 +84,22 @@ html.dark {
 }
 
 /*
- * View transition group names (browser View Transitions API).
- * Only the footer is persisted via data-astro-transition-persist; other regions
- * keep their view-transition-name only so they re-render per page.
+ * View transition hooks: use whole-page root Turnstile (see @umamichi-ui/windows-phone-motion).
+ * vt-* classes remain for layout hooks; named element morph is disabled to avoid slide/fade morph.
  */
-.vt-header {
-	view-transition-name: header;
-}
-.vt-footer {
-	view-transition-name: footer;
-}
-.vt-sidebar {
-	view-transition-name: sidebar;
-}
-.vt-toc {
-	view-transition-name: toc;
-}
-.vt-top-sidebar {
-	view-transition-name: top-sidebar;
-}
-.vt-article {
-	view-transition-name: article;
-}
-.vt-title {
-	view-transition-name: title;
-}
-.vt-tags {
-	view-transition-name: tags;
-}
-.vt-source-actions {
-	view-transition-name: source-actions;
-}
-.vt-hero-image {
-	view-transition-name: hero-image;
-}
-.vt-copyright {
-	view-transition-name: copyright;
-}
+.vt-header,
+.vt-footer,
+.vt-sidebar,
+.vt-toc,
+.vt-top-sidebar,
+.vt-article,
+.vt-title,
+.vt-tags,
+.vt-source-actions,
+.vt-hero-image,
+.vt-copyright,
 .vt-prev-next {
-	view-transition-name: prev-next;
+	view-transition-name: none;
 }
 
 .site-emoji {
