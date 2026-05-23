@@ -1,5 +1,12 @@
 import { Box, Link, Stack, Text } from "@chakra-ui/react"
 import type { SidebarFolderNode, SidebarNode } from "../../lib/docs"
+import {
+  ARTICLE_NAV_BASE_DEPTH,
+  type ArticleSidebarLinkKind,
+  getArticleSidebarIndent,
+  getArticleSidebarLinkStyle,
+  getArticleSidebarLinkTier,
+} from "../../lib/article-sidebar-link"
 
 export type ArticleSidebarTree = SidebarFolderNode
 
@@ -23,28 +30,29 @@ function isCurrentLink(href: string, currentPath: string, currentPostId?: string
 }
 
 function renderTreeNode(node: SidebarNode, currentPath: string, currentPostId?: string): JSX.Element {
-  if (node.kind === "folder") {
-    const isCurrent = isCurrentLink(node.href, currentPath)
-    const headingSize = node.level <= 1 ? "sm" : "xs"
-    const childPadding = node.level <= 1 ? "3" : "4"
+  const kind: ArticleSidebarLinkKind = node.kind === "folder" ? "section" : "item"
+  const tier = getArticleSidebarLinkTier(node.level, ARTICLE_NAV_BASE_DEPTH, kind)
+  const isCurrent =
+    node.kind === "folder"
+      ? isCurrentLink(node.href, currentPath)
+      : isCurrentLink(node.href, currentPath, currentPostId, node.id)
+  const linkStyle = getArticleSidebarLinkStyle(kind, tier, isCurrent)
+  const indent = getArticleSidebarIndent(node.level, ARTICLE_NAV_BASE_DEPTH)
 
+  if (node.kind === "folder") {
     return (
-      <Stack key={node.routePath || node.href} gap="1.5">
+      <Stack key={node.routePath || node.href} gap="2">
         <Link
           href={node.href}
           aria-current={isCurrent ? "page" : undefined}
-          display="block"
-          color={isCurrent ? "var(--site-accent)" : "var(--article-fg)"}
-          fontSize={headingSize}
-          fontWeight="700"
-          lineHeight="1.6"
-          _hover={{ color: "var(--site-accent)", textDecoration: "none" }}
+          ps={indent}
+          {...linkStyle}
         >
           {node.title}
         </Link>
 
         {node.children.length > 0 && (
-          <Stack gap="1.5" ps={childPadding}>
+          <Stack gap="2">
             {node.children.map((child) => renderTreeNode(child, currentPath, currentPostId))}
           </Stack>
         )}
@@ -52,21 +60,13 @@ function renderTreeNode(node: SidebarNode, currentPath: string, currentPostId?: 
     )
   }
 
-  const isCurrent = isCurrentLink(node.href, currentPath, currentPostId, node.id)
-  const fontSize = node.level <= 2 ? "sm" : "xs"
-
   return (
     <Link
       key={node.id}
       href={node.href}
       aria-current={isCurrent ? "page" : undefined}
-      display="block"
-      color={isCurrent ? "var(--site-accent)" : "var(--site-muted-fg)"}
-      fontSize={fontSize}
-      fontWeight={isCurrent ? "700" : "500"}
-      lineHeight="1.6"
-      transition="color 0.2s ease, font-weight 0.2s ease"
-      _hover={{ color: "var(--site-accent)", textDecoration: "none" }}
+      ps={indent}
+      {...linkStyle}
     >
       {node.title}
     </Link>
@@ -108,7 +108,7 @@ export function ArticlePostList({ currentPath, currentPostId, tree, variant = "d
           },
         }}
       >
-        <Stack gap="2.5">
+        <Stack gap="2">
           {renderTreeNode(tree, currentPath, currentPostId)}
         </Stack>
       </Box>

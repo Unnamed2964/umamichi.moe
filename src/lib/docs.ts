@@ -515,6 +515,13 @@ function scanContentDirectory(): ScannedContent {
 	};
 }
 
+/** Sidebar nav only: promote each node one visual tier (level and indent). */
+function getSidebarNavLevel(folderDepth: number, kind: 'doc' | 'folder'): number {
+	const rawLevel = kind === 'folder' ? folderDepth : folderDepth + 1;
+
+	return Math.max(0, rawLevel - 1);
+}
+
 function buildSidebarTree(folderPath: string, folderStateMap: Map<string, FolderState>): SidebarFolderNode {
 	const folder = folderStateMap.get(folderPath);
 
@@ -533,13 +540,13 @@ function buildSidebarTree(folderPath: string, folderStateMap: Map<string, Folder
 				href: item.href,
 				id: item.id,
 				kind: 'doc',
-				level: folder.depth + 1,
+				level: getSidebarNavLevel(folder.depth, 'doc'),
 				title: item.title,
 			} satisfies SidebarDocNode;
 		}),
 		href: toHref(folder.routePath),
 		kind: 'folder',
-		level: folder.depth,
+		level: getSidebarNavLevel(folder.depth, 'folder'),
 		routePath: folder.routePath,
 		title: folder.displayTitle,
 	};

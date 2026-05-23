@@ -1,4 +1,10 @@
-export const ARTICLE_TOC_MIN_DEPTH = 2;
+import {
+	ARTICLE_TOC_BASE_DEPTH,
+	getArticleSidebarIndent,
+	isArticleSidebarTopLevel,
+} from "./article-sidebar-link";
+
+export const ARTICLE_TOC_MIN_DEPTH = ARTICLE_TOC_BASE_DEPTH;
 export const ARTICLE_TOC_MAX_DEPTH = 6;
 
 export function filterArticleTocHeadings<T extends { depth: number }>(headings: T[]): T[] {
@@ -8,10 +14,9 @@ export function filterArticleTocHeadings<T extends { depth: number }>(headings: 
 }
 
 export function isArticleTocTopLevel(depth: number): boolean {
-	return depth === ARTICLE_TOC_MIN_DEPTH;
+	return isArticleSidebarTopLevel(depth, ARTICLE_TOC_MIN_DEPTH);
 }
 
-/** Chakra spacing token per heading level below h2 (h3 → 4, h4 → 8, …). */
 export function getArticleTocIndent(depth: number): number {
-	return Math.max(0, depth - ARTICLE_TOC_MIN_DEPTH) * 4;
+	return getArticleSidebarIndent(depth, ARTICLE_TOC_MIN_DEPTH);
 }

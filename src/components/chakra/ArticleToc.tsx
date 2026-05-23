@@ -1,9 +1,13 @@
 import { Box, Link, Stack, Text } from "@chakra-ui/react"
 import {
-  filterArticleTocHeadings,
-  getArticleTocIndent,
-  isArticleTocTopLevel,
-} from "../../lib/article-toc"
+  ARTICLE_TOC_BASE_DEPTH,
+  type ArticleSidebarLinkKind,
+  getArticleSidebarIndent,
+  getArticleSidebarLinkStyle,
+  getArticleSidebarLinkTier,
+  isArticleSidebarTopLevel,
+} from "../../lib/article-sidebar-link"
+import { filterArticleTocHeadings } from "../../lib/article-toc"
 
 export type ArticleTocHeading = {
   depth: number
@@ -56,22 +60,21 @@ export function ArticleToc({ headings, maxH = "calc(100vh - var(--site-header-of
       >
         <Stack gap="2">
           {items.map((heading) => {
-            const topLevel = isArticleTocTopLevel(heading.depth)
+            const kind: ArticleSidebarLinkKind = isArticleSidebarTopLevel(
+              heading.depth,
+              ARTICLE_TOC_BASE_DEPTH,
+            )
+              ? "section"
+              : "item"
+            const tier = getArticleSidebarLinkTier(heading.depth, ARTICLE_TOC_BASE_DEPTH, kind)
 
             return (
             <Link
               key={heading.slug}
               href={`#${heading.slug}`}
               data-toc-link={heading.slug}
-              display="block"
-              ps={getArticleTocIndent(heading.depth)}
-              color={topLevel ? "var(--article-fg)" : "var(--site-muted-fg)"}
-              fontSize={topLevel ? "sm" : "xs"}
-              fontWeight={topLevel ? "600" : "500"}
-              lineHeight="1.6"
-              transition="color 0.2s ease, font-weight 0.2s ease"
-              _hover={{ color: "var(--site-accent)", textDecoration: "none" }}
-              _currentPage={{ color: "var(--site-accent)", fontWeight: "700" }}
+              ps={getArticleSidebarIndent(heading.depth, ARTICLE_TOC_BASE_DEPTH)}
+              {...getArticleSidebarLinkStyle(kind, tier, false)}
               css={{
                 '&[aria-current="location"]': {
                   color: 'var(--site-accent)',
