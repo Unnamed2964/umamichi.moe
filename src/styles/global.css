@@ -85,7 +85,7 @@ html.dark {
 
 /*
  * View transition hooks: use whole-page root Turnstile (see @umamichi-ui/windows-phone-motion).
- * vt-* classes remain for layout hooks; named element morph is disabled to avoid slide/fade morph.
+ * Header persists via data-astro-transition-persist; vt-* classes disable per-element morph.
  */
 .vt-header,
 .vt-footer,
@@ -100,6 +100,26 @@ html.dark {
 .vt-copyright,
 .vt-prev-next {
 	view-transition-name: none;
+}
+
+[data-site-header] a[data-nav-item] {
+	font-weight: 500;
+	color: var(--site-header-fg);
+}
+
+[data-site-header] a[data-nav-item][data-nav-active-item] {
+	font-weight: 700;
+	color: var(--site-header-accent-fg);
+}
+
+[data-site-mobile-menu] a[data-mobile-nav-item] {
+	font-weight: 500;
+	color: var(--site-header-fg);
+}
+
+[data-site-mobile-menu] a[data-mobile-nav-item][data-mobile-nav-active-item] {
+	font-weight: 700;
+	color: var(--site-header-accent-fg);
 }
 
 .site-emoji {
@@ -182,7 +202,8 @@ html.dark {
 		pointer-events: auto;
 	}
 
-	html[data-mobile-menu-open='true'] body > * [data-site-header].wpm-pane-shift {
+	html[data-mobile-menu-open='true'] body > * [data-site-header].wpm-pane-shift,
+	html[data-mobile-menu-open='true'] body > * [data-astro-transition-persist='header'].wpm-pane-shift {
 		position: fixed;
 		top: 0;
 		left: 0;

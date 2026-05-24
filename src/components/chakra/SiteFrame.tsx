@@ -118,6 +118,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
         <Box
           as="header"
           data-site-header
+          data-astro-transition-persist="header"
           position="sticky"
           top="0"
           zIndex="10"
