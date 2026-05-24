@@ -124,6 +124,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           top="0"
           zIndex="10"
           bg="var(--site-header-bg)"
+          className="wpm-pane-shift"
         >
           <div className="navbar-running-line" data-nav-running-line aria-hidden="true"></div>
           {navItems.map((item, index) => {
@@ -303,6 +304,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
 
         <Box
           data-site-mobile-dimmer
+          className="wpm-pane-dimmer"
           position="fixed"
           inset="0"
           zIndex="15"
@@ -316,6 +318,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           aria-label="移动端菜单"
           aria-hidden="true"
           data-site-mobile-menu
+          className="wpm-pane-menu"
           position="fixed"
           top="0"
           left="0"
@@ -453,7 +456,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           maxW={SITE_MAIN_MAX_W}
           px={{ base: 6, md: 8 }}
           py={{ base: 10, md: 14 }}
-          className="site-route-main"
+          className="site-route-main wpm-pane-shift"
           data-astro-transition-scope={SITE_ROUTE_TRANSITION_SCOPE}
           css={{
             "--site-content-font-size": "var(--chakra-font-sizes-md)",
@@ -470,6 +473,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           as="footer"
           mt="16"
           bg="var(--site-surface-muted)"
+          className="wpm-pane-shift"
           data-astro-transition-persist="footer"
         >
           <Container maxW="6xl" px={{ base: 4, md: 6 }} py="10">
