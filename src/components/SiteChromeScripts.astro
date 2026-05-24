@@ -73,6 +73,7 @@
 		window.siteMobileMenuInitialized = true;
 
 		let menuHistoryPushed = false;
+		let skipNextSameDocumentRouteTransition = false;
 
 		const isMobileViewport = () => window.innerWidth < 768;
 
@@ -142,7 +143,7 @@
 			}
 		};
 
-		const closeMenu = ({ fromPopstate = false, forNavigation = false } = {}) => {
+		const closeMenu = ({ fromPopstate = false } = {}) => {
 			if (!isMenuOpen()) {
 				return;
 			}
@@ -151,11 +152,8 @@
 
 			if (fromPopstate) {
 				menuHistoryPushed = false;
-			} else if (forNavigation) {
+			} else {
 				releaseMenuHistoryEntry();
-			} else if (menuHistoryPushed) {
-				menuHistoryPushed = false;
-				history.back();
 			}
 		};
 
@@ -169,7 +167,41 @@
 				return;
 			}
 
+			skipNextSameDocumentRouteTransition = true;
 			closeMenu({ fromPopstate: true });
+		});
+
+		const shouldSkipSameDocumentRouteTransition = (event) => {
+			if (!skipNextSameDocumentRouteTransition) {
+				return false;
+			}
+
+			const from = event.from;
+			const to = event.to;
+
+			if (!(from instanceof URL) || !(to instanceof URL)) {
+				return false;
+			}
+
+			return from.href === to.href;
+		};
+
+		document.addEventListener('astro:before-preparation', (event) => {
+			if (!shouldSkipSameDocumentRouteTransition(event)) {
+				return;
+			}
+
+			skipNextSameDocumentRouteTransition = false;
+			event.preventDefault();
+		});
+
+		document.addEventListener('astro:before-swap', (event) => {
+			if (!shouldSkipSameDocumentRouteTransition(event)) {
+				return;
+			}
+
+			skipNextSameDocumentRouteTransition = false;
+			event.viewTransition?.skipTransition?.();
 		});
 
 		document.addEventListener('click', (event) => {
@@ -206,7 +238,7 @@
 			}
 
 			if (target.closest('[data-site-menu-link]')) {
-				closeMenu({ forNavigation: true });
+				closeMenu();
 				return;
 			}
 
