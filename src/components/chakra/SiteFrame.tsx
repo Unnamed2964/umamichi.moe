@@ -16,6 +16,7 @@ import { LuMoon, LuSun } from "react-icons/lu"
 import { Provider } from "../ui/provider"
 import { SITE_TITLE } from "../../consts"
 import type { NavIconKind, TopLevelNavItem } from "../../lib/docs"
+import { SITE_ROUTE_TRANSITION_SCOPE } from "../../lib/site-route-transition"
 import NormalNavIcon from "../../assets/metro-nav/normal.svg?react"
 import TransferNavIcon from "../../assets/metro-nav/transfer.svg?react"
 import TransferAndOutOfStationTransferNavIcon from "../../assets/metro-nav/transfer-and-out-of-station-transfer.svg?react"
@@ -108,7 +109,7 @@ function ThemeToggleButton(props: Omit<ComponentProps<typeof IconButton>, "aria-
   )
 }
 
-export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
+export function SiteFrameChrome({ children, currentPath, navItems }: SiteFrameProps) {
   const activeNavIndex = navItems.findIndex((item) => isActiveLink(item.href, currentPath))
 
   return (
@@ -450,22 +451,13 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           </Container>
         </Box>
 
-        <Container
-          as="main"
-          className="wpm-pane-shift"
-          maxW={SITE_MAIN_MAX_W}
-          px={{ base: 6, md: 8 }}
-          py={{ base: 10, md: 14 }}
-          css={{
-            "--site-content-font-size": "var(--chakra-font-sizes-md)",
-            "--site-content-line-height": "var(--chakra-line-heights-tall)",
-            "@media screen and (min-width: 48rem)": {
-              "--site-content-font-size": "var(--chakra-font-sizes-lg)",
-            },
-          }}
+        <Box
+          data-site-route-surface
+          data-astro-transition-scope={SITE_ROUTE_TRANSITION_SCOPE}
+          className="site-route-surface wpm-pane-shift"
         >
           {children}
-        </Container>
+        </Box>
 
         <Box
           as="footer"

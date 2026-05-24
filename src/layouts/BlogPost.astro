@@ -9,8 +9,6 @@ import type { ArticleTag } from '../components/chakra/ArticleTags';
 import { SITE_DESCRIPTION, SITE_GITHUB_SOURCE_BASE_URL, SITE_TITLE } from '../consts';
 import type { CopyrightConfig } from '../lib/copyright';
 import { buildDocsStructure, toTagHref, type SidebarNode } from '../lib/docs';
-import { siteRootViewTransition } from '../lib/site-root-transition';
-
 type LayoutData = {
 	comment?: boolean;
 	copyright?: CopyrightConfig;
@@ -116,7 +114,7 @@ const formattedUpdatedDate = updatedDate
 	: undefined;
 ---
 
-<html lang="zh-CN" transition:name="root" transition:animate={siteRootViewTransition}>
+<html lang="zh-CN" data-wpm-route="turnstile" data-wpm-nav-direction="forward">
 	<head>
 		<BaseHead title={title} description={description} />
 	</head>

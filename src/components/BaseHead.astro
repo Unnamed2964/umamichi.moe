@@ -9,6 +9,7 @@ import '../styles/article-content.css';
 import type { ImageMetadata } from 'astro';
 import FallbackImage from '../assets/adachi_doll.webp';
 import { SITE_TITLE } from '../consts';
+import { siteRouteTransitionStyles } from '../lib/site-route-transition';
 import { ClientRouter } from 'astro:transitions';
 
 interface Props {
@@ -35,6 +36,8 @@ const { title, description, image = FallbackImage, disableTikkun = false } = Ast
 	href={new URL('rss.xml', Astro.site)}
 />
 <meta name="generator" content={Astro.generator} />
+
+<style is:inline set:html={siteRouteTransitionStyles}></style>
 
 <script is:inline>
 	(() => {

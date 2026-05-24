@@ -9,7 +9,8 @@ import { ArticlePrevNext, type AdjacentArticleLink } from "./ArticlePrevNext"
 import ArticleSourceActions from "./ArticleSourceActions"
 import { ArticleTags, type ArticleTag } from "./ArticleTags"
 import { ArticleToc, type ArticleTocHeading } from "./ArticleToc"
-import { SiteFrame, SITE_MAIN_HALF_W, SITE_MAIN_MAX_W } from "./SiteFrame"
+import { Container } from "@chakra-ui/react"
+import { SiteFrameChrome, SITE_MAIN_HALF_W, SITE_MAIN_MAX_W } from "./SiteFrame"
 import type { CopyrightConfig } from "../../lib/copyright"
 import { filterArticleTocHeadings } from "../../lib/article-toc"
 import type { TopLevelNavItem } from "../../lib/docs"
@@ -32,10 +33,10 @@ type ArticleLayoutProps = PropsWithChildren<{
   currentPostId?: string
   previousPost?: AdjacentArticleLink
   nextPost?: AdjacentArticleLink
-  navItems: TopLevelNavItem[]
   sidebarTree?: ArticleSidebarTree
   sourceMarkdown?: string
   sourceUrl?: string
+  navItems: TopLevelNavItem[]
 }>
 
 export function ArticleLayout({
@@ -62,8 +63,24 @@ export function ArticleLayout({
   const commentSlot = comments
 
   return (
-    <SiteFrame currentPath={currentPath} navItems={navItems}>
-      <Box maxW={SITE_MAIN_MAX_W} mx="auto" position="relative">
+    <SiteFrameChrome
+      currentPath={currentPath}
+      navItems={navItems}
+    >
+      <Container
+        as="main"
+        maxW={SITE_MAIN_MAX_W}
+        px={{ base: 6, md: 8 }}
+        py={{ base: 10, md: 14 }}
+        css={{
+          "--site-content-font-size": "var(--chakra-font-sizes-md)",
+          "--site-content-line-height": "var(--chakra-line-heights-tall)",
+          "@media screen and (min-width: 48rem)": {
+            "--site-content-font-size": "var(--chakra-font-sizes-lg)",
+          },
+        }}
+      >
+        <Box maxW={SITE_MAIN_MAX_W} mx="auto" position="relative">
         {sidebarTree && (
           <Box
             as="aside"
@@ -158,6 +175,7 @@ export function ArticleLayout({
           </Stack>
         </Stack>
       </Box>
-    </SiteFrame>
+      </Container>
+    </SiteFrameChrome>
   )
 }

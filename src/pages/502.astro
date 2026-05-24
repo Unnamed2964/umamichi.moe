@@ -2,7 +2,6 @@
 import BaseHead from '../components/BaseHead.astro';
 import ErrorRecoveryExperience from '../components/ErrorRecoveryExperience.astro';
 import { getErrorPageRecoveryLink } from '../lib/error-page';
-import { siteRootViewTransition } from '../lib/site-root-transition';
 
 Astro.response.status = 502;
 
@@ -10,7 +9,7 @@ const requestPath = Astro.url.pathname;
 const recoveryLink = await getErrorPageRecoveryLink(requestPath);
 ---
 
-<html lang="zh-CN" transition:name="root" transition:animate={siteRootViewTransition}>
+<html lang="zh-CN">
 	<head>
 		<BaseHead title="502: 网关响应无效" description="上游服务返回了无效响应。" disableTikkun />
 		<meta name="robots" content="noindex" />

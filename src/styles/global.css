@@ -47,6 +47,8 @@ html {
 
 	scroll-padding-top: var(--site-header-offset);
 	overflow-y: scroll;
+	/* ClientRouter / UA default page root; route surface uses view-transition-name: site-route */
+	view-transition-name: none;
 }
 
 :root {
@@ -84,8 +86,8 @@ html.dark {
 }
 
 /*
- * View transition hooks: use whole-page root Turnstile (see @umamichi-ui/windows-phone-motion).
- * Header persists via data-astro-transition-persist; vt-* classes disable per-element morph.
+ * Route Turnstile/slide applies to [data-site-route-surface] only; header/footer persist outside root snapshot.
+ * vt-* classes disable per-element morph inside the route surface.
  */
 .vt-header,
 .vt-footer,
@@ -120,6 +122,11 @@ html.dark {
 [data-site-mobile-menu] a[data-mobile-nav-item][data-mobile-nav-active-item] {
 	font-weight: 700;
 	color: var(--site-header-accent-fg);
+}
+
+.site-route-surface {
+	display: block;
+	min-height: calc(100vh - var(--site-header-offset));
 }
 
 .site-emoji {
@@ -218,6 +225,7 @@ html.dark {
 		height: var(--site-header-placeholder-height, 0);
 	}
 
+	html[data-mobile-menu-open='true'] body > * [data-site-route-surface].wpm-pane-shift,
 	html[data-mobile-menu-open='true'] body > * main.wpm-pane-shift,
 	html[data-mobile-menu-open='true'] body > * [data-astro-transition-persist='footer'].wpm-pane-shift {
 		transform: translateX(50vw);
