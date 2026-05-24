@@ -73,7 +73,6 @@ export function ArticleLayout({
             left={`max(1rem, calc(50vw - ${SITE_MAIN_HALF_W} - ${ARTICLE_SIDEBAR_W} - ${ARTICLE_SIDEBAR_GAP}))`}
             w={ARTICLE_SIDEBAR_W}
             zIndex="1"
-            className="vt-sidebar"
           >
             <ArticlePostList currentPath={currentPath} currentPostId={currentPostId} tree={sidebarTree} />
           </Box>
@@ -88,7 +87,6 @@ export function ArticleLayout({
             right={`max(1rem, calc(50vw - ${SITE_MAIN_HALF_W} - ${ARTICLE_SIDEBAR_W} - ${ARTICLE_SIDEBAR_GAP}))`}
             w={ARTICLE_SIDEBAR_W}
             zIndex="1"
-            className="vt-toc"
           >
             <Stack gap="3">
               {sourceUrl && sourceMarkdown && (
@@ -102,12 +100,11 @@ export function ArticleLayout({
           </Box>
         )}
 
-        <Stack as="article" gap="10" w="full" className="vt-article">
+        <Stack as="article" gap="10" w="full">
           <Stack gap="6" w="full">
             {sidebarTree && (
               <Box
                 display={{ base: "block", xl: "none" }}
-                className="vt-top-sidebar"
               >
                 <ArticlePostList
                   currentPath={currentPath}
@@ -118,24 +115,24 @@ export function ArticleLayout({
               </Box>
             )}
 
-            <Box className="vt-title" w="full">
+            <Box w="full">
               <ArticleHeader title={title} pubDate={pubDate} updatedDate={updatedDate} />
             </Box>
 
             {tags.length > 0 && (
-              <Box className="vt-tags" w="full">
+              <Box w="full">
                 <ArticleTags tags={tags} />
               </Box>
             )}
 
             {sourceUrl && sourceMarkdown && (
-              <Box display={{ base: "block", xl: "none" }} className="vt-source-actions" w="full">
+              <Box display={{ base: "block", xl: "none" }} w="full">
                 <ArticleSourceActions sourceMarkdown={sourceMarkdown} sourceUrl={sourceUrl} />
               </Box>
             )}
 
             {heroImage && (
-              <Box className="vt-hero-image" w="full">
+              <Box w="full">
                 <ArticleHeroImage src={heroImage.src} />
               </Box>
             )}
@@ -143,13 +140,13 @@ export function ArticleLayout({
             <ArticleContent>{children}</ArticleContent>
 
             {copyright && (
-              <Box className="vt-copyright" w="full">
+              <Box w="full">
                 <ArticleCopyright copyright={copyright} />
               </Box>
             )}
 
             {(previousPost || nextPost) && (
-              <Box className="vt-prev-next" w="full">
+              <Box w="full">
                 <ArticlePrevNext previousPost={previousPost} nextPost={nextPost} showDivider={!copyright} />
               </Box>
             )}
