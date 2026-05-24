@@ -2,6 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import ErrorRecoveryExperience from '../components/ErrorRecoveryExperience.astro';
 import { getErrorPageRecoveryLink } from '../lib/error-page';
+import { siteRootViewTransition } from '../lib/site-root-transition';
 
 Astro.response.status = 503;
 
@@ -9,7 +10,7 @@ const requestPath = Astro.url.pathname;
 const recoveryLink = await getErrorPageRecoveryLink(requestPath);
 ---
 
-<html lang="zh-CN">
+<html lang="zh-CN" transition:name="root" transition:animate={siteRootViewTransition}>
 	<head>
 		<BaseHead title="503: 服务暂时不可用" description="服务暂时不可用，请稍后再试。" disableTikkun />
 		<meta name="robots" content="noindex" />

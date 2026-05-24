@@ -9,6 +9,7 @@ import type { ArticleTag } from '../components/chakra/ArticleTags';
 import { SITE_DESCRIPTION, SITE_GITHUB_SOURCE_BASE_URL, SITE_TITLE } from '../consts';
 import type { CopyrightConfig } from '../lib/copyright';
 import { buildDocsStructure, toTagHref, type SidebarNode } from '../lib/docs';
+import { siteRootViewTransition } from '../lib/site-root-transition';
 
 type LayoutData = {
 	comment?: boolean;
@@ -115,7 +116,7 @@ const formattedUpdatedDate = updatedDate
 	: undefined;
 ---
 
-<html lang="zh-CN">
+<html lang="zh-CN" transition:name="root" transition:animate={siteRootViewTransition}>
 	<head>
 		<BaseHead title={title} description={description} />
 	</head>

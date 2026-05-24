@@ -1,8 +1,9 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
+import { siteRootViewTransition } from '../lib/site-root-transition';
 ---
 
-<html lang="zh-CN">
+<html lang="zh-CN" transition:name="root" transition:animate={siteRootViewTransition}>
 	<head>
 		<BaseHead
 			title="即将离开本站"
