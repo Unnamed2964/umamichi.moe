@@ -226,10 +226,8 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                           px="3"
                           py="2"
                           rounded="full"
-                          fontWeight={active ? "700" : "500"}
                           bg="transparent"
                           textDecoration="none"
-                          color={active ? "var(--site-header-accent-fg)" : "var(--site-header-fg)"}
                           _hover={{
                             textDecoration: "underline",
                             textDecorationColor: "currentColor",
@@ -391,11 +389,9 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                           px="3"
                           py="2"
                           rounded="full"
-                          fontWeight={active ? "700" : "500"}
                           bg="transparent"
                           textAlign="right"
                           textDecoration="none"
-                          color={active ? "var(--site-header-accent-fg)" : "var(--site-header-fg)"}
                           _hover={{
                             textDecoration: "underline",
                             textDecorationColor: "currentColor",

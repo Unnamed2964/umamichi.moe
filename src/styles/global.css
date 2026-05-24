@@ -143,6 +143,26 @@ html.dark {
 	transition: height 2000ms ease;
 }
 
+[data-site-header] a[data-nav-item] {
+	font-weight: 500;
+	color: var(--site-header-fg);
+}
+
+[data-site-header] a[data-nav-item][data-nav-active-item] {
+	font-weight: 700;
+	color: var(--site-header-accent-fg);
+}
+
+[data-site-mobile-menu] a[data-mobile-nav-item] {
+	font-weight: 500;
+	color: var(--site-header-fg);
+}
+
+[data-site-mobile-menu] a[data-mobile-nav-item][data-mobile-nav-active-item] {
+	font-weight: 700;
+	color: var(--site-header-accent-fg);
+}
+
 [data-nav-active-item] > span,
 [data-mobile-nav-active-item] > span {
 	filter: url(#site-nav-active-text-outline);
