@@ -746,6 +746,9 @@
 				link.removeAttribute('data-nav-active-item');
 				link.removeAttribute('aria-current');
 			}
+
+			link.style.removeProperty('color');
+			link.style.removeProperty('font-weight');
 		}
 
 		for (const link of document.querySelectorAll('[data-mobile-nav-item]')) {
@@ -762,6 +765,9 @@
 				link.removeAttribute('data-mobile-nav-active-item');
 				link.removeAttribute('aria-current');
 			}
+
+			link.style.removeProperty('color');
+			link.style.removeProperty('font-weight');
 		}
 
 		const desktopNavItems = Array.from(document.querySelectorAll('[data-nav-item]'));
