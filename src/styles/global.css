@@ -150,33 +150,30 @@ html.dark {
 }
 
 @media screen and (max-width: 47.999rem) {
-	[data-site-mobile-menu] {
+	[data-site-mobile-menu].wpm-pane-menu {
 		visibility: hidden;
 		transform: translateX(-100%);
-		transition: transform 220ms ease, visibility 220ms step-end;
 		will-change: transform;
 	}
 
-	[data-site-mobile-dimmer] {
+	[data-site-mobile-dimmer].wpm-pane-dimmer {
 		opacity: 0;
 		background: rgba(13, 17, 23, 0.42);
 		pointer-events: none;
-		transition: opacity 220ms ease;
 	}
 
-	html[data-mobile-menu-open='true'] [data-site-mobile-menu] {
+	html[data-mobile-menu-open='true'] [data-site-mobile-menu].wpm-pane-menu {
 		visibility: visible;
 		transform: translateX(0);
-		transition: transform 220ms ease;
 	}
 
-	html[data-mobile-menu-open='true'] [data-site-mobile-dimmer] {
+	html[data-mobile-menu-open='true'] [data-site-mobile-dimmer].wpm-pane-dimmer {
 		opacity: 1;
 		pointer-events: auto;
 	}
 
-	html[data-mobile-menu-open='true'] body > * [data-site-header],
-	html[data-mobile-menu-open='true'] body > * [data-astro-transition-persist='header'] {
+	html[data-mobile-menu-open='true'] body > * [data-site-header].wpm-pane-shift,
+	html[data-mobile-menu-open='true'] body > * [data-astro-transition-persist='header'].wpm-pane-shift {
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -185,23 +182,15 @@ html.dark {
 		z-index: 10;
 		box-sizing: border-box;
 		transform: translateX(50vw);
-		transition: transform 220ms ease;
 	}
 
 	html[data-mobile-menu-open='true'] [data-site-header-spacer] {
 		height: var(--site-header-placeholder-height, 0);
 	}
 
-	html[data-mobile-menu-open='true'] body > * .site-route-main,
-	html[data-mobile-menu-open='true'] body > * [data-astro-transition-persist='footer'] {
+	html[data-mobile-menu-open='true'] body > * .site-route-main.wpm-pane-shift,
+	html[data-mobile-menu-open='true'] body > * [data-astro-transition-persist='footer'].wpm-pane-shift {
 		transform: translateX(50vw);
-		transition: transform 220ms ease;
-	}
-
-	[data-site-header],
-	.site-route-main,
-	[data-astro-transition-persist='footer'] {
-		transition: transform 220ms ease;
 	}
 }
 
@@ -235,11 +224,4 @@ html[data-theme-switching='true'] *::after {
 		--site-header-offset: 72px;
 	}
 
-	[data-site-header],
-	[data-astro-transition-persist='header'],
-	.site-route-main,
-	[data-astro-transition-persist='footer'] {
-		transform-origin: left top;
-		transition: transform 420ms ease;
-	}
 }
