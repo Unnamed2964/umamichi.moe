@@ -493,6 +493,35 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
                   Chakra UI
                 </Link>
               </Text>
+              <Text
+                color="var(--site-muted-fg)"
+                fontSize={{ base: "sm", md: "md" }}
+                display="inline-flex"
+                alignItems="center"
+                gap="1"
+                flexWrap="wrap"
+                justifyContent="center"
+              >
+                <Box as="span">Transitions powered by</Box>
+                <Link
+                  href="https://github.com/umamichi-ui/windows-phone-motion"
+                  target="_blank"
+                  rel="noreferrer"
+                  color="var(--site-accent)"
+                >
+                  @umamichi-ui/windows-phone-motion
+                </Link>
+                <Box as="span">(</Box>
+                <Link
+                  href="https://github.com/MicrosoftArchive/WindowsPhoneToolkit"
+                  target="_blank"
+                  rel="noreferrer"
+                  color="var(--site-accent)"
+                >
+                  Windows Phone Toolkit
+                </Link>
+                <Box as="span">)</Box>
+              </Text>
             </Stack>
           </Container>
         </Box>
