@@ -495,7 +495,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
               </Text>
               <Text
                 color="var(--site-muted-fg)"
-                fontSize={{ base: "sm", md: "md" }}
+                fontSize={{ base: "md", md: "lg" }}
                 display="inline-flex"
                 alignItems="center"
                 gap="1"
