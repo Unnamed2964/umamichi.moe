@@ -267,6 +267,8 @@ html {
 	width: 100%;
 	overflow: hidden;
 	border-radius: 0.75rem;
+	background: var(--site-button-bg);
+	color: var(--site-button-fg);
 }
 
 .article-source-actions__menu[hidden] {
@@ -280,19 +282,9 @@ html {
 	width: 100%;
 	padding: 0.625rem 0.875rem;
 	border: 0;
-	background: transparent;
 	text-align: left;
 	font-size: 0.875rem;
 	cursor: pointer;
-}
-
-.article-source-actions__menu-item:hover,
-.article-source-actions__menu-item:active {
-	background: var(--site-button-hover-bg);
-}
-
-.article-source-actions__menu-item:active {
-	background: var(--site-button-active-bg);
 }
 
 .article-source-actions__icon {
