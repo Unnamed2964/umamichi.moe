@@ -9,13 +9,13 @@ import { ArticlePrevNext, type AdjacentArticleLink } from "./ArticlePrevNext"
 import ArticleSourceActions from "./ArticleSourceActions"
 import { ArticleTags, type ArticleTag } from "./ArticleTags"
 import { ArticleToc, type ArticleTocHeading } from "./ArticleToc"
-import { SiteFrame, SITE_MAIN_HALF_W, SITE_MAIN_MAX_W } from "./SiteFrame"
+import { SiteFrame } from "./SiteFrame"
+import { ARTICLE_SIDEBAR_FIXED_INSET, SITE_MAIN_MAX_W } from "../../lib/site-layout"
 import type { CopyrightConfig } from "../../lib/copyright"
 import { filterArticleTocHeadings } from "../../lib/article-toc"
 import type { TopLevelNavItem } from "../../lib/docs"
 
-const ARTICLE_SIDEBAR_W = "12rem"
-const ARTICLE_SIDEBAR_GAP = "0.5rem"
+const ARTICLE_SIDEBAR_W = "var(--site-article-sidebar-w)"
 
 type ArticleLayoutProps = PropsWithChildren<{
   copyright?: CopyrightConfig
@@ -70,7 +70,7 @@ export function ArticleLayout({
             display={{ base: "none", xl: "block" }}
             position="fixed"
             top="calc(var(--site-header-offset) + 2rem)"
-            left={`max(1rem, calc(50vw - ${SITE_MAIN_HALF_W} - ${ARTICLE_SIDEBAR_W} - ${ARTICLE_SIDEBAR_GAP}))`}
+            left={ARTICLE_SIDEBAR_FIXED_INSET}
             w={ARTICLE_SIDEBAR_W}
             zIndex="1"
           >
@@ -84,7 +84,7 @@ export function ArticleLayout({
             display={{ base: "none", xl: "block" }}
             position="fixed"
             top="calc(var(--site-header-offset) + 2rem)"
-            right={`max(1rem, calc(50vw - ${SITE_MAIN_HALF_W} - ${ARTICLE_SIDEBAR_W} - ${ARTICLE_SIDEBAR_GAP}))`}
+            right={ARTICLE_SIDEBAR_FIXED_INSET}
             w={ARTICLE_SIDEBAR_W}
             zIndex="1"
           >
