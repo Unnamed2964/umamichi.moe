@@ -157,6 +157,10 @@
 			}
 		};
 
+		window.__siteMobileMenuCloseForNavigation = () => {
+			closeMenu();
+		};
+
 		const clearMenuHistoryAfterNavigation = () => {
 			releaseMenuHistoryEntry();
 			setMenuOpen(false);
@@ -237,7 +241,28 @@
 				return;
 			}
 
-			if (target.closest('[data-site-menu-link]')) {
+			if (target.closest('[data-site-menu-link]') && isMenuOpen()) {
+				const menuLink = target.closest('a[href]');
+
+				if (menuLink instanceof HTMLAnchorElement) {
+					try {
+						const url = new URL(menuLink.href, window.location.href);
+
+						if (
+							url.origin === window.location.origin
+							&& (
+								url.pathname !== window.location.pathname
+								|| url.search !== window.location.search
+								|| url.hash !== window.location.hash
+							)
+						) {
+							return;
+						}
+					} catch {
+						// Fall through to close the menu.
+					}
+				}
+
 				closeMenu();
 				return;
 			}
@@ -274,6 +299,12 @@
 		document.addEventListener('astro:after-swap', clearMenuHistoryAfterNavigation);
 		clearMenuHistoryAfterNavigation();
 	}
+</script>
+
+<script>
+	import { initSiteMobileMenuRouteDefer } from '../lib/site-mobile-menu-route-defer.ts';
+
+	initSiteMobileMenuRouteDefer();
 </script>
 
 <script is:inline>
