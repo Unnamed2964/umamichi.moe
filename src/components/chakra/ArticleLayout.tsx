@@ -4,12 +4,13 @@ import { ArticleHeader } from "../article/ArticleHeader"
 import { ArticleHeroImage } from "../article/ArticleHeroImage"
 import ArticleSourceActions from "../article/ArticleSourceActions"
 import { ArticleTags } from "../article/ArticleTags"
-import { ArticleCopyright } from "./ArticleCopyright"
-import { ArticlePostList, type ArticleSidebarTree } from "./ArticlePostList"
-import { ArticlePrevNext, type AdjacentArticleLink } from "./ArticlePrevNext"
-import { ArticleToc, type ArticleTocHeading } from "./ArticleToc"
+import { ArticleCopyright } from "../article/ArticleCopyright"
+import { ArticlePostList, type ArticleSidebarTree } from "../article/ArticlePostList"
+import { ArticlePrevNext } from "../article/ArticlePrevNext"
+import { ArticleToc } from "../article/ArticleToc"
 import { SiteFrame } from "./SiteFrame"
-import type { ArticleTag } from "../../lib/article"
+import type { AdjacentArticleLink, ArticleTag } from "../../lib/article"
+import type { ArticleTocHeading } from "../../lib/article-toc"
 import { ARTICLE_SIDEBAR_FIXED_INSET, SITE_MAIN_MAX_W } from "../../lib/site-layout"
 import type { CopyrightConfig } from "../../lib/copyright"
 import { filterArticleTocHeadings } from "../../lib/article-toc"
@@ -88,7 +89,7 @@ export function ArticleLayout({
             w={ARTICLE_SIDEBAR_W}
             zIndex="1"
           >
-            <Stack gap="3">
+            <div className="article-sidebar-rail">
               {sourceUrl && sourceMarkdown && (
                 <ArticleSourceActions sourceMarkdown={sourceMarkdown} sourceUrl={sourceUrl} />
               )}
@@ -96,7 +97,7 @@ export function ArticleLayout({
                 headings={tocHeadings}
                 maxH={sourceUrl && sourceMarkdown ? "calc(100vh - var(--site-header-offset) - 9rem)" : undefined}
               />
-            </Stack>
+            </div>
           </Box>
         )}
 
