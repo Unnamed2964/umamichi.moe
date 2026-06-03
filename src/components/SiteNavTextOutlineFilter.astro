@@ -1,0 +1,28 @@
+---
+/** 供当前导航项文字 `filter: url(#site-nav-active-text-outline)` 引用的 SVG 滤镜（白底描边）。 */
+---
+
+<svg
+	aria-hidden="true"
+	focusable="false"
+	style="position: absolute; width: 0; height: 0; overflow: hidden;"
+>
+	<defs>
+		<filter
+			id="site-nav-active-text-outline"
+			x="-30%"
+			y="-30%"
+			width="160%"
+			height="160%"
+			color-interpolation-filters="sRGB"
+		>
+			<feMorphology in="SourceAlpha" operator="dilate" radius="1.25" result="stroke"></feMorphology>
+			<feFlood flood-color="var(--site-bg)" result="flood"></feFlood>
+			<feComposite in="flood" in2="stroke" operator="in" result="outline"></feComposite>
+			<feMerge>
+				<feMergeNode in="outline"></feMergeNode>
+				<feMergeNode in="SourceGraphic"></feMergeNode>
+			</feMerge>
+		</filter>
+	</defs>
+</svg>

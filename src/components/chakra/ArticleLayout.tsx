@@ -1,15 +1,15 @@
 import type { PropsWithChildren, ReactNode } from "react"
 import { Box, Stack } from "@chakra-ui/react"
-import { ArticleContent } from "./ArticleContent"
+import { ArticleHeader } from "../article/ArticleHeader"
+import { ArticleHeroImage } from "../article/ArticleHeroImage"
+import ArticleSourceActions from "../article/ArticleSourceActions"
+import { ArticleTags } from "../article/ArticleTags"
 import { ArticleCopyright } from "./ArticleCopyright"
-import { ArticleHeader } from "./ArticleHeader"
-import { ArticleHeroImage } from "./ArticleHeroImage"
 import { ArticlePostList, type ArticleSidebarTree } from "./ArticlePostList"
 import { ArticlePrevNext, type AdjacentArticleLink } from "./ArticlePrevNext"
-import ArticleSourceActions from "./ArticleSourceActions"
-import { ArticleTags, type ArticleTag } from "./ArticleTags"
 import { ArticleToc, type ArticleTocHeading } from "./ArticleToc"
 import { SiteFrame } from "./SiteFrame"
+import type { ArticleTag } from "../../lib/article"
 import { ARTICLE_SIDEBAR_FIXED_INSET, SITE_MAIN_MAX_W } from "../../lib/site-layout"
 import type { CopyrightConfig } from "../../lib/copyright"
 import { filterArticleTocHeadings } from "../../lib/article-toc"
@@ -137,7 +137,7 @@ export function ArticleLayout({
               </Box>
             )}
 
-            <ArticleContent>{children}</ArticleContent>
+            <div className="article-content">{children}</div>
 
             {copyright && (
               <Box w="full">

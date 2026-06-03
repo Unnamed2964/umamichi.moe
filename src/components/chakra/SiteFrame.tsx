@@ -22,7 +22,6 @@ import TransferAndOutOfStationTransferNavIcon from "../../assets/metro-nav/trans
 import OutOfStationTransferNavIcon from "../../assets/metro-nav/out-of-station-transfer.svg?react"
 import OutOfStationTransferAndOutOfStationTransferNavIcon from "../../assets/metro-nav/out-of-station-transfer-and-out-of-station-transfer.svg?react"
 import { SITE_MAIN_MAX_W } from "../../lib/site-layout"
-import { SiteNavTextOutlineFilter } from "./SiteNavTextOutlineFilter"
 import { SITE_ROUTE_TRANSITION_SCOPE } from "../../lib/site-slide-transition"
 
 type SiteFrameProps = PropsWithChildren<{
@@ -112,7 +111,6 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
 
   return (
     <Provider>
-      <SiteNavTextOutlineFilter />
       <Box minH="100vh" bg="var(--site-bg)" color="var(--site-fg)">
         <Box
           as="header"
