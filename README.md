@@ -2,7 +2,6 @@
 
 [![Astro](https://img.shields.io/badge/Astro-6.1.3-111111?logo=astro&logoColor=white)](https://astro.build)
 [![React](https://img.shields.io/badge/React-19-20232a?logo=react&logoColor=61dafb)](https://react.dev)
-[![Chakra%20UI](https://img.shields.io/badge/Chakra%20UI-3.34-1a202c?logo=chakraui&logoColor=4fd1c5)](https://chakra-ui.com)
 [![Cloudflare](https://img.shields.io/badge/Deploy-Cloudflare-f38020?logo=cloudflare&logoColor=white)](https://www.cloudflare.com)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-43853d?logo=nodedotjs&logoColor=white)](https://nodejs.org)
 
@@ -13,7 +12,7 @@
 ## 项目概览
 
 - 站点框架：Astro
-- UI 组件：React + Chakra UI
+- UI：`@umamichi-ui/common-css` + 自建 CSS；React 用于 Giscus 评论与文章侧栏组件（构建期 SSR）
 - 内容来源：src/content 下的 Markdown 和 MDX
 - 部署目标：Cloudflare Workers / Pages 兼容运行时
 - 线上地址：https://umamichi.moe

@@ -9,7 +9,6 @@ import rehypeKatex from "rehype-katex";
 import rehypeWrapEmoji from './scripts/rehype-wrap-emoji.mjs';
 import outOfSiteHtmlPostbuildIntegration from './src/integrations/out-of-site-html-postbuild.mjs';
 import { loadEnv } from 'vite';
-import svgr from "vite-plugin-svgr";
 
 import react from '@astrojs/react';
 
@@ -29,9 +28,6 @@ export default defineConfig({
     react(),
   ],
   adapter: cloudflare(),
-  vite: {
-    plugins: [svgr()],
-  },
   markdown: {
     shikiConfig: {
       themes: {
