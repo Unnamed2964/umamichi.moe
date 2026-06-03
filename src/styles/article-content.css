@@ -33,7 +33,7 @@ html {
 .article-content h5,
 .article-content h6 {
 	position: relative;
-	scroll-margin-top: calc(var(--site-header-offset) + 1.5rem);
+	scroll-margin-top: 0;
 }
 
 .article-content h1::before,
