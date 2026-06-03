@@ -45,6 +45,9 @@ html {
 	--site-focus-visible-outline-color: var(--theme-200);
 	--site-header-accent-fg: var(--theme-600);
 
+	--site-route-sidebar-fade-duration: 200ms;
+	--site-route-sidebar-fade-easing: ease-out;
+
 	scroll-padding-top: var(--site-header-offset);
 	overflow-y: scroll;
 }
@@ -78,7 +81,7 @@ html.dark {
 	background: var(--site-bg);
 }
 
-/* Route surface: slide via Astro `transition:animate` (see BlogPost.astro + site-slide-transition.ts). */
+/* Route surfaces: main slide + article sidebar fade (site-slide-transition.ts). */
 
 @media (prefers-reduced-motion: reduce) {
 	::view-transition-old(*),
