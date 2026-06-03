@@ -42,7 +42,7 @@ export default function ArticleSourceActions({
 			</div>
 
 			<div
-				className="article-source-actions__menu site-button"
+				className="article-source-actions__menu"
 				data-article-source-menu
 				data-site-button
 				role="menu"

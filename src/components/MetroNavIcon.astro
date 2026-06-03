@@ -1,0 +1,41 @@
+---
+import type { NavIconKind } from '../lib/docs';
+import type { MetroNavIconTone } from '../lib/site-frame';
+import normalSvg from '../assets/metro-nav/normal.svg?raw';
+import transferSvg from '../assets/metro-nav/transfer.svg?raw';
+import transferAndOutOfStationTransferSvg from '../assets/metro-nav/transfer-and-out-of-station-transfer.svg?raw';
+import outOfStationTransferSvg from '../assets/metro-nav/out-of-station-transfer.svg?raw';
+import outOfStationTransferAndOutOfStationTransferSvg from '../assets/metro-nav/out-of-station-transfer-and-out-of-station-transfer.svg?raw';
+
+interface Props {
+	kind: NavIconKind;
+	tone: MetroNavIconTone;
+}
+
+const METRO_SVGS: Record<NavIconKind, string> = {
+	normal: normalSvg,
+	transfer: transferSvg,
+	'transfer-and-out-of-station-transfer': transferAndOutOfStationTransferSvg,
+	'out-of-station-transfer': outOfStationTransferSvg,
+	'out-of-station-transfer-and-out-of-station-transfer':
+		outOfStationTransferAndOutOfStationTransferSvg,
+};
+
+const { kind, tone } = Astro.props;
+const rawSvg = METRO_SVGS[kind];
+const viewBoxMatch = rawSvg.match(/viewBox="\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*"/);
+
+const height = (8 / 43) * 100;
+const viewBoxWidth = viewBoxMatch ? Number(viewBoxMatch[3]) : 43;
+const viewBoxHeight = viewBoxMatch ? Number(viewBoxMatch[4]) : 100;
+const width = (viewBoxWidth / viewBoxHeight) * height;
+const color =
+	tone === 'future' ? 'var(--site-nav-future-icon)' : 'var(--site-nav-running-line-bg)';
+
+const svgHtml = rawSvg.replace(
+	'<svg',
+	`<svg aria-hidden="true" focusable="false" width="${width}" height="${height}" style="display:block;overflow:visible;color:${color}"`,
+);
+---
+
+<Fragment set:html={svgHtml} />
