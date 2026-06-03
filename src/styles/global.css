@@ -96,6 +96,10 @@ html.dark {
 	font-family: 'Noto Color Emoji Web';
 }
 
+.site-button[hidden] {
+	display: none !important;
+}
+
 .site-copy-toast {
 	position: fixed;
 	left: 16px;
@@ -215,15 +219,15 @@ html.dark {
 }
 
 [data-site-theme-icon='dark'] {
-	display: none;
+	display: none !important;
 }
 
 html.dark [data-site-theme-icon='light'] {
-	display: none;
+	display: none !important;
 }
 
 html.dark [data-site-theme-icon='dark'] {
-	display: inline-flex;
+	display: inline-flex !important;
 }
 
 html[data-theme-switching='true'],
