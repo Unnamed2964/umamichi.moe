@@ -3,8 +3,8 @@ import type { SidebarFolderNode, SidebarNode } from "../../lib/docs"
 import {
   ARTICLE_NAV_BASE_DEPTH,
   type ArticleSidebarLinkKind,
-  getArticleSidebarIndent,
-  getArticleSidebarLinkStyle,
+  getArticleSidebarIndentStyle,
+  getArticleSidebarLinkClassName,
   getArticleSidebarLinkTier,
 } from "../../lib/article-sidebar-link"
 
@@ -36,8 +36,8 @@ function renderTreeNode(node: SidebarNode, currentPath: string, currentPostId?: 
     node.kind === "folder"
       ? isCurrentLink(node.href, currentPath)
       : isCurrentLink(node.href, currentPath, currentPostId, node.id)
-  const linkStyle = getArticleSidebarLinkStyle(kind, tier, isCurrent)
-  const indent = getArticleSidebarIndent(node.level, ARTICLE_NAV_BASE_DEPTH)
+  const linkClassName = getArticleSidebarLinkClassName(kind, tier, isCurrent)
+  const indentStyle = getArticleSidebarIndentStyle(node.level, ARTICLE_NAV_BASE_DEPTH)
 
   if (node.kind === "folder") {
     return (
@@ -45,8 +45,8 @@ function renderTreeNode(node: SidebarNode, currentPath: string, currentPostId?: 
         <Link
           href={node.href}
           aria-current={isCurrent ? "page" : undefined}
-          ps={indent}
-          {...linkStyle}
+          className={linkClassName}
+          style={indentStyle}
         >
           {node.title}
         </Link>
@@ -65,8 +65,8 @@ function renderTreeNode(node: SidebarNode, currentPath: string, currentPostId?: 
       key={node.id}
       href={node.href}
       aria-current={isCurrent ? "page" : undefined}
-      ps={indent}
-      {...linkStyle}
+      className={linkClassName}
+      style={indentStyle}
     >
       {node.title}
     </Link>
@@ -82,33 +82,15 @@ export function ArticlePostList({ currentPath, currentPostId, tree, variant = "d
     <Box
       as="nav"
       aria-label="文章列表"
-      rounded="none"
-      bg="var(--site-sidebar-bg)"
+      className="site-sidebar-panel"
       maxH={variant === "mobile" ? "10rem" : "calc(100vh - var(--site-header-offset) - 4rem)"}
-      overflowX="hidden"
-      display="flex"
-      flexDirection="column"
     >
-      <Text fontSize="sm" fontWeight="700" letterSpacing="wide" color="var(--site-subtle-fg)">
+      <Text className="site-sidebar-panel__title">
         导航
       </Text>
 
-      <Box
-        mt="3"
-        flex="1"
-        minH="0"
-        overflowY="auto"
-        overflowX="hidden"
-        overscrollBehavior="contain"
-        css={{
-          scrollbarWidth: "none",
-          msOverflowStyle: "none",
-          "&::-webkit-scrollbar": {
-            display: "none",
-          },
-        }}
-      >
-        <Stack gap="2">
+      <Box className="site-sidebar-scroll">
+        <Stack className="site-sidebar-links" gap="2">
           {renderTreeNode(tree, currentPath, currentPostId)}
         </Stack>
       </Box>
