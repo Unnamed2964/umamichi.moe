@@ -63,19 +63,27 @@ const tocMaxHeight = hasSourceTools
 ---
 
 <SiteFrame currentPath={currentPath} navItems={navItems}>
-	<div class="article-layout">
-		{sidebarTree && (
-			<aside class="article-layout__sidebar article-layout__sidebar--left">
+	{
+		sidebarTree && (
+			<aside
+				slot="article-sidebar-left"
+				class="article-layout__sidebar article-layout__sidebar--left"
+			>
 				<ArticlePostList
 					currentPath={currentPath}
 					currentPostId={currentPostId}
 					tree={sidebarTree}
 				/>
 			</aside>
-		)}
+		)
+	}
 
-		{hasToc && (
-			<aside class="article-layout__sidebar article-layout__sidebar--right">
+	{
+		hasToc && (
+			<aside
+				slot="article-sidebar-right"
+				class="article-layout__sidebar article-layout__sidebar--right"
+			>
 				<div class="article-sidebar-rail">
 					{hasSourceTools && (
 						<ArticleSourceActions sourceMarkdown={sourceMarkdown!} sourceUrl={sourceUrl!} />
@@ -83,8 +91,10 @@ const tocMaxHeight = hasSourceTools
 					<ArticleToc headings={tocHeadings} maxH={tocMaxHeight} />
 				</div>
 			</aside>
-		)}
+		)
+	}
 
+	<div class="article-layout">
 		<article class="article-page">
 			<div class="article-page__stack">
 				{sidebarTree && (
