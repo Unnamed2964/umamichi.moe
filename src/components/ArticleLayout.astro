@@ -88,13 +88,17 @@ const tocMaxHeight = hasSourceTools
 			<aside
 				slot="article-sidebar-right"
 				class="article-layout__sidebar article-layout__sidebar--right"
-				data-astro-transition-scope={SITE_ARTICLE_SIDEBAR_RIGHT_TRANSITION_SCOPE}
 			>
 				<div class="article-sidebar-rail">
 					{hasSourceTools && (
 						<ArticleSourceActions sourceMarkdown={sourceMarkdown!} sourceUrl={sourceUrl!} />
 					)}
-					<ArticleToc headings={tocHeadings} maxH={tocMaxHeight} />
+					<div
+						class="article-sidebar-rail__toc"
+						data-astro-transition-scope={SITE_ARTICLE_SIDEBAR_RIGHT_TRANSITION_SCOPE}
+					>
+						<ArticleToc headings={tocHeadings} maxH={tocMaxHeight} />
+					</div>
 				</div>
 			</aside>
 		)
