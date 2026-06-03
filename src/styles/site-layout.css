@@ -473,7 +473,6 @@ html {
 }
 
 .article-layout {
-	position: relative;
 	max-width: var(--site-main-max-w);
 	margin-inline: auto;
 }

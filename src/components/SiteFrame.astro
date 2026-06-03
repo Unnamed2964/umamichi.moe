@@ -212,6 +212,10 @@ const iconGithub = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512
 		</div>
 	</nav>
 
+	<slot name="article-sidebar-left" />
+
+	<slot name="article-sidebar-right" />
+
 	<main
 		class="site-main site-route-main wpm-pane-shift"
 		style={`max-width: ${SITE_MAIN_MAX_W}`}
