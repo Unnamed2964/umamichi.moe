@@ -1,11 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
 import ArticleTocScript from '../components/ArticleTocScript.astro';
-import ArticleComments from '../components/ArticleComments';
 import BaseHead from '../components/BaseHead.astro';
 import SiteChromeScripts from '../components/SiteChromeScripts.astro';
 import SiteNavTextOutlineFilter from '../components/SiteNavTextOutlineFilter.astro';
-import { ArticleLayout } from '../components/chakra/ArticleLayout';
+import ArticleLayout from '../components/ArticleLayout.astro';
 import type { ArticleTag } from '../lib/article';
 import { SITE_DESCRIPTION, SITE_GITHUB_SOURCE_BASE_URL, SITE_TITLE } from '../consts';
 import type { CopyrightConfig } from '../lib/copyright';
@@ -124,6 +123,7 @@ const formattedUpdatedDate = updatedDate
 	<body>
 		<SiteNavTextOutlineFilter />
 		<ArticleLayout
+			comment={comment}
 			copyright={copyright}
 			currentPostId={currentEntryId}
 			currentPath={currentPath}
@@ -141,7 +141,6 @@ const formattedUpdatedDate = updatedDate
 			heroImage={heroImage ? { src: heroImage.src } : undefined}
 		>
 			<slot />
-			{comment && <ArticleComments slot="comments" client:idle />}
 		</ArticleLayout>
 
 		<SiteChromeScripts />
