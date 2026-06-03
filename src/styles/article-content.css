@@ -275,12 +275,15 @@ html {
 .article-content blockquote {
 	margin-top: 0;
 	margin-bottom: 1rem;
-	padding-inline: 1em;
+	margin-inline: 0;
+	padding-block: 0;
+	padding-inline-start: 1em;
+	padding-inline-end: 0;
 	color: var(--article-quote-fg);
 	border-left: 0.25em solid var(--article-border);
 }
 
-.article-content blockquote > :first-child {
+.article-content blockquote > :first-of-type {
 	margin-top: 0;
 }
 
