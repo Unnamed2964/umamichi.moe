@@ -10,7 +10,7 @@ export const SITE_ROUTE_TRANSITION_SCOPE = 'site-route-root';
 /** Desktop article nav sidebar (sibling of `<main>`). */
 export const SITE_ARTICLE_SIDEBAR_LEFT_TRANSITION_SCOPE = 'article-sidebar-left';
 
-/** Desktop article TOC sidebar (sibling of `<main>`). */
+/** Desktop article TOC panel in the right sidebar (sibling of `<main>`). */
 export const SITE_ARTICLE_SIDEBAR_RIGHT_TRANSITION_SCOPE = 'article-sidebar-right';
 
 const slideDuration = 'var(--wpm-slide-horizontal-duration)';
@@ -193,7 +193,7 @@ const siteRouteSidebarFadeKeyframes = `
 
 /**
  * Scoped view-transition CSS for persisted chrome (`header` / `footer` persist),
- * sliding main, and fading article sidebars. Do not use `@layer astro`.
+ * sliding main, and fading article sidebars (TOC panel only on the right). Do not use `@layer astro`.
  */
 export const siteRouteSlideTransitionStyles = [
 	siteRouteSidebarFadeKeyframes,
