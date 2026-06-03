@@ -49,11 +49,6 @@ html {
 	overflow-y: scroll;
 }
 
-:root {
-	--chakra-colors-gray-focus-ring: var(--site-focus-visible-outline-color);
-	--chakra-colors-color-palette-focus-ring: var(--site-focus-visible-outline-color);
-}
-
 :focus-visible {
 	outline-color: var(--site-focus-visible-outline-color);
 }
