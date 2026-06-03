@@ -10,6 +10,10 @@ import { ArticleTags } from './article/ArticleTags';
 import { ArticleToc } from './article/ArticleToc';
 import SiteFrame from './SiteFrame.astro';
 import type { AdjacentArticleLink, ArticleTag } from '../lib/article';
+import {
+	SITE_ARTICLE_SIDEBAR_LEFT_TRANSITION_SCOPE,
+	SITE_ARTICLE_SIDEBAR_RIGHT_TRANSITION_SCOPE,
+} from '../lib/site-slide-transition';
 import { filterArticleTocHeadings, type ArticleTocHeading } from '../lib/article-toc';
 import type { CopyrightConfig } from '../lib/copyright';
 import type { SidebarFolderNode, TopLevelNavItem } from '../lib/docs';
@@ -68,6 +72,7 @@ const tocMaxHeight = hasSourceTools
 			<aside
 				slot="article-sidebar-left"
 				class="article-layout__sidebar article-layout__sidebar--left"
+				data-astro-transition-scope={SITE_ARTICLE_SIDEBAR_LEFT_TRANSITION_SCOPE}
 			>
 				<ArticlePostList
 					currentPath={currentPath}
@@ -83,6 +88,7 @@ const tocMaxHeight = hasSourceTools
 			<aside
 				slot="article-sidebar-right"
 				class="article-layout__sidebar article-layout__sidebar--right"
+				data-astro-transition-scope={SITE_ARTICLE_SIDEBAR_RIGHT_TRANSITION_SCOPE}
 			>
 				<div class="article-sidebar-rail">
 					{hasSourceTools && (
