@@ -1,6 +1,6 @@
 import {
 	ARTICLE_TOC_BASE_DEPTH,
-	getArticleSidebarIndent,
+	getArticleSidebarIndentUnits,
 	isArticleSidebarTopLevel,
 } from "./article-sidebar-link";
 
@@ -18,5 +18,5 @@ export function isArticleTocTopLevel(depth: number): boolean {
 }
 
 export function getArticleTocIndent(depth: number): number {
-	return getArticleSidebarIndent(depth, ARTICLE_TOC_MIN_DEPTH);
+	return getArticleSidebarIndentUnits(depth, ARTICLE_TOC_MIN_DEPTH);
 }

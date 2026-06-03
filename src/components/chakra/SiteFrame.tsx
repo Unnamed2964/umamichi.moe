@@ -21,11 +21,9 @@ import TransferNavIcon from "../../assets/metro-nav/transfer.svg?react"
 import TransferAndOutOfStationTransferNavIcon from "../../assets/metro-nav/transfer-and-out-of-station-transfer.svg?react"
 import OutOfStationTransferNavIcon from "../../assets/metro-nav/out-of-station-transfer.svg?react"
 import OutOfStationTransferAndOutOfStationTransferNavIcon from "../../assets/metro-nav/out-of-station-transfer-and-out-of-station-transfer.svg?react"
+import { SITE_MAIN_MAX_W } from "../../lib/site-layout"
 import { SiteNavTextOutlineFilter } from "./SiteNavTextOutlineFilter"
 import { SITE_ROUTE_TRANSITION_SCOPE } from "../../lib/site-slide-transition"
-
-export const SITE_MAIN_MAX_W = "4xl"
-export const SITE_MAIN_HALF_W = `calc(var(--chakra-sizes-${SITE_MAIN_MAX_W}) / 2)`
 
 type SiteFrameProps = PropsWithChildren<{
   currentPath: string
@@ -150,7 +148,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
             )
           })}
 
-          <Container maxW="6xl" px={{ base: 4, md: 6 }}>
+          <Container maxW="var(--site-frame-max-w)" px={{ base: 4, md: 6 }}>
             <Stack gap={{ base: 3, md: 0 }} py={{ base: 3, md: 0 }}>
               <Flex
                 minH={{ base: "auto", md: "72px" }}
@@ -454,13 +452,6 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           py={{ base: 10, md: 14 }}
           className="site-route-main wpm-pane-shift"
           data-astro-transition-scope={SITE_ROUTE_TRANSITION_SCOPE}
-          css={{
-            "--site-content-font-size": "var(--chakra-font-sizes-md)",
-            "--site-content-line-height": "var(--chakra-line-heights-tall)",
-            "@media screen and (min-width: 48rem)": {
-              "--site-content-font-size": "var(--chakra-font-sizes-lg)",
-            },
-          }}
         >
           {children}
         </Container>
@@ -472,7 +463,7 @@ export function SiteFrame({ children, currentPath, navItems }: SiteFrameProps) {
           className="wpm-pane-shift"
           data-astro-transition-persist="footer"
         >
-          <Container maxW="6xl" px={{ base: 4, md: 6 }} py="10">
+          <Container maxW="var(--site-frame-max-w)" px={{ base: 4, md: 6 }} py="10">
             <Stack gap="2" align="center" textAlign="center">
               <Text
                 color="var(--site-muted-fg)"

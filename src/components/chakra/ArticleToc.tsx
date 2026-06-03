@@ -2,8 +2,8 @@ import { Box, Link, Stack, Text } from "@chakra-ui/react"
 import {
   ARTICLE_TOC_BASE_DEPTH,
   type ArticleSidebarLinkKind,
-  getArticleSidebarIndent,
-  getArticleSidebarLinkStyle,
+  getArticleSidebarIndentStyle,
+  getArticleSidebarLinkClassName,
   getArticleSidebarLinkTier,
   isArticleSidebarTopLevel,
 } from "../../lib/article-sidebar-link"
@@ -32,33 +32,15 @@ export function ArticleToc({ headings, maxH = "calc(100vh - var(--site-header-of
       as="nav"
       aria-label="文章目录"
       data-toc
-      rounded="none"
-      bg="var(--site-sidebar-bg)"
+      className="site-sidebar-panel"
       maxH={maxH}
-      overflowX="hidden"
-      display="flex"
-      flexDirection="column"
     >
-      <Text fontSize="sm" fontWeight="700" letterSpacing="wide" color="var(--site-subtle-fg)">
+      <Text className="site-sidebar-panel__title">
         目录
       </Text>
 
-      <Box
-        mt="3"
-        flex="1"
-        minH="0"
-        overflowY="auto"
-        overflowX="hidden"
-        overscrollBehavior="contain"
-        css={{
-          scrollbarWidth: "none",
-          msOverflowStyle: "none",
-          "&::-webkit-scrollbar": {
-            display: "none",
-          },
-        }}
-      >
-        <Stack gap="2">
+      <Box className="site-sidebar-scroll">
+        <Stack className="site-sidebar-links" gap="2">
           {items.map((heading) => {
             const kind: ArticleSidebarLinkKind = isArticleSidebarTopLevel(
               heading.depth,
@@ -73,14 +55,8 @@ export function ArticleToc({ headings, maxH = "calc(100vh - var(--site-header-of
               key={heading.slug}
               href={`#${heading.slug}`}
               data-toc-link={heading.slug}
-              ps={getArticleSidebarIndent(heading.depth, ARTICLE_TOC_BASE_DEPTH)}
-              {...getArticleSidebarLinkStyle(kind, tier, false)}
-              css={{
-                '&[aria-current="location"]': {
-                  color: 'var(--site-accent)',
-                  fontWeight: 700,
-                },
-              }}
+              className={getArticleSidebarLinkClassName(kind, tier, false)}
+              style={getArticleSidebarIndentStyle(heading.depth, ARTICLE_TOC_BASE_DEPTH)}
             >
               {heading.text}
             </Link>

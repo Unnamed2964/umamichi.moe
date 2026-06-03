@@ -1,0 +1,145 @@
+/*
+ * Site layout tokens and shared UI primitives.
+ * Replaces Chakra layout/font tokens used by SiteFrame and article chrome.
+ *
+ * Breakpoints (align with global.css and Chakra defaults):
+ *   md: 48rem (768px)
+ *   xl: 80rem (1280px) — article fixed sidebars
+ */
+
+html {
+	--site-main-max-w: 56rem;
+	--site-main-half-w: calc(var(--site-main-max-w) / 2);
+	--site-frame-max-w: 72rem;
+
+	--site-article-sidebar-w: 12rem;
+	--site-article-sidebar-gap: 0.5rem;
+
+	--site-content-font-size: 1rem;
+	--site-content-line-height: 1.65;
+
+	--site-space-unit: 0.25rem;
+}
+
+@media screen and (min-width: 48rem) {
+	html {
+		--site-content-font-size: 1.125rem;
+	}
+}
+
+.site-route-main {
+	font-size: var(--site-content-font-size);
+	line-height: var(--site-content-line-height);
+}
+
+[data-site-button] {
+	transition:
+		background-color 0.2s ease,
+		color 0.2s ease;
+}
+
+.site-button {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	background: var(--site-button-bg);
+	color: var(--site-button-fg);
+	font-weight: 500;
+	text-decoration: none;
+	transition:
+		background-color 0.2s ease,
+		color 0.2s ease;
+}
+
+.site-button:hover {
+	background: var(--site-button-hover-bg);
+	text-decoration: none;
+}
+
+.site-button:active {
+	background: var(--site-button-active-bg);
+}
+
+.site-sidebar-panel {
+	display: flex;
+	flex-direction: column;
+	overflow-x: hidden;
+	border-radius: 0;
+	background: var(--site-sidebar-bg);
+}
+
+.site-sidebar-panel__title {
+	font-size: 0.875rem;
+	font-weight: 700;
+	letter-spacing: 0.05em;
+	color: var(--site-subtle-fg);
+}
+
+.site-sidebar-scroll {
+	margin-top: 0.75rem;
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
+	overflow-x: hidden;
+	overscroll-behavior: contain;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+}
+
+.site-sidebar-scroll::-webkit-scrollbar {
+	display: none;
+}
+
+.site-sidebar-links {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.site-sidebar-link {
+	display: block;
+	line-height: 1.6;
+	text-decoration: none;
+}
+
+.site-sidebar-link:hover {
+	color: var(--site-accent);
+	text-decoration: none;
+}
+
+.site-sidebar-link--section.site-sidebar-link--primary {
+	color: var(--article-fg);
+	font-size: 0.875rem;
+	font-weight: 700;
+}
+
+.site-sidebar-link--section.site-sidebar-link--nested {
+	color: var(--article-fg);
+	font-size: 0.75rem;
+	font-weight: 700;
+}
+
+.site-sidebar-link--item.site-sidebar-link--primary {
+	color: var(--site-muted-fg);
+	font-size: 0.875rem;
+	font-weight: 500;
+	transition: color 0.2s ease, font-weight 0.2s ease;
+}
+
+.site-sidebar-link--item.site-sidebar-link--nested {
+	color: var(--site-muted-fg);
+	font-size: 0.75rem;
+	font-weight: 500;
+	transition: color 0.2s ease, font-weight 0.2s ease;
+}
+
+.site-sidebar-link--current.site-sidebar-link--section,
+.site-sidebar-link--current.site-sidebar-link--item {
+	color: var(--site-accent);
+	font-weight: 700;
+}
+
+.site-sidebar-link[aria-current='location'] {
+	color: var(--site-accent);
+	font-weight: 700;
+}
