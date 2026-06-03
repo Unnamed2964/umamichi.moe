@@ -1,0 +1,147 @@
+---
+import ArticleComments from './ArticleComments';
+import { ArticleCopyright } from './article/ArticleCopyright';
+import { ArticleHeader } from './article/ArticleHeader';
+import { ArticleHeroImage } from './article/ArticleHeroImage';
+import { ArticlePostList } from './article/ArticlePostList';
+import { ArticlePrevNext } from './article/ArticlePrevNext';
+import ArticleSourceActions from './article/ArticleSourceActions';
+import { ArticleTags } from './article/ArticleTags';
+import { ArticleToc } from './article/ArticleToc';
+import { SiteFrame } from './chakra/SiteFrame';
+import type { AdjacentArticleLink, ArticleTag } from '../lib/article';
+import { filterArticleTocHeadings, type ArticleTocHeading } from '../lib/article-toc';
+import type { CopyrightConfig } from '../lib/copyright';
+import type { SidebarFolderNode, TopLevelNavItem } from '../lib/docs';
+
+interface Props {
+	comment?: boolean;
+	copyright?: CopyrightConfig;
+	currentPath: string;
+	currentPostId?: string;
+	headings?: ArticleTocHeading[];
+	heroImage?: {
+		src: string;
+	};
+	navItems: TopLevelNavItem[];
+	nextPost?: AdjacentArticleLink;
+	previousPost?: AdjacentArticleLink;
+	pubDate?: string;
+	sidebarTree?: SidebarFolderNode;
+	sourceMarkdown?: string;
+	sourceUrl?: string;
+	tags?: ArticleTag[];
+	title: string;
+	updatedDate?: string;
+}
+
+const {
+	comment = false,
+	copyright,
+	currentPath,
+	currentPostId,
+	headings = [],
+	heroImage,
+	navItems,
+	nextPost,
+	previousPost,
+	pubDate,
+	sidebarTree,
+	sourceMarkdown,
+	sourceUrl,
+	tags = [],
+	title,
+	updatedDate,
+} = Astro.props;
+
+const tocHeadings = filterArticleTocHeadings(headings);
+const hasToc = tocHeadings.length > 0;
+const hasSourceTools = Boolean(sourceUrl && sourceMarkdown);
+const tocMaxHeight = hasSourceTools
+	? 'calc(100vh - var(--site-header-offset) - 9rem)'
+	: undefined;
+---
+
+<SiteFrame currentPath={currentPath} navItems={navItems}>
+	<div class="article-layout">
+		{sidebarTree && (
+			<aside class="article-layout__sidebar article-layout__sidebar--left">
+				<ArticlePostList
+					currentPath={currentPath}
+					currentPostId={currentPostId}
+					tree={sidebarTree}
+				/>
+			</aside>
+		)}
+
+		{hasToc && (
+			<aside class="article-layout__sidebar article-layout__sidebar--right">
+				<div class="article-sidebar-rail">
+					{hasSourceTools && (
+						<ArticleSourceActions sourceMarkdown={sourceMarkdown!} sourceUrl={sourceUrl!} />
+					)}
+					<ArticleToc headings={tocHeadings} maxH={tocMaxHeight} />
+				</div>
+			</aside>
+		)}
+
+		<article class="article-page">
+			<div class="article-page__stack">
+				{sidebarTree && (
+					<div class="article-layout__sidebar-mobile">
+						<ArticlePostList
+							currentPath={currentPath}
+							currentPostId={currentPostId}
+							tree={sidebarTree}
+							variant="mobile"
+						/>
+					</div>
+				)}
+
+				<div class="article-page__block">
+					<ArticleHeader title={title} pubDate={pubDate} updatedDate={updatedDate} />
+				</div>
+
+				{tags.length > 0 && (
+					<div class="article-page__block">
+						<ArticleTags tags={tags} />
+					</div>
+				)}
+
+				{hasSourceTools && (
+					<div class="article-layout__source-mobile article-page__block">
+						<ArticleSourceActions sourceMarkdown={sourceMarkdown!} sourceUrl={sourceUrl!} />
+					</div>
+				)}
+
+				{heroImage && (
+					<div class="article-page__block">
+						<ArticleHeroImage src={heroImage.src} />
+					</div>
+				)}
+
+				<div class="article-content">
+					<slot />
+				</div>
+
+				{copyright && (
+					<div class="article-page__block">
+						<ArticleCopyright copyright={copyright} />
+					</div>
+				)}
+
+				{(previousPost || nextPost) && (
+					<div class="article-page__block">
+						<ArticlePrevNext
+							previousPost={previousPost}
+							nextPost={nextPost}
+							showDivider={!copyright}
+						/>
+					</div>
+				)}
+
+				{comment && <ArticleComments client:idle />}
+			</div>
+		</article>
+	</div>
+</SiteFrame>
