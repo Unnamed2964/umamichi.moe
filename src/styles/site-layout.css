@@ -639,7 +639,6 @@ html {
 
 .site-header__theme-toggle--mobile {
 	display: inline-flex;
-	border-radius: 9999px;
 	color: var(--site-header-fg);
 }
 
