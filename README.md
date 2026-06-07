@@ -87,3 +87,7 @@ npm run deploy
 - `public/`：静态资源
 - `functions/`：Cloudflare 相关函数代码
 - `docs/`：项目内部说明文档
+
+## LLM 生成代码说明
+
+本项目架构和大体方向由人工把控，具体代码由 GitHub Copilot、Cursor 等 LLM 生成。本项目以展示和功能为主，具体代码可能经不起推敲，请注意。
