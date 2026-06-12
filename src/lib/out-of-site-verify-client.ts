@@ -71,10 +71,17 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 	const kind = params.get('kind');
 	const hash = params.get('hash');
 
+	const closeButton = document.getElementById('out-of-site-close');
+	if (closeButton instanceof HTMLButtonElement) {
+		closeButton.addEventListener('click', () => {
+			window.close();
+		});
+	}
+
 	const proceed = document.getElementById('out-of-site-proceed');
-	const setProceedButtonTone = (tone: 'primary' | 'danger') => {
+	const setProceedButtonTone = (tone: 'secondary' | 'danger') => {
 		if (proceed instanceof HTMLAnchorElement) {
-			proceed.classList.toggle('primary-button', tone === 'primary');
+			proceed.classList.toggle('secondary-button', tone === 'secondary');
 			proceed.classList.toggle('danger-button', tone === 'danger');
 		}
 	};
@@ -87,10 +94,10 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 			proceed.setAttribute('aria-disabled', 'true');
 			proceed.setAttribute('tabindex', '-1');
 			proceed.classList.add('is-pending');
-			setProceedButtonTone('primary');
+			setProceedButtonTone('secondary');
 		}
 	};
-	const showProceed = (tone: 'primary' | 'danger' = 'primary') => {
+	const showProceed = (tone: 'secondary' | 'danger' = 'secondary') => {
 		if (proceed instanceof HTMLAnchorElement) {
 			proceed.href = destination.href;
 			proceed.removeAttribute('target');
