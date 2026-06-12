@@ -19,8 +19,8 @@ import BaseHead from '../components/BaseHead.astro';
 				<code id="out-of-site-url" class="out-of-site-url"></code>
 			</p>
 			<p class="out-of-site-actions">
-				<a id="out-of-site-proceed" class="primary-button" href="#" hidden>继续访问</a>
-				<a class="out-of-site-link" href="/">返回首页</a>
+				<a id="out-of-site-proceed" class="secondary-button" href="#" hidden>继续访问</a>
+				<button type="button" id="out-of-site-close" class="primary-button">关闭</button>
 			</p>
 		</main>
 		<script>
@@ -107,36 +107,25 @@ import BaseHead from '../components/BaseHead.astro';
 		align-items: center;
 	}
 
-	.out-of-site-actions .primary-button,
+	.out-of-site-actions .secondary-button,
 	.out-of-site-actions .danger-button {
 		text-decoration: none;
 	}
 
-	.out-of-site-actions .primary-button:hover,
-	.out-of-site-actions .primary-button:active,
+	.out-of-site-actions .secondary-button:hover,
+	.out-of-site-actions .secondary-button:active,
 	.out-of-site-actions .danger-button:hover,
 	.out-of-site-actions .danger-button:active {
 		text-decoration: none;
 	}
 
-	.out-of-site-actions .primary-button.is-pending,
-	.out-of-site-actions .primary-button[aria-disabled='true'],
+	.out-of-site-actions .secondary-button.is-pending,
+	.out-of-site-actions .secondary-button[aria-disabled='true'],
 	.out-of-site-actions .danger-button.is-pending,
 	.out-of-site-actions .danger-button[aria-disabled='true'] {
 		opacity: 0.5;
 		pointer-events: none;
 		cursor: not-allowed;
 		transform: none;
-	}
-
-	.out-of-site-link {
-		color: var(--site-accent);
-		text-decoration: underline;
-		text-underline-offset: 0.2em;
-		font-size: 0.925rem;
-	}
-
-	.out-of-site-link:hover {
-		color: var(--site-accent-hover, var(--site-accent));
 	}
 </style>
