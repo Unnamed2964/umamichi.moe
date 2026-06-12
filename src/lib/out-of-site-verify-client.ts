@@ -79,6 +79,16 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 	}
 
 	const proceed = document.getElementById('out-of-site-proceed');
+	let proceedDestination: string | null = null;
+	if (proceed instanceof HTMLAnchorElement) {
+		proceed.addEventListener('click', (event) => {
+			if (!proceedDestination) {
+				return;
+			}
+			event.preventDefault();
+			window.location.replace(proceedDestination);
+		});
+	}
 	const setProceedButtonTone = (tone: 'secondary' | 'danger') => {
 		if (proceed instanceof HTMLAnchorElement) {
 			proceed.classList.toggle('secondary-button', tone === 'secondary');
@@ -86,6 +96,7 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 		}
 	};
 	const lockProceed = () => {
+		proceedDestination = null;
 		if (proceed instanceof HTMLAnchorElement) {
 			proceed.hidden = true;
 			proceed.href = '#';
@@ -98,6 +109,7 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 		}
 	};
 	const showProceed = (tone: 'secondary' | 'danger' = 'secondary') => {
+		proceedDestination = destination.href;
 		if (proceed instanceof HTMLAnchorElement) {
 			proceed.href = destination.href;
 			proceed.removeAttribute('target');
