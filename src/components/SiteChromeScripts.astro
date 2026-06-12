@@ -66,6 +66,26 @@
 		document.addEventListener('astro:after-swap', () => applyThemePreference(getStoredThemePreference()));
 		applyThemePreference(getStoredThemePreference());
 	}
+
+	if (!window.sitePaletteControlsInitialized) {
+		window.sitePaletteControlsInitialized = true;
+
+		const paletteStorageKey = 'site-palette';
+
+		const applyStoredPalette = () => {
+			const stored = window.localStorage.getItem(paletteStorageKey);
+
+			if (!stored || stored === 'default') {
+				delete document.documentElement.dataset.palette;
+				return;
+			}
+
+			document.documentElement.dataset.palette = stored;
+		};
+
+		document.addEventListener('astro:after-swap', applyStoredPalette);
+		applyStoredPalette();
+	}
 </script>
 
 <script is:inline>
