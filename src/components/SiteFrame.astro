@@ -1,5 +1,6 @@
 ---
 import MetroNavIcon from './MetroNavIcon.astro';
+import PaletteDropdown from './PaletteDropdown.tsx';
 import ThemeToggleButton from './ThemeToggleButton.astro';
 import { SITE_TITLE } from '../consts';
 import type { TopLevelNavItem } from '../lib/docs';
@@ -65,6 +66,11 @@ const iconGithub = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512
 						</h1>
 					</div>
 
+					<PaletteDropdown
+						client:load
+						wrapClassName="site-header__palette-dropdown--mobile"
+						className="site-icon-button--round"
+					/>
 					<ThemeToggleButton class="site-header__theme-toggle--mobile site-icon-button--round" />
 
 					<h1 class="site-header__title site-header__title--desktop">
@@ -92,6 +98,7 @@ const iconGithub = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512
 						</nav>
 
 						<div class="site-header__actions">
+							<PaletteDropdown client:load className="site-icon-button--round" />
 							<ThemeToggleButton class="site-icon-button--round" />
 							<a
 								class="site-header__social-link"
