@@ -75,7 +75,7 @@ html {
 
 .site-sidebar-panel__title {
 	margin: 0;
-	font-size: 0.875rem;
+	font-size: 1rem;
 	font-weight: 700;
 	letter-spacing: 0.05em;
 	color: var(--site-subtle-fg);
@@ -461,7 +461,7 @@ html {
 .article-sidebar-rail {
 	display: flex;
 	flex-direction: column;
-	gap: 0.75rem;
+	gap: 1.25rem;
 }
 
 .article-layout {
