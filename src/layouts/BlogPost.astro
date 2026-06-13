@@ -65,6 +65,7 @@ const articleList = 'articleList' in Astro.props ? (Astro.props.articleList as P
 const currentEntryId = 'currentEntryId' in Astro.props ? (Astro.props.currentEntryId as string) : undefined;
 
 const title = pageData.title ?? SITE_TITLE;
+const documentTitle = title === SITE_TITLE ? title : `${title} - ${SITE_TITLE}`;
 const description = pageData.description ?? SITE_DESCRIPTION;
 const { pubDate, updatedDate, heroImage } = pageData;
 const tags: ArticleTag[] = (pageData.tags ?? []).map((tag) => ({
@@ -117,7 +118,7 @@ const formattedUpdatedDate = updatedDate
 
 <html lang="zh-CN" transition:animate="none">
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={documentTitle} description={description} />
 	</head>
 
 	<body>
