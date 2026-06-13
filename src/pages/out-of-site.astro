@@ -109,6 +109,11 @@ import BaseHead from '../components/BaseHead.astro';
 		margin-left: auto;
 	}
 
+	/* common-css `.secondary-button` sets `display: inline-flex`, which overrides `[hidden]`. */
+	#out-of-site-proceed[hidden] {
+		display: none !important;
+	}
+
 	.out-of-site-actions .secondary-button,
 	.out-of-site-actions .danger-button {
 		text-decoration: none;
