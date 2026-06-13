@@ -7,6 +7,25 @@ function isHttpOrHttpsUrl(url: URL) {
 	return url.protocol === 'http:' || url.protocol === 'https:';
 }
 
+function closePopupIfOpen(popup: Window) {
+	if (!popup.closed) {
+		popup.close();
+	}
+}
+
+function navigatePopupIfOpen(popup: Window, url: string) {
+	if (popup.closed) {
+		return;
+	}
+
+	try {
+		popup.opener = null;
+		popup.location.href = url;
+	} catch {
+		closePopupIfOpen(popup);
+	}
+}
+
 export function initOutOfSiteClickHandler(options: { outOfSiteLinkHmacKey: string }) {
 	if (typeof window === 'undefined' || (window as unknown as Record<string, boolean>)[INIT_KEY]) {
 		return;
@@ -59,32 +78,41 @@ export function initOutOfSiteClickHandler(options: { outOfSiteLinkHmacKey: strin
 			event.preventDefault();
 			event.stopPropagation();
 
+			const popup = window.open('about:blank', '_blank');
+			if (!popup) {
+				return;
+			}
+
 			const toAbs = resolved.href;
 			const inGiscus = Boolean(anchor.closest('[data-out-of-site-ugc="giscus"]'));
 			const kind = inGiscus ? 'giscus' : 'ssr';
 
 			void (async () => {
-				const params = new URLSearchParams();
-				params.set('to', toAbs);
-				params.set('kind', kind);
+				try {
+					const params = new URLSearchParams();
+					params.set('to', toAbs);
+					params.set('kind', kind);
 
-				if (kind === 'ssr') {
-					const sig = anchor.getAttribute('data-ssr-out-of-site-sig');
-					if (sig) {
-						params.set('sig', sig);
+					if (kind === 'ssr') {
+						const sig = anchor.getAttribute('data-ssr-out-of-site-sig');
+						if (sig) {
+							params.set('sig', sig);
+						}
 					}
-				}
 
-				if (!outOfSiteLinkHmacKey) {
-					params.set('hash', '');
-				} else {
-					const token = buildCanonicalOutOfSiteMessage({ kind, toHref: toAbs });
-					params.set('hash', await hmacSha256Base64Url(outOfSiteLinkHmacKey, token));
-				}
+					if (!outOfSiteLinkHmacKey) {
+						params.set('hash', '');
+					} else {
+						const token = buildCanonicalOutOfSiteMessage({ kind, toHref: toAbs });
+						params.set('hash', await hmacSha256Base64Url(outOfSiteLinkHmacKey, token));
+					}
 
-				const interstitial = new URL('/out-of-site/', window.location.origin);
-				interstitial.search = params.toString();
-				window.open(interstitial.href, '_blank', 'noopener,noreferrer');
+					const interstitial = new URL('/out-of-site/', window.location.origin);
+					interstitial.search = params.toString();
+					navigatePopupIfOpen(popup, interstitial.href);
+				} catch {
+					closePopupIfOpen(popup);
+				}
 			})();
 		},
 		true,
