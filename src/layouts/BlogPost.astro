@@ -5,6 +5,7 @@ import BaseHead from '../components/BaseHead.astro';
 import SiteChromeScripts from '../components/SiteChromeScripts.astro';
 import SiteNavTextOutlineFilter from '../components/SiteNavTextOutlineFilter.astro';
 import ArticleLayout from '../components/ArticleLayout.astro';
+import ArticleNavScript from '../components/ArticleNavScript.astro';
 import type { ArticleTag } from '../lib/article';
 import { SITE_DESCRIPTION, SITE_GITHUB_SOURCE_BASE_URL, SITE_TITLE } from '../consts';
 import type { CopyrightConfig } from '../lib/copyright';
@@ -145,6 +146,7 @@ const formattedUpdatedDate = updatedDate
 		</ArticleLayout>
 
 		<SiteChromeScripts />
+		<ArticleNavScript />
 		<ArticleTocScript />
 	</body>
 </html>
