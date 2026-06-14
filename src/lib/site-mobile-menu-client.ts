@@ -16,6 +16,12 @@ function isMenuClosing(): boolean {
 	return document.documentElement.dataset.mobileMenuClosing === 'true';
 }
 
+const SCROLLBAR_COMPENSATION_VAR = '--site-scrollbar-compensation';
+
+function measureScrollbarWidth(): number {
+	return Math.max(0, window.innerWidth - document.documentElement.clientWidth);
+}
+
 function syncMobileHeaderPlaceholder(keepPlaceholder: boolean): void {
 	const header = document.querySelector('[data-site-header]');
 
@@ -26,6 +32,19 @@ function syncMobileHeaderPlaceholder(keepPlaceholder: boolean): void {
 	}
 
 	document.documentElement.style.removeProperty('--site-header-placeholder-height');
+}
+
+function syncScrollbarCompensation(keepCompensation: boolean): void {
+	if (keepCompensation && isMobileMenuViewport()) {
+		const scrollbarWidth = measureScrollbarWidth();
+
+		if (scrollbarWidth > 0) {
+			document.documentElement.style.setProperty(SCROLLBAR_COMPENSATION_VAR, `${scrollbarWidth}px`);
+			return;
+		}
+	}
+
+	document.documentElement.style.removeProperty(SCROLLBAR_COMPENSATION_VAR);
 }
 
 function syncMenuToggleButtons(isOpen: boolean): void {
@@ -52,6 +71,7 @@ export function initSiteMobileMenu(): void {
 
 		delete document.documentElement.dataset.mobileMenuClosing;
 		syncMobileHeaderPlaceholder(false);
+		syncScrollbarCompensation(false);
 		menuClosePromise = null;
 	};
 
@@ -82,12 +102,14 @@ export function initSiteMobileMenu(): void {
 
 		if (isOpen) {
 			syncMobileHeaderPlaceholder(true);
+			syncScrollbarCompensation(true);
 			applyMenuOpenState(mobileMenu);
 			return;
 		}
 
 		delete document.documentElement.dataset.mobileMenuOpen;
 		syncMobileHeaderPlaceholder(false);
+		syncScrollbarCompensation(false);
 		applyMenuClosedState(mobileMenu);
 	};
 
@@ -132,6 +154,7 @@ export function initSiteMobileMenu(): void {
 		}
 
 		syncMobileHeaderPlaceholder(true);
+		syncScrollbarCompensation(true);
 		applyMenuOpenState(mobileMenu);
 
 		if (!isMobileMenuViewport() || menuHistoryPushed) {
