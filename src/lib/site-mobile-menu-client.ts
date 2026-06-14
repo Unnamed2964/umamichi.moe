@@ -51,7 +51,6 @@ export function initSiteMobileMenu(): void {
 		}
 
 		delete document.documentElement.dataset.mobileMenuClosing;
-		document.body.style.overflow = '';
 		syncMobileHeaderPlaceholder(false);
 		menuClosePromise = null;
 	};
@@ -67,7 +66,6 @@ export function initSiteMobileMenu(): void {
 		mobileMenu.setAttribute('aria-hidden', 'false');
 		document.documentElement.dataset.mobileMenuOpen = 'true';
 		delete document.documentElement.dataset.mobileMenuClosing;
-		document.body.style.overflow = 'hidden';
 		syncMenuToggleButtons(true);
 		document.dispatchEvent(new Event('site:nav-layout-change'));
 	};
@@ -90,7 +88,6 @@ export function initSiteMobileMenu(): void {
 
 		delete document.documentElement.dataset.mobileMenuOpen;
 		syncMobileHeaderPlaceholder(false);
-		document.body.style.overflow = '';
 		applyMenuClosedState(mobileMenu);
 	};
 
@@ -111,7 +108,6 @@ export function initSiteMobileMenu(): void {
 
 		delete document.documentElement.dataset.mobileMenuOpen;
 		document.documentElement.dataset.mobileMenuClosing = 'true';
-		document.body.style.overflow = 'hidden';
 		applyMenuClosedState(mobileMenu);
 
 		if (!isMobileMenuViewport()) {
