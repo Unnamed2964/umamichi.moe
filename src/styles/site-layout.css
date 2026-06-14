@@ -12,8 +12,8 @@ html {
 	--site-main-half-w: calc(var(--site-main-max-w) / 2);
 	--site-frame-max-w: 72rem;
 
-	--site-article-sidebar-w: 12rem;
-	--site-article-sidebar-gap: 0.5rem;
+	--site-article-sidebar-w: 13rem;
+	--site-article-sidebar-gap: 1rem;
 
 	--site-content-font-size: 1rem;
 	--site-content-line-height: 1.65;
