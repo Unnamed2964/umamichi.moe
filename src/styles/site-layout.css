@@ -20,6 +20,12 @@ html {
 
 	--site-space-unit: 0.25rem;
 
+	/* Font weight scale — see docs/site-font-weight.md */
+	--site-weight-body: 400;
+	--site-weight-ui: 500;
+	--site-weight-heading: 600;
+	--site-weight-display: 700;
+
 	/* Chakra defaultSystem body/heading stack (SiteFrame era) */
 	--site-chrome-font:
 		Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif,
@@ -35,6 +41,7 @@ html {
 .site-route-main {
 	font-size: var(--site-content-font-size);
 	line-height: var(--site-content-line-height);
+	font-weight: var(--site-weight-body);
 }
 
 [data-site-button] {
@@ -49,7 +56,7 @@ html {
 	gap: 0.5rem;
 	background: var(--site-button-bg);
 	color: var(--site-button-fg);
-	font-weight: 500;
+	font-weight: var(--site-weight-ui);
 	text-decoration: none;
 	transition:
 		background-color 0.2s ease,
@@ -76,7 +83,7 @@ html {
 .site-sidebar-panel__title {
 	margin: 0;
 	font-size: 1rem;
-	font-weight: 700;
+	font-weight: var(--site-weight-ui);
 	letter-spacing: 0.05em;
 	color: var(--site-subtle-fg);
 }
@@ -116,38 +123,38 @@ html {
 .site-sidebar-link--section.site-sidebar-link--primary {
 	color: var(--article-fg);
 	font-size: 0.875rem;
-	font-weight: 400;
+	font-weight: var(--site-weight-body);
 }
 
 .site-sidebar-link--section.site-sidebar-link--nested {
 	color: var(--article-fg);
 	font-size: 0.75rem;
-	font-weight: 400;
+	font-weight: var(--site-weight-body);
 }
 
 .site-sidebar-link--item.site-sidebar-link--primary {
 	color: var(--site-muted-fg);
 	font-size: 0.875rem;
-	font-weight: 400;
+	font-weight: var(--site-weight-body);
 	transition: color 0.2s ease, font-weight 0.2s ease;
 }
 
 .site-sidebar-link--item.site-sidebar-link--nested {
 	color: var(--site-muted-fg);
 	font-size: 0.75rem;
-	font-weight: 400;
+	font-weight: var(--site-weight-body);
 	transition: color 0.2s ease, font-weight 0.2s ease;
 }
 
 .site-sidebar-link--current.site-sidebar-link--section,
 .site-sidebar-link--current.site-sidebar-link--item {
 	color: var(--site-accent);
-	font-weight: 700;
+	font-weight: var(--site-weight-ui);
 }
 
 .site-sidebar-link[aria-current='location'] {
 	color: var(--site-accent);
-	font-weight: 700;
+	font-weight: var(--site-weight-ui);
 }
 
 .article-header {
@@ -162,7 +169,7 @@ html {
 .article-header__date {
 	margin: 0;
 	color: var(--article-muted-fg);
-	font-weight: 400;
+	font-weight: var(--site-weight-body);
 }
 
 .article-header__updated {
@@ -175,7 +182,7 @@ html {
 .article-header__title {
 	margin: 0;
 	font-size: 2.25rem;
-	font-weight: 700;
+	font-weight: var(--site-weight-display);
 	line-height: 1.2;
 	letter-spacing: -0.025em;
 }
@@ -224,7 +231,7 @@ html {
 	padding: 0.25rem 0.75rem;
 	border-radius: 9999px;
 	font-size: 0.875rem;
-	font-weight: 600;
+	font-weight: var(--site-weight-body);
 }
 
 .article-source-actions {
@@ -380,13 +387,13 @@ html {
 
 .article-prev-next__label {
 	font-size: 0.75rem;
-	font-weight: 600;
+	font-weight: var(--site-weight-body);
 	color: var(--site-subtle-fg);
 }
 
 .article-prev-next__title {
 	font-size: 0.875rem;
-	font-weight: 700;
+	font-weight: var(--site-weight-ui);
 	line-height: 1.5;
 	color: inherit;
 }
@@ -410,7 +417,7 @@ html {
 .article-copyright__heading {
 	margin: 0 0 0.625rem;
 	font-size: 0.875rem;
-	font-weight: 700;
+	font-weight: var(--site-weight-ui);
 	color: var(--site-fg);
 }
 
@@ -712,7 +719,7 @@ html {
 .site-header__title {
 	margin: 0;
 	font-size: 1.125rem;
-	font-weight: 600;
+	font-weight: var(--site-weight-ui);
 	line-height: 1.75rem;
 	letter-spacing: -0.025em;
 	text-align: left;
@@ -1093,7 +1100,7 @@ html.dark .site-icon-button[data-site-theme-toggle] [data-site-theme-icon='dark'
 	margin: 0;
 	color: var(--site-muted-fg);
 	font-size: 1rem;
-	font-weight: 400;
+	font-weight: var(--site-weight-body);
 	line-height: 1.5rem;
 }
 
