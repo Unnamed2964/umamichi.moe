@@ -31,10 +31,6 @@ function readCssVarMs(variableName: string, fallbackMs: number): number {
 	return parsed > 0 ? parsed : fallbackMs;
 }
 
-function prefersReducedMotion(): boolean {
-	return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
 function isPanelVisible(panel: HTMLElement): boolean {
 	if (panel.offsetParent === null) {
 		return false;
@@ -70,7 +66,7 @@ export function scrollArticleSidebarCurrentIntoView(): void {
 		current.scrollIntoView({
 			block: 'nearest',
 			inline: 'nearest',
-			behavior: prefersReducedMotion() ? 'instant' : 'smooth',
+			behavior: 'instant',
 		});
 		return;
 	}
