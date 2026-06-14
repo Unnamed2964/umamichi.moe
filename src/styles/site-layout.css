@@ -116,26 +116,26 @@ html {
 .site-sidebar-link--section.site-sidebar-link--primary {
 	color: var(--article-fg);
 	font-size: 0.875rem;
-	font-weight: 700;
+	font-weight: 400;
 }
 
 .site-sidebar-link--section.site-sidebar-link--nested {
 	color: var(--article-fg);
 	font-size: 0.75rem;
-	font-weight: 700;
+	font-weight: 400;
 }
 
 .site-sidebar-link--item.site-sidebar-link--primary {
 	color: var(--site-muted-fg);
 	font-size: 0.875rem;
-	font-weight: 500;
+	font-weight: 400;
 	transition: color 0.2s ease, font-weight 0.2s ease;
 }
 
 .site-sidebar-link--item.site-sidebar-link--nested {
 	color: var(--site-muted-fg);
 	font-size: 0.75rem;
-	font-weight: 500;
+	font-weight: 400;
 	transition: color 0.2s ease, font-weight 0.2s ease;
 }
 
@@ -162,7 +162,7 @@ html {
 .article-header__date {
 	margin: 0;
 	color: var(--article-muted-fg);
-	font-weight: 600;
+	font-weight: 400;
 }
 
 .article-header__updated {
