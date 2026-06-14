@@ -13,6 +13,11 @@ export const SITE_ARTICLE_SIDEBAR_LEFT_TRANSITION_SCOPE = 'article-sidebar-left'
 /** Desktop article TOC panel in the right sidebar (sibling of `<main>`). */
 export const SITE_ARTICLE_SIDEBAR_RIGHT_TRANSITION_SCOPE = 'article-sidebar-right';
 
+/** Matches `data-astro-transition-persist` on {@link SiteFrame} header. */
+export const SITE_HEADER_PERSIST_ID = 'header';
+
+const siteChromeHeaderVtName = 'site-chrome-header';
+
 const slideDuration = 'var(--wpm-slide-horizontal-duration)';
 const slideEasing = 'var(--wpm-ease-out-exp6)';
 const sidebarFadeDuration = 'var(--site-route-sidebar-fade-duration)';
@@ -170,6 +175,34 @@ const routeSlideAnimations: ScopedTransitionAnimations = {
 	backNew: 'wpm-slide-back-in',
 };
 
+/**
+ * Persisted header: own view-transition layer, no size morph or cross-fade.
+ * Keeps the site title bar out of the root VT group during route swaps.
+ */
+function buildPersistedHeaderTransitionStyles(persistId: string, vtName: string): string {
+	return `
+[data-astro-transition-persist="${persistId}"] {
+	view-transition-name: ${vtName};
+}
+
+@supports (view-transition-name: none) {
+	::view-transition-group(${vtName}) {
+		animation: none !important;
+		overflow: clip;
+	}
+
+	::view-transition-image-pair(${vtName}) {
+		animation: none !important;
+	}
+
+	::view-transition-old(${vtName}),
+	::view-transition-new(${vtName}) {
+		animation: none !important;
+		mix-blend-mode: normal;
+	}
+}`;
+}
+
 const siteRouteSidebarFadeKeyframes = `
 @keyframes site-route-fade-in {
 	from {
@@ -192,11 +225,12 @@ const siteRouteSidebarFadeKeyframes = `
 }`;
 
 /**
- * Scoped view-transition CSS for persisted chrome (`header` / `footer` persist),
- * sliding main, and fading article sidebars (TOC panel only on the right). Do not use `@layer astro`.
+ * Scoped view-transition CSS for persisted header, sliding main,
+ * and fading article sidebars (TOC panel only on the right). Do not use `@layer astro`.
  */
 export const siteRouteSlideTransitionStyles = [
 	siteRouteSidebarFadeKeyframes,
+	buildPersistedHeaderTransitionStyles(SITE_HEADER_PERSIST_ID, siteChromeHeaderVtName),
 	buildScopedViewTransitionStyles(
 		SITE_ROUTE_TRANSITION_SCOPE,
 		'site-route',
