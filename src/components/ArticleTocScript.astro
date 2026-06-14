@@ -72,11 +72,12 @@
 				getComputedStyle(document.documentElement).getPropertyValue('--site-header-offset'),
 			) || 0;
 			const activationY = headerOffset;
+			const activationTolerancePx = 2;
 
 			let current = headings[0].slug;
 
 			for (const item of headings) {
-				if (item.heading.getBoundingClientRect().top <= activationY) {
+				if (item.heading.getBoundingClientRect().top <= activationY + activationTolerancePx) {
 					current = item.slug;
 				} else {
 					break;
