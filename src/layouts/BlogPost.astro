@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import ArticleSidebarScrollScript from '../components/ArticleSidebarScrollScript.astro';
 import ArticleTocScript from '../components/ArticleTocScript.astro';
 import BaseHead from '../components/BaseHead.astro';
 import SiteChromeScripts from '../components/SiteChromeScripts.astro';
@@ -145,6 +146,7 @@ const formattedUpdatedDate = updatedDate
 		</ArticleLayout>
 
 		<SiteChromeScripts />
+		<ArticleSidebarScrollScript />
 		<ArticleTocScript />
 	</body>
 </html>
