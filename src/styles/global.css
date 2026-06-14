@@ -186,11 +186,14 @@ html.dark {
 
 	html[data-mobile-menu-open='true'],
 	html[data-mobile-menu-closing='true'] {
-		overflow-x: hidden;
+		overflow: hidden;
+		overscroll-behavior: none;
 	}
 
+	html[data-mobile-menu-open='true'] body,
 	html[data-mobile-menu-closing='true'] body {
 		overflow: hidden;
+		overscroll-behavior: none;
 	}
 
 	html[data-mobile-menu-open='true'] [data-site-mobile-menu].wpm-pane-menu {
