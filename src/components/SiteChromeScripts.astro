@@ -101,16 +101,7 @@
 		window.siteHeaderOffsetInitialized = true;
 		let headerOffsetObserver = null;
 
-		const isMobileMenuTransitioning = () => {
-			const html = document.documentElement;
-			return html.dataset.mobileMenuOpen === 'true' || html.dataset.mobileMenuClosing === 'true';
-		};
-
 		const syncHeaderOffset = () => {
-			if (isMobileMenuTransitioning()) {
-				return;
-			}
-
 			const header = document.querySelector('[data-site-header]');
 
 			if (header instanceof HTMLElement) {
@@ -125,19 +116,16 @@
 			headerOffsetObserver?.disconnect();
 			headerOffsetObserver = null;
 
-			if (!(header instanceof HTMLElement) || isMobileMenuTransitioning()) {
-				return;
+			if (header instanceof HTMLElement) {
+				headerOffsetObserver = new ResizeObserver(syncHeaderOffset);
+				headerOffsetObserver.observe(header);
 			}
-
-			headerOffsetObserver = new ResizeObserver(syncHeaderOffset);
-			headerOffsetObserver.observe(header);
 
 			syncHeaderOffset();
 		};
 
 		observeHeaderOffset();
 		document.addEventListener('astro:after-swap', observeHeaderOffset);
-		document.addEventListener('site:nav-layout-change', observeHeaderOffset);
 		window.addEventListener('resize', syncHeaderOffset, { passive: true });
 	}
 </script>
