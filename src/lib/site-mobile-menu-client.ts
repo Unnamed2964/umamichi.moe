@@ -73,6 +73,7 @@ export function initSiteMobileMenu(): void {
 		syncMobileHeaderPlaceholder(false);
 		syncScrollbarCompensation(false);
 		menuClosePromise = null;
+		document.dispatchEvent(new Event('site:nav-layout-change'));
 	};
 
 	const applyMenuClosedState = (mobileMenu: HTMLElement) => {
