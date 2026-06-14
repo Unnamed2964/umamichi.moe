@@ -1,19 +1,14 @@
 import { isTransitionBeforePreparationEvent } from 'astro:transitions/client';
-
-const MOBILE_BREAKPOINT_PX = 768;
+import { isMobileMenuViewport } from './site-mobile-menu-pane.ts';
 
 declare global {
 	interface Window {
-		__siteMobileMenuCloseForNavigation?: () => void;
+		__siteMobileMenuCloseForNavigation?: () => void | Promise<void>;
 	}
 }
 
 function isMenuOpen(): boolean {
 	return document.documentElement.dataset.mobileMenuOpen === 'true';
-}
-
-function isMobileViewport(): boolean {
-	return window.innerWidth < MOBILE_BREAKPOINT_PX;
 }
 
 function resolveUrl(value: unknown): URL | null {
@@ -80,69 +75,12 @@ function isInternalNavigationSource(sourceElement: EventTarget | null | undefine
 	}
 }
 
-function parsePaneDurationMs(): number {
-	const shiftSurface = document.querySelector('.site-route-main.wpm-pane-shift')
-		?? document.querySelector('[data-site-mobile-menu]');
-
-	if (shiftSurface instanceof HTMLElement) {
-		const duration = getComputedStyle(shiftSurface).transitionDuration;
-		const first = duration.split(',')[0]?.trim();
-
-		if (first?.endsWith('ms')) {
-			return Number.parseFloat(first);
-		}
-
-		if (first?.endsWith('s')) {
-			return Number.parseFloat(first) * 1000;
-		}
-	}
-
-	return 500;
-}
-
-function waitForPaneClose(): Promise<void> {
-	if (!isMobileViewport()) {
-		return Promise.resolve();
-	}
-
-	const shiftSurface = document.querySelector('.site-route-main.wpm-pane-shift')
-		?? document.querySelector('[data-site-mobile-menu]');
-
-	if (!(shiftSurface instanceof HTMLElement)) {
-		return Promise.resolve();
-	}
-
-	const fallbackMs = parsePaneDurationMs() + 50;
-
-	return new Promise((resolve) => {
-		let settled = false;
-
-		const finish = () => {
-			if (settled) {
-				return;
-			}
-
-			settled = true;
-			resolve();
-		};
-
-		const onTransitionEnd = (event: TransitionEvent) => {
-			if (event.target === shiftSurface && event.propertyName === 'transform') {
-				finish();
-			}
-		};
-
-		shiftSurface.addEventListener('transitionend', onTransitionEnd);
-		window.setTimeout(finish, fallbackMs);
-	});
-}
-
 function shouldDeferMenuNavigation(event: Event): boolean {
 	if (!isTransitionBeforePreparationEvent(event)) {
 		return false;
 	}
 
-	if (!isMenuOpen() || !isMobileViewport()) {
+	if (!isMenuOpen() || !isMobileMenuViewport()) {
 		return false;
 	}
 
@@ -175,8 +113,7 @@ export function initSiteMobileMenuRouteDefer(): void {
 			const originalLoader = event.loader;
 
 			event.loader = async () => {
-				window.__siteMobileMenuCloseForNavigation?.();
-				await waitForPaneClose();
+				await window.__siteMobileMenuCloseForNavigation?.();
 				await originalLoader();
 			};
 		},
