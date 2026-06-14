@@ -12,7 +12,7 @@ rss: false
 - [MkDocs](https://www.mkdocs.org/)：导航、目录侧栏，层级式的目录结构，“上一篇/下一篇”按钮
   + [OI Wiki](https://oi-wiki.org/)：版权信息、Giscus 评论区
 - Windows 8-10、Office 2013-2016、Visual Studio 2012-2017（Metro Design）：内容、语义中心，采用纯色色块，不使用阴影，采用隐喻的抽象图标，类似于城市轨道交通导向标识的视觉风格
-  <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=3638545&bvid=BV19s411R7Tb&cid=5820574&p=1&autoplay=false" scrolling="yes" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="100%" style="aspect-ratio: 1.5; max-height: 600px;"></iframe>
+  <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=3638545&bvid=BV19s411R7Tb&cid=5820574&p=1&autoplay=false" scrolling="yes" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="100%" style="aspect-ratio: 1.5; max-height: 600px;" loading="lazy"></iframe>
   <del>这也是希望能够借这一折腾的机会熟悉 CSS 和思考 UI 组件设计</del>
 - 上海地铁：导航栏的具有隐喻含义的图标的来源
 
