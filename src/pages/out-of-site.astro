@@ -63,7 +63,7 @@ import BaseHead from '../components/BaseHead.astro';
 	.out-of-site-title {
 		margin: 0 0 0.875rem;
 		font-size: clamp(1.25rem, 2.8vw, 1.55rem);
-		font-weight: 700;
+		font-weight: var(--site-weight-ui);
 		letter-spacing: -0.02em;
 		line-height: 1.25;
 	}
@@ -76,7 +76,7 @@ import BaseHead from '../components/BaseHead.astro';
 
 	.out-of-site-status.is-warning {
 		color: var(--site-danger);
-		font-weight: 700;
+		font-weight: var(--site-weight-heading);
 	}
 
 	.out-of-site-detail {

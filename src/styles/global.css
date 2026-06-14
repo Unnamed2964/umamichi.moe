@@ -110,7 +110,7 @@ html.dark {
 	background: var(--site-copy-toast-bg);
 	color: var(--site-copy-toast-fg);
 	font-size: 0.875rem;
-	font-weight: 500;
+	font-weight: var(--site-weight-ui);
 	line-height: 1.4;
 	white-space: nowrap;
 	overflow: hidden;
@@ -146,22 +146,22 @@ html.dark {
 }
 
 [data-site-header] a[data-nav-item] {
-	font-weight: 500;
+	font-weight: var(--site-weight-body);
 	color: var(--site-header-fg);
 }
 
 [data-site-header] a[data-nav-item][data-nav-active-item] {
-	font-weight: 700;
+	font-weight: var(--site-weight-ui);
 	color: var(--site-header-accent-fg);
 }
 
 [data-site-mobile-menu] a[data-mobile-nav-item] {
-	font-weight: 500;
+	font-weight: var(--site-weight-body);
 	color: var(--site-header-fg);
 }
 
 [data-site-mobile-menu] a[data-mobile-nav-item][data-mobile-nav-active-item] {
-	font-weight: 700;
+	font-weight: var(--site-weight-ui);
 	color: var(--site-header-accent-fg);
 }
 
