@@ -47,8 +47,6 @@ html {
 
 	--site-route-sidebar-fade-duration: 200ms;
 	--site-route-sidebar-fade-easing: ease-out;
-	--site-sidebar-scroll-duration: var(--wpm-chrome-reposition-duration);
-	--site-sidebar-scroll-easing: var(--wpm-ease-out-exp6);
 
 	scroll-padding-top: var(--site-header-offset);
 	overflow-y: scroll;
