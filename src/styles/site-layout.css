@@ -37,6 +37,7 @@ html {
 	font-size: var(--site-content-font-size);
 	line-height: var(--site-content-line-height);
 	font-weight: var(--site-weight-body);
+	font-family: var(--article-font-ui);
 }
 
 [data-site-button] {
@@ -542,7 +543,7 @@ html {
 	min-height: 100vh;
 	background: var(--site-bg);
 	color: var(--site-fg);
-	font-family: var(--site-font-ui);
+	font-family: var(--font-ui);
 	line-height: 1.5;
 }
 
