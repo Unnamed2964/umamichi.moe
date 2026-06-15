@@ -24,7 +24,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@umamichi-ui/common-components": "^0.1.0",
-    "@umamichi-ui/common-css": "^0.11.0",
+    "@umamichi-ui/common-css": "^0.12.0",
     "@umamichi-ui/windows-phone-motion": "^0.1.1",
     "astro": "^6.1.3",
     "parse5": "^8.0.1",
