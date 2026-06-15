@@ -48,10 +48,10 @@ html {
 	--site-route-sidebar-fade-duration: 200ms;
 	--site-route-sidebar-fade-easing: ease-out;
 
-	/* Emoji fallback: common-css --font-ui is sans/CJK only; site hosts Noto Color Emoji Web. */
-	--site-font-emoji-fallback:
+	/* Emoji fallback for prose: common-css --font-ui is sans/CJK only. */
+	--font-emoji-fallback:
 		'Noto Color Emoji Web', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-	--site-font-ui: var(--font-ui), var(--site-font-emoji-fallback);
+	--article-font-ui: var(--font-ui), var(--font-emoji-fallback);
 
 	scroll-padding-top: var(--site-header-offset);
 	overflow-y: scroll;
@@ -71,10 +71,6 @@ html.dark {
 
 	--site-focus-visible-outline-color: var(--theme-300);
 	--site-header-accent-fg: var(--theme-100);
-}
-
-body {
-	font-family: var(--site-font-ui);
 }
 
 ::selection {
