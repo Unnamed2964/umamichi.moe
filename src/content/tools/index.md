@@ -7,7 +7,7 @@ rss: false
 
 ## 地铁相关工具
 
-与 [@kyuri-metro](https://www.npmjs.com/org/kyuri-metro) 组织下的线路号方块、屏蔽门贴纸等生成器有关。线路号方块的交互预览与导出已统一迁至 [kyuri-metro Storybook](https://kyuri-metro-storybook.umamichi.moe/)；原独立 UI 仓库（`njmetro-line-id-block-ui`、`shmetro-line-id-block-ui`）已归档。
+与 [@kyuri-metro](https://www.npmjs.com/org/kyuri-metro) 组织下的线路号方块、数字地贴、屏蔽门贴纸等生成器有关。线路号方块与数字地贴的交互预览与导出已统一迁至 [kyuri-metro Storybook](https://kyuri-metro-storybook.umamichi.moe/)；原独立 UI 仓库（`njmetro-line-id-block-ui`、`shmetro-line-id-block-ui`）已归档。
 
 ### 上海地铁
 
@@ -34,6 +34,18 @@ rss: false
 - 2025
 
   ![上海地铁线路号方块生成器 2025 样式输出示例](/tools/shmetro-idblock/output-example-2025.webp)
+
+#### [数字线路号地贴生成器（Storybook）](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-numeric-floor-sticker-2025-svg-generator--docs)
+
+2025 版上海地铁数字线路号地贴（竖向箭头，显示线路号）SVG 生成器。在 Storybook 中可调线路号、高度、颜色与字体，并导出 SVG / PNG / JPG / WebP。
+
+NPM：[@kyuri-metro/shmetro-numeric-floor-sticker-2025-svg-generator](https://www.npmjs.com/package/@kyuri-metro/shmetro-numeric-floor-sticker-2025-svg-generator)
+
+GitHub：[kyuri-metro/shmetro-numeric-floor-sticker-2025-svg-generator](https://github.com/kyuri-metro/shmetro-numeric-floor-sticker-2025-svg-generator)
+
+示例：
+
+![上海地铁数字线路号地贴生成器输出示例（12 号线）](/tools/shmetro-numeric-floor-sticker/output-example.webp)
 
 ### 南京地铁
 
