@@ -82,10 +82,22 @@ type FolderState = {
 	routePath: string;
 };
 
-type ScannedContent = {
+export type ScannedContent = {
 	folderPaths: string[];
 	rawFolderMetaMap: Map<string, RawFolderMeta>;
 	sourceDocs: SourceDocMeta[];
+};
+
+export type ContentScanInput = {
+	docs: Array<{
+		rawContent?: string;
+		relativePath: string;
+	}>;
+	folderMetas?: Array<{
+		folderPath: string;
+		rawContent: string;
+		relativePath?: string;
+	}>;
 };
 
 export type FolderRoute = {
@@ -439,55 +451,60 @@ function buildDocListItem(doc: ResolvedDocMeta): DocListItem {
 	};
 }
 
-function scanContentDirectory(): ScannedContent {
+const DEFAULT_DOC_RAW_CONTENT = '---\ntitle: stub\n---\n';
+
+function sourceDocMetaFromRelativePath(relativePath: string, rawContent: string): SourceDocMeta {
+	const pathWithoutExtension = relativePath.replace(/\.mdx?$/, '');
+	const pathSegments = pathWithoutExtension.split('/');
+	const baseName = pathSegments.pop() ?? '';
+	const folderPath = pathSegments.join('/');
+	const isIndex = baseName === 'index';
+	const id = isIndex ? folderPath || 'index' : joinPosixPath(folderPath, baseName);
+	const routePath = id === 'index' ? '' : id;
+
+	return {
+		folderPath,
+		id,
+		isIndex,
+		rawContent,
+		routePath,
+		sourcePath: `src/content/${relativePath}`,
+	};
+}
+
+export function scanContentFromInput(input: ContentScanInput): ScannedContent {
 	const folderPathSet = new Set<string>(['']);
 	const idSourceMap = new Map<string, string[]>();
 	const indexSourceMap = new Map<string, string[]>();
 	const rawFolderMetaMap = new Map<string, RawFolderMeta>();
-	const sourceDocs = SOURCE_DOC_FILES.map<SourceDocMeta>((sourcePath) => {
-		const normalizedPath = toPosixPath(sourcePath);
-		const relativePath = normalizedPath.replace(/^\.\.\/content\//, '');
-		const rawContent = SOURCE_DOC_RAW_FILES[sourcePath];
-		const pathWithoutExtension = relativePath.replace(/\.mdx?$/, '');
-		const pathSegments = pathWithoutExtension.split('/');
-		const baseName = pathSegments.pop() ?? '';
-		const folderPath = pathSegments.join('/');
-		const isIndex = baseName === 'index';
-		const id = isIndex ? folderPath || 'index' : joinPosixPath(folderPath, baseName);
-		const routePath = id === 'index' ? '' : id;
-		const duplicateSources = idSourceMap.get(id) ?? [];
+	const sourceDocs = input.docs.map<SourceDocMeta>((doc) => {
+		const relativePath = toPosixPath(doc.relativePath);
+		const rawContent = doc.rawContent ?? DEFAULT_DOC_RAW_CONTENT;
+		const sourceDoc = sourceDocMetaFromRelativePath(relativePath, rawContent);
+		const duplicateSources = idSourceMap.get(sourceDoc.id) ?? [];
 
 		duplicateSources.push(relativePath);
-		idSourceMap.set(id, duplicateSources);
-		addFolderPathWithAncestors(folderPathSet, folderPath);
+		idSourceMap.set(sourceDoc.id, duplicateSources);
+		addFolderPathWithAncestors(folderPathSet, sourceDoc.folderPath);
 
-		if (isIndex) {
-			const indexSources = indexSourceMap.get(folderPath) ?? [];
+		if (sourceDoc.isIndex) {
+			const indexSources = indexSourceMap.get(sourceDoc.folderPath) ?? [];
 			indexSources.push(relativePath);
-			indexSourceMap.set(folderPath, indexSources);
+			indexSourceMap.set(sourceDoc.folderPath, indexSources);
 		}
 
-		return {
-			folderPath,
-			id,
-			isIndex,
-			rawContent,
-			routePath,
-			sourcePath: `src/content/${relativePath}`,
-		};
+		return sourceDoc;
 	});
 
-	for (const [sourcePath, rawContent] of Object.entries(SOURCE_FOLDER_META_FILES)) {
-		const normalizedPath = toPosixPath(sourcePath);
-		const relativePath = normalizedPath.replace(/^\.\.\/content\/?/, '');
-		const folderPath = relativePath.replace(/(?:^|\/)_meta\.ya?ml$/u, '');
-		const normalizedFolderPath = folderPath === relativePath ? '' : folderPath;
+	for (const folderMeta of input.folderMetas ?? []) {
+		const normalizedFolderPath = folderMeta.folderPath;
+		const relativePath = folderMeta.relativePath ?? (normalizedFolderPath ? `${normalizedFolderPath}/_meta.yml` : '_meta.yml');
 
 		if (rawFolderMetaMap.has(normalizedFolderPath)) {
 			throw new Error(`Folder ${normalizedFolderPath || '/'} cannot contain multiple meta files.`);
 		}
 
-		rawFolderMetaMap.set(normalizedFolderPath, parseFolderMeta(relativePath, rawContent));
+		rawFolderMetaMap.set(normalizedFolderPath, parseFolderMeta(relativePath, folderMeta.rawContent));
 		addFolderPathWithAncestors(folderPathSet, normalizedFolderPath);
 	}
 
@@ -513,6 +530,31 @@ function scanContentDirectory(): ScannedContent {
 		rawFolderMetaMap,
 		sourceDocs,
 	};
+}
+
+function scanContentFromDisk(): ScannedContent {
+	return scanContentFromInput({
+		docs: SOURCE_DOC_FILES.map((sourcePath) => {
+			const normalizedPath = toPosixPath(sourcePath);
+			const relativePath = normalizedPath.replace(/^\.\.\/content\//, '');
+
+			return {
+				rawContent: SOURCE_DOC_RAW_FILES[sourcePath],
+				relativePath,
+			};
+		}),
+		folderMetas: Object.entries(SOURCE_FOLDER_META_FILES).map(([sourcePath, rawContent]) => {
+			const normalizedPath = toPosixPath(sourcePath);
+			const relativePath = normalizedPath.replace(/^\.\.\/content\/?/, '');
+			const folderPath = relativePath.replace(/(?:^|\/)_meta\.ya?ml$/u, '');
+
+			return {
+				folderPath: folderPath === relativePath ? '' : folderPath,
+				rawContent,
+				relativePath,
+			};
+		}),
+	});
 }
 
 /** Sidebar nav only: promote each node one visual tier (level and indent). */
@@ -552,9 +594,8 @@ function buildSidebarTree(folderPath: string, folderStateMap: Map<string, Folder
 	};
 }
 
-export function buildDocsStructure(entries: DocEntry[]): DocsStructure {
+export function buildDocsStructure(entries: DocEntry[], scannedContent: ScannedContent = scanContentFromDisk()): DocsStructure {
 	const docsById = new Map(entries.map((entry) => [entry.id, entry]));
-	const scannedContent = scanContentDirectory();
 	const docDataById = new Map<string, { comment?: boolean; copyright?: CopyrightConfig; rawContent: string; routePath: string; sourcePath: string }>();
 	const entryRouteMap = new Map<string, string>();
 	const folderMetaMap = new Map<string, FolderMeta>();
