@@ -17,25 +17,19 @@ rss: false
 
 详细介绍、NPM 包与仓库说明见[单独页面](/tools/shmetro-line-id-block-generator/)。
 
-| 样式 | Storybook |
-| --- | --- |
-| 2025 | [打开](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-line-id-block-2025-svg-generator--docs) |
-| 2020 | [打开](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-line-id-block-2020-svg-generator--docs) |
-| 2020 样式 2 | [打开](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-line-id-block-2020-type-2-svg-generator--docs) |
+链接&示例：
 
-示例：
+- [2025](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-line-id-block-2025-svg-generator--docs)
 
-- 2020 样式 2
+  ![上海地铁线路号方块生成器 2025 样式输出示例](/tools/shmetro-idblock/output-example-2025.webp)
 
-  ![上海地铁线路号方块生成器 2020 样式 2 输出示例](/tools/shmetro-idblock/output-example-2020-type2.webp)
-
-- 2020
+- [2020](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-line-id-block-2020-svg-generator--docs)
 
   ![上海地铁线路号方块生成器 2020 样式输出示例](/tools/shmetro-idblock/output-example.webp)
 
-- 2025
+- [2020 样式 2](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-line-id-block-2020-type-2-svg-generator--docs)
 
-  ![上海地铁线路号方块生成器 2025 样式输出示例](/tools/shmetro-idblock/output-example-2025.webp)
+  ![上海地铁线路号方块生成器 2020 样式 2 输出示例](/tools/shmetro-idblock/output-example-2020-type2.webp)
 
 #### [数字线路号地贴生成器（Storybook）](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-numeric-floor-sticker-2025-svg-generator--docs)
 
@@ -63,7 +57,7 @@ GitHub：[kyuri-metro/njmetro-railmap-creator](https://github.com/kyuri-metro/nj
 
 ![南京地铁屏蔽门上方贴纸生成器线路牌示例](/tools/njmetro-railmap-creator/route-badge.webp)
 
-![南京地铁屏蔽门上方贴纸生成器方向牌示例](/tools/njmetro-railmap-creator/direction-badge.webp)
+![南京地铁屏蔽门上方贴纸生成器方向牌示例](/tools/njmetro-railmap-creator/direction-badge-long-station-name.webp)
 
 ![南京地铁屏蔽门上方贴纸生成器终点站牌示例](/tools/njmetro-railmap-creator/terminus-badge.webp)
 
