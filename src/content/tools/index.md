@@ -7,13 +7,15 @@ rss: false
 
 ## 地铁相关工具
 
-与 [@kyuri-metro](https://www.npmjs.com/org/kyuri-metro) 组织下的线路号方块、数字地贴、屏蔽门贴纸等生成器有关。线路号方块与数字地贴的交互预览与导出已统一迁至 [kyuri-metro Storybook](https://kyuri-metro-storybook.umamichi.moe/)；原独立 UI 仓库（`njmetro-line-id-block-ui`、`shmetro-line-id-block-ui`）已归档。
+[@kyuri-metro](https://www.npmjs.com/org/kyuri-metro) 组织下的线路号方块、地贴、吊板贴纸等生成器，均可导出为 SVG / PNG / JPG / WebP。
 
 ### 上海地铁
 
 #### [线路号方块生成器（Storybook）](https://kyuri-metro-storybook.umamichi.moe/)
 
-参考实拍的 13 号线竖立线路图等（2020 样式 2）、9 号线站台门线路图（2020 样式）和 2 号线竖立线路图（2025 样式）制作。在 Storybook 中可调参数并导出 SVG / PNG / JPG / WebP。详细介绍、NPM 包与仓库说明见[单独页面](/tools/shmetro-line-id-block-generator/)。
+根据实拍的 13 号线竖立线路图等（2020 样式 2）、9 号线站台门线路图（2020 样式）和 2 号线竖立线路图（2025 样式）制作的上海地铁线路号方块生成器，还原了上海地铁导向系统中几种典型的线路号方块样式。
+
+详细介绍、NPM 包与仓库说明见[单独页面](/tools/shmetro-line-id-block-generator/)。
 
 | 样式 | Storybook |
 | --- | --- |
@@ -37,7 +39,7 @@ rss: false
 
 #### [数字线路号地贴生成器（Storybook）](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-numeric-floor-sticker-2025-svg-generator--docs)
 
-2025 版上海地铁数字线路号地贴（竖向箭头，显示线路号）SVG 生成器。在 Storybook 中可调线路号、高度、颜色与字体，并导出 SVG / PNG / JPG / WebP。
+根据 2025 版《城市轨道交通导向标识系统设计规范（征求意见稿）》绘制的上海地铁数字线路号地贴（竖向箭头，显示线路号）SVG 生成器。
 
 NPM：[@kyuri-metro/shmetro-numeric-floor-sticker-2025-svg-generator](https://www.npmjs.com/package/@kyuri-metro/shmetro-numeric-floor-sticker-2025-svg-generator)
 
@@ -51,7 +53,7 @@ GitHub：[kyuri-metro/shmetro-numeric-floor-sticker-2025-svg-generator](https://
 
 #### [屏蔽门上方贴纸生成器（Beta）](https://njmetro-railmap-creator.umamichi.moe/)
 
-用于生成南京地铁屏蔽门上方贴纸样式线路图，目前处于 Beta 阶段。
+根据实拍的南京地铁3号线吊板制作的南京地铁屏蔽门上方贴纸生成器。
 
 GitHub：[kyuri-metro/njmetro-railmap-creator](https://github.com/kyuri-metro/njmetro-railmap-creator)
 
@@ -67,7 +69,7 @@ GitHub：[kyuri-metro/njmetro-railmap-creator](https://github.com/kyuri-metro/nj
 
 #### [线路号方块生成器（Storybook）](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-njmetro-line-id-block-svg-generator--docs)
 
-参考实拍图片与其他资料制作的南京地铁线路号方块生成器。在 Storybook 中可调参数并导出 SVG / PNG / JPG / WebP。
+参考实拍的南京地铁系统内导向标识图片制作的南京地铁线路号方块生成器，用于南京地铁屏蔽门上方贴纸生成器，也可单独使用。
 
 NPM：[@kyuri-metro/njmetro-line-id-block-svg-generator](https://www.npmjs.com/package/@kyuri-metro/njmetro-line-id-block-svg-generator)
 
@@ -77,9 +79,13 @@ NPM：[@kyuri-metro/njmetro-line-id-block-svg-generator](https://www.npmjs.com/p
 
 ---
 
-## [铁路缓和曲线交互实验（未检查）](https://railroad-spline-experiment.umamichi.moe/)
+## Vibe Coding 的小作品
 
-一个用于观察“二点约束 + 两端切线 + 首尾允许补直线”时铁路曲线求解结果的交互式小实验，可在美国常用的欧拉缓和曲线和中国大陆常用的三次抛物线缓和曲线之间切换，并实时查看补直线长度、缓和曲线长度、圆曲线长度、总长、转角和终点误差。
+由 Vibe Coding 简单制作成的小作品。~~这并不是说其他章节的作品不是 Vibe Coding，但是本章的作品所花费的精力和注意力是小于其他章节的。~~
+
+### [铁路缓和曲线交互实验（未检查）](https://railroad-spline-experiment.umamichi.moe/)
+
+一个用于观察“二点约束 + 两端切线 + 首尾允许补直线”时铁路曲线求解结果的交互式小实验，可选欧拉缓和曲线（美国常用）和三次抛物线缓和曲线（中国大陆常用），并实时查看补直线长度、缓和曲线长度、圆曲线长度、总长、转角和终点误差等参数。
 
 这是一个未经检查的 vibe coding 产物，没有经过代码审查或测试覆盖，更适合作为可视化草图和几何玩具，而不是可靠工具。
 
