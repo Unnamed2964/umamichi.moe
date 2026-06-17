@@ -21,15 +21,15 @@ NPM 包见[单独页面](/tools/shmetro-line-id-block-generator/)。
 
 - [2025](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-line-id-block-2025-svg-generator--docs)
 
-  ![上海地铁线路号方块生成器 2025 样式输出示例](/tools/shmetro-idblock/output-example-2025.webp)
+  <img src="/tools/shmetro-idblock/output-example-2025.webp" alt="上海地铁线路号方块生成器 2025 样式输出示例" height="60" />
 
 - [2020](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-line-id-block-2020-svg-generator--docs)
 
-  ![上海地铁线路号方块生成器 2020 样式输出示例](/tools/shmetro-idblock/output-example.webp)
+  <img src="/tools/shmetro-idblock/output-example.webp" alt="上海地铁线路号方块生成器 2020 样式输出示例" height="60" />
 
 - [2020 样式 2](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-line-id-block-2020-type-2-svg-generator--docs)
 
-  ![上海地铁线路号方块生成器 2020 样式 2 输出示例](/tools/shmetro-idblock/output-example-2020-type2.webp)
+  <img src="/tools/shmetro-idblock/output-example-2020-type2.webp" alt="上海地铁线路号方块生成器 2020 样式 2 输出示例" height="60" />
 
 #### [数字线路号地贴生成器](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-numeric-floor-sticker-2025-svg-generator--docs)
 
@@ -69,7 +69,7 @@ NPM：[@kyuri-metro/njmetro-line-id-block-svg-generator](https://www.npmjs.com/p
 
 示例：
 
-![南京地铁线路号方块生成器输出示例](/tools/njmetro-idblock/output-example-v0.2.3.webp)
+<img src="/tools/njmetro-idblock/output-example-v0.2.3.webp" alt="南京地铁线路号方块生成器输出示例" height="120" />
 
 ---
 
