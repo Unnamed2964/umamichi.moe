@@ -6,6 +6,9 @@
     "node": ">=22.12.0"
   },
   "scripts": {
+    "sync:giscus-theme": "node scripts/sync-giscus-theme.mjs",
+    "predev": "npm run sync:giscus-theme",
+    "prebuild": "npm run sync:giscus-theme",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "npm run build && wrangler dev",

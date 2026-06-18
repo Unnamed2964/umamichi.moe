@@ -1,11 +1,9 @@
 import Giscus from "@giscus/react"
-import giscusDarkUrl from "@umamichi-ui/giscus-theme/dark.css?url"
-import giscusLightUrl from "@umamichi-ui/giscus-theme/light.css?url"
 import { useEffect, useState } from "react"
 
 const giscusThemeUrls = {
-  light: giscusLightUrl,
-  dark: giscusDarkUrl,
+  light: "/giscus/light.css",
+  dark: "/giscus/dark.css",
 } as const
 
 type GiscusResolvedTheme = keyof typeof giscusThemeUrls
