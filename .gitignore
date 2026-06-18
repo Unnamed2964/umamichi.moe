@@ -1,5 +1,8 @@
 # build output
 dist/
+
+# copied from @umamichi-ui/giscus-theme (scripts/sync-giscus-theme.mjs)
+public/giscus/
 # generated types
 .astro/
 
