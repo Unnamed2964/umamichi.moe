@@ -154,6 +154,15 @@ function Check-CPU {
 - <ruby>延<rp>(</rp><rt>연</rt><rp>)</rp>吉<rp>(</rp><rt>길</rt><rp>)</rp></ruby>
 - <ruby>溪<rp>(</rp><rt>계</rt><rp>)</rp>洞<rp>(</rp><rt>동</rt><rp>)</rp></ruby>
 
+## diff 块
+
+```diff
+上海南站
+- 松江南站
++ 上海松江站
+金山北站
+```
+
 
 [^1]: 7号线由第三运营公司运营
 [^2]: 参考：<br />[1] [ピノキオピー - T氏の話を信じるな feat. 初音ミク・重音テト](https://www.bilibili.com/video/BV1SfK9zPEL3). 哔哩哔哩.<br />[2] [【4K/中文字幕】不要相信T氏的话/T氏の話を信じるな/Don’t Believe in T 初音ミク/重音テト 【ピノキオピー】](https://www.bilibili.com/video/BV14Qg6zTEZL). 哔哩哔哩.
