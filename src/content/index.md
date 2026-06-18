@@ -27,10 +27,11 @@ rss: false
 1. 调整标题区域的字号和间距比例
 
 **近期：**
-1. 文章 Git 修改记录查看功能
-2. 搜索功能
-3. 充实博文、友情链接
-4. 友情链接显示为上海地铁换乘线路列表样式
+1. 带行号和添加/删除行的代码块（参考 [XiaoCai's Blog](https://blog.ixiaocai.net/posts/Astro-Blog-Customize-1-Adding-MarkDown-Mermaid-Support/) 和 [Yue-plus/hexo-theme-arknights](https://github.com/Yue-plus/hexo-theme-arknights)）
+2. 文章 Git 修改记录查看功能
+3. 搜索功能
+4. 充实博文、友情链接
+5. 友情链接显示为上海地铁换乘线路列表样式
 
 **远期：**
 1. 对 Giscus 通过自定义 CSS 进行调教，使其更符合页面整体风格
