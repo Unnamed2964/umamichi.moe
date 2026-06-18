@@ -8,6 +8,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeWrapEmoji from './scripts/rehype-wrap-emoji.mjs';
 import outOfSiteHtmlPostbuildIntegration from './src/integrations/out-of-site-html-postbuild.mjs';
+import { giscusThemeCorsDev } from './scripts/vite-giscus-theme-cors-dev.mjs';
 import { loadEnv } from 'vite';
 
 import react from '@astrojs/react';
@@ -37,5 +38,8 @@ export default defineConfig({
     },
     remarkPlugins: [remarkGfm, remarkMath],
     rehypePlugins: [rehypeKatex, rehypeWrapEmoji],
+  },
+  vite: {
+    plugins: [giscusThemeCorsDev()],
   },
 });
