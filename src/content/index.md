@@ -25,6 +25,8 @@ rss: false
 
 **待修复：**
 1. 调整标题区域的字号和间距比例
+2. 与 Hexo 的 frontmatter 格式同步
+3. 支持 Mermaid
 
 **近期：**
 1. 带行号和添加/删除行的代码块（参考 [XiaoCai's Blog](https://blog.ixiaocai.net/posts/Astro-Blog-Customize-1-Adding-MarkDown-Mermaid-Support/) 和 [Yue-plus/hexo-theme-arknights](https://github.com/Yue-plus/hexo-theme-arknights)）
