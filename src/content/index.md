@@ -25,7 +25,7 @@ rss: false
 
 **待修复：**
 1. 调整标题区域的字号和间距比例
-2. 与 Hexo 的 frontmatter 格式同步
+2. 与 MkDocs 的 frontmatter 格式以及 assets 方式同步
 3. 支持 Mermaid
 
 **近期：**
