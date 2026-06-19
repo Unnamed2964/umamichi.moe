@@ -339,7 +339,9 @@ html.dark .article-content .astro-code span {
 
 .article-content img {
 	display: block;
+	width: auto;
 	max-width: 100%;
+	height: auto;
 	margin-inline: auto;
 	border: 1px solid var(--article-border);
 }
