@@ -19,6 +19,18 @@
 			return preference;
 		};
 
+		const updateMermaidMedia = (preference) => {
+			const mediaMap = {
+				system: '(prefers-color-scheme: dark)',
+				dark: 'all',
+				light: 'none',
+			};
+
+			for (const element of document.querySelectorAll('[id^="mermaid-dark"]')) {
+				element.setAttribute('media', mediaMap[preference] ?? 'none');
+			}
+		};
+
 		const applyThemePreference = (preference) => {
 			const resolved = getResolvedTheme(preference);
 			document.documentElement.dataset.themeSwitching = 'true';
@@ -36,6 +48,7 @@
 			document.documentElement.dataset.themePreference = preference;
 			document.documentElement.dataset.themeResolved = resolved;
 			document.documentElement.style.colorScheme = resolved;
+			updateMermaidMedia(preference);
 			document.dispatchEvent(new CustomEvent('site:theme-change', { detail: { preference, resolved } }));
 
 			for (const button of document.querySelectorAll('[data-site-theme-toggle]')) {

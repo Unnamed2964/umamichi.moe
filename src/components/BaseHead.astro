@@ -58,6 +58,25 @@ const { title, description, image = FallbackImage, disableTikkun = false } = Ast
 		document.documentElement.dataset.themeResolved = resolved;
 		document.documentElement.style.colorScheme = resolved;
 
+		const updateMermaidMedia = (preference) => {
+			const mediaMap = {
+				system: '(prefers-color-scheme: dark)',
+				dark: 'all',
+				light: 'none',
+			};
+
+			for (const element of document.querySelectorAll('[id^="mermaid-dark"]')) {
+				element.setAttribute('media', mediaMap[preference] ?? 'none');
+			}
+		};
+
+		const syncMermaidMedia = () => updateMermaidMedia(preference);
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', syncMermaidMedia, { once: true });
+		} else {
+			syncMermaidMedia();
+		}
+
 		const paletteKey = 'site-palette';
 		const storedPalette = window.localStorage.getItem(paletteKey);
 		if (storedPalette && storedPalette !== 'default') {

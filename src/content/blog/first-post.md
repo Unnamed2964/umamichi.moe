@@ -112,6 +112,27 @@ function Check-CPU {
 }
 ```
 
+## Mermaid 测试
+
+> **本章内容由 Cursor Auto 生成，未经过人工检查，请谨慎对待**
+
+> 以下流程图以 HRT（激素替代治疗）为示例主题，仅示意常见的医疗照护路径；具体是否适用、如何用药与随访间隔，须以专业医生的评估与医嘱为准。
+
+```mermaid
+flowchart TD
+  learn[了解相关背景] --> consult[向专业医生咨询]
+  consult --> eval{综合评估}
+  eval -->|适合| plan[制定个体化方案]
+  eval -->|暂不适用| wait[观察或进一步检查]
+  plan --> med[按医嘱规律用药]
+  med --> visit[定期复诊与监测]
+  visit --> log[记录身心变化]
+  log --> adj{需要调整?}
+  adj -->|是| plan
+  adj -->|否| care[长期随访与自我照护]
+  wait --> consult
+```
+
 ## Utau 角色对比
 
 |        | 重音テト | 呗音ウタ     | 桃音モモ                                     | 足立レイ   |

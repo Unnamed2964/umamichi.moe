@@ -351,3 +351,8 @@ html.dark .article-content .astro-code span {
 .article-content img:not([height]) {
 	height: auto;
 }
+
+.article-content picture {
+	display: flex;
+	justify-content: center;
+}

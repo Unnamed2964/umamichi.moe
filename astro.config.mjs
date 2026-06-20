@@ -7,6 +7,7 @@ import umamichiConfig from './umamichi.config.mjs';
 import remarkGfm from 'remark-gfm';
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import rehypeMermaid from 'rehype-mermaid';
 import rehypeWrapEmoji from './scripts/rehype-wrap-emoji.mjs';
 import { rehypeContentAssetUrls, remarkContentAssetUrls } from './scripts/content-asset-urls.mjs';
 import outOfSiteHtmlPostbuildIntegration from './src/integrations/out-of-site-html-postbuild.mjs';
@@ -22,13 +23,32 @@ const site = 'https://umamichi.moe';
 const env = loadEnv(process.env.NODE_ENV ?? 'development', process.cwd(), '');
 const outOfSitePrivateKey = env.OUT_OF_SITE_ED25519_PRIVATE_KEY ?? '';
 
+/** @type {import('rehype-mermaid').RehypeMermaidOptions} */
+const rehypeMermaidOptions = {
+  strategy: 'img-svg',
+  dark: true,
+};
+
+const markdownRehypePlugins = [
+  [rehypeMermaid, rehypeMermaidOptions],
+  rehypeContentAssetUrls,
+  rehypeKatex,
+  rehypeWrapEmoji,
+];
+
+const mdxRehypePlugins = [
+  [rehypeMermaid, rehypeMermaidOptions],
+  rehypeContentAssetUrls,
+  rehypeWrapEmoji,
+];
+
 // https://astro.build/config
 export default defineConfig({
   site,
   integrations: [
     mdx({
       remarkPlugins: [remarkGfm, remarkMath, remarkContentAssetUrls],
-      rehypePlugins: [rehypeContentAssetUrls, rehypeWrapEmoji],
+      rehypePlugins: mdxRehypePlugins,
     }),
     contentStaticAssetsIntegration(),
     outOfSiteHtmlPostbuildIntegration({ site, privateKeyPem: outOfSitePrivateKey }),
@@ -48,8 +68,12 @@ export default defineConfig({
         dark: 'github-dark',
       },
     },
+    syntaxHighlight: {
+      type: 'shiki',
+      excludeLangs: ['mermaid', 'math'],
+    },
     remarkPlugins: [remarkGfm, remarkMath, remarkContentAssetUrls],
-    rehypePlugins: [rehypeContentAssetUrls, rehypeKatex, rehypeWrapEmoji],
+    rehypePlugins: markdownRehypePlugins,
   },
   vite: {
     plugins: [giscusThemeCorsDev()],

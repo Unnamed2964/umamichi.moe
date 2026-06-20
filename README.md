@@ -56,8 +56,11 @@ Markdown/MDX 正文与 `src/content/` 下的图片、附件放在一起管理：
 
 要求：Node.js 22.12.0 或更高版本。
 
+克隆仓库后，除依赖安装外还需安装 Playwright 的 Chromium（Markdown 中的 Mermaid 图在构建/渲染时由 `rehype-mermaid` 通过无头浏览器生成；未安装时含 Mermaid 的页面在 `npm run build` 会失败）：
+
 ```sh
 npm install
+npx playwright install chromium
 npm run dev
 ```
 
