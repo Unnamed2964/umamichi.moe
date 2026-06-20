@@ -7,7 +7,7 @@ pubDate: '2026-06-01'
 [关于延吉轨道交通的幻想（来自 umamichi.moe/blog/yanji-rail-transit-imaginary/）](https://umamichi.moe/blog/yanji-rail-transit-imaginary/) 的续篇
 
 RMP 版（包括 S2 延雄线、S3 延和线、S4 延敦线）：
-![延吉轨道交通线路图（幻想）](/yanji-rail-transit-imaginary/RMP_1780306681595.webp)
+![延吉轨道交通线路图（幻想）](imgs/RMP_1780306681595.webp)
 
 RMP 存档：
-[RMP_1780306678570.json](/yanji-rail-transit-imaginary/RMP_1780306678570.json)
+[RMP_1780306678570.json](files/RMP_1780306678570.json)

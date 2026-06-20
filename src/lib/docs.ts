@@ -1,5 +1,6 @@
 import type { CollectionEntry } from 'astro:content';
 import { parse as parseYaml } from 'yaml';
+import { isIncludedContentDoc } from './content-doc-include.mjs';
 import { parseCopyrightConfig, type CopyrightConfig } from './copyright';
 
 type DocEntry = CollectionEntry<'docs'>;
@@ -190,7 +191,7 @@ const SOURCE_DOC_RAW_FILES = import.meta.glob('../content/**/*.{md,mdx}', {
 	query: '?raw',
 }) as Record<string, string>;
 
-const SOURCE_FOLDER_META_FILES = import.meta.glob('../content/**/_meta.{yml,yaml}', {
+const SOURCE_FOLDER_META_FILES = import.meta.glob('../content/**/.meta.{yml,yaml}', {
 	eager: true,
 	import: 'default',
 	query: '?raw',
@@ -498,7 +499,7 @@ export function scanContentFromInput(input: ContentScanInput): ScannedContent {
 
 	for (const folderMeta of input.folderMetas ?? []) {
 		const normalizedFolderPath = folderMeta.folderPath;
-		const relativePath = folderMeta.relativePath ?? (normalizedFolderPath ? `${normalizedFolderPath}/_meta.yml` : '_meta.yml');
+		const relativePath = folderMeta.relativePath ?? (normalizedFolderPath ? `${normalizedFolderPath}/.meta.yml` : '.meta.yml');
 
 		if (rawFolderMetaMap.has(normalizedFolderPath)) {
 			throw new Error(`Folder ${normalizedFolderPath || '/'} cannot contain multiple meta files.`);
@@ -542,11 +543,11 @@ function scanContentFromDisk(): ScannedContent {
 				rawContent: SOURCE_DOC_RAW_FILES[sourcePath],
 				relativePath,
 			};
-		}),
+		}).filter((doc) => isIncludedContentDoc(doc.relativePath)),
 		folderMetas: Object.entries(SOURCE_FOLDER_META_FILES).map(([sourcePath, rawContent]) => {
 			const normalizedPath = toPosixPath(sourcePath);
 			const relativePath = normalizedPath.replace(/^\.\.\/content\/?/, '');
-			const folderPath = relativePath.replace(/(?:^|\/)_meta\.ya?ml$/u, '');
+			const folderPath = relativePath.replace(/(?:^|\/)\.meta\.ya?ml$/u, '');
 
 			return {
 				folderPath: folderPath === relativePath ? '' : folderPath,

@@ -2,12 +2,15 @@
 
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
-import { defineConfig } from 'astro/config';
+import { defineConfig, passthroughImageService, sharpImageService } from 'astro/config';
+import umamichiConfig from './umamichi.config.mjs';
 import remarkGfm from 'remark-gfm';
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeWrapEmoji from './scripts/rehype-wrap-emoji.mjs';
+import { rehypeContentAssetUrls, remarkContentAssetUrls } from './scripts/content-asset-urls.mjs';
 import outOfSiteHtmlPostbuildIntegration from './src/integrations/out-of-site-html-postbuild.mjs';
+import contentStaticAssetsIntegration from './src/integrations/content-static-assets.mjs';
 import { giscusThemeCorsDev } from './scripts/vite-giscus-theme-cors-dev.mjs';
 import { loadEnv } from 'vite';
 
@@ -23,12 +26,21 @@ const outOfSitePrivateKey = env.OUT_OF_SITE_ED25519_PRIVATE_KEY ?? '';
 export default defineConfig({
   site,
   integrations: [
-    mdx({ rehypePlugins: [rehypeWrapEmoji] }),
+    mdx({
+      remarkPlugins: [remarkGfm, remarkMath, remarkContentAssetUrls],
+      rehypePlugins: [rehypeContentAssetUrls, rehypeWrapEmoji],
+    }),
+    contentStaticAssetsIntegration(),
     outOfSiteHtmlPostbuildIntegration({ site, privateKeyPem: outOfSitePrivateKey }),
     sitemap(),
     react(),
   ],
   adapter: cloudflare(),
+  image: {
+    service: umamichiConfig.imageOptimization.enabled
+      ? sharpImageService()
+      : passthroughImageService(),
+  },
   markdown: {
     shikiConfig: {
       themes: {
@@ -36,8 +48,8 @@ export default defineConfig({
         dark: 'github-dark',
       },
     },
-    remarkPlugins: [remarkGfm, remarkMath],
-    rehypePlugins: [rehypeKatex, rehypeWrapEmoji],
+    remarkPlugins: [remarkGfm, remarkMath, remarkContentAssetUrls],
+    rehypePlugins: [rehypeContentAssetUrls, rehypeKatex, rehypeWrapEmoji],
   },
   vite: {
     plugins: [giscusThemeCorsDev()],

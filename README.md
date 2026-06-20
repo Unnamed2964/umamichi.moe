@@ -21,6 +21,37 @@
 
 - 支持多级目录，支持逐文件、目录设置多种可继承的属性，包括文件按名称排序或按时间排序，版权设置，是否计入 rss，可覆写继承自上级目录的属性
 
+## 内容资源
+
+Markdown/MDX 正文与 `src/content/` 下的图片、附件放在一起管理：
+
+- **图片**：放在与 `.md`/`.mdx` **同一目录**下的 `imgs/` 子文件夹。例如 `src/content/blog/imgs/plan.webp` 对应线上 `/blog/imgs/plan.webp`。
+- **附件**：放在同目录下的 `files/` 子文件夹。
+- **页面范围**：`imgs/`、`files/` 目录下的 `.md`/`.mdx` **不会**作为站点页面（在 [`umamichi.config.mjs`](umamichi.config.mjs) 的 `content.excludeDocGlobs` 中配置，并同步作用于 content collection 与路由扫描）。
+- **引用**：在 Markdown/MDX 中使用相对路径 `imgs/...`、`files/...`（也支持 `./imgs/...`）。构建时会自动改写为站点根路径，行为类似 MkDocs。
+
+示例（`src/content/blog/post.md`）：
+
+```markdown
+![说明](imgs/plan.webp)
+[附件](files/data.json)
+```
+
+构建后 HTML 中为 `/blog/imgs/plan.webp`、`/blog/files/data.json`。若以 `/` 开头、`http(s):` 等形式已是绝对 URL，则不会二次改写。
+
+实现：`scripts/content-asset-urls.mjs` 提供 Remark 插件（处理 `![]()`、链接）与 Rehype 插件（处理正文 HTML 中的 `<img>`、`<a>`），根据当前文件在 `src/content/` 下的路径计算公开 URL。已在 `astro.config.mjs` 的 `markdown` 与 `@astrojs/mdx` 中注册。
+
+构建时，`src/content/` 内除 `.md`/`.mdx` 以及以 `.` 开头的文件（含各目录的 `.meta.yml`）外，其余文件会按相对路径复制到站点根（`https://umamichi.moe/...`）。开发模式下通过 Vite 中间件提供相同访问路径（见 `src/integrations/content-static-assets.mjs`）。
+
+`public/` 中与上述资源路径重复的文件仅为**旧 URL 向后兼容**保留；新资源不应放入 `public/`。详见 [`public/README.md`](public/README.md)。
+
+## 项目配置
+
+根目录 [`umamichi.config.mjs`](umamichi.config.mjs) 为站点级配置。当前可用项：
+
+- `content.excludeDocGlobs`：不参与 content collection 与站点路由的 Markdown/MDX 路径 glob（默认排除 `**/imgs/**`、`**/files/**`）。
+- `imageOptimization.enabled`：是否启用 Astro 构建期图片优化（Sharp）。Cloudflare 部署下默认 `false`（透传，不处理）。
+
 ## 本地开发
 
 要求：Node.js 22.12.0 或更高版本。
@@ -83,8 +114,9 @@ npm run deploy
 ## 仓库结构
 
 - `src/`：页面、组件、内容配置和运行时代码
-- `src/content/`：站点内容
-- `public/`：静态资源
+- `src/content/`：站点内容（Markdown/MDX、图片、附件、目录 `.meta.yml`）
+- `public/`：站点级静态资源；与 content 重复的图片/附件副本仅用于旧 URL 兼容（见 `public/README.md`）
+- `umamichi.config.mjs`：站点级项目配置
 - `functions/`：Cloudflare 相关函数代码
 - `docs/`：项目内部说明文档
 
