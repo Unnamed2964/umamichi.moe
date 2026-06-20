@@ -16,8 +16,8 @@ rss: false
   这也是希望能够借这一折腾的机会熟悉 CSS 和思考 UI 组件设计
 - 上海地铁：导航栏的具有隐喻含义的图标的来源
 
-  ![现实世界的上海地铁线路图的示例](/index/shanghai-metro-realworld-map-example-line-2.webp)
-  ![上海地铁站点图例](/index/shmetro-station-figure-legends.webp)
+  ![现实世界的上海地铁线路图的示例](imgs/shanghai-metro-realworld-map-example-line-2.webp)
+  ![上海地铁站点图例](imgs/shmetro-station-figure-legends.webp)
 
 从小当小时候旅游时第一次接触到北京地铁开始就觉得，地铁以单色色块和抽象图标代表一件事物的设计是那么漂亮和令人愉悦...<b>所以我没有理由不穿带有颜色的可爱衣物</b>
 
@@ -25,7 +25,7 @@ rss: false
 
 **待修复：**
 1. 调整标题区域的字号和间距比例
-2. 与 MkDocs 的 frontmatter 格式以及 assets 方式同步
+2. 与 MkDocs 的 frontmatter 格式以及 assets 方式同步（assets 相对路径已支持，见 README「内容资源」）
 3. 支持 Mermaid
 
 **近期：**
