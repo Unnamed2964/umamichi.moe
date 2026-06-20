@@ -4,11 +4,11 @@
 
 可配置位置：
 - 文章 frontmatter，例如 `src/content/blog/first-post.md`
-- 目录 `_meta.yml`，例如 `src/content/blog/_meta.yml`
+- 目录 `.meta.yml`，例如 `src/content/blog/.meta.yml`
 
 规则：
 - `copyright` 整个字段是可选的
-- 目录 `_meta.yml` 中的 `copyright` 会作为该目录下文章的默认值
+- 目录 `.meta.yml` 中的 `copyright` 会作为该目录下文章的默认值
 - 单篇文章可以在 frontmatter 中重新声明 `copyright`，覆盖目录默认值
 
 ## 允许的配置

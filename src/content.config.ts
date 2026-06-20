@@ -1,6 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import umamichiConfig from '../umamichi.config.mjs';
 import { COPYRIGHT_CC_LICENSE_IDS } from './lib/copyright';
 
 const copyrightSchema = z.discriminatedUnion('kind', [
@@ -15,7 +16,11 @@ const copyrightSchema = z.discriminatedUnion('kind', [
 ]);
 
 const docs = defineCollection({
-	loader: glob({ base: './src/content', pattern: '**/*.{md,mdx}' }),
+	loader: glob({
+		base: './src/content',
+		pattern: '**/*.{md,mdx}',
+		ignore: umamichiConfig.content.excludeDocGlobs,
+	}),
 	schema: ({ image }) =>
 		z.object({
 			copyright: copyrightSchema.optional(),
