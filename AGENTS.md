@@ -7,7 +7,7 @@ This repo is a single product: the **umamichi.moe** personal blog, built with As
 ### Services / commands
 - **Dev server (primary):** `npm run dev` → Astro at `http://localhost:4321/`. This is all that's needed for normal content/UI work.
 - **Type check / lint:** `npx astro check`. Note there are 2 pre-existing type errors (`src/worker.ts` `ctx` cast and `ArticleCopyright.tsx` `CopyrightConfig.statement`) that exist on a clean checkout — they do not block dev or build.
-- **Build:** `npm run build` (outputs to `dist/`, runs the Ed25519 out-of-site link post-build step).
+- **Build:** `npm run build` (outputs to `dist/`). Production deploy is via GitHub Actions (`.github/workflows/deploy.yml`) → `wrangler deploy`.
 - **Cloudflare runtime / API endpoints:** `npm run preview` (= `astro build && wrangler dev`). Only needed to exercise the telemetry endpoints `/api/tikkun` and `/api/hester`, which require the `tikkun` KV binding. Not needed for normal page browsing.
 
 ### Non-obvious notes
