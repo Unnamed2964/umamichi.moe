@@ -1,0 +1,46 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-umamichi-moe
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Clear Astro content cache
+        run: rm -rf node_modules/.astro
+
+      - name: Build
+        run: npm run build
+        env:
+          PUBLIC_OUT_OF_SITE_LINK_HMAC_KEY: ${{ secrets.PUBLIC_OUT_OF_SITE_LINK_HMAC_KEY }}
+          OUT_OF_SITE_ED25519_PRIVATE_KEY: ${{ secrets.OUT_OF_SITE_ED25519_PRIVATE_KEY }}
+          PUBLIC_OUT_OF_SITE_ED25519_SPKI_B64: ${{ secrets.PUBLIC_OUT_OF_SITE_ED25519_SPKI_B64 }}
+
+      - name: Deploy to Cloudflare Workers
+        run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
