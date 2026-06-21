@@ -100,6 +100,26 @@ PUBLIC_OUT_OF_SITE_LINK_HMAC_KEY=replace-with-your-local-secret
 - 对于 Astro/Vite，最稳妥的方式是直接在项目内使用 `.env.local`。
 - 在 `npm run dev` 下，若出现 `安全警告：未期望的未知链接。该链接可能并不来自网站原本的内容。`，常见原因包括：未配置 `OUT_OF_SITE_ED25519_PRIVATE_KEY`（开发模式不会跑构建后 HTML 扫描，故无 `sig`），或该链接来自未预渲染进 HTML 的客户端内容。
 
+## 部署
+
+生产部署通过 **GitHub Actions**（`.github/workflows/deploy.yml`）完成：在 Ubuntu 上安装 Playwright Chromium（含系统依赖）、构建站点，再用 Wrangler 部署到 Cloudflare Workers。
+
+推送到 `main` 分支会自动触发；也可在 GitHub 仓库的 Actions 页手动运行 **Deploy** workflow。
+
+### GitHub Secrets
+
+在仓库 **Settings → Secrets and variables → Actions** 中配置：
+
+| Secret | 用途 |
+|--------|------|
+| `CLOUDFLARE_API_TOKEN` | Wrangler 部署用 API 令牌（需含 Workers 编辑与账号读取权限） |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare 账号 ID |
+| `PUBLIC_OUT_OF_SITE_LINK_HMAC_KEY` | 出站链接 HMAC 校验（与 `.env.example` 一致） |
+| `OUT_OF_SITE_ED25519_PRIVATE_KEY` | 可选；构建时为站外链接写入 Ed25519 签名 |
+| `PUBLIC_OUT_OF_SITE_ED25519_SPKI_B64` | 可选；与上项配套的公钥 |
+
+含 Mermaid 的页面在构建期需要 Playwright。Cloudflare 默认构建容器无法启动 Chromium（缺系统库且无 root），因此不在 CF 远程环境中构建，改为由 GitHub Actions 构建后提交 Cloudflare。
+
 ## 常用命令
 
 ```sh
@@ -112,7 +132,7 @@ npm run deploy
 - `npm run dev`：启动本地开发服务器
 - `npm run build`：构建站点到 dist
 - `npm run preview`：构建后通过 Wrangler 进行本地预览
-- `npm run deploy`：构建并部署到 Cloudflare
+- `npm run deploy`：本地构建后部署到 Cloudflare（日常建议改用 GitHub Actions）
 
 ## 仓库结构
 
