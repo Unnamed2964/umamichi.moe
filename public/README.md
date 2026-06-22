@@ -8,5 +8,6 @@
 
 - 图片：与 Markdown/MDX 同目录下的 `imgs/` 子文件夹
 - 附件：与 Markdown/MDX 同目录下的 `files/` 子文件夹
+- 正文引用：手写站点根绝对路径（如 `/blog/imgs/plan.webp`），见项目根目录 `README.md`
 
 构建时，`src/content/` 中符合条件的非文档文件会自动复制到站点根路径（详见项目根目录 `README.md`）。

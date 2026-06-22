@@ -28,18 +28,19 @@ Markdown/MDX 正文与 `src/content/` 下的图片、附件放在一起管理：
 - **图片**：放在与 `.md`/`.mdx` **同一目录**下的 `imgs/` 子文件夹。例如 `src/content/blog/imgs/plan.webp` 对应线上 `/blog/imgs/plan.webp`。
 - **附件**：放在同目录下的 `files/` 子文件夹。
 - **页面范围**：`imgs/`、`files/` 目录下的 `.md`/`.mdx` **不会**作为站点页面（在 [`umamichi.config.mjs`](umamichi.config.mjs) 的 `content.excludeDocGlobs` 中配置，并同步作用于 content collection 与路由扫描）。
-- **引用**：在 Markdown/MDX 中使用相对路径 `imgs/...`、`files/...`（也支持 `./imgs/...`）。构建时会自动改写为站点根路径，行为类似 MkDocs。
+- **引用**：在 Markdown/MDX 中**手写以 `/` 开头的站点根绝对路径**（不是构建输出目录 `dist/`，而是线上 URL 路径）。例如 `src/content/blog/post.md` 中引用同目录 `imgs/` 下的文件时写 `/blog/imgs/plan.webp`，`src/content/index.md` 则写 `/imgs/...`。
 
 示例（`src/content/blog/post.md`）：
 
 ```markdown
-![说明](imgs/plan.webp)
-[附件](files/data.json)
+![说明](/blog/imgs/plan.webp)
+[附件](/blog/files/data.json)
 ```
 
-构建后 HTML 中为 `/blog/imgs/plan.webp`、`/blog/files/data.json`。若以 `/` 开头、`http(s):` 等形式已是绝对 URL，则不会二次改写。
+**为何不用相对路径 `imgs/...`，也不在构建时自动改写 URL？**
 
-实现：`scripts/content-asset-urls.mjs` 提供 Remark 插件（处理 `![]()`、链接）与 Rehype 插件（处理正文 HTML 中的 `<img>`、`<a>`），根据当前文件在 `src/content/` 下的路径计算公开 URL。已在 `astro.config.mjs` 的 `markdown` 与 `@astrojs/mdx` 中注册。
+1. **客户端路由（`ClientRouter`）**：通过导航栏无刷新进入页面时，`<img src="imgs/...">` 等相对路径可能在 URL 尚未切到目标页时就开始加载，按离开前的页面解析，导致图片长期显示为未加载；以 `/` 开头的路径与当前在哪个页面无关。
+2. **Markdown 与 raw HTML 行为不一致**：`![](imgs/...)` 与 `<img src="imgs/...">` 在 Astro 管道中的处理阶段不同，仅靠 remark/rehype 插件难以可靠覆盖全部写法；手写绝对路径在源码与 HTML 中一致，无需额外插件。
 
 构建时，`src/content/` 内除 `.md`/`.mdx` 以及以 `.` 开头的文件（含各目录的 `.meta.yml`）外，其余文件会按相对路径复制到站点根（`https://umamichi.moe/...`）。开发模式下通过 Vite 中间件提供相同访问路径（见 `src/integrations/content-static-assets.mjs`）。
 

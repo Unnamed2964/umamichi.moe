@@ -13,5 +13,5 @@ This repo is a single product: the **umamichi.moe** personal blog, built with As
 ### Non-obvious notes
 - `wrangler types` (script: `npm run generate-types`) writes `worker-configuration.d.ts`, which provides the `cloudflare:workers` module + `Env`/`request.cf` types. Without it `astro check` reports extra errors on `src/pages/api/*.ts`. The file is generated (not committed) and is recreated by the update script.
 - Env vars (all optional for basic dev) are in `.env.example`; use a local `.env.local`. `PUBLIC_OUT_OF_SITE_LINK_HMAC_KEY` is recommended if you need to test outbound-link (`/out-of-site/`) handling, otherwise external-link clicks hit a 503 recovery page.
-- Content images/attachments live under `src/content/**/imgs/` and `src/content/**/files/`; non-markdown assets there are copied to the site root at build. Legacy copies under `public/` are for backward-compatible URLs only.
+- Content images/attachments live under `src/content/**/imgs/` and `src/content/**/files/`; non-markdown assets there are copied to the site root at build. Reference them in Markdown/MDX with site-root absolute paths (e.g. `/blog/imgs/foo.webp`), not relative `imgs/...` — see root `README.md` for why. Legacy copies under `public/` are for backward-compatible URLs only.
 - Comments use Giscus (external GitHub Discussions) and won't load fully offline — expected.

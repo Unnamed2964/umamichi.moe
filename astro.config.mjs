@@ -9,7 +9,6 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeMermaid from 'rehype-mermaid';
 import rehypeWrapEmoji from './scripts/rehype-wrap-emoji.mjs';
-import { rehypeContentAssetUrls, remarkContentAssetUrls } from './scripts/content-asset-urls.mjs';
 import outOfSiteHtmlPostbuildIntegration from './src/integrations/out-of-site-html-postbuild.mjs';
 import contentStaticAssetsIntegration from './src/integrations/content-static-assets.mjs';
 import { giscusThemeCorsDev } from './scripts/vite-giscus-theme-cors-dev.mjs';
@@ -31,14 +30,12 @@ const rehypeMermaidOptions = {
 
 const markdownRehypePlugins = [
   [rehypeMermaid, rehypeMermaidOptions],
-  rehypeContentAssetUrls,
   rehypeKatex,
   rehypeWrapEmoji,
 ];
 
 const mdxRehypePlugins = [
   [rehypeMermaid, rehypeMermaidOptions],
-  rehypeContentAssetUrls,
   rehypeWrapEmoji,
 ];
 
@@ -47,7 +44,7 @@ export default defineConfig({
   site,
   integrations: [
     mdx({
-      remarkPlugins: [remarkGfm, remarkMath, remarkContentAssetUrls],
+      remarkPlugins: [remarkGfm, remarkMath],
       rehypePlugins: mdxRehypePlugins,
     }),
     contentStaticAssetsIntegration(),
@@ -72,7 +69,7 @@ export default defineConfig({
       type: 'shiki',
       excludeLangs: ['mermaid', 'math'],
     },
-    remarkPlugins: [remarkGfm, remarkMath, remarkContentAssetUrls],
+    remarkPlugins: [remarkGfm, remarkMath],
     rehypePlugins: markdownRehypePlugins,
   },
   vite: {
