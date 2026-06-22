@@ -41,7 +41,7 @@ GitHub：[kyuri-metro/shmetro-numeric-floor-sticker-2025-svg-generator](https://
 
 示例：
 
-<img src="/tools/imgs/shmetro-numeric-floor-sticker/output-example.webp" alt="上海地铁数字线路号地贴生成器输出示例（12 号线）" style="max-height: 400px" />
+<img src="/tools/imgs/shmetro-numeric-floor-sticker/merged-output-example.webp" alt="上海地铁数字线路号地贴生成器输出示例（6号线和12号线）" style="max-height: 400px" />
 
 ### 南京地铁
 
