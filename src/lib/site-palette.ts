@@ -27,7 +27,7 @@ export function applySitePalette(paletteId: string | null): void {
 		localStorage.setItem(sitePaletteStorageKey, 'default');
 	}
 
-	root.dispatchEvent(
+	document.dispatchEvent(
 		new CustomEvent('site:palette-change', {
 			detail: { palette: paletteId ?? 'default' },
 		}),
