@@ -30,7 +30,7 @@
     "@types/react-dom": "^19.2.3",
     "@umamichi-ui/common-components": "^0.1.0",
     "@umamichi-ui/common-css": "^0.12.0",
-    "@umamichi-ui/giscus-theme": "^0.2.8",
+    "@umamichi-ui/giscus-theme": "^0.2.9",
     "@umamichi-ui/windows-phone-motion": "^0.1.1",
     "astro": "^6.4.8",
     "parse5": "^8.0.1",
