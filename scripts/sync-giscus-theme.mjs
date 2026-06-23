@@ -7,16 +7,18 @@ const sourceDir = path.join(root, 'node_modules', '@umamichi-ui', 'giscus-theme'
 const targetDir = path.join(root, 'public', 'giscus');
 
 const files = await readdir(sourceDir);
-const cssFiles = files.filter((name) => name.endsWith('.css'));
+const syncFiles = files.filter(
+	(name) => name.endsWith('.css') || name === 'palettes.manifest.json',
+);
 
-if (cssFiles.length === 0) {
-	throw new Error(`No giscus theme CSS files found in ${sourceDir}`);
+if (syncFiles.length === 0) {
+	throw new Error(`No giscus theme files found in ${sourceDir}`);
 }
 
 await mkdir(targetDir, { recursive: true });
 
-for (const file of cssFiles) {
+for (const file of syncFiles) {
 	await cp(path.join(sourceDir, file), path.join(targetDir, file));
 }
 
-console.log(`Synced ${cssFiles.length} giscus theme file(s) to public/giscus/`);
+console.log(`Synced ${syncFiles.length} giscus theme file(s) to public/giscus/`);
