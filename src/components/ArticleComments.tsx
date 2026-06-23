@@ -1,44 +1,20 @@
 import Giscus from "@giscus/react"
 import { useEffect, useState } from "react"
-
-const giscusThemeUrls = {
-  light: "/giscus/light.css",
-  dark: "/giscus/dark.css",
-} as const
-
-type GiscusResolvedTheme = keyof typeof giscusThemeUrls
-
-function getResolvedGiscusTheme(): GiscusResolvedTheme {
-  if (typeof document === "undefined") {
-    return "light"
-  }
-
-  return document.documentElement.dataset.themeResolved === "dark" ? "dark" : "light"
-}
-
-function toAbsoluteGiscusThemeUrl(assetUrl: string): string {
-  if (/^https?:\/\//i.test(assetUrl)) {
-    return assetUrl
-  }
-
-  return new URL(assetUrl, window.location.origin).href
-}
-
-function getGiscusThemeUrl(resolved: GiscusResolvedTheme): string {
-  return toAbsoluteGiscusThemeUrl(giscusThemeUrls[resolved])
-}
+import { getGiscusThemeUrl } from "../lib/giscus-theme"
 
 export default function ArticleComments() {
   const [giscusTheme, setGiscusTheme] = useState<string | null>(null)
 
   useEffect(() => {
-    const syncGiscusTheme = () => setGiscusTheme(getGiscusThemeUrl(getResolvedGiscusTheme()))
+    const syncGiscusTheme = () => setGiscusTheme(getGiscusThemeUrl())
 
     syncGiscusTheme()
     document.addEventListener("site:theme-change", syncGiscusTheme)
+    document.addEventListener("site:palette-change", syncGiscusTheme)
 
     return () => {
       document.removeEventListener("site:theme-change", syncGiscusTheme)
+      document.removeEventListener("site:palette-change", syncGiscusTheme)
     }
   }, [])
 
