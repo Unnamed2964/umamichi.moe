@@ -9,6 +9,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeMermaid from 'rehype-mermaid';
 import rehypeWrapEmoji from './scripts/rehype-wrap-emoji.mjs';
+import rehypeWrapMermaidSource from './scripts/rehype-wrap-mermaid-source.mjs';
 import outOfSiteHtmlPostbuildIntegration from './src/integrations/out-of-site-html-postbuild.mjs';
 import contentStaticAssetsIntegration from './src/integrations/content-static-assets.mjs';
 import { giscusThemeCorsDev } from './scripts/vite-giscus-theme-cors-dev.mjs';
@@ -29,12 +30,14 @@ const rehypeMermaidOptions = {
 };
 
 const markdownRehypePlugins = [
+  rehypeWrapMermaidSource,
   [rehypeMermaid, rehypeMermaidOptions],
   rehypeKatex,
   rehypeWrapEmoji,
 ];
 
 const mdxRehypePlugins = [
+  rehypeWrapMermaidSource,
   [rehypeMermaid, rehypeMermaidOptions],
   rehypeWrapEmoji,
 ];
