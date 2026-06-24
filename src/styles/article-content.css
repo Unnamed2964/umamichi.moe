@@ -300,6 +300,60 @@ html {
 	background-color: var(--article-inline-code-bg);
 }
 
+.article-content .article-copyable-block {
+	position: relative;
+	margin-bottom: 1rem;
+}
+
+.article-content .article-copyable-block > pre {
+	margin-bottom: 0;
+}
+
+.article-content .article-copy-source {
+	display: none !important;
+}
+
+.article-content .article-block-copy {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	z-index: 1;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2rem;
+	height: 2rem;
+	padding: 0;
+	border: 1px solid var(--article-border);
+	border-radius: 6px;
+	background: var(--site-surface);
+	color: var(--site-subtle-fg);
+	cursor: pointer;
+	opacity: 0;
+	transition: opacity 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+
+.article-content .article-block-copy svg {
+	width: 1rem;
+	height: 1rem;
+}
+
+.article-content .article-copyable-block:hover .article-block-copy,
+.article-content .article-copyable-block:focus-within .article-block-copy {
+	opacity: 1;
+}
+
+.article-content .article-block-copy:hover,
+.article-content .article-block-copy:focus-visible {
+	color: var(--site-link-hover);
+	border-color: var(--site-link-hover);
+}
+
+.article-content .article-block-copy[data-copied] {
+	color: var(--site-link-hover);
+	border-color: var(--site-link-hover);
+}
+
 .article-content pre {
 	overflow-x: auto;
 	margin-top: 0;
