@@ -1,0 +1,109 @@
+<script is:inline>
+	if (!window.siteArticleCodeCopyInitialized) {
+		window.siteArticleCodeCopyInitialized = true;
+
+		const wrapperClass = 'article-copyable-block';
+		const copyButtonClass = 'article-block-copy';
+		const copiedLabel = '已复制';
+		const copyIcon = '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"/><path fill="currentColor" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg>';
+		const checkIcon = '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/></svg>';
+
+		const copyTextToClipboard = async (value) => {
+			if (!value) {
+				return false;
+			}
+
+			if (navigator.clipboard?.writeText) {
+				await navigator.clipboard.writeText(value);
+				return true;
+			}
+
+			const fallback = document.createElement('textarea');
+			fallback.value = value;
+			fallback.setAttribute('readonly', '');
+			fallback.style.position = 'fixed';
+			fallback.style.left = '-9999px';
+			fallback.style.top = '0';
+			document.body.append(fallback);
+			fallback.select();
+
+			try {
+				return document.execCommand('copy');
+			} finally {
+				fallback.remove();
+			}
+		};
+
+		const createCopyButton = (getText, label) => {
+			const button = document.createElement('button');
+			button.type = 'button';
+			button.className = copyButtonClass;
+			button.setAttribute('aria-label', label);
+			button.title = label;
+			button.innerHTML = copyIcon;
+			button.addEventListener('click', () => {
+				void (async () => {
+					try {
+						const copied = await copyTextToClipboard(getText());
+
+						if (!copied) {
+							return;
+						}
+
+						button.dataset.copied = copiedLabel;
+						button.innerHTML = checkIcon;
+						window.setTimeout(() => {
+							button.dataset.copied = '';
+							button.innerHTML = copyIcon;
+						}, 1200);
+					} catch {
+						button.dataset.copied = '';
+						button.innerHTML = copyIcon;
+					}
+				})();
+			});
+			return button;
+		};
+
+		const wrapCodeBlock = (pre) => {
+			const wrapper = document.createElement('div');
+			wrapper.className = wrapperClass;
+			wrapper.dataset.copyKind = 'code';
+			pre.parentNode.insertBefore(wrapper, pre);
+			wrapper.append(pre);
+			wrapper.append(createCopyButton(
+				() => pre.querySelector('code')?.textContent ?? pre.textContent ?? '',
+				'复制代码',
+			));
+		};
+
+		const setupCodeCopyButtons = () => {
+			const contentRoot = document.querySelector('.article-content');
+
+			if (!contentRoot) {
+				return;
+			}
+
+			for (const pre of contentRoot.querySelectorAll('pre')) {
+				if (pre.closest(`.${wrapperClass}`)) {
+					continue;
+				}
+
+				wrapCodeBlock(pre);
+			}
+
+			for (const block of contentRoot.querySelectorAll(`.${wrapperClass}[data-copy-kind="mermaid"]`)) {
+				if (block.querySelector(`.${copyButtonClass}`)) {
+					continue;
+				}
+
+				const source = block.querySelector('.article-copy-source')?.textContent ?? '';
+
+				block.append(createCopyButton(() => source, '复制 Mermaid 源码'));
+			}
+		};
+
+		document.addEventListener('astro:after-swap', setupCodeCopyButtons);
+		setupCodeCopyButtons();
+	}
+</script>
