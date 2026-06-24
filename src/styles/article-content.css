@@ -309,6 +309,12 @@ html {
 	margin-bottom: 0;
 }
 
+.article-content .article-copyable-block[data-copy-kind="mermaid"] {
+	width: fit-content;
+	max-width: 100%;
+	margin-inline: auto;
+}
+
 .article-content .article-copy-source {
 	display: none !important;
 }
@@ -349,7 +355,7 @@ html {
 	border-color: var(--site-link-hover);
 }
 
-.article-content .article-block-copy[data-copied] {
+.article-content .article-block-copy[data-copied="已复制"] {
 	color: var(--site-link-hover);
 	border-color: var(--site-link-hover);
 }

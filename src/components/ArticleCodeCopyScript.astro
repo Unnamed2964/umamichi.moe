@@ -53,11 +53,12 @@
 						button.dataset.copied = copiedLabel;
 						button.innerHTML = checkIcon;
 						window.setTimeout(() => {
-							button.dataset.copied = '';
+							button.removeAttribute('data-copied');
 							button.innerHTML = copyIcon;
+							button.blur();
 						}, 1200);
 					} catch {
-						button.dataset.copied = '';
+						button.removeAttribute('data-copied');
 						button.innerHTML = copyIcon;
 					}
 				})();
