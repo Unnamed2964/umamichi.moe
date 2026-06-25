@@ -405,8 +405,8 @@ html {
 }
 
 .article-copyright__heading {
-	margin: 0 0 0.625rem;
-	font-size: 0.875em;
+	margin: 0 0 0.75em;
+	font-size: 1em;
 	font-weight: var(--site-weight-ui);
 	color: var(--site-fg);
 }
