@@ -376,13 +376,13 @@ html {
 }
 
 .article-prev-next__label {
-	font-size: 0.75rem;
+	font-size: 0.75em;
 	font-weight: var(--site-weight-body);
 	color: var(--site-subtle-fg);
 }
 
 .article-prev-next__title {
-	font-size: 0.875rem;
+	font-size: 0.875em;
 	font-weight: var(--site-weight-ui);
 	line-height: 1.5;
 	color: inherit;
@@ -406,7 +406,7 @@ html {
 
 .article-copyright__heading {
 	margin: 0 0 0.625rem;
-	font-size: 0.875rem;
+	font-size: 0.875em;
 	font-weight: var(--site-weight-ui);
 	color: var(--site-fg);
 }
@@ -435,7 +435,7 @@ html {
 
 .article-copyright__body {
 	margin: 0 0 0.625rem;
-	font-size: 0.875rem;
+	font-size: 0.875em;
 	line-height: 1.7;
 	color: var(--site-fg);
 }
@@ -451,7 +451,7 @@ html {
 
 .article-copyright__footnote {
 	margin: 0;
-	font-size: 0.75rem;
+	font-size: 0.75em;
 	color: var(--site-subtle-fg);
 }
 
