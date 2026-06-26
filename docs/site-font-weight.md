@@ -2,7 +2,7 @@
 
 > 以下内容为 Cursor Auto 编写，未经人工检查，请谨慎对待。
 
-本站通过 CSS 自定义属性统一控制字重。变量分两类：**壳层 UI**（导航、侧栏、按钮等）与 **文章排版**（页顶标题、正文标题、强调）。定义于 `src/styles/site-layout.css` 的 `html { … }` 块。
+本站通过 CSS 自定义属性统一控制字重。壳层 UI 变量定义于 `src/styles/site-layout.css`；正文排版字重由 `@umamichi-ui/common-css/article.css` 的 `--article-weight-*` 提供，站点在 `site-layout.css` 将其映射到 `--site-weight-*`。
 
 ## 变量
 
@@ -58,13 +58,15 @@
 | `[data-nav-item]` / `[data-mobile-nav-item]`（未选中） | `body` |
 | `[data-nav-active-item]` / `[data-mobile-nav-active-item]` | `ui` |
 
-### `src/styles/article-content.css`
+### `@umamichi-ui/common-css/article.css`
 
-| 选择器 | 变量 |
-|--------|------|
+站点经 `site-layout.css` 映射 `--article-weight-*`。选择器使用 `--article-weight-h1-h2` / `h3-h6` / `body` / `emphasis`。
+
+| 选择器 | token |
+|--------|-------|
 | `.article-content` | `body` |
-| `.article-content h1`、`h2` | `content-h1-h2` |
-| `.article-content h3`–`h6` | `content-h3-h6` |
+| `.article-content h1`、`h2` | `h1-h2` |
+| `.article-content h3`–`h6` | `h3-h6` |
 | `.article-content b`、`strong` | `emphasis` |
 
 ### `src/pages/out-of-site.astro`
