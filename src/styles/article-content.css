@@ -116,7 +116,7 @@ html {
 	margin-bottom: 1rem;
 	padding-bottom: 0.35em;
 	font-size: 2.5em;
-	font-weight: var(--site-weight-light);
+	font-weight: var(--site-weight-content-h1-h2);
 	line-height: 1.24;
 	border-bottom: 1px solid var(--article-border);
 }
@@ -126,7 +126,7 @@ html {
 	margin-bottom: 1rem;
 	padding-bottom: 0.3em;
 	font-size: 1.95em;
-	font-weight: var(--site-weight-light);
+	font-weight: var(--site-weight-content-h1-h2);
 	line-height: 1.32;
 	border-bottom: 1px solid var(--article-border);
 }
@@ -135,7 +135,7 @@ html {
 	margin-top: 1.26em;
 	margin-bottom: 1rem;
 	font-size: 1.65em;
-	font-weight: var(--site-weight-body);
+	font-weight: var(--site-weight-content-h3-h6);
 	line-height: 1.42;
 }
 
@@ -143,7 +143,7 @@ html {
 	margin-top: 1.2em;
 	margin-bottom: 1rem;
 	font-size: 1.38em;
-	font-weight: var(--site-weight-body);
+	font-weight: var(--site-weight-content-h3-h6);
 	line-height: 1.52;
 }
 
@@ -152,7 +152,7 @@ html {
 	margin-top: 1.12em;
 	margin-bottom: 1rem;
 	font-size: 1.18em;
-	font-weight: var(--site-weight-body);
+	font-weight: var(--site-weight-content-h3-h6);
 	line-height: 1.625;
 }
 
@@ -243,7 +243,7 @@ html {
 
 .article-content b,
 .article-content strong {
-	font-weight: var(--site-weight-heading);
+	font-weight: var(--site-weight-emphasis);
 }
 
 
