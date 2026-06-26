@@ -516,6 +516,13 @@ html {
 	width: 100%;
 }
 
+@media screen and (max-width: 47.99rem) {
+	.article-layout__sidebar-mobile {
+		margin-top: -1rem;
+		margin-bottom: 1rem;
+	}
+}
+
 @media screen and (min-width: 80rem) {
 	.article-layout__sidebar-mobile {
 		display: none;
