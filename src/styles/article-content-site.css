@@ -1,0 +1,85 @@
+/* Site-specific .article-content extensions (Astro/Shiki, code copy). */
+
+.article-content h1,
+.article-content h2,
+.article-content h3,
+.article-content h4,
+.article-content h5,
+.article-content h6 {
+	scroll-margin-top: 0;
+}
+
+.article-content .article-copyable-block {
+	position: relative;
+	margin-bottom: 1rem;
+}
+
+.article-content .article-copyable-block > pre {
+	margin-bottom: 0;
+}
+
+.article-content .article-copyable-block[data-copy-kind='mermaid'] {
+	width: fit-content;
+	max-width: 100%;
+	margin-inline: auto;
+}
+
+.article-content .article-copy-source {
+	display: none !important;
+}
+
+.article-content .article-block-copy {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	z-index: 1;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2rem;
+	height: 2rem;
+	padding: 0;
+	border: 1px solid var(--article-border);
+	border-radius: 6px;
+	background: var(--site-surface);
+	color: var(--site-subtle-fg);
+	cursor: pointer;
+	opacity: 0;
+	transition:
+		opacity 120ms ease,
+		color 120ms ease,
+		border-color 120ms ease;
+}
+
+.article-content .article-block-copy svg {
+	width: 1rem;
+	height: 1rem;
+}
+
+.article-content .article-copyable-block:hover .article-block-copy,
+.article-content .article-copyable-block:focus-within .article-block-copy {
+	opacity: 1;
+}
+
+.article-content .article-block-copy:hover,
+.article-content .article-block-copy:focus-visible {
+	color: var(--site-link-hover);
+	border-color: var(--site-link-hover);
+}
+
+.article-content .article-block-copy[data-copied='已复制'] {
+	color: var(--site-link-hover);
+	border-color: var(--site-link-hover);
+}
+
+.article-content .astro-code {
+	background-color: var(--article-code-block-bg) !important;
+}
+
+html.dark .article-content .astro-code,
+html.dark .article-content .astro-code span {
+	color: var(--shiki-dark) !important;
+	font-style: var(--shiki-dark-font-style) !important;
+	font-weight: var(--shiki-dark-font-weight) !important;
+	text-decoration: var(--shiki-dark-text-decoration) !important;
+}

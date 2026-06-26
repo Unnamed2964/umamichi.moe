@@ -27,6 +27,15 @@ html {
 	--site-weight-content-h1-h2: 300;
 	--site-weight-content-h3-h6: 400;
 	--site-weight-emphasis: 600;
+
+	/* article.css overrides — see @umamichi-ui/common-css/article.css */
+	--article-title-bar: var(--site-header-bg);
+	--article-pre-radius: 0;
+	--article-heading-scroll-margin: 0;
+	--article-weight-h1-h2: var(--site-weight-content-h1-h2);
+	--article-weight-h3-h6: var(--site-weight-content-h3-h6);
+	--article-weight-body: var(--site-weight-body);
+	--article-weight-emphasis: var(--site-weight-emphasis);
 }
 
 @media screen and (min-width: 48rem) {
