@@ -1073,7 +1073,7 @@ html.dark .site-icon-button[data-site-theme-toggle] [data-site-theme-icon='dark'
 .site-main {
 	width: 100%;
 	margin-inline: auto;
-	padding: 3.5rem 1.5rem;
+	padding: 3rem 1.5rem;
 }
 
 @media screen and (min-width: 48rem) {
