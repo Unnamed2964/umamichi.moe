@@ -20,17 +20,7 @@ html {
 
 	--site-space-unit: 0.25rem;
 
-	/* Font weight scale — see docs/site-font-weight.md */
-	--site-weight-light: 300;
-	--site-weight-regular: 400;
-	--site-weight-medium: 500;
-	--site-weight-semibold: 600;
-
-	--site-weight-page-title: var(--site-weight-light);
-	--site-weight-content-h1-h2: var(--site-weight-light);
-	--site-weight-content-h3-h6: var(--site-weight-regular);
-
-	/* article.css overrides — see @umamichi-ui/common-css/article.css */
+	/* article.css site overrides — see @umamichi-ui/common-css/article.css */
 	--article-title-bar: var(--site-header-bg);
 	--article-pre-radius: 0;
 	--article-heading-scroll-margin: 0;
