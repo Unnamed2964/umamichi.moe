@@ -46,7 +46,7 @@
 | `.article-header__title` | `page-title`（`light`） |
 | `.article-tag` | `regular` |
 | `.article-prev-next__label` | `regular` |
-| `.article-prev-next__title` | `regular` |
+| `.article-prev-next__title` | `light` |
 | `.article-copyright__heading` | `light` |
 | `.site-header__title` | `regular` |
 | `.site-footer__line` | `regular` |
