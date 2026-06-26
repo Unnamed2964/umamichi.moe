@@ -150,10 +150,17 @@ html {
 .article-header {
 	display: flex;
 	flex-direction: column;
-	gap: 0.75rem;
+	gap: 1rem;
 	align-items: flex-start;
 	width: 100%;
+	margin-bottom: 0.5rem;
 	text-align: left;
+}
+
+@media screen and (min-width: 48rem) {
+	.article-header {
+		margin-bottom: 1rem;
+	}
 }
 
 .article-header__date {
@@ -170,29 +177,29 @@ html {
 }
 
 .article-header__title {
-	margin: 0;
-	font-size: 2.25rem;
-	font-weight: var(--site-weight-display);
-	line-height: 1.2;
-	letter-spacing: -0.025em;
+	margin: 0.25rem 0 0;
+	font-size: 3.25rem;
+	font-weight: var(--site-weight-body);
+	line-height: 1.1;
+	letter-spacing: 0;
 }
 
 @media screen and (min-width: 48rem) {
 	.article-header__title {
-		font-size: 3.75rem;
-		line-height: 1.15;
+		font-size: 4.25rem;
 	}
 }
 
 .article-header__title-bar {
-	height: 3px;
-	width: 5rem;
+	height: 4px;
+	width: 6rem;
+	margin-top: 0.25rem;
 	background: var(--article-title-bar);
 }
 
 @media screen and (min-width: 48rem) {
 	.article-header__title-bar {
-		width: 6.5rem;
+		width: 7.5rem;
 	}
 }
 
