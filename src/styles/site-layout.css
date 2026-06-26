@@ -720,9 +720,9 @@ html {
 
 .site-header__title {
 	margin: 0;
-	font-size: 1rem;
+	font-size: 1.125rem;
 	font-weight: var(--site-weight-ui);
-	line-height: 1.5rem;
+	line-height: 1.75rem;
 	letter-spacing: -0.025em;
 	text-align: left;
 }
