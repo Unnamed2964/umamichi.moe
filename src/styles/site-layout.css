@@ -21,12 +21,14 @@ html {
 	--site-space-unit: 0.25rem;
 
 	/* Font weight scale — see docs/site-font-weight.md */
-	--site-weight-body: 400;
-	--site-weight-ui: 500;
-	--site-weight-page-title: 300;
-	--site-weight-content-h1-h2: 300;
-	--site-weight-content-h3-h6: 400;
-	--site-weight-emphasis: 600;
+	--site-weight-light: 300;
+	--site-weight-regular: 400;
+	--site-weight-medium: 500;
+	--site-weight-semibold: 600;
+
+	--site-weight-page-title: var(--site-weight-light);
+	--site-weight-content-h1-h2: var(--site-weight-light);
+	--site-weight-content-h3-h6: var(--site-weight-regular);
 
 	/* article.css overrides — see @umamichi-ui/common-css/article.css */
 	--article-title-bar: var(--site-header-bg);
@@ -34,14 +36,14 @@ html {
 	--article-heading-scroll-margin: 0;
 	--article-weight-h1-h2: var(--site-weight-content-h1-h2);
 	--article-weight-h3-h6: var(--site-weight-content-h3-h6);
-	--article-weight-body: var(--site-weight-body);
-	--article-weight-emphasis: var(--site-weight-emphasis);
+	--article-weight-body: var(--site-weight-regular);
+	--article-weight-emphasis: var(--site-weight-semibold);
 }
 
 .site-route-main {
 	font-size: var(--site-content-font-size);
 	line-height: var(--site-content-line-height);
-	font-weight: var(--site-weight-body);
+	font-weight: var(--site-weight-regular);
 	font-family: var(--article-font-ui);
 }
 
@@ -57,7 +59,7 @@ html {
 	gap: 0.5rem;
 	background: var(--site-button-bg);
 	color: var(--site-button-fg);
-	font-weight: var(--site-weight-ui);
+	font-weight: var(--site-weight-regular);
 	text-decoration: none;
 	transition:
 		background-color 0.2s ease,
@@ -84,7 +86,7 @@ html {
 .site-sidebar-panel__title {
 	margin: 0;
 	font-size: 1rem;
-	font-weight: var(--site-weight-ui);
+	font-weight: var(--site-weight-regular);
 	letter-spacing: 0.05em;
 	color: var(--site-subtle-fg);
 }
@@ -118,38 +120,38 @@ html {
 .site-sidebar-link--section.site-sidebar-link--primary {
 	color: var(--article-fg);
 	font-size: 0.875rem;
-	font-weight: var(--site-weight-body);
+	font-weight: var(--site-weight-regular);
 }
 
 .site-sidebar-link--section.site-sidebar-link--nested {
 	color: var(--article-fg);
 	font-size: 0.75rem;
-	font-weight: var(--site-weight-body);
+	font-weight: var(--site-weight-regular);
 }
 
 .site-sidebar-link--item.site-sidebar-link--primary {
 	color: var(--site-muted-fg);
 	font-size: 0.875rem;
-	font-weight: var(--site-weight-body);
+	font-weight: var(--site-weight-regular);
 	transition: color 0.2s ease, font-weight 0.2s ease;
 }
 
 .site-sidebar-link--item.site-sidebar-link--nested {
 	color: var(--site-muted-fg);
 	font-size: 0.75rem;
-	font-weight: var(--site-weight-body);
+	font-weight: var(--site-weight-regular);
 	transition: color 0.2s ease, font-weight 0.2s ease;
 }
 
 .site-sidebar-link--current.site-sidebar-link--section,
 .site-sidebar-link--current.site-sidebar-link--item {
 	color: var(--site-accent);
-	font-weight: var(--site-weight-ui);
+	font-weight: var(--site-weight-medium);
 }
 
 .site-sidebar-link[aria-current='location'] {
 	color: var(--site-accent);
-	font-weight: var(--site-weight-ui);
+	font-weight: var(--site-weight-medium);
 }
 
 .article-header {
@@ -171,7 +173,7 @@ html {
 .article-header__date {
 	margin: 0;
 	color: var(--article-muted-fg);
-	font-weight: var(--site-weight-body);
+	font-weight: var(--site-weight-regular);
 }
 
 .article-header__updated {
@@ -233,7 +235,7 @@ html {
 	padding: 0.25rem 0.75rem;
 	border-radius: 9999px;
 	font-size: 0.875rem;
-	font-weight: var(--site-weight-body);
+	font-weight: var(--site-weight-regular);
 }
 
 .article-source-actions {
@@ -389,13 +391,13 @@ html {
 
 .article-prev-next__label {
 	font-size: 0.75rem;
-	font-weight: var(--site-weight-body);
+	font-weight: var(--site-weight-regular);
 	color: var(--site-subtle-fg);
 }
 
 .article-prev-next__title {
 	font-size: 0.875rem;
-	font-weight: var(--site-weight-ui);
+	font-weight: var(--site-weight-regular);
 	line-height: 1.5;
 	color: inherit;
 }
@@ -417,9 +419,11 @@ html {
 }
 
 .article-copyright__heading {
-	margin: 0 0 0.75rem;
-	font-size: 1rem;
-	font-weight: var(--site-weight-ui);
+	margin: 0 0 0.875rem;
+	font-size: 1.75rem;
+	font-weight: var(--site-weight-light);
+	letter-spacing: -0.022em;
+	line-height: 1.38;
 	color: var(--site-fg);
 }
 
@@ -721,7 +725,7 @@ html {
 .site-header__title {
 	margin: 0;
 	font-size: 1.125rem;
-	font-weight: var(--site-weight-body);
+	font-weight: var(--site-weight-regular);
 	line-height: 1.75rem;
 	letter-spacing: -0.025em;
 	text-align: left;
@@ -1102,7 +1106,7 @@ html.dark .site-icon-button[data-site-theme-toggle] [data-site-theme-icon='dark'
 	margin: 0;
 	color: var(--site-muted-fg);
 	font-size: 1rem;
-	font-weight: var(--site-weight-body);
+	font-weight: var(--site-weight-regular);
 	line-height: 1.5;
 }
 
