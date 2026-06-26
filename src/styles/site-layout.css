@@ -425,11 +425,10 @@ html {
 }
 
 .article-copyright__heading {
-	margin: 0 0 0.875rem;
-	font-size: 1.75rem;
-	font-weight: var(--site-weight-light);
-	letter-spacing: -0.022em;
-	line-height: 1.38;
+	margin: 0 0 1rem;
+	font-size: 1.95rem;
+	font-weight: var(--article-weight-h1-h2);
+	line-height: 1.32;
 	color: var(--site-fg);
 }
 
