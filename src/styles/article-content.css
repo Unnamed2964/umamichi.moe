@@ -241,8 +241,9 @@ html {
 	text-decoration: underline;
 }
 
+.article-content b,
 .article-content strong {
-	font-weight: var(--site-weight-ui);
+	font-weight: var(--site-weight-heading);
 }
 
 
