@@ -2,7 +2,7 @@
 
 > 以下内容为 Cursor Auto 编写，未经人工检查，请谨慎对待。
 
-本站通过 CSS 自定义属性统一控制字重。壳层 UI 变量定义于 `src/styles/site-layout.css`；正文排版字重由 `@umamichi-ui/common-css/article.css` 的 `--article-weight-*` 提供，站点在 `site-layout.css` 将其映射到 `--site-weight-*`。
+壳层 UI 变量定义于 `@umamichi-ui/common-css` `tokens.css` 的 `--site-weight-*`；本站 `site-layout.css` 仅保留博客特有覆盖。
 
 ## 变量
 
