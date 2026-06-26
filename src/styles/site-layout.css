@@ -21,6 +21,7 @@ html {
 	--site-space-unit: 0.25rem;
 
 	/* Font weight scale — see docs/site-font-weight.md */
+	--site-weight-light: 300;
 	--site-weight-body: 400;
 	--site-weight-ui: 500;
 	--site-weight-heading: 600;
@@ -179,7 +180,7 @@ html {
 .article-header__title {
 	margin: 0.25rem 0 0;
 	font-size: 3.25rem;
-	font-weight: var(--site-weight-body);
+	font-weight: var(--site-weight-light);
 	line-height: 1.1;
 	letter-spacing: 0;
 }
