@@ -47,7 +47,7 @@
 | `.article-prev-next__label` | `body` |
 | `.article-prev-next__title` | `ui` |
 | `.article-copyright__heading` | `ui` |
-| `.site-header__title` | `ui` |
+| `.site-header__title` | `body` |
 | `.site-footer__line` | `body` |
 
 ### `src/styles/global.css`
