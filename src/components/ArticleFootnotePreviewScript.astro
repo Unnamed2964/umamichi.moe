@@ -1,0 +1,274 @@
+<script is:inline>
+	if (!window.siteArticleFootnotePreviewInitialized) {
+		window.siteArticleFootnotePreviewInitialized = true;
+
+		const previewId = 'article-footnote-preview';
+		const previewBodyClass = 'article-footnote-preview__body';
+		const viewportPadding = 16;
+		const offset = 8;
+		const showDelayMs = 150;
+		const hideDelayMs = 200;
+
+		let setupAbortController = null;
+		let showTimer = 0;
+		let hideTimer = 0;
+		let activeRef = null;
+		let defById = new Map();
+
+		const clamp = (value, min, max) => {
+			if (max <= min) {
+				return min;
+			}
+
+			return Math.min(Math.max(value, min), max);
+		};
+
+		const clearShowTimer = () => {
+			if (showTimer) {
+				window.clearTimeout(showTimer);
+				showTimer = 0;
+			}
+		};
+
+		const clearHideTimer = () => {
+			if (hideTimer) {
+				window.clearTimeout(hideTimer);
+				hideTimer = 0;
+			}
+		};
+
+		const stripIds = (root) => {
+			if (root.hasAttribute?.('id')) {
+				root.removeAttribute('id');
+			}
+
+			for (const element of root.querySelectorAll?.('[id]') ?? []) {
+				element.removeAttribute('id');
+			}
+		};
+
+		const getFootnoteBody = (definitionItem) => {
+			const wrapper = document.createElement('div');
+
+			for (const node of definitionItem.childNodes) {
+				wrapper.append(node.cloneNode(true));
+			}
+
+			for (const backref of wrapper.querySelectorAll('[data-footnote-backref]')) {
+				backref.remove();
+			}
+
+			const body = document.createDocumentFragment();
+
+			while (wrapper.firstChild) {
+				body.append(wrapper.firstChild);
+			}
+
+			return body;
+		};
+
+		const getPreview = () => {
+			let preview = document.getElementById(previewId);
+
+			if (!(preview instanceof HTMLDivElement)) {
+				preview = document.createElement('div');
+				preview.id = previewId;
+				preview.className = 'article-footnote-preview';
+				preview.setAttribute('role', 'tooltip');
+				preview.hidden = true;
+
+				const body = document.createElement('div');
+				body.className = previewBodyClass;
+				preview.append(body);
+				document.body.append(preview);
+
+				preview.addEventListener('pointerenter', () => {
+					clearHideTimer();
+				}, { passive: true });
+
+				preview.addEventListener('pointerleave', () => {
+					scheduleHide();
+				}, { passive: true });
+			}
+
+			return preview;
+		};
+
+		const getPreviewBody = (preview) => {
+			const body = preview.querySelector(`.${previewBodyClass}`);
+
+			if (!(body instanceof HTMLDivElement)) {
+				throw new Error('Article footnote preview body is missing.');
+			}
+
+			return body;
+		};
+
+		const positionPreview = (preview, ref) => {
+			const anchorRect = ref.getBoundingClientRect();
+			preview.style.visibility = 'hidden';
+			preview.hidden = false;
+			preview.classList.remove('is-visible');
+
+			const previewRect = preview.getBoundingClientRect();
+			const spaceBelow = window.innerHeight - anchorRect.bottom - offset - viewportPadding;
+			const spaceAbove = anchorRect.top - offset - viewportPadding;
+			const placeAbove = previewRect.height > spaceBelow && spaceAbove >= spaceBelow;
+
+			let top = placeAbove
+				? anchorRect.top - offset - previewRect.height
+				: anchorRect.bottom + offset;
+			let left = anchorRect.left;
+
+			left = clamp(
+				left,
+				viewportPadding,
+				window.innerWidth - previewRect.width - viewportPadding,
+			);
+			top = clamp(
+				top,
+				viewportPadding,
+				window.innerHeight - previewRect.height - viewportPadding,
+			);
+
+			preview.style.left = `${left}px`;
+			preview.style.top = `${top}px`;
+			preview.style.visibility = 'visible';
+		};
+
+		const closePreview = () => {
+			clearShowTimer();
+			clearHideTimer();
+			activeRef = null;
+
+			const preview = document.getElementById(previewId);
+
+			if (!(preview instanceof HTMLDivElement) || preview.hidden) {
+				return;
+			}
+
+			preview.classList.remove('is-visible');
+
+			const finalizeHide = () => {
+				if (preview.classList.contains('is-visible')) {
+					return;
+				}
+
+				preview.hidden = true;
+				getPreviewBody(preview).replaceChildren();
+				preview.removeAttribute('style');
+			};
+
+			preview.addEventListener('transitionend', finalizeHide, { once: true });
+			window.setTimeout(finalizeHide, 220);
+		};
+
+		const openPreview = (ref) => {
+			const href = ref.getAttribute('href');
+
+			if (!href?.startsWith('#')) {
+				return;
+			}
+
+			const definition = defById.get(href.slice(1));
+
+			if (!definition) {
+				return;
+			}
+
+			const preview = getPreview();
+			const body = getPreviewBody(preview);
+			body.replaceChildren(getFootnoteBody(definition));
+			stripIds(body);
+			activeRef = ref;
+			positionPreview(preview, ref);
+
+			window.requestAnimationFrame(() => {
+				preview.classList.add('is-visible');
+			});
+		};
+
+		const scheduleShow = (ref) => {
+			clearHideTimer();
+
+			if (activeRef === ref && !getPreview().hidden) {
+				return;
+			}
+
+			clearShowTimer();
+			showTimer = window.setTimeout(() => {
+				showTimer = 0;
+				openPreview(ref);
+			}, showDelayMs);
+		};
+
+		const scheduleHide = () => {
+			clearShowTimer();
+			clearHideTimer();
+			hideTimer = window.setTimeout(() => {
+				hideTimer = 0;
+				closePreview();
+			}, hideDelayMs);
+		};
+
+		const repositionVisiblePreview = () => {
+			const preview = document.getElementById(previewId);
+
+			if (!(preview instanceof HTMLDivElement) || preview.hidden || !activeRef) {
+				return;
+			}
+
+			positionPreview(preview, activeRef);
+		};
+
+		const setupFootnotePreview = () => {
+			setupAbortController?.abort();
+			setupAbortController = new AbortController();
+			const { signal } = setupAbortController;
+
+			closePreview();
+			defById = new Map();
+
+			const contentRoot = document.querySelector('.article-content');
+
+			if (!contentRoot) {
+				return;
+			}
+
+			const footnotesRoot = contentRoot.querySelector('section[data-footnotes], section.footnotes');
+
+			if (!footnotesRoot) {
+				return;
+			}
+
+			for (const item of footnotesRoot.querySelectorAll('li[id]')) {
+				defById.set(item.id, item);
+			}
+
+			const refs = contentRoot.querySelectorAll('a[data-footnote-ref]');
+
+			for (const ref of refs) {
+				ref.addEventListener('pointerenter', (event) => {
+					if (event.pointerType === 'touch') {
+						return;
+					}
+
+					scheduleShow(ref);
+				}, { signal, passive: true });
+
+				ref.addEventListener('pointerleave', scheduleHide, { signal, passive: true });
+
+				ref.addEventListener('focus', () => {
+					scheduleShow(ref);
+				}, { signal });
+
+				ref.addEventListener('blur', scheduleHide, { signal });
+			}
+		};
+
+		window.addEventListener('resize', repositionVisiblePreview, { passive: true });
+		document.addEventListener('scroll', repositionVisiblePreview, { passive: true, capture: true });
+		document.addEventListener('astro:after-swap', setupFootnotePreview);
+		setupFootnotePreview();
+	}
+</script>

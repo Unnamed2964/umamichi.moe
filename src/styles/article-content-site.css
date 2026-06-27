@@ -87,3 +87,50 @@ html.dark .article-content .astro-code span {
 	font-weight: var(--shiki-dark-font-weight) !important;
 	text-decoration: var(--shiki-dark-text-decoration) !important;
 }
+
+.article-footnote-preview {
+	position: fixed;
+	left: 16px;
+	top: 16px;
+	z-index: 40;
+	box-sizing: border-box;
+	max-width: min(calc(100vw - 32px), 28rem);
+	max-height: min(calc(100vh - 32px), 40vh);
+	overflow: auto;
+	padding: 0.75rem 1rem;
+	border: 1px solid var(--site-copy-toast-border);
+	background: color-mix(in srgb, var(--site-bg) 88%, transparent);
+	backdrop-filter: blur(12px);
+	color: var(--site-copy-toast-fg);
+	font-size: 0.875rem;
+	font-weight: var(--site-weight-regular);
+	line-height: 1.5;
+	pointer-events: auto;
+	opacity: 0;
+	transform: translateY(4px);
+	transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.article-footnote-preview.is-visible {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.article-footnote-preview__body > :first-child {
+	margin-top: 0;
+}
+
+.article-footnote-preview__body > :last-child {
+	margin-bottom: 0;
+}
+
+.article-footnote-preview img,
+.article-footnote-preview picture,
+.article-footnote-preview svg {
+	max-width: 100%;
+	height: auto;
+}
+
+.article-footnote-preview .katex-display {
+	overflow-x: auto;
+}

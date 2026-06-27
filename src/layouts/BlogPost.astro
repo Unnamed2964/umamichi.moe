@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import ArticleCodeCopyScript from '../components/ArticleCodeCopyScript.astro';
+import ArticleFootnotePreviewScript from '../components/ArticleFootnotePreviewScript.astro';
 import ArticleTocScript from '../components/ArticleTocScript.astro';
 import BaseHead from '../components/BaseHead.astro';
 import SiteChromeScripts from '../components/SiteChromeScripts.astro';
@@ -150,5 +151,6 @@ const formattedUpdatedDate = updatedDate
 		<ArticleNavScript />
 		<ArticleTocScript />
 		<ArticleCodeCopyScript />
+		<ArticleFootnotePreviewScript />
 	</body>
 </html>
