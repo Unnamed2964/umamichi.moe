@@ -36,19 +36,19 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 2rem;
-	height: 2rem;
+	width: 2.5rem;
+	height: 2.5rem;
 	padding: 0;
-	border: 1px solid var(--article-border);
+	border: 0;
 	border-radius: 6px;
-	background: var(--site-surface);
-	color: var(--site-subtle-fg);
+	background: var(--site-button-bg);
+	color: var(--site-button-fg);
 	cursor: pointer;
 	opacity: 0;
 	transition:
 		opacity 120ms ease,
-		color 120ms ease,
-		border-color 120ms ease;
+		background-color 0.2s ease,
+		color 120ms ease;
 }
 
 .article-content .article-block-copy svg {
@@ -63,13 +63,17 @@
 
 .article-content .article-block-copy:hover,
 .article-content .article-block-copy:focus-visible {
+	background: var(--site-button-hover-bg);
 	color: var(--site-link-hover);
-	border-color: var(--site-link-hover);
+}
+
+.article-content .article-block-copy:active {
+	background: var(--site-button-active-bg);
 }
 
 .article-content .article-block-copy[data-copied='已复制'] {
+	background: var(--site-button-hover-bg);
 	color: var(--site-link-hover);
-	border-color: var(--site-link-hover);
 }
 
 .article-content .astro-code {
