@@ -1,8 +1,6 @@
-import { useEffect } from 'react';
 import { FloatingMenu } from '@umamichi-ui/common-components/menu';
 import {
 	applySitePalette,
-	getStoredSitePaletteId,
 	paletteManifest,
 } from '../lib/site-palette';
 
@@ -48,10 +46,6 @@ function PaletteIcon() {
 }
 
 export default function PaletteDropdown({ className, wrapClassName }: PaletteDropdownProps) {
-	useEffect(() => {
-		applySitePalette(getStoredSitePaletteId());
-	}, []);
-
 	const items = [
 		{
 			kind: 'item' as const,

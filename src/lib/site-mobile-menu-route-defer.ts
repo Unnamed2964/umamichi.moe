@@ -98,6 +98,13 @@ function shouldDeferMenuNavigation(event: Event): boolean {
 	return isSameOriginInternalUrl(to) && isDifferentPage(from, to);
 }
 
+/**
+ * Defers in-menu link navigation until the mobile pane close animation finishes.
+ *
+ * Registered with capture on `astro:before-preparation` so it runs before
+ * `site-mobile-menu-client` (bubble), which may call `preventDefault()` when
+ * popstate closes the menu on the same URL.
+ */
 export function initSiteMobileMenuRouteDefer(): void {
 	document.addEventListener(
 		'astro:before-preparation',

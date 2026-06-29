@@ -17,6 +17,7 @@ import type { ImageMetadata } from 'astro';
 import FallbackImage from '../assets/adachi_doll.webp';
 import { SITE_TITLE } from '../consts';
 import { siteRouteSlideTransitionStyles } from '../lib/site-slide-transition';
+import { SITE_THEME_STORAGE_KEY, SITE_PALETTE_STORAGE_KEY } from '../lib/site-appearance';
 import { ClientRouter } from 'astro:transitions';
 
 interface Props {
@@ -44,10 +45,9 @@ const { title, description, image = FallbackImage, disableTikkun = false } = Ast
 />
 <meta name="generator" content={Astro.generator} />
 
-<script is:inline>
+<script is:inline define:vars={{ siteThemeStorageKey: SITE_THEME_STORAGE_KEY, sitePaletteStorageKey: SITE_PALETTE_STORAGE_KEY }}>
 	(() => {
-		const storageKey = 'site-theme';
-		const stored = window.localStorage.getItem(storageKey);
+		const stored = window.localStorage.getItem(siteThemeStorageKey);
 		const preference = stored === 'light' || stored === 'dark' ? stored : 'system';
 		const resolved = preference === 'system'
 			? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
@@ -78,8 +78,7 @@ const { title, description, image = FallbackImage, disableTikkun = false } = Ast
 			syncMermaidMedia();
 		}
 
-		const paletteKey = 'site-palette';
-		const storedPalette = window.localStorage.getItem(paletteKey);
+		const storedPalette = window.localStorage.getItem(sitePaletteStorageKey);
 		if (storedPalette && storedPalette !== 'default') {
 			document.documentElement.dataset.palette = storedPalette;
 		}

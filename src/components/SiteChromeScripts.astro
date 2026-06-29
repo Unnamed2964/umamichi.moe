@@ -1,150 +1,7 @@
-<script is:inline>
-	if (!window.siteThemeControlsInitialized) {
-		window.siteThemeControlsInitialized = true;
-
-		const storageKey = 'site-theme';
-		const themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-		let themeTransitionResetFrame = 0;
-
-		const getStoredThemePreference = () => {
-			const stored = window.localStorage.getItem(storageKey);
-			return stored === 'light' || stored === 'dark' ? stored : 'system';
-		};
-
-		const getResolvedTheme = (preference) => {
-			if (preference === 'system') {
-				return themeMediaQuery.matches ? 'dark' : 'light';
-			}
-
-			return preference;
-		};
-
-		const updateMermaidMedia = (preference) => {
-			const mediaMap = {
-				system: '(prefers-color-scheme: dark)',
-				dark: 'all',
-				light: 'none',
-			};
-
-			for (const element of document.querySelectorAll('[id^="mermaid-dark"]')) {
-				element.setAttribute('media', mediaMap[preference] ?? 'none');
-			}
-		};
-
-		const applyThemePreference = (preference) => {
-			const resolved = getResolvedTheme(preference);
-			document.documentElement.dataset.themeSwitching = 'true';
-			if (themeTransitionResetFrame) {
-				window.cancelAnimationFrame(themeTransitionResetFrame);
-			}
-			themeTransitionResetFrame = window.requestAnimationFrame(() => {
-				themeTransitionResetFrame = window.requestAnimationFrame(() => {
-					delete document.documentElement.dataset.themeSwitching;
-					themeTransitionResetFrame = 0;
-				});
-			});
-			document.documentElement.classList.toggle('dark', resolved === 'dark');
-			document.documentElement.classList.toggle('light', resolved === 'light');
-			document.documentElement.dataset.themePreference = preference;
-			document.documentElement.dataset.themeResolved = resolved;
-			document.documentElement.style.colorScheme = resolved;
-			updateMermaidMedia(preference);
-			document.dispatchEvent(new CustomEvent('site:theme-change', { detail: { preference, resolved } }));
-
-			for (const button of document.querySelectorAll('[data-site-theme-toggle]')) {
-				button.setAttribute('aria-label', resolved === 'dark' ? '切换到浅色模式' : '切换到深色模式');
-				button.setAttribute('title', resolved === 'dark' ? '切换到浅色模式' : '切换到深色模式');
-			}
-		};
-
-		document.addEventListener('click', (event) => {
-			const target = event.target;
-
-			if (!(target instanceof Element) || !target.closest('[data-site-theme-toggle]')) {
-				return;
-			}
-
-			const currentResolved = document.documentElement.dataset.themeResolved === 'dark' ? 'dark' : 'light';
-			const nextPreference = currentResolved === 'dark' ? 'light' : 'dark';
-			window.localStorage.setItem(storageKey, nextPreference);
-			applyThemePreference(nextPreference);
-		});
-
-		themeMediaQuery.addEventListener('change', () => {
-			if (getStoredThemePreference() === 'system') {
-				applyThemePreference('system');
-			}
-		});
-
-		document.addEventListener('astro:after-swap', () => applyThemePreference(getStoredThemePreference()));
-		applyThemePreference(getStoredThemePreference());
-	}
-
-	if (!window.sitePaletteControlsInitialized) {
-		window.sitePaletteControlsInitialized = true;
-
-		const paletteStorageKey = 'site-palette';
-
-		const applyStoredPalette = () => {
-			const stored = window.localStorage.getItem(paletteStorageKey);
-
-			if (!stored || stored === 'default') {
-				delete document.documentElement.dataset.palette;
-				return;
-			}
-
-			document.documentElement.dataset.palette = stored;
-		};
-
-		document.addEventListener('astro:after-swap', applyStoredPalette);
-		applyStoredPalette();
-	}
-</script>
-
 <script>
-	import { initSiteAppearanceBeforeSwap } from '../lib/site-appearance-before-swap.ts';
-	import { initSiteMobileMenu } from '../lib/site-mobile-menu-client.ts';
-	import { initSiteMobileMenuRouteDefer } from '../lib/site-mobile-menu-route-defer.ts';
-	import { initSiteThemeColorSync } from '../lib/site-theme-color-client.ts';
+	import { initSiteChromeClients } from '../lib/site-chrome-init.ts';
 
-	initSiteMobileMenu();
-	initSiteMobileMenuRouteDefer();
-	initSiteAppearanceBeforeSwap();
-	initSiteThemeColorSync();
-</script>
-
-<script is:inline>
-	if (!window.siteHeaderOffsetInitialized) {
-		window.siteHeaderOffsetInitialized = true;
-		let headerOffsetObserver = null;
-
-		const syncHeaderOffset = () => {
-			const header = document.querySelector('[data-site-header]');
-
-			if (header instanceof HTMLElement) {
-				const headerHeight = Math.ceil(header.getBoundingClientRect().height);
-				document.documentElement.style.setProperty('--site-header-offset', `${headerHeight}px`);
-			}
-		};
-
-		const observeHeaderOffset = () => {
-			const header = document.querySelector('[data-site-header]');
-
-			headerOffsetObserver?.disconnect();
-			headerOffsetObserver = null;
-
-			if (header instanceof HTMLElement) {
-				headerOffsetObserver = new ResizeObserver(syncHeaderOffset);
-				headerOffsetObserver.observe(header);
-			}
-
-			syncHeaderOffset();
-		};
-
-		observeHeaderOffset();
-		document.addEventListener('astro:after-swap', observeHeaderOffset);
-		window.addEventListener('resize', syncHeaderOffset, { passive: true });
-	}
+	initSiteChromeClients();
 </script>
 
 <script>
@@ -508,8 +365,17 @@
 		}
 	});
 
-	document.addEventListener('astro:after-swap', closeArticleSourceMenus);
-	closeArticleSourceMenus();
+	const registerAfterSwap = (callback) => {
+		if (window.__siteRegisterAfterSwap) {
+			return window.__siteRegisterAfterSwap(callback);
+		}
+
+		document.addEventListener('astro:after-swap', callback);
+		callback();
+		return () => document.removeEventListener('astro:after-swap', callback);
+	};
+
+	registerAfterSwap(closeArticleSourceMenus);
 
 	document.addEventListener('pointerdown', (event) => {
 		const target = event.target;
@@ -547,6 +413,25 @@
 	let toWidth = null;
 	let pendingNavigationPath = null;
 	const transferIconBaselineY = 100;
+
+	const registerAfterSwap = (callback) => {
+		if (window.__siteRegisterAfterSwap) {
+			return window.__siteRegisterAfterSwap(callback);
+		}
+
+		document.addEventListener('astro:after-swap', callback);
+		callback();
+		return () => document.removeEventListener('astro:after-swap', callback);
+	};
+
+	const registerBeforePreparation = (callback) => {
+		if (window.__siteRegisterBeforePreparation) {
+			return window.__siteRegisterBeforePreparation(callback);
+		}
+
+		document.addEventListener('astro:before-preparation', callback);
+		return () => document.removeEventListener('astro:before-preparation', callback);
+	};
 
 	function normalizeNavPath(path) {
 		const trimmed = path.replace(/\/+$/, '');
@@ -857,7 +742,7 @@
 	syncPersistedHeaderNavState(window.location.pathname);
 	scheduleNavRunningLineUpdate();
 
-	document.addEventListener('astro:before-preparation', (event) => {
+	registerBeforePreparation((event) => {
 		const targetPath = resolveNavTargetPath(event);
 		pendingNavigationPath = null;
 		syncPersistedHeaderNavState(targetPath);
@@ -868,7 +753,7 @@
 		pendingWidthTransition = true;
 	});
 
-	document.addEventListener('astro:after-swap', () => {
+	registerAfterSwap(() => {
 		syncPersistedHeaderNavState(window.location.pathname);
 		resolveNavElements();
 		scheduleNavRunningLineUpdate();

@@ -6,6 +6,16 @@
 		const anchorButtonClass = 'article-heading-anchor-copy';
 		const copiedLabel = '已复制';
 
+		const registerAfterSwap = (callback) => {
+			if (window.__siteRegisterAfterSwap) {
+				return window.__siteRegisterAfterSwap(callback);
+			}
+
+			document.addEventListener('astro:after-swap', callback);
+			callback();
+			return () => document.removeEventListener('astro:after-swap', callback);
+		};
+
 		const buildAnchorUrl = (slug) => `${window.location.origin}${window.location.pathname}${window.location.search}#${slug}`;
 
 		const copyHeadingAnchor = async (slug, button) => {
@@ -141,7 +151,6 @@
 		window.addEventListener('hashchange', refreshActive);
 		window.addEventListener('resize', refreshActive, { passive: true });
 		document.addEventListener('scroll', refreshActive, { passive: true });
-		document.addEventListener('astro:after-swap', setupToc);
-		setupToc();
+		registerAfterSwap(setupToc);
 	}
 </script>

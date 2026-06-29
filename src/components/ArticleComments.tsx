@@ -1,6 +1,7 @@
 import Giscus from "@giscus/react"
 import { useEffect, useState } from "react"
 import { getGiscusThemeUrl } from "../lib/giscus-theme"
+import { isAppearanceChangeForSubscribers, type SiteAppearanceChangeDetail } from "../lib/site-events"
 
 export default function ArticleComments() {
   const [giscusTheme, setGiscusTheme] = useState<string | null>(null)
@@ -9,12 +10,18 @@ export default function ArticleComments() {
     const syncGiscusTheme = () => setGiscusTheme(getGiscusThemeUrl())
 
     syncGiscusTheme()
-    document.addEventListener("site:theme-change", syncGiscusTheme)
-    document.addEventListener("site:palette-change", syncGiscusTheme)
+    const onAppearanceChange = (event: CustomEvent<SiteAppearanceChangeDetail>) => {
+      if (!isAppearanceChangeForSubscribers(event.detail.reason)) {
+        return
+      }
+
+      syncGiscusTheme()
+    }
+
+    document.addEventListener("site:appearance-change", onAppearanceChange)
 
     return () => {
-      document.removeEventListener("site:theme-change", syncGiscusTheme)
-      document.removeEventListener("site:palette-change", syncGiscusTheme)
+      document.removeEventListener("site:appearance-change", onAppearanceChange)
     }
   }, [])
 

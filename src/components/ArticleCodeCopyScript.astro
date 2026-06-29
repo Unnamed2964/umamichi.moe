@@ -2,6 +2,16 @@
 	if (!window.siteArticleCodeCopyInitialized) {
 		window.siteArticleCodeCopyInitialized = true;
 
+		const registerAfterSwap = (callback) => {
+			if (window.__siteRegisterAfterSwap) {
+				return window.__siteRegisterAfterSwap(callback);
+			}
+
+			document.addEventListener('astro:after-swap', callback);
+			callback();
+			return () => document.removeEventListener('astro:after-swap', callback);
+		};
+
 		const wrapperClass = 'article-copyable-block';
 		const copyButtonClass = 'article-block-copy';
 		const copiedLabel = '已复制';
@@ -107,7 +117,6 @@
 			}
 		};
 
-		document.addEventListener('astro:after-swap', setupCodeCopyButtons);
-		setupCodeCopyButtons();
+		registerAfterSwap(setupCodeCopyButtons);
 	}
 </script>
