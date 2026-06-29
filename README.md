@@ -5,6 +5,9 @@
 [![Cloudflare](https://img.shields.io/badge/Deploy-Cloudflare-f38020?logo=cloudflare&logoColor=white)](https://www.cloudflare.com)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-43853d?logo=nodedotjs&logoColor=white)](https://nodejs.org)
 
+[![Deploy](https://github.com/Unnamed2964/umamichi.moe/actions/workflows/deploy.yml/badge.svg)](https://github.com/Unnamed2964/umamichi.moe/actions/workflows/deploy.yml)
+[![Archive to Wayback Machine](https://github.com/Unnamed2964/umamichi.moe/actions/workflows/archive-wayback.yml/badge.svg)](https://github.com/Unnamed2964/umamichi.moe/actions/workflows/archive-wayback.yml)
+
 > 以下内容为 GPT 5.4 生成，但已经过人工检查，可以作为参考。
 
 这是 umamichi.moe 的站点仓库。
