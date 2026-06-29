@@ -2,6 +2,16 @@
 	if (!window.siteArticleFootnotePreviewInitialized) {
 		window.siteArticleFootnotePreviewInitialized = true;
 
+		const registerAfterSwap = (callback) => {
+			if (window.__siteRegisterAfterSwap) {
+				return window.__siteRegisterAfterSwap(callback);
+			}
+
+			document.addEventListener('astro:after-swap', callback);
+			callback();
+			return () => document.removeEventListener('astro:after-swap', callback);
+		};
+
 		const previewId = 'article-footnote-preview';
 		const previewBodyClass = 'article-footnote-preview__body';
 		const viewportPadding = 16;
@@ -268,7 +278,6 @@
 
 		window.addEventListener('resize', repositionVisiblePreview, { passive: true });
 		document.addEventListener('scroll', repositionVisiblePreview, { passive: true, capture: true });
-		document.addEventListener('astro:after-swap', setupFootnotePreview);
-		setupFootnotePreview();
+		registerAfterSwap(setupFootnotePreview);
 	}
 </script>
