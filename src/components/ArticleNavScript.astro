@@ -2,6 +2,16 @@
 	if (!window.siteArticleNavInitialized) {
 		window.siteArticleNavInitialized = true;
 
+		const registerAfterSwap = (callback) => {
+			if (window.__siteRegisterAfterSwap) {
+				return window.__siteRegisterAfterSwap(callback);
+			}
+
+			document.addEventListener('astro:after-swap', callback);
+			callback();
+			return () => document.removeEventListener('astro:after-swap', callback);
+		};
+
 		const isCurrentLinkVisible = (scrollContainer, currentLink) => {
 			const containerRect = scrollContainer.getBoundingClientRect();
 			const linkRect = currentLink.getBoundingClientRect();
@@ -33,7 +43,6 @@
 			}
 		};
 
-		document.addEventListener('astro:after-swap', scrollArticleNavToCurrent);
-		scrollArticleNavToCurrent();
+		registerAfterSwap(scrollArticleNavToCurrent);
 	}
 </script>

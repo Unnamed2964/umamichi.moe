@@ -1,4 +1,6 @@
 import { isMobileMenuViewport, waitForPaneClose } from './site-mobile-menu-pane.ts';
+import { dispatchSiteNavLayoutChange } from './site-events';
+import { registerAfterSwap } from './view-transition-lifecycle';
 
 const INIT_KEY = '__siteMobileMenuInit';
 
@@ -28,6 +30,7 @@ function syncMobileHeaderPlaceholder(keepPlaceholder: boolean): void {
 	if (keepPlaceholder && isMobileMenuViewport() && header instanceof HTMLElement) {
 		const headerHeight = Math.ceil(header.getBoundingClientRect().height);
 		document.documentElement.style.setProperty('--site-header-placeholder-height', `${headerHeight}px`);
+		dispatchSiteNavLayoutChange();
 		return;
 	}
 
@@ -78,7 +81,7 @@ export function initSiteMobileMenu(): void {
 	const applyMenuClosedState = (mobileMenu: HTMLElement) => {
 		mobileMenu.setAttribute('aria-hidden', 'true');
 		syncMenuToggleButtons(false);
-		document.dispatchEvent(new Event('site:nav-layout-change'));
+		dispatchSiteNavLayoutChange();
 	};
 
 	const applyMenuOpenState = (mobileMenu: HTMLElement) => {
@@ -87,7 +90,7 @@ export function initSiteMobileMenu(): void {
 		document.documentElement.dataset.mobileMenuOpen = 'true';
 		delete document.documentElement.dataset.mobileMenuClosing;
 		syncMenuToggleButtons(true);
-		document.dispatchEvent(new Event('site:nav-layout-change'));
+		dispatchSiteNavLayoutChange();
 	};
 
 	const setMenuOpenImmediate = (isOpen: boolean) => {
@@ -197,7 +200,7 @@ export function initSiteMobileMenu(): void {
 
 	window.__siteMobileMenuCloseForNavigation = () => beginMenuClose();
 
-	const clearMenuHistoryAfterNavigation = () => {
+	const resetMobileMenuAfterNavigation = () => {
 		releaseMenuHistoryEntry();
 		setMenuOpenImmediate(false);
 	};
@@ -227,6 +230,7 @@ export function initSiteMobileMenu(): void {
 		return from.href === to.href;
 	};
 
+	// Bubble phase: skip same-URL transitions after popstate menu close.
 	document.addEventListener('astro:before-preparation', (event) => {
 		if (!shouldSkipSameDocumentRouteTransition(event)) {
 			return;
@@ -334,6 +338,5 @@ export function initSiteMobileMenu(): void {
 		}
 	});
 
-	document.addEventListener('astro:after-swap', clearMenuHistoryAfterNavigation);
-	clearMenuHistoryAfterNavigation();
+	registerAfterSwap(resetMobileMenuAfterNavigation, true);
 }

@@ -1,33 +1,12 @@
+import { isAppearanceChangeForSubscribers } from './site-events';
+import { syncSiteThemeColor } from './site-theme-color';
+
 const INIT_KEY = '__siteThemeColorSyncInit';
 
 declare global {
 	interface Window {
 		[INIT_KEY]?: boolean;
 	}
-}
-
-export function syncSiteThemeColor(): void {
-	const header = document.querySelector('[data-site-header]');
-
-	if (!(header instanceof HTMLElement)) {
-		return;
-	}
-
-	const color = getComputedStyle(header).backgroundColor;
-
-	if (!color || color === 'transparent' || color === 'rgba(0, 0, 0, 0)') {
-		return;
-	}
-
-	let meta = document.querySelector('meta[name="theme-color"]');
-
-	if (!meta) {
-		meta = document.createElement('meta');
-		meta.setAttribute('name', 'theme-color');
-		document.head.appendChild(meta);
-	}
-
-	meta.setAttribute('content', color);
 }
 
 export function initSiteThemeColorSync(): void {
@@ -37,16 +16,19 @@ export function initSiteThemeColorSync(): void {
 
 	window[INIT_KEY] = true;
 
-	const runSync = () => {
-		syncSiteThemeColor();
-	};
+	document.addEventListener('site:appearance-change', (event) => {
+		if (!isAppearanceChangeForSubscribers(event.detail.reason)) {
+			return;
+		}
 
-	document.addEventListener('site:theme-change', runSync);
-	document.addEventListener('site:palette-change', runSync);
+		syncSiteThemeColor();
+	});
 
 	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', runSync, { once: true });
+		document.addEventListener('DOMContentLoaded', () => syncSiteThemeColor(), { once: true });
 	} else {
-		runSync();
+		syncSiteThemeColor();
 	}
 }
+
+export { syncSiteThemeColor } from './site-theme-color';
