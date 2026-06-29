@@ -69,7 +69,7 @@ NPM：[@kyuri-metro/njmetro-line-id-block-svg-generator](https://www.npmjs.com/p
 
 示例：
 
-<img src="/tools/imgs/njmetro-idblock/output-example-v0.2.3.webp" alt="南京地铁线路号方块生成器输出示例" style="max-height: 120px" />
+<img src="/tools/imgs/njmetro-idblock/output-example-v0.3.1.webp" alt="南京地铁线路号方块生成器输出示例" style="max-height: 120px" />
 
 ---
 
