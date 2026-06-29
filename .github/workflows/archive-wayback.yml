@@ -1,0 +1,38 @@
+name: Archive to Wayback Machine
+
+on:
+  schedule:
+    # 每周日 UTC 03:00（北京时间 11:00）
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+
+concurrency:
+  group: archive-wayback-umamichi-moe
+  cancel-in-progress: false
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install wayback-machine-archiver
+        run: pip install wayback-machine-archiver==3.5.0
+
+      - name: Submit sitemap URLs to Internet Archive
+        run: |
+          archiver \
+            --sitemaps https://umamichi.moe/sitemap-index.xml \
+            --force-get \
+            --skip-first-archive \
+            --if-not-archived-within 7d \
+            --js-behavior-timeout 0 \
+            --rate-limit-wait 20 \
+            --log INFO
+        env:
+          INTERNET_ARCHIVE_ACCESS_KEY: ${{ secrets.IA_ACCESS_KEY }}
+          INTERNET_ARCHIVE_SECRET_KEY: ${{ secrets.IA_SECRET_KEY }}
