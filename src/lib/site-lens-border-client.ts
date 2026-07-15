@@ -1,7 +1,7 @@
 /**
- * Lens-style RGB fringe on opt-in borders (header hairline, dropdowns, buttons).
- * Offset follows the pointer; touch / coarse pointers use eased focus.
- * Giscus lives in a cross-origin iframe and is out of scope.
+ * Lens-style RGB fringe on opt-in borders (header hairline, mobile pane seam,
+ * dropdowns, buttons). Offset follows the pointer; touch / coarse pointers use
+ * eased focus. Giscus lives in a cross-origin iframe and is out of scope.
  */
 
 const INIT_KEY = '__siteLensBorderInit';
@@ -36,11 +36,12 @@ const REF_DIAGONAL_FRACTION = 0.35;
 const TOUCH_EASE = 0.14;
 const SETTLE_EPS_SQ = 0.25;
 
+type LensEdge = 'bottom' | 'right' | null;
+
 type LensTarget = {
 	element: HTMLElement;
 	depth: number;
-	/** Anchor on the bottom edge instead of the box center. */
-	edgeBottom: boolean;
+	edge: LensEdge;
 };
 
 function clearLensVars(element: HTMLElement): void {
@@ -50,33 +51,57 @@ function clearLensVars(element: HTMLElement): void {
 	element.style.removeProperty('--lens-ghost-a');
 }
 
-function isUsableLensElement(element: HTMLElement): boolean {
+function isUsableLensElement(element: HTMLElement, options?: { ignoreAriaHidden?: boolean }): boolean {
 	if (element.hidden) {
 		return false;
 	}
 
-	if (element.getAttribute('aria-hidden') === 'true') {
+	if (!options?.ignoreAriaHidden && element.getAttribute('aria-hidden') === 'true') {
 		return false;
 	}
 
 	return element.getClientRects().length > 0;
 }
 
+function isMobileMenuPaneActive(): boolean {
+	const root = document.documentElement;
+	return root.dataset.mobileMenuOpen === 'true' || root.dataset.mobileMenuClosing === 'true';
+}
+
+function parseLensEdge(value: string | undefined): LensEdge {
+	if (value === 'bottom' || value === 'right') {
+		return value;
+	}
+
+	return null;
+}
+
 function collectLensTargets(): LensTarget[] {
 	const targets: LensTarget[] = [];
 	const seen = new Set<HTMLElement>();
 
-	const push = (element: HTMLElement, depth: number, edgeBottom: boolean): void => {
-		if (seen.has(element) || !isUsableLensElement(element)) {
+	const push = (
+		element: HTMLElement,
+		depth: number,
+		edge: LensEdge,
+		options?: { ignoreAriaHidden?: boolean },
+	): void => {
+		if (seen.has(element) || !isUsableLensElement(element, options)) {
 			return;
 		}
 
 		seen.add(element);
-		targets.push({ element, depth, edgeBottom });
+		targets.push({ element, depth, edge });
 	};
 
 	for (const element of document.querySelectorAll('[data-lens-border]')) {
 		if (!(element instanceof HTMLElement)) {
+			continue;
+		}
+
+		const isMobileMenu = element.hasAttribute('data-site-mobile-menu');
+
+		if (isMobileMenu && !isMobileMenuPaneActive()) {
 			continue;
 		}
 
@@ -86,13 +111,14 @@ function collectLensTargets(): LensTarget[] {
 		push(
 			element,
 			Number.isFinite(depth) && depth > 0 ? depth : DEFAULT_DEPTH,
-			element.dataset.lensBorder === 'bottom',
+			parseLensEdge(element.dataset.lensBorder),
+			isMobileMenu ? { ignoreAriaHidden: true } : undefined,
 		);
 	}
 
 	for (const element of document.querySelectorAll(DROPDOWN_PANEL_SELECTOR)) {
 		if (element instanceof HTMLElement) {
-			push(element, DROPDOWN_DEPTH, false);
+			push(element, DROPDOWN_DEPTH, null);
 		}
 	}
 
@@ -101,12 +127,12 @@ function collectLensTargets(): LensTarget[] {
 			continue;
 		}
 
-		// Header controls skip the box fringe; only the hairline is lens-styled.
-		if (element.closest('[data-site-header]')) {
+		// Chrome controls skip the box fringe; only hairlines / seams are lens-styled.
+		if (element.closest('[data-site-header], [data-site-mobile-menu]')) {
 			continue;
 		}
 
-		push(element, BUTTON_DEPTH, false);
+		push(element, BUTTON_DEPTH, null);
 	}
 
 	return targets;
@@ -152,10 +178,10 @@ export function initSiteLensBorder(): void {
 	const applyLensVars = (targets: LensTarget[]): void => {
 		const ref = Math.hypot(window.innerWidth, window.innerHeight) * REF_DIAGONAL_FRACTION;
 
-		for (const { element, depth, edgeBottom } of targets) {
+		for (const { element, depth, edge } of targets) {
 			const rect = element.getBoundingClientRect();
-			const cx = rect.left + rect.width / 2;
-			const cy = edgeBottom ? rect.bottom : rect.top + rect.height / 2;
+			const cx = edge === 'right' ? rect.right : rect.left + rect.width / 2;
+			const cy = edge === 'bottom' ? rect.bottom : rect.top + rect.height / 2;
 			const vx = cx - focusX;
 			const vy = cy - focusY;
 			const dist = Math.hypot(vx, vy);
@@ -267,7 +293,12 @@ export function initSiteLensBorder(): void {
 		subtree: true,
 		childList: true,
 		attributes: true,
-		attributeFilter: ['class', 'data-lens-border', 'data-lens-depth', 'hidden'],
+		attributeFilter: ['class', 'data-lens-border', 'data-lens-depth', 'hidden', 'aria-hidden'],
+	});
+
+	observer.observe(document.documentElement, {
+		attributes: true,
+		attributeFilter: ['data-mobile-menu-open', 'data-mobile-menu-closing'],
 	});
 
 	schedule();
