@@ -594,6 +594,16 @@ html {
 }
 
 /*
+ * Package sets position:relative on .chromatic-fringe-box for containing blocks.
+ * Floating menus are portaled as position:fixed — restore that so fringe class
+ * does not demote them into document flow (misplaced panel + horizontal scroll).
+ */
+.chromatic-fringe-box.dropdown-menu-panel,
+.chromatic-fringe-box.download-format-menu-panel {
+	position: fixed;
+}
+
+/*
  * Controls (not floating menus): shallower fringe on hover / press.
  * Scales the package’s --lens-* offsets so depth feels reduced.
  */
