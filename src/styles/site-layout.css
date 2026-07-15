@@ -593,6 +593,54 @@ html {
 	--chromatic-fringe-border: var(--site-sidebar-border);
 }
 
+/*
+ * Controls (not floating menus): shallower fringe on hover / press.
+ * Scales the package’s --lens-* offsets so depth feels reduced.
+ */
+.chromatic-fringe-box:not(.dropdown-menu-panel):not(.download-format-menu-panel) {
+	--lens-interaction: 1;
+}
+
+.chromatic-fringe-box:not(.dropdown-menu-panel):not(.download-format-menu-panel):is(:hover, :focus-visible) {
+	--lens-interaction: 0.4;
+}
+
+.chromatic-fringe-box:not(.dropdown-menu-panel):not(.download-format-menu-panel):active {
+	--lens-interaction: 0.15;
+}
+
+.chromatic-fringe-box:not(.dropdown-menu-panel):not(.download-format-menu-panel)::before,
+.chromatic-fringe-box:not(.dropdown-menu-panel):not(.download-format-menu-panel)::after {
+	opacity: calc(var(--lens-ghost-a) * var(--lens-interaction));
+	transition:
+		transform 120ms ease,
+		opacity 120ms ease;
+}
+
+.chromatic-fringe-box:not(.dropdown-menu-panel):not(.download-format-menu-panel)::before {
+	transform: translate(
+		calc(var(--lens-ox) * var(--lens-interaction)),
+		calc(var(--lens-oy) * var(--lens-interaction))
+	);
+}
+
+.chromatic-fringe-box:not(.dropdown-menu-panel):not(.download-format-menu-panel)::after {
+	transform: translate(
+		calc(var(--lens-ox) * -1 * var(--lens-interaction)),
+		calc(var(--lens-oy) * -1 * var(--lens-interaction))
+	);
+}
+
+.chromatic-fringe-box--fade-border:not(.dropdown-menu-panel):not(.download-format-menu-panel) {
+	border-color: color-mix(
+		in srgb,
+		var(--chromatic-fringe-border, var(--site-border))
+			calc((1 - (1 - var(--lens-main-a)) * var(--lens-interaction)) * 100%),
+		transparent
+	);
+	transition: border-color 120ms ease;
+}
+
 /* Chrome controls: no box fringe (also skipped in initSiteLensBorder). */
 .site-header .chromatic-fringe-box::before,
 .site-header .chromatic-fringe-box::after,
