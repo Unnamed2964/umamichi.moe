@@ -84,7 +84,7 @@ const tocMaxHeight = hasSourceTools
 	}
 
 	{
-		hasToc && (
+		(hasToc || hasSourceTools) && (
 			<aside
 				slot="article-sidebar-right"
 				class="article-layout__sidebar article-layout__sidebar--right"
@@ -93,12 +93,14 @@ const tocMaxHeight = hasSourceTools
 					{hasSourceTools && (
 						<ArticleSourceActions sourceMarkdown={sourceMarkdown!} sourceUrl={sourceUrl!} />
 					)}
-					<div
-						class="article-sidebar-rail__toc"
-						data-astro-transition-scope={SITE_ARTICLE_SIDEBAR_RIGHT_TRANSITION_SCOPE}
-					>
-						<ArticleToc headings={tocHeadings} maxH={tocMaxHeight} />
-					</div>
+					{hasToc && (
+						<div
+							class="article-sidebar-rail__toc"
+							data-astro-transition-scope={SITE_ARTICLE_SIDEBAR_RIGHT_TRANSITION_SCOPE}
+						>
+							<ArticleToc headings={tocHeadings} maxH={tocMaxHeight} />
+						</div>
+					)}
 				</div>
 			</aside>
 		)
