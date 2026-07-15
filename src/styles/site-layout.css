@@ -150,14 +150,7 @@ html {
 	gap: 1rem;
 	align-items: flex-start;
 	width: 100%;
-	margin-bottom: 0.5rem;
 	text-align: left;
-}
-
-@media screen and (min-width: 48rem) {
-	.article-header {
-		margin-bottom: 1rem;
-	}
 }
 
 .article-header__date {
@@ -552,6 +545,20 @@ html {
 }
 
 .article-page__block {
+	width: 100%;
+}
+
+.article-page__meta {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	width: 100%;
+}
+
+.article-page__meta-actions {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
 	width: 100%;
 }
 
