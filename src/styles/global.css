@@ -270,7 +270,7 @@ html[data-theme-switching='true'] *::after {
 
 @media screen and (min-width: 48rem) {
 	html {
-		--site-header-offset: 72px;
+		/* Matches mobile: padding-block 0.75rem × 2 + 2rem controls */
+		--site-header-offset: 3.5rem;
 	}
-
 }
