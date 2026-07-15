@@ -768,13 +768,36 @@ html {
 	border-radius: 9999px;
 }
 
-/* Lens RGB fringe on dropdown panel borders (see site-lens-border-client.ts). */
+/* Lens RGB fringe on box borders (dropdowns + buttons; see site-lens-border-client.ts). */
 .dropdown-menu-panel,
-.download-format-menu-panel {
+.download-format-menu-panel,
+.site-button,
+.site-icon-button,
+.article-prev-next__card,
+.article-block-copy,
+.outline-button,
+.primary-button,
+.secondary-button,
+.ghost-button {
 	--lens-ox: 0px;
 	--lens-oy: 0px;
 	--lens-main-a: 1;
 	--lens-ghost-a: 0;
+}
+
+.site-button,
+.site-icon-button,
+.article-prev-next__card,
+.article-block-copy,
+.outline-button,
+.primary-button,
+.secondary-button,
+.ghost-button {
+	position: relative;
+}
+
+.dropdown-menu-panel,
+.download-format-menu-panel {
 	border-color: color-mix(
 		in srgb,
 		var(--site-border) calc(var(--lens-main-a) * 100%),
@@ -782,34 +805,91 @@ html {
 	);
 }
 
+.outline-button {
+	border-color: color-mix(
+		in srgb,
+		var(--site-sidebar-border) calc(var(--lens-main-a) * 100%),
+		transparent
+	);
+}
+
 .dropdown-menu-panel::before,
 .dropdown-menu-panel::after,
 .download-format-menu-panel::before,
-.download-format-menu-panel::after {
+.download-format-menu-panel::after,
+.site-button::before,
+.site-button::after,
+.site-icon-button::before,
+.site-icon-button::after,
+.article-prev-next__card::before,
+.article-prev-next__card::after,
+.article-block-copy::before,
+.article-block-copy::after,
+.outline-button::before,
+.outline-button::after,
+.primary-button::before,
+.primary-button::after,
+.secondary-button::before,
+.secondary-button::after,
+.ghost-button::before,
+.ghost-button::after {
 	content: '';
 	position: absolute;
 	inset: 0;
 	border: 1px solid transparent;
+	border-radius: inherit;
 	pointer-events: none;
 	opacity: var(--lens-ghost-a);
 	box-sizing: border-box;
 }
 
 .dropdown-menu-panel::before,
-.download-format-menu-panel::before {
+.download-format-menu-panel::before,
+.site-button::before,
+.site-icon-button::before,
+.article-prev-next__card::before,
+.article-block-copy::before,
+.outline-button::before,
+.primary-button::before,
+.secondary-button::before,
+.ghost-button::before {
 	border-color: color-mix(in srgb, #e85a5a 60%, transparent);
 	transform: translate(var(--lens-ox), var(--lens-oy));
 }
 
 .dropdown-menu-panel::after,
-.download-format-menu-panel::after {
+.download-format-menu-panel::after,
+.site-button::after,
+.site-icon-button::after,
+.article-prev-next__card::after,
+.article-block-copy::after,
+.outline-button::after,
+.primary-button::after,
+.secondary-button::after,
+.ghost-button::after {
 	border-color: color-mix(in srgb, #4ab8d8 60%, transparent);
 	transform: translate(calc(var(--lens-ox) * -1), calc(var(--lens-oy) * -1));
 }
 
+/* Header chrome controls: only the bottom hairline uses the lens fringe. */
+.site-header .site-button::before,
+.site-header .site-button::after,
+.site-header .site-icon-button::before,
+.site-header .site-icon-button::after {
+	content: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.dropdown-menu-panel,
-	.download-format-menu-panel {
+	.download-format-menu-panel,
+	.site-button,
+	.site-icon-button,
+	.article-prev-next__card,
+	.article-block-copy,
+	.outline-button,
+	.primary-button,
+	.secondary-button,
+	.ghost-button {
 		--lens-ox: 0px !important;
 		--lens-oy: 0px !important;
 		--lens-main-a: 1 !important;

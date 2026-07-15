@@ -1,6 +1,7 @@
 /**
- * Lens-style RGB fringe on opt-in gray borders (header hairline, dropdown panels).
+ * Lens-style RGB fringe on opt-in borders (header hairline, dropdowns, buttons).
  * Offset follows the pointer; touch / coarse pointers use eased focus.
+ * Giscus lives in a cross-origin iframe and is out of scope.
  */
 
 const INIT_KEY = '__siteLensBorderInit';
@@ -13,8 +14,21 @@ declare global {
 
 const DROPDOWN_PANEL_SELECTOR =
 	'.dropdown-menu-panel.is-open, .download-format-menu-panel.is-open';
+const BUTTON_SELECTOR = [
+	'.site-button',
+	'.site-icon-button',
+	'.article-prev-next__card',
+	'.article-block-copy',
+	'.outline-button',
+	'.primary-button',
+	'.secondary-button',
+	'.ghost-button',
+].join(', ');
+
 /** Floating menu overlay depth. */
 const DROPDOWN_DEPTH = 1.35;
+/** Page-surface controls — shallower than the header hairline (0.9). */
+const BUTTON_DEPTH = 0.65;
 const DEFAULT_DEPTH = 1;
 const MAX_OFFSET_PX = 1.75;
 /** Distance at full strength ≈ this fraction of the viewport diagonal. */
@@ -36,8 +50,30 @@ function clearLensVars(element: HTMLElement): void {
 	element.style.removeProperty('--lens-ghost-a');
 }
 
+function isUsableLensElement(element: HTMLElement): boolean {
+	if (element.hidden) {
+		return false;
+	}
+
+	if (element.getAttribute('aria-hidden') === 'true') {
+		return false;
+	}
+
+	return element.getClientRects().length > 0;
+}
+
 function collectLensTargets(): LensTarget[] {
 	const targets: LensTarget[] = [];
+	const seen = new Set<HTMLElement>();
+
+	const push = (element: HTMLElement, depth: number, edgeBottom: boolean): void => {
+		if (seen.has(element) || !isUsableLensElement(element)) {
+			return;
+		}
+
+		seen.add(element);
+		targets.push({ element, depth, edgeBottom });
+	};
 
 	for (const element of document.querySelectorAll('[data-lens-border]')) {
 		if (!(element instanceof HTMLElement)) {
@@ -47,23 +83,30 @@ function collectLensTargets(): LensTarget[] {
 		const depthRaw = element.dataset.lensDepth;
 		const depth = depthRaw ? Number(depthRaw) : DEFAULT_DEPTH;
 
-		targets.push({
+		push(
 			element,
-			depth: Number.isFinite(depth) && depth > 0 ? depth : DEFAULT_DEPTH,
-			edgeBottom: element.dataset.lensBorder === 'bottom',
-		});
+			Number.isFinite(depth) && depth > 0 ? depth : DEFAULT_DEPTH,
+			element.dataset.lensBorder === 'bottom',
+		);
 	}
 
 	for (const element of document.querySelectorAll(DROPDOWN_PANEL_SELECTOR)) {
+		if (element instanceof HTMLElement) {
+			push(element, DROPDOWN_DEPTH, false);
+		}
+	}
+
+	for (const element of document.querySelectorAll(BUTTON_SELECTOR)) {
 		if (!(element instanceof HTMLElement)) {
 			continue;
 		}
 
-		targets.push({
-			element,
-			depth: DROPDOWN_DEPTH,
-			edgeBottom: false,
-		});
+		// Header controls skip the box fringe; only the hairline is lens-styled.
+		if (element.closest('[data-site-header]')) {
+			continue;
+		}
+
+		push(element, BUTTON_DEPTH, false);
 	}
 
 	return targets;
@@ -77,6 +120,12 @@ function clearAllLensTargets(): void {
 	}
 
 	for (const element of document.querySelectorAll(DROPDOWN_PANEL_SELECTOR)) {
+		if (element instanceof HTMLElement) {
+			clearLensVars(element);
+		}
+	}
+
+	for (const element of document.querySelectorAll(BUTTON_SELECTOR)) {
 		if (element instanceof HTMLElement) {
 			clearLensVars(element);
 		}
@@ -218,7 +267,7 @@ export function initSiteLensBorder(): void {
 		subtree: true,
 		childList: true,
 		attributes: true,
-		attributeFilter: ['class', 'data-lens-border', 'data-lens-depth'],
+		attributeFilter: ['class', 'data-lens-border', 'data-lens-depth', 'hidden'],
 	});
 
 	schedule();
