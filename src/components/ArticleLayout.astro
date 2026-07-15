@@ -120,21 +120,27 @@ const tocMaxHeight = hasSourceTools
 					</div>
 				)}
 
-				<div class="article-page__block">
+				<div class="article-page__meta article-page__block">
 					<ArticleHeader title={title} pubDate={pubDate} updatedDate={updatedDate} />
+
+					{tags.length > 0 ? (
+						<div class="article-page__meta-actions">
+							<ArticleTags tags={tags} />
+
+							{hasSourceTools && (
+								<div class="article-layout__source-mobile">
+									<ArticleSourceActions sourceMarkdown={sourceMarkdown!} sourceUrl={sourceUrl!} />
+								</div>
+							)}
+						</div>
+					) : (
+						hasSourceTools && (
+							<div class="article-layout__source-mobile">
+								<ArticleSourceActions sourceMarkdown={sourceMarkdown!} sourceUrl={sourceUrl!} />
+							</div>
+						)
+					)}
 				</div>
-
-				{tags.length > 0 && (
-					<div class="article-page__block">
-						<ArticleTags tags={tags} />
-					</div>
-				)}
-
-				{hasSourceTools && (
-					<div class="article-layout__source-mobile article-page__block">
-						<ArticleSourceActions sourceMarkdown={sourceMarkdown!} sourceUrl={sourceUrl!} />
-					</div>
-				)}
 
 				{heroImage && (
 					<div class="article-page__block">
