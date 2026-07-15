@@ -594,6 +594,7 @@ html {
 	--lens-oy: 0px;
 	--lens-main-a: 1;
 	--lens-ghost-a: 0;
+	overflow-x: clip;
 	border-bottom: 1px solid
 		color-mix(in srgb, var(--site-header-border) calc(var(--lens-main-a) * 100%), transparent);
 }
