@@ -627,13 +627,6 @@ html {
 	padding-block: 0.75rem;
 }
 
-@media screen and (min-width: 48rem) {
-	.site-header__stack {
-		gap: 0;
-		padding-block: 0;
-	}
-}
-
 .site-header__row {
 	display: flex;
 	flex-direction: row;
@@ -646,7 +639,6 @@ html {
 @media screen and (min-width: 48rem) {
 	.site-header__row {
 		gap: 1.5rem;
-		min-height: 72px;
 	}
 }
 
