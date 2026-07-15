@@ -597,10 +597,17 @@ html {
  * Package sets position:relative on .chromatic-fringe-box for containing blocks.
  * Floating menus are portaled as position:fixed — restore that so fringe class
  * does not demote them into document flow (misplaced panel + horizontal scroll).
+ * (Also fixed upstream in chromatic-fringe ≥0.2.0; kept as a durable site guard.)
  */
 .chromatic-fringe-box.dropdown-menu-panel,
 .chromatic-fringe-box.download-format-menu-panel {
 	position: fixed;
+}
+
+/* Mobile menu elevates global --lens-focus-depth (same overlay plane as dropdowns). */
+html[data-mobile-menu-open='true'],
+html[data-mobile-menu-closing='true'] {
+	--lens-focus-depth: var(--lens-focus-depth-overlay, 1.35);
 }
 
 /*

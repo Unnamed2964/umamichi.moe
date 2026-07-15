@@ -36,5 +36,6 @@ export function initSiteLensBorder(): void {
 			return isMobileMenuPaneActive();
 		},
 		markedIgnoreAriaHidden: (element) => element.hasAttribute('data-site-mobile-menu'),
+		isOverlayElevating: () => isMobileMenuPaneActive(),
 	});
 }
