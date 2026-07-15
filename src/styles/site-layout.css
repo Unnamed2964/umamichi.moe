@@ -555,6 +555,10 @@ html {
 	width: 100%;
 }
 
+.article-content {
+	margin-top: 1rem;
+}
+
 /* --- SiteFrame (header / mobile menu / footer shell) --- */
 
 .site-shell {
