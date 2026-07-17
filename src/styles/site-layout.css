@@ -620,6 +620,33 @@ html {
 	background: var(--site-header-bg);
 }
 
+/* Chromatic fringe: site tokens and chrome exclusions (@umamichi-ui/chromatic-fringe). */
+.outline-button.chromatic-fringe-box--fade-border {
+	--chromatic-fringe-border: var(--site-sidebar-border);
+}
+
+/*
+ * Durable guard: package sets position:relative on .chromatic-fringe-box.
+ * Portaled floating menus must stay fixed (misplaced panel + horizontal scroll).
+ */
+.chromatic-fringe-box.chromatic-fringe-box--overlay {
+	position: fixed;
+}
+
+/* Mobile menu elevates global --lens-focus-depth (same overlay plane as dropdowns). */
+html[data-mobile-menu-open='true'],
+html[data-mobile-menu-closing='true'] {
+	--lens-focus-depth: var(--lens-focus-depth-overlay, 1.35);
+}
+
+/* Chrome controls: no box fringe (also skipped in initSiteLensBorder). */
+.site-header .chromatic-fringe-box::before,
+.site-header .chromatic-fringe-box::after,
+.site-mobile-menu .chromatic-fringe-box::before,
+.site-mobile-menu .chromatic-fringe-box::after {
+	content: none;
+}
+
 .site-header__nav-icon {
 	position: absolute;
 	left: 0;
