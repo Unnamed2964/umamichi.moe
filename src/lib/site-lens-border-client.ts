@@ -16,6 +16,10 @@ function isMobileMenuPaneActive(): boolean {
 	return root.dataset.mobileMenuOpen === 'true' || root.dataset.mobileMenuClosing === 'true';
 }
 
+function isMobileMenuFocused(): boolean {
+	return document.documentElement.dataset.mobileMenuOpen === 'true';
+}
+
 /** Site wiring for @umamichi-ui/chromatic-fringe. */
 export function initSiteLensBorder(): void {
 	initChromaticFringe({
@@ -36,6 +40,6 @@ export function initSiteLensBorder(): void {
 			return isMobileMenuPaneActive();
 		},
 		markedIgnoreAriaHidden: (element) => element.hasAttribute('data-site-mobile-menu'),
-		isOverlayElevating: () => isMobileMenuPaneActive(),
+		isOverlayElevating: () => isMobileMenuFocused(),
 	});
 }
