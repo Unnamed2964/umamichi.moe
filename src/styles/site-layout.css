@@ -263,10 +263,36 @@ html {
 	border-radius: 0.75rem;
 	background: var(--site-button-bg);
 	color: var(--site-button-fg);
+	opacity: 0;
+	transform: translateY(-4px);
+	visibility: hidden;
+	pointer-events: none;
+	transition:
+		opacity var(--transition-overlay),
+		transform var(--transition-overlay),
+		visibility 0s linear var(--transition-overlay);
+}
+
+.article-source-actions__menu.is-open {
+	opacity: 1;
+	transform: translateY(0);
+	visibility: visible;
+	pointer-events: auto;
+	transition:
+		opacity var(--transition-overlay),
+		transform var(--transition-overlay),
+		visibility 0s;
 }
 
 .article-source-actions__menu[hidden] {
-	display: none !important;
+	display: block !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.article-source-actions__menu,
+	.article-source-actions__menu.is-open {
+		transform: none;
+	}
 }
 
 .article-source-actions__menu-item {
