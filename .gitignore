@@ -31,3 +31,6 @@ pnpm-debug.log*
 .dev.vars*
 !.dev.vars.example
 !.env.example
+
+# local motion/design audit plans (agent-generated, not shipped)
+plans/
