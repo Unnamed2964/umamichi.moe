@@ -633,9 +633,8 @@ html {
 	position: fixed;
 }
 
-/* Mobile menu elevates global --lens-focus-depth (same overlay plane as dropdowns). */
-html[data-mobile-menu-open='true'],
-html[data-mobile-menu-closing='true'] {
+/* Return focus with the closing pane instead of after its transition ends. */
+html[data-mobile-menu-open='true'] {
 	--lens-focus-depth: var(--lens-focus-depth-overlay, 1.35);
 }
 
