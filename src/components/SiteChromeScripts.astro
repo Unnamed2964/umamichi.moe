@@ -296,6 +296,30 @@
 		}
 	};
 
+	const ARTICLE_SOURCE_MENU_HIDE_MS = 220;
+
+	const clearArticleSourceMenuClose = (menu) => {
+		if (menu._articleSourceMenuHideTimer) {
+			window.clearTimeout(menu._articleSourceMenuHideTimer);
+			menu._articleSourceMenuHideTimer = 0;
+		}
+
+		if (menu._articleSourceMenuTransitionEnd) {
+			menu.removeEventListener('transitionend', menu._articleSourceMenuTransitionEnd);
+			menu._articleSourceMenuTransitionEnd = null;
+		}
+	};
+
+	const openArticleSourceMenu = (toggle, menu) => {
+		clearArticleSourceMenuClose(menu);
+		menu.hidden = false;
+		toggle.setAttribute('aria-expanded', 'true');
+
+		requestAnimationFrame(() => {
+			menu.classList.add('is-open');
+		});
+	};
+
 	const closeArticleSourceMenu = (container) => {
 		const toggle = container.querySelector('[data-article-source-menu-toggle]');
 		const menu = container.querySelector('[data-article-source-menu]');
@@ -304,8 +328,38 @@
 			return;
 		}
 
+		if (toggle.getAttribute('aria-expanded') !== 'true') {
+			return;
+		}
+
 		toggle.setAttribute('aria-expanded', 'false');
-		menu.hidden = true;
+		menu.classList.remove('is-open');
+		clearArticleSourceMenuClose(menu);
+
+		const finalizeHide = () => {
+			if (menu.classList.contains('is-open')) {
+				return;
+			}
+
+			menu.hidden = true;
+			clearArticleSourceMenuClose(menu);
+		};
+
+		const onTransitionEnd = (event) => {
+			if (event.target !== menu) {
+				return;
+			}
+
+			if (event.propertyName !== 'opacity' && event.propertyName !== 'transform') {
+				return;
+			}
+
+			finalizeHide();
+		};
+
+		menu._articleSourceMenuTransitionEnd = onTransitionEnd;
+		menu.addEventListener('transitionend', onTransitionEnd);
+		menu._articleSourceMenuHideTimer = window.setTimeout(finalizeHide, ARTICLE_SOURCE_MENU_HIDE_MS);
 	};
 
 	const closeArticleSourceMenus = () => {
@@ -341,8 +395,11 @@
 				}
 			}
 
-			toggle.setAttribute('aria-expanded', String(!isOpen));
-			menu.hidden = isOpen;
+			if (isOpen) {
+				closeArticleSourceMenu(container);
+			} else {
+				openArticleSourceMenu(toggle, menu);
+			}
 			return;
 		}
 
