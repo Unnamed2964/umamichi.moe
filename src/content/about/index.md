@@ -46,8 +46,8 @@ rss: false
 - C++ / OI［最高奖项只在黑龙江省获得了省二等奖（请注意黑龙江省很少有人参加 OI，是“弱省”，这和例如广东省的省二等奖含金量不同），是杂鱼呢］
 - 放送文化［很长一段时间，我的作业 BGM 都是韩国/欧洲电视新闻节目 op/ed 合集，我对电视台的应急处理（这种需要应急处理的情况被称为“放送事故”）也很感兴趣］
 - 函数式编程、形式化方法［我正在刷 [Software Foundations](https://softwarefoundations.cis.upenn.edu/)，已基本完成（`Admitted.` 数量≤10） Logical Foundations 和 Programming Language Foundations 的机器判定题，正在做 Verified Functional Algorithms，进度可见 [Software-Foundations-Checklist](https://github.com/Unnamed2964/Software-Foundations-Checklist)］
-- ~~客家历史（我不是客家人为什么要感兴趣这个🥺）、犹太文化（我是 goyim 为什么要感兴趣这个🥺）~~
-- 东北亚历史（谨慎，因为涉及到自己本人的民族身份，容易形成拉踩）
+- ~~客家历史（“我不是客家人为什么要感兴趣这个”🥺）、犹太文化（“我是 goyim 为什么要感兴趣这个”🥺）~~
+- 东北亚历史（我提醒自己谨慎对待，因为涉及到自己本人的民族身份，容易形成拉踩）
 - 哲学；精神分析与精神病学（试着描述自己的体验）
 
 关于「宣称」与实际：
