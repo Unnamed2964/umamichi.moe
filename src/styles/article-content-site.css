@@ -116,6 +116,13 @@ html.dark .article-content .astro-code span {
 	transform: translateY(0);
 }
 
+@media (prefers-reduced-motion: reduce) {
+	.article-footnote-preview,
+	.article-footnote-preview.is-visible {
+		transform: none;
+	}
+}
+
 .article-footnote-preview__body > :first-child {
 	margin-top: 0;
 }

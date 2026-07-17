@@ -125,6 +125,13 @@ html.dark {
 	transform: translateY(0);
 }
 
+@media (prefers-reduced-motion: reduce) {
+	.site-copy-toast,
+	.site-copy-toast.is-visible {
+		transform: none;
+	}
+}
+
 .navbar-running-line {
 	position: absolute;
 	background: var(--site-nav-running-line-bg);
