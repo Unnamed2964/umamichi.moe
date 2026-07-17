@@ -123,14 +123,14 @@ html {
 	color: var(--site-muted-fg);
 	font-size: 0.875rem;
 	font-weight: var(--site-weight-regular);
-	transition: color 0.2s ease, font-weight 0.2s ease;
+	transition: color var(--transition-fast);
 }
 
 .site-sidebar-link--item.site-sidebar-link--nested {
 	color: var(--site-muted-fg);
 	font-size: 0.75rem;
 	font-weight: var(--site-weight-regular);
-	transition: color 0.2s ease, font-weight 0.2s ease;
+	transition: color var(--transition-fast);
 }
 
 .site-sidebar-link--current.site-sidebar-link--section,
