@@ -565,7 +565,7 @@ html {
 .article-page__stack {
 	display: flex;
 	flex-direction: column;
-	gap: 2rem;
+	gap: 2.75rem;
 	width: 100%;
 }
 
@@ -576,14 +576,14 @@ html {
 .article-page__meta {
 	display: flex;
 	flex-direction: column;
-	gap: 2rem;
+	gap: 1.5rem;
 	width: 100%;
 }
 
 .article-page__meta-actions {
 	display: flex;
 	flex-direction: column;
-	gap: 2rem;
+	gap: 1.5rem;
 	width: 100%;
 }
 
