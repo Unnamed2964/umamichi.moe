@@ -27,7 +27,7 @@ rss: false
 
 解离时多半在做白日梦：
 
-- 常借白日梦想问题；部分内容偏「电波系」［采用「电波系」的精神病性思维（这里指弗洛伊德-拉康精神分析上的精神病性，也包括自闭症谱系障碍等）本义，包括基于浅层或部分相似性的逻辑跳跃的联想］。
+- 常借白日梦想问题；部分内容偏「电波系」［这里采用「电波系」的精神病性思维（这里指弗洛伊德-拉康精神分析上的精神病性，也包括自闭症谱系障碍等）之本义，包括基于浅层或部分相似性的逻辑跳跃的联想，例如「我觉得我是空心人，所以要学习一些网状的知识来作为填料填充自己，就像用棉花填充玩偶娃娃一样」］。
 - 会为幻想内容羞耻；社交时会 mock，以免影响外泄。
 - 这也会让线下真诚社交更难。
 
@@ -45,7 +45,9 @@ rss: false
 - UI 设计（尤其约 2012；站点风格里的确刻意靠近了 Windows 8 的设计）
 - C++ / OI［最高奖项只在黑龙江省获得了省二等奖（请注意黑龙江省很少有人参加 OI，是“弱省”，这和例如广东省的省二等奖含金量不同），是杂鱼呢］
 - 放送文化［很长一段时间，我的作业 BGM 都是韩国/欧洲电视新闻节目 op/ed 合集，我对电视台的应急处理（这种需要应急处理的情况被称为“放送事故”）也很感兴趣。我在 B 站上有一个[放送文化（含架空）](https://b23.tv/J04gvta)收藏夹（如果在手机版需要在 App 中打开后显示），里面收藏了一些放送文化相关的视频］
-- 函数式编程、形式化方法［我正在刷 [Software Foundations](https://softwarefoundations.cis.upenn.edu/)，已基本完成（`Admitted.` 数量≤10） Logical Foundations 和 Programming Language Foundations 的机器判定题，正在做 Verified Functional Algorithms，进度可见 [Software-Foundations-Checklist](https://github.com/Unnamed2964/Software-Foundations-Checklist)］
+- 函数式编程、形式化方法
+  + 形式化证明是我日常生活中的少数的确定感来源
+  + 我正在刷 [Software Foundations](https://softwarefoundations.cis.upenn.edu/)，已基本完成 Logical Foundations 和 Programming Language Foundations 的机器判定题（`Admitted.` 数量≤10，两者在未修改时的 `Admitted.` 总数分别为415和269[^1]），正在做 Verified Functional Algorithms，进度可见 [Software-Foundations-Checklist](https://github.com/Unnamed2964/Software-Foundations-Checklist)
 - ~~客家历史（「我不是客家人为什么要感兴趣这个」🥺）、犹太文化（「我是 goyim 为什么要感兴趣这个」🥺）~~
 - 东北亚历史（我提醒自己谨慎对待，因为涉及到自己本人的民族身份，容易形成拉踩）
 - 哲学；精神分析与精神病学（试着描述自己的体验）
@@ -75,7 +77,7 @@ rss: false
 - 希望被当作会犯错的バカ，而不是完美的人。
 - 更想靠作品获得认可，而不是靠人设维系关系。
 
-## 请这样对待我[^1]
+## 请这样对待我[^2]
 
 - 请不要因可怜而迁就我；我没有经济或人身安全上的现实困境。
 - 日常请用对普通人也会用的诚实、边界和反馈；不要长期当易碎品。
@@ -83,4 +85,5 @@ rss: false
 - 关系里的心理表征（含抛弃），要在真诚关系里长出来，而不是在「拯救」脚本里扭曲。
 - 若出现精神卫生危机：由我家里人决定并送医住院。
 
-[^1]: 「请这样对待我」最初几条由 Cursor Auto 帮忙整理；本页列表结构与「协作 / 想认识我」等段落由 Composer 按 ADHD 友好版式改写，请以你自己的审阅为准。对话记录见 [对话记录](/transcripts/about-line-46-conversation-transcript.md)。
+[^1]: Logical Foundations 和 Programming Language Foundations 均以 Version 6.9.0 版本为准，完成的也是此版本。不同版本可能略有差异。
+[^2]: 「请这样对待我」最初几条由 Cursor Auto 帮忙整理；本页列表结构与「协作 / 想认识我」等段落由 Composer 按 ADHD 友好版式改写，请以你自己的审阅为准。对话记录见 [对话记录](/transcripts/about-line-46-conversation-transcript.md)。
