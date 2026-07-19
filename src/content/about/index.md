@@ -60,7 +60,7 @@ rss: false
   + 数学式、公理系统式的证明是我日常生活中的少数的确定感来源，我很难做到从其他人能从他人获得确认的方式从他人的确认中获得确定感
   + 我正在刷 [Software Foundations](https://softwarefoundations.cis.upenn.edu/)，已基本完成 Logical Foundations 和 Programming Language Foundations 的机器判定题（`Admitted.` 数量≤10，两者在未修改时的 `Admitted.` 总数分别为415和269[^1]），正在做 Verified Functional Algorithms，进度可见 [Software-Foundations-Checklist](https://github.com/Unnamed2964/Software-Foundations-Checklist)
   + 准确来说，这里的确并不是完全没有「他人的目光」的参与————这是一种我找到的「相对符合社会规范和期待的满足『对确定性的过度追求』的方法」
-  + 这里的证明，更多是关于「今天在房间里摆放的东西，如果自己没有动明天仍然会这么摆放」「做的没有恶意的事情不会因为别人的歪曲而变成有邪恶动机，应当定罪的不可饶恕的罪行」，而不是「我要证明自己比别人厉害」
+  + 这里的证明，更多是关于「今天在房间里摆放的东西，如果自己没有动明天仍然会这么摆放」「做的没有恶意的事情不会因为别人的歪曲而变成有邪恶动机，应当定罪的不可饶恕的罪行」[^2]，而不是「我要证明自己比别人厉害」
 - ~~客家历史（「我不是客家人为什么要感兴趣这个」🥺）、犹太文化（「我是 goyim 为什么要感兴趣这个」🥺）~~
 - 东北亚历史（我提醒自己谨慎对待，因为涉及到自己本人的民族身份，容易形成拉踩）
 - 哲学；精神分析与精神病学（试着描述自己的体验）
@@ -90,7 +90,7 @@ rss: false
 - 希望被当作会犯错的バカ，而不是完美的人。
 - 更想靠作品获得认可，而不是靠人设维系关系。
 
-## 请这样对待我[^2]
+## 请这样对待我[^3]
 
 - 请不要因可怜而迁就我；我没有经济或人身安全上的现实困境。
 - 日常请用对普通人也会用的诚实、边界和反馈；不要长期当易碎品。
@@ -99,4 +99,5 @@ rss: false
 - 若出现精神卫生危机：由我家里人决定并送医住院。
 
 [^1]: Logical Foundations 和 Programming Language Foundations 均以 Version 6.9.0 版本为准，完成的也是此版本。不同版本可能略有差异。
-[^2]: 「请这样对待我」最初几条由 Cursor Auto 帮忙整理；本页列表结构与「协作 / 想认识我」等段落由 Composer 按 ADHD 友好版式改写，请以你自己的审阅为准。对话记录见 [对话记录](/transcripts/about-line-46-conversation-transcript.md)。
+[^2]: 别人怎么想我是没法控制的，但是至少可以让自己相信自己的确是没有问题的（至少带着这种期望）
+[^3]: 「请这样对待我」最初几条由 Cursor Auto 帮忙整理；本页列表结构与「协作 / 想认识我」等段落由 Composer 按 ADHD 友好版式改写，请以你自己的审阅为准。对话记录见 [对话记录](/transcripts/about-line-46-conversation-transcript.md)。
