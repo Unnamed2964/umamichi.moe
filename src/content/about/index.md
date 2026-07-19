@@ -60,6 +60,7 @@ rss: false
   + 数学式、公理系统式的证明是我日常生活中的少数的确定感来源，我很难做到从其他人能从他人获得确认的方式从他人的确认中获得确定感
   + 我正在刷 [Software Foundations](https://softwarefoundations.cis.upenn.edu/)，已基本完成 Logical Foundations 和 Programming Language Foundations 的机器判定题（`Admitted.` 数量≤10，两者在未修改时的 `Admitted.` 总数分别为415和269[^1]），正在做 Verified Functional Algorithms，进度可见 [Software-Foundations-Checklist](https://github.com/Unnamed2964/Software-Foundations-Checklist)
   + 准确来说，这里的确并不是完全没有「他人的目光」的参与————这是一种我找到的「相对符合社会规范和期待的满足『对确定性的过度追求』的方法」
+  + 这里的证明，更多是关于「今天在房间里摆放的东西，如果自己没有动明天仍然会这么摆放」「做的没有恶意的事情不会因为别人的歪曲而变成有邪恶动机，应当定罪的不可饶恕的罪行」，而不是「我要证明自己比别人厉害」
 - ~~客家历史（「我不是客家人为什么要感兴趣这个」🥺）、犹太文化（「我是 goyim 为什么要感兴趣这个」🥺）~~
 - 东北亚历史（我提醒自己谨慎对待，因为涉及到自己本人的民族身份，容易形成拉踩）
 - 哲学；精神分析与精神病学（试着描述自己的体验）
