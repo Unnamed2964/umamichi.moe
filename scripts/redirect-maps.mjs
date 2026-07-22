@@ -19,6 +19,18 @@ export function contentDocPathToRoutePath(docPath) {
 }
 
 /**
+ * Encode each path segment for Cloudflare `_redirects` (space-separated tokens).
+ * Literal spaces would otherwise split one destination into multiple tokens.
+ * @param {string} routePath site path, e.g. `/blog/yanji-hambuk intercity/post/`
+ */
+export function encodeRoutePathForRedirects(routePath) {
+	return routePath
+		.split('/')
+		.map((segment) => (segment === '' ? '' : encodeURIComponent(segment)))
+		.join('/');
+}
+
+/**
  * @param {string} target redirect target (content-relative .md/.mdx path or http(s) URL)
  */
 export function isExternalRedirectTarget(target) {
@@ -54,10 +66,10 @@ export function buildAstroRedirectsFromMaps(redirectMaps, options) {
 	const redirects = {};
 
 	for (const [fromDoc, toTarget] of Object.entries(redirectMaps)) {
-		const fromRoute = contentDocPathToRoutePath(fromDoc);
+		const fromRoute = encodeRoutePathForRedirects(contentDocPathToRoutePath(fromDoc));
 		const destination = isExternalRedirectTarget(toTarget)
 			? toTarget
-			: contentDocPathToRoutePath(toTarget);
+			: encodeRoutePathForRedirects(contentDocPathToRoutePath(toTarget));
 
 		if (!isExternalRedirectTarget(toTarget)) {
 			const targetAbs = resolveContentPath(contentRoot, toTarget);
