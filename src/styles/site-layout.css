@@ -578,6 +578,14 @@ html {
 	display: block;
 }
 
+/* Hide during route VT — fixed FAB corrupts site-route slide snapshots */
+html[data-astro-transition] .article-mobile-toc,
+html[data-astro-transition] .article-mobile-toc-backdrop,
+html[data-mobile-toc-vt-hide] .article-mobile-toc,
+html[data-mobile-toc-vt-hide] .article-mobile-toc-backdrop {
+	display: none !important;
+}
+
 @media screen and (min-width: 80rem) {
 	.article-mobile-toc {
 		display: none;

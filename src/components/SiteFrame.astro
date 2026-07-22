@@ -235,6 +235,9 @@ const iconGithub = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512
 		<slot />
 	</main>
 
+	{/* Outside route VT scope — fixed chrome must not live under view-transition-name: site-route */}
+	<slot name="site-floating" />
+
 	<footer class="site-footer wpm-pane-shift" data-astro-transition-persist="footer">
 		<div class="site-container site-container--frame">
 			<div class="site-footer__stack">
