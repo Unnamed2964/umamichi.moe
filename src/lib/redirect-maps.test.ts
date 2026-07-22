@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
 	buildAstroRedirectsFromMaps,
 	contentDocPathToRoutePath,
+	encodeRoutePathForRedirects,
 	isExternalRedirectTarget,
 	resolveContentPath,
 } from '../../scripts/redirect-maps.mjs';
@@ -20,6 +21,14 @@ describe('contentDocPathToRoutePath', () => {
 	it('keeps spaces in content paths', () => {
 		expect(contentDocPathToRoutePath('blog/yanji-hambuk intercity/post.md')).toBe(
 			'/blog/yanji-hambuk intercity/post/',
+		);
+	});
+});
+
+describe('encodeRoutePathForRedirects', () => {
+	it('percent-encodes spaces so _redirects stays two or three tokens', () => {
+		expect(encodeRoutePathForRedirects('/blog/yanji-hambuk intercity/post/')).toBe(
+			'/blog/yanji-hambuk%20intercity/post/',
 		);
 	});
 });
@@ -52,7 +61,7 @@ describe('buildAstroRedirectsFromMaps', () => {
 
 		expect(redirects).toEqual({
 			'/blog/yanji-rail-transit-imaginary/':
-				'/blog/yanji-hambuk intercity/yanji-rail-transit-imaginary/',
+				'/blog/yanji-hambuk%20intercity/yanji-rail-transit-imaginary/',
 		});
 	});
 
