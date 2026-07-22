@@ -12,7 +12,10 @@ import rehypeWrapEmoji from './scripts/rehype-wrap-emoji.mjs';
 import rehypeWrapMermaidSource from './scripts/rehype-wrap-mermaid-source.mjs';
 import outOfSiteHtmlPostbuildIntegration from './src/integrations/out-of-site-html-postbuild.mjs';
 import contentStaticAssetsIntegration from './src/integrations/content-static-assets.mjs';
+import { buildAstroRedirectsFromMaps } from './scripts/redirect-maps.mjs';
 import { giscusThemeCorsDev } from './scripts/vite-giscus-theme-cors-dev.mjs';
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { loadEnv } from 'vite';
 
 import react from '@astrojs/react';
@@ -22,6 +25,10 @@ import cloudflare from '@astrojs/cloudflare';
 const site = 'https://umamichi.moe';
 const env = loadEnv(process.env.NODE_ENV ?? 'development', process.cwd(), '');
 const outOfSitePrivateKey = env.OUT_OF_SITE_ED25519_PRIVATE_KEY ?? '';
+const redirects = buildAstroRedirectsFromMaps(umamichiConfig.content.redirect_maps ?? {}, {
+  contentRoot: resolve(process.cwd(), 'src/content'),
+  exists: existsSync,
+});
 
 /** @type {import('rehype-mermaid').RehypeMermaidOptions} */
 const rehypeMermaidOptions = {
@@ -45,6 +52,7 @@ const mdxRehypePlugins = [
 // https://astro.build/config
 export default defineConfig({
   site,
+  redirects,
   integrations: [
     mdx({
       remarkPlugins: [remarkGfm, remarkMath],
