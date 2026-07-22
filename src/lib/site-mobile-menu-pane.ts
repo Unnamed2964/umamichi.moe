@@ -5,7 +5,8 @@ export function isMobileMenuViewport(): boolean {
 }
 
 function getPaneShiftSurface(): HTMLElement | null {
-	const shiftSurface = document.querySelector('.site-route-main.wpm-pane-shift')
+	const shiftSurface = document.querySelector('.site-pane-shift.wpm-pane-shift')
+		?? document.querySelector('.site-route-main.wpm-pane-shift')
 		?? document.querySelector('[data-site-mobile-menu]');
 
 	return shiftSurface instanceof HTMLElement ? shiftSurface : null;
