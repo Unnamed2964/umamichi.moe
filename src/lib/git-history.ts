@@ -1,16 +1,17 @@
 /**
  * Build-time / client-shared helpers for article git history JSON URLs.
+ *
+ * Files keep literal spaces (and other characters) from the entry id; only `/`
+ * is replaced with `__`. The public URL percent-encodes the filename so hosts
+ * that decode `%20` → space resolve the asset correctly.
  */
 
 export function historyFileNameForEntryId(entryId: string): string {
-	return `${entryId
-		.split('/')
-		.map((segment) => encodeURIComponent(segment))
-		.join('__')}.json`;
+	return `${entryId.split('/').join('__')}.json`;
 }
 
 export function historyUrlForEntryId(entryId: string): string {
-	return `/git-history/${historyFileNameForEntryId(entryId)}`;
+	return `/git-history/${encodeURIComponent(historyFileNameForEntryId(entryId))}`;
 }
 
 export type GitHistoryPaths = {
