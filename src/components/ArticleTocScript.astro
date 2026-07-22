@@ -64,11 +64,29 @@
 
 		const setActive = (slug) => {
 			for (const item of headings) {
-				if (item.slug === slug) {
-					item.link.setAttribute('aria-current', 'location');
-					item.link.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-				} else {
-					item.link.removeAttribute('aria-current');
+				const isActive = item.slug === slug;
+
+				for (const link of item.links) {
+					if (isActive) {
+						link.setAttribute('aria-current', 'location');
+
+						const sheet = link.closest('[data-mobile-toc-sheet]');
+						if (sheet) {
+							if (document.documentElement.dataset.mobileTocOpen === 'true') {
+								link.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+							}
+							continue;
+						}
+
+						const sidebar = link.closest('.article-layout__sidebar');
+						if (sidebar && getComputedStyle(sidebar).display === 'none') {
+							continue;
+						}
+
+						link.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+					} else {
+						link.removeAttribute('aria-current');
+					}
 				}
 			}
 		};
@@ -107,27 +125,29 @@
 
 		const setupToc = () => {
 			setupHeadingAnchorCopy();
-			const toc = document.querySelector('[data-toc]');
 			observer?.disconnect();
 			observer = null;
 			headings = [];
 
-			if (!toc) {
-				return;
+			const links = Array.from(document.querySelectorAll('[data-toc-link]'));
+			const bySlug = new Map();
+
+			for (const link of links) {
+				const slug = link.getAttribute('data-toc-link');
+				if (!slug) continue;
+
+				const heading = document.getElementById(slug);
+				if (!heading) continue;
+
+				const existing = bySlug.get(slug);
+				if (existing) {
+					existing.links.push(link);
+				} else {
+					bySlug.set(slug, { slug, links: [link], heading });
+				}
 			}
 
-			const links = Array.from(toc.querySelectorAll('[data-toc-link]'));
-			headings = links
-				.map((link) => {
-					const slug = link.getAttribute('data-toc-link');
-					if (!slug) return null;
-
-					const heading = document.getElementById(slug);
-					if (!heading) return null;
-
-					return { slug, link, heading };
-				})
-				.filter(Boolean);
+			headings = Array.from(bySlug.values());
 
 			if (headings.length === 0) {
 				return;
@@ -151,6 +171,7 @@
 		window.addEventListener('hashchange', refreshActive);
 		window.addEventListener('resize', refreshActive, { passive: true });
 		document.addEventListener('scroll', refreshActive, { passive: true });
+		window.addEventListener('site:toc-refresh', setupToc);
 		registerAfterSwap(setupToc);
 	}
 </script>
