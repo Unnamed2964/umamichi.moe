@@ -86,6 +86,51 @@ export default function ArticleMobileToc({ headings }: ArticleMobileTocProps) {
 		return () => window.removeEventListener('keydown', onKeyDown);
 	}, [open]);
 
+	useEffect(() => {
+		const hideForViewTransition = () => {
+			setOpen(false);
+			document.documentElement.dataset.mobileTocVtHide = 'true';
+			delete document.documentElement.dataset.mobileTocOpen;
+			document.documentElement.style.overflow = '';
+		};
+
+		const showAfterViewTransition = () => {
+			const reveal = () => {
+				if (document.documentElement.hasAttribute('data-astro-transition')) {
+					return false;
+				}
+				delete document.documentElement.dataset.mobileTocVtHide;
+				return true;
+			};
+
+			if (reveal()) {
+				return;
+			}
+
+			const observer = new MutationObserver(() => {
+				if (reveal()) {
+					observer.disconnect();
+				}
+			});
+			observer.observe(document.documentElement, {
+				attributes: true,
+				attributeFilter: ['data-astro-transition'],
+			});
+			window.setTimeout(() => {
+				observer.disconnect();
+				delete document.documentElement.dataset.mobileTocVtHide;
+			}, 1000);
+		};
+
+		document.addEventListener('astro:before-preparation', hideForViewTransition);
+		document.addEventListener('astro:after-swap', showAfterViewTransition);
+		return () => {
+			document.removeEventListener('astro:before-preparation', hideForViewTransition);
+			document.removeEventListener('astro:after-swap', showAfterViewTransition);
+			delete document.documentElement.dataset.mobileTocVtHide;
+		};
+	}, []);
+
 	if (items.length === 0) {
 		return null;
 	}

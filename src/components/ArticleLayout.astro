@@ -181,5 +181,11 @@ const tocMaxHeight = hasSourceTools
 		</article>
 	</div>
 
-	{hasToc && <ArticleMobileToc client:load headings={tocHeadings} />}
+	{
+		hasToc && (
+			<div slot="site-floating">
+				<ArticleMobileToc client:load headings={tocHeadings} />
+			</div>
+		)
+	}
 </SiteFrame>
