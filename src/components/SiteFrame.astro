@@ -227,40 +227,45 @@ const iconGithub = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512
 
 	<slot name="article-sidebar-right" />
 
-	<main
-		class="site-main site-route-main wpm-pane-shift"
-		style={`max-width: ${SITE_MAIN_MAX_W}`}
-		data-astro-transition-scope={SITE_ROUTE_TRANSITION_SCOPE}
-	>
-		<slot />
-	</main>
+	{/*
+	  Pane-shift surface: menu push applies here once.
+	  Route VT stays on <main> only — fixed floating chrome must not sit under site-route.
+	*/}
+	<div class="site-pane-shift wpm-pane-shift">
+		<main
+			class="site-main site-route-main"
+			style={`max-width: ${SITE_MAIN_MAX_W}`}
+			data-astro-transition-scope={SITE_ROUTE_TRANSITION_SCOPE}
+		>
+			<slot />
+		</main>
 
-	{/* Outside route VT scope — fixed chrome must not live under view-transition-name: site-route */}
-	<slot name="site-floating" />
+		<slot name="site-floating" />
 
-	<footer class="site-footer wpm-pane-shift" data-astro-transition-persist="footer">
-		<div class="site-container site-container--frame">
-			<div class="site-footer__stack">
-				<p class="site-footer__line">
-					<span>© {year} Umamichi/Unnamed2964.</span>
-					<span>
-						Powered by{' '}
-						<a class="site-footer__link" href="https://astro.build/" target="_blank" rel="noreferrer">Astro</a>, Transitions powered by{' '}
-						<a
-							class="site-footer__link"
-							href="https://github.com/umamichi-ui/windows-phone-motion"
-							target="_blank"
-							rel="noreferrer"
-						>@umamichi-ui/windows-phone-motion</a>
-						(<a
-							class="site-footer__link"
-							href="https://github.com/MicrosoftArchive/WindowsPhoneToolkit"
-							target="_blank"
-							rel="noreferrer"
-						>Windows Phone Toolkit</a>).
-					</span>
-				</p>
+		<footer class="site-footer" data-astro-transition-persist="footer">
+			<div class="site-container site-container--frame">
+				<div class="site-footer__stack">
+					<p class="site-footer__line">
+						<span>© {year} Umamichi/Unnamed2964.</span>
+						<span>
+							Powered by{' '}
+							<a class="site-footer__link" href="https://astro.build/" target="_blank" rel="noreferrer">Astro</a>, Transitions powered by{' '}
+							<a
+								class="site-footer__link"
+								href="https://github.com/umamichi-ui/windows-phone-motion"
+								target="_blank"
+								rel="noreferrer"
+							>@umamichi-ui/windows-phone-motion</a>
+							(<a
+								class="site-footer__link"
+								href="https://github.com/MicrosoftArchive/WindowsPhoneToolkit"
+								target="_blank"
+								rel="noreferrer"
+							>Windows Phone Toolkit</a>).
+						</span>
+					</p>
+				</div>
 			</div>
-		</div>
-	</footer>
+		</footer>
+	</div>
 </div>

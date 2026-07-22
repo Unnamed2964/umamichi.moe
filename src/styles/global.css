@@ -237,8 +237,7 @@ html.dark {
 		height: var(--site-header-placeholder-height, 0);
 	}
 
-	html[data-mobile-menu-open='true'] body > * .site-route-main.wpm-pane-shift,
-	html[data-mobile-menu-open='true'] body > * [data-astro-transition-persist='footer'].wpm-pane-shift {
+	html[data-mobile-menu-open='true'] body > * .site-pane-shift.wpm-pane-shift {
 		transform: translateX(50vw);
 	}
 }
