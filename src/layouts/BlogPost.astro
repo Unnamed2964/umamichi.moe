@@ -12,6 +12,7 @@ import type { ArticleTag } from '../lib/article';
 import { SITE_DESCRIPTION, SITE_GITHUB_SOURCE_BASE_URL, SITE_TITLE } from '../consts';
 import type { CopyrightConfig } from '../lib/copyright';
 import { buildDocsStructure, toTagHref, type SidebarNode } from '../lib/docs';
+import { formatReadingTimeLabel } from '../lib/reading-time';
 
 type LayoutData = {
 	comment?: boolean;
@@ -83,12 +84,11 @@ const docsStructure = buildDocsStructure(docs);
 const sourcePath = currentEntryId
 	? docsStructure.docDataById.get(currentEntryId)?.sourcePath
 	: undefined;
-const sourceMarkdown = formatExportMarkdown(
-	currentEntryId
-		? docsStructure.docDataById.get(currentEntryId)?.rawContent
-		: undefined,
-	title,
-);
+const rawContent = currentEntryId
+	? docsStructure.docDataById.get(currentEntryId)?.rawContent
+	: undefined;
+const sourceMarkdown = formatExportMarkdown(rawContent, title);
+const readingTimeLabel = rawContent ? formatReadingTimeLabel(rawContent) : undefined;
 const sourceUrl = sourcePath ? `${SITE_GITHUB_SOURCE_BASE_URL}/${sourcePath}` : undefined;
 const comment = currentEntryId
 	? docsStructure.docDataById.get(currentEntryId)?.comment ?? pageData.comment
@@ -139,6 +139,7 @@ const formattedUpdatedDate = updatedDate
 			title={title}
 			tags={tags}
 			pubDate={formattedPubDate}
+			readingTimeLabel={readingTimeLabel}
 			sourceMarkdown={sourceMarkdown}
 			sourceUrl={sourceUrl}
 			updatedDate={formattedUpdatedDate}

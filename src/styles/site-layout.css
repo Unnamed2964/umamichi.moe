@@ -153,10 +153,25 @@ html {
 	text-align: left;
 }
 
-.article-header__date {
+.article-header__meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 1.25rem;
 	margin: 0;
 	color: var(--article-muted-fg);
 	font-weight: var(--site-weight-regular);
+}
+
+.article-header__meta-item {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+}
+
+.article-header__meta-icon {
+	flex-shrink: 0;
+	width: 1em;
+	height: 1em;
 }
 
 .article-header__updated {
