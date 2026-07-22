@@ -7,6 +7,7 @@ import { ArticlePostList } from './article/ArticlePostList';
 import { ArticlePrevNext } from './article/ArticlePrevNext';
 import ArticleSourceActions from './article/ArticleSourceActions';
 import { ArticleTags } from './article/ArticleTags';
+import ArticleMobileToc from './article/ArticleMobileToc';
 import { ArticleToc } from './article/ArticleToc';
 import SiteFrame from './SiteFrame.astro';
 import type { AdjacentArticleLink, ArticleTag } from '../lib/article';
@@ -179,4 +180,6 @@ const tocMaxHeight = hasSourceTools
 			</div>
 		</article>
 	</div>
+
+	{hasToc && <ArticleMobileToc client:load headings={tocHeadings} />}
 </SiteFrame>
