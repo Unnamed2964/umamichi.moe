@@ -12,6 +12,8 @@ import type { ArticleTag } from '../lib/article';
 import { SITE_DESCRIPTION, SITE_GITHUB_SOURCE_BASE_URL, SITE_TITLE } from '../consts';
 import type { CopyrightConfig } from '../lib/copyright';
 import { buildDocsStructure, toTagHref, type SidebarNode } from '../lib/docs';
+import gitHistoryManifest from '../generated/git-history-manifest.json';
+import { historyUrlForEntryId } from '../lib/git-history';
 import { formatReadingTimeLabel } from '../lib/reading-time';
 
 type LayoutData = {
@@ -90,6 +92,11 @@ const rawContent = currentEntryId
 const sourceMarkdown = formatExportMarkdown(rawContent, title);
 const readingTimeLabel = rawContent ? formatReadingTimeLabel(rawContent) : undefined;
 const sourceUrl = sourcePath ? `${SITE_GITHUB_SOURCE_BASE_URL}/${sourcePath}` : undefined;
+const historyEntries = new Set(gitHistoryManifest.entries ?? []);
+const historyUrl =
+	currentEntryId && historyEntries.has(currentEntryId)
+		? historyUrlForEntryId(currentEntryId)
+		: undefined;
 const comment = currentEntryId
 	? docsStructure.docDataById.get(currentEntryId)?.comment ?? pageData.comment
 	: pageData.comment;
@@ -142,6 +149,7 @@ const formattedUpdatedDate = updatedDate
 			readingTimeLabel={readingTimeLabel}
 			sourceMarkdown={sourceMarkdown}
 			sourceUrl={sourceUrl}
+			historyUrl={historyUrl}
 			updatedDate={formattedUpdatedDate}
 			heroImage={heroImage ? { src: heroImage.src } : undefined}
 		>

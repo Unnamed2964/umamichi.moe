@@ -24,7 +24,7 @@ function isMobileMenuFocused(): boolean {
 export function initSiteLensBorder(): void {
 	initChromaticFringe({
 		buttonSelector: BUTTON_SELECTOR,
-		skipClosest: '[data-site-header], [data-site-mobile-menu]',
+		skipClosest: '[data-site-header], [data-site-mobile-menu], [data-article-git-history-dialog]',
 		fadeBorderSelector: '.outline-button',
 		depths: {
 			dropdown: 1.35,
