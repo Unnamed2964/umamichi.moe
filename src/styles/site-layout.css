@@ -596,7 +596,8 @@ html[data-mobile-toc-vt-hide] .article-mobile-toc-backdrop {
 	position: fixed;
 	right: max(1rem, env(safe-area-inset-right, 0px));
 	bottom: max(1rem, env(safe-area-inset-bottom, 0px));
-	z-index: 30;
+	/* Below mobile-menu dimmer (15) so pane-shift slides it under the overlay */
+	z-index: 12;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -628,11 +629,6 @@ html[data-mobile-toc-vt-hide] .article-mobile-toc-backdrop {
 .article-mobile-toc-fab:active {
 	background: var(--site-active-bg);
 	transform: scale(0.97);
-}
-
-html[data-mobile-toc-open='true'] .article-mobile-toc-fab {
-	visibility: hidden;
-	pointer-events: none;
 }
 
 .article-mobile-toc-fab__icon {
