@@ -573,6 +573,185 @@ html {
 	}
 }
 
+/* Mobile article TOC FAB + bottom sheet (hidden when desktop right rail is shown) */
+.article-mobile-toc {
+	display: block;
+}
+
+@media screen and (min-width: 80rem) {
+	.article-mobile-toc {
+		display: none;
+	}
+}
+
+.article-mobile-toc-fab {
+	position: fixed;
+	right: max(1rem, env(safe-area-inset-right, 0px));
+	bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+	z-index: 30;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.4rem;
+	min-height: 2.75rem;
+	padding: 0.6rem 0.95rem;
+	border: 1px solid var(--site-border);
+	border-radius: 0.5rem;
+	background: color-mix(in srgb, var(--site-surface) 88%, transparent);
+	backdrop-filter: blur(var(--site-frosted-blur));
+	-webkit-backdrop-filter: blur(var(--site-frosted-blur));
+	color: var(--site-fg);
+	font: inherit;
+	font-size: 0.875rem;
+	font-weight: var(--site-weight-regular);
+	line-height: 1.2;
+	cursor: pointer;
+	transition:
+		background-color 0.2s ease,
+		color 0.2s ease,
+		transform 0.1s ease-out;
+}
+
+.article-mobile-toc-fab:hover {
+	background: color-mix(in srgb, var(--site-surface) 96%, transparent);
+	color: var(--site-accent);
+}
+
+.article-mobile-toc-fab:active {
+	background: var(--site-active-bg);
+	transform: scale(0.97);
+}
+
+html[data-mobile-toc-open='true'] .article-mobile-toc-fab {
+	visibility: hidden;
+	pointer-events: none;
+}
+
+.article-mobile-toc-fab__icon {
+	flex-shrink: 0;
+	width: 1.125rem;
+	height: 1.125rem;
+}
+
+.article-mobile-toc-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 40;
+	display: flex;
+	align-items: flex-end;
+	justify-content: stretch;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	opacity: 0;
+	pointer-events: none;
+	backdrop-filter: blur(var(--site-frosted-blur));
+	-webkit-backdrop-filter: blur(var(--site-frosted-blur));
+	background: var(--site-frosted-overlay);
+	transition: opacity var(--transition-overlay);
+}
+
+.article-mobile-toc-backdrop.is-open {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.article-mobile-toc-sheet {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	max-height: min(75dvh, 100%);
+	box-sizing: border-box;
+	border-top: 1px solid var(--site-border);
+	background: var(--site-surface);
+	color: var(--site-fg);
+	opacity: 0;
+	transform: translateY(100%);
+	transition:
+		transform var(--transition-overlay, 0.22s ease),
+		opacity var(--transition-overlay, 0.22s ease);
+	padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+}
+
+.article-mobile-toc-backdrop.is-open > .article-mobile-toc-sheet {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.article-mobile-toc-sheet__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	flex-shrink: 0;
+	padding: 0.85rem 0.75rem 0.85rem 1.15rem;
+	border-bottom: 1px solid var(--site-border);
+}
+
+.article-mobile-toc-sheet__title {
+	margin: 0;
+	font-size: 1rem;
+	font-weight: var(--site-weight-regular);
+	letter-spacing: 0.05em;
+	color: var(--site-subtle-fg);
+}
+
+.article-mobile-toc-sheet__close {
+	color: var(--site-fg);
+}
+
+.article-mobile-toc-sheet__nav {
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+	flex: 1;
+}
+
+.article-mobile-toc-sheet__scroll {
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
+	overflow-x: hidden;
+	overscroll-behavior: contain;
+	padding: 0.85rem 1.15rem 0.5rem;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+	.article-mobile-toc-fab {
+		background: var(--site-surface);
+	}
+
+	.article-mobile-toc-backdrop {
+		background: var(--site-backdrop);
+	}
+}
+
+@media (prefers-reduced-transparency: reduce) {
+	.article-mobile-toc-fab {
+		backdrop-filter: none;
+		-webkit-backdrop-filter: none;
+		background: var(--site-surface);
+	}
+
+	.article-mobile-toc-backdrop {
+		backdrop-filter: none;
+		-webkit-backdrop-filter: none;
+		background: var(--site-backdrop);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.article-mobile-toc-fab,
+	.article-mobile-toc-fab:active {
+		transform: none;
+	}
+
+	.article-mobile-toc-backdrop,
+	.article-mobile-toc-sheet {
+		transition: none;
+	}
+}
+
 .article-page {
 	width: 100%;
 }
