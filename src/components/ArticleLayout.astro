@@ -1,6 +1,7 @@
 ---
 import ArticleComments from './ArticleComments';
 import { ArticleCopyright } from './article/ArticleCopyright';
+import ArticleGitHistory from './article/ArticleGitHistory';
 import { ArticleHeader } from './article/ArticleHeader';
 import { ArticleHeroImage } from './article/ArticleHeroImage';
 import { ArticlePostList } from './article/ArticlePostList';
@@ -28,6 +29,7 @@ interface Props {
 	heroImage?: {
 		src: string;
 	};
+	historyUrl?: string;
 	navItems: TopLevelNavItem[];
 	nextPost?: AdjacentArticleLink;
 	previousPost?: AdjacentArticleLink;
@@ -48,6 +50,7 @@ const {
 	currentPostId,
 	headings = [],
 	heroImage,
+	historyUrl,
 	navItems,
 	nextPost,
 	previousPost,
@@ -94,7 +97,11 @@ const tocMaxHeight = hasSourceTools
 			>
 				<div class="article-sidebar-rail">
 					{hasSourceTools && (
-						<ArticleSourceActions sourceMarkdown={sourceMarkdown!} sourceUrl={sourceUrl!} />
+						<ArticleSourceActions
+							sourceMarkdown={sourceMarkdown!}
+							sourceUrl={sourceUrl!}
+							historyUrl={historyUrl}
+						/>
 					)}
 					{hasToc && (
 						<div
@@ -137,14 +144,22 @@ const tocMaxHeight = hasSourceTools
 
 							{hasSourceTools && (
 								<div class="article-layout__source-mobile">
-									<ArticleSourceActions sourceMarkdown={sourceMarkdown!} sourceUrl={sourceUrl!} />
+									<ArticleSourceActions
+										sourceMarkdown={sourceMarkdown!}
+										sourceUrl={sourceUrl!}
+										historyUrl={historyUrl}
+									/>
 								</div>
 							)}
 						</div>
 					) : (
 						hasSourceTools && (
 							<div class="article-layout__source-mobile">
-								<ArticleSourceActions sourceMarkdown={sourceMarkdown!} sourceUrl={sourceUrl!} />
+								<ArticleSourceActions
+									sourceMarkdown={sourceMarkdown!}
+									sourceUrl={sourceUrl!}
+									historyUrl={historyUrl}
+								/>
 							</div>
 						)
 					)}
@@ -182,9 +197,10 @@ const tocMaxHeight = hasSourceTools
 	</div>
 
 	{
-		hasToc && (
+		(hasToc || historyUrl) && (
 			<div slot="site-floating">
-				<ArticleMobileToc client:load headings={tocHeadings} />
+				{hasToc && <ArticleMobileToc client:load headings={tocHeadings} />}
+				{historyUrl && <ArticleGitHistory client:load historyUrl={historyUrl} />}
 			</div>
 		)
 	}

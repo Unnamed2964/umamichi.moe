@@ -377,6 +377,7 @@
 
 		const toggle = target.closest('[data-article-source-menu-toggle]');
 		const copyButton = target.closest('[data-article-copy-markdown]');
+		const gitHistoryButton = target.closest('[data-article-git-history]');
 
 		if (toggle instanceof HTMLButtonElement) {
 			event.preventDefault();
@@ -419,6 +420,16 @@
 			if (container instanceof Element) {
 				closeArticleSourceMenu(container);
 			}
+			return;
+		}
+
+		if (gitHistoryButton instanceof HTMLButtonElement) {
+			event.preventDefault();
+			const container = gitHistoryButton.closest('[data-article-source-tools]');
+			if (container instanceof Element) {
+				closeArticleSourceMenu(container);
+			}
+			window.dispatchEvent(new CustomEvent('article:git-history-open'));
 		}
 	});
 
