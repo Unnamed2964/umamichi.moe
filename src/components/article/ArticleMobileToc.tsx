@@ -137,26 +137,22 @@ export default function ArticleMobileToc({ headings }: ArticleMobileTocProps) {
 
 	const close = () => setOpen(false);
 
-	const sheet =
+	const overlay =
 		mounted &&
 		createPortal(
-			<div
-				ref={overlayRef as RefObject<HTMLDivElement>}
-				className={withOverlayOpen('article-mobile-toc-backdrop', isOpen)}
-				role="presentation"
-				onClick={(event) => {
-					if (event.target === event.currentTarget) {
-						close();
-					}
-				}}
-			>
+			<>
 				<div
-					className="article-mobile-toc-sheet"
+					className={withOverlayOpen('article-mobile-toc-backdrop', isOpen)}
+					role="presentation"
+					onClick={close}
+				/>
+				<div
+					ref={overlayRef as RefObject<HTMLDivElement>}
+					className={withOverlayOpen('article-mobile-toc-sheet', isOpen)}
 					role="dialog"
 					aria-modal="true"
 					aria-labelledby={titleId}
 					data-mobile-toc-sheet
-					onClick={(event) => event.stopPropagation()}
 				>
 					<header className="article-mobile-toc-sheet__header">
 						<p id={titleId} className="article-mobile-toc-sheet__title">
@@ -189,7 +185,7 @@ export default function ArticleMobileToc({ headings }: ArticleMobileTocProps) {
 						</div>
 					</nav>
 				</div>
-			</div>,
+			</>,
 			document.body,
 		);
 
@@ -206,7 +202,7 @@ export default function ArticleMobileToc({ headings }: ArticleMobileTocProps) {
 				<LuList className="article-mobile-toc-fab__icon" aria-hidden="true" focusable="false" />
 				<span>目录</span>
 			</button>
-			{sheet}
+			{overlay}
 		</div>
 	);
 }
