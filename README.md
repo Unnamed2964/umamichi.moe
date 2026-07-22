@@ -49,11 +49,22 @@ Markdown/MDX 正文与 `src/content/` 下的图片、附件放在一起管理：
 
 `public/` 中与上述资源路径重复的文件仅为**旧 URL 向后兼容**保留；新资源不应放入 `public/`。详见 [`public/README.md`](public/README.md)。
 
+## 页面搬家与 Giscus 评论
+
+旧 URL 跳转使用 MkDocs 风格的 `content.redirect_maps`（见下方「项目配置」），构建时转为 Astro `redirects`（默认 301）。评论区使用 Giscus，当前映射为 **`pathname`**（见 [`src/components/ArticleComments.tsx`](src/components/ArticleComments.tsx)）：Discussion 按页面最终 URL 的路径查找。因此，**真正会断评论的是「读者最终打开的 pathname 变了」**；`redirect_maps` 只负责把旧链送到新页，不会自动带走评论。
+
+处理办法：
+
+- **已有讨论时**：在仓库的 GitHub Discussions 里，把对应讨论的标题改成**新 pathname**（与线上一致，含尾部 `/`）。本站目前 `strict="0"`，一般改标题即可；若日后开启严格匹配，还需按 [Giscus 文档](https://github.com/giscus/giscus/blob/main/ADVANCED-USAGE.md) 更新讨论正文中的 SHA-1。没有任何评论则不必改。
+
+若只加 `redirect_maps`、不同时处理 Discussion，搬家后评论区会空掉，旧讨论仍留在 GitHub 侧。
+
 ## 项目配置
 
 根目录 [`umamichi.config.mjs`](umamichi.config.mjs) 为站点级配置。当前可用项：
 
 - `content.excludeDocGlobs`：不参与 content collection 与站点路由的 Markdown/MDX 路径 glob（默认排除 `**/imgs/**`、`**/files/**`）。
+- `content.redirect_maps`：MkDocs 风格的页面重定向（用于搬家/改名）。键与站内目标值为相对 `src/content` 的 Markdown 路径（不是最终 HTML URL）；目标也可以是 `http(s)` 外链。构建时由 [`scripts/redirect-maps.mjs`](scripts/redirect-maps.mjs) 转成 Astro `redirects`；站内目标必须存在，且源路径不得仍保留内容文件（否则页面会盖过重定向）。
 - `imageOptimization.enabled`：是否启用 Astro 构建期图片优化（Sharp）。Cloudflare 部署下默认 `false`（透传，不处理）。
 
 ## 本地开发

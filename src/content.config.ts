@@ -15,11 +15,27 @@ const copyrightSchema = z.discriminatedUnion('kind', [
 	}),
 ]);
 
+/** Keep entry ids aligned with filesystem routes in `src/lib/docs.ts` (do not github-slug spaces). */
+function contentEntryIdFromPath(entry: string) {
+	const withoutExt = entry.replace(/\\/g, '/').replace(/\.mdx?$/u, '');
+
+	if (withoutExt === 'index') {
+		return 'index';
+	}
+
+	if (withoutExt.endsWith('/index')) {
+		return withoutExt.slice(0, -'/index'.length) || 'index';
+	}
+
+	return withoutExt;
+}
+
 const docs = defineCollection({
 	loader: glob({
 		base: './src/content',
 		pattern: '**/*.{md,mdx}',
 		ignore: umamichiConfig.content.excludeDocGlobs,
+		generateId: ({ entry }) => contentEntryIdFromPath(entry),
 	}),
 	schema: ({ image }) =>
 		z.object({
