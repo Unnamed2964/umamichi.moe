@@ -228,8 +228,8 @@ const iconGithub = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512
 	<slot name="article-sidebar-right" />
 
 	{/*
-	  Pane-shift surface: menu push applies here once.
-	  Route VT stays on <main> only — fixed floating chrome must not sit under site-route.
+	  Content pane-shift: menu push for main + footer.
+	  Route VT stays on <main> only.
 	*/}
 	<div class="site-pane-shift wpm-pane-shift">
 		<main
@@ -239,8 +239,6 @@ const iconGithub = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512
 		>
 			<slot />
 		</main>
-
-		<slot name="site-floating" />
 
 		<footer class="site-footer" data-astro-transition-persist="footer">
 			<div class="site-container site-container--frame">
@@ -267,5 +265,13 @@ const iconGithub = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512
 				</div>
 			</div>
 		</footer>
+	</div>
+
+	{/*
+	  Fixed viewport layer that also pane-shifts — keeps absolute FAB from jumping when
+	  a document-flow ancestor gains transform (fixed containing-block switch).
+	*/}
+	<div class="site-floating-layer site-pane-shift wpm-pane-shift">
+		<slot name="site-floating" />
 	</div>
 </div>
