@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom';
 import { LuList, LuX } from 'react-icons/lu';
 import type { ArticleTocHeading } from '../../lib/article-toc';
 import { filterArticleTocHeadings } from '../../lib/article-toc';
+import { acquirePreservedScrollbar, releasePreservedScrollbar } from '../../lib/site-preserve-scrollbar';
 import { ArticleTocLinks } from './ArticleToc';
 
 type ArticleMobileTocProps = {
@@ -11,6 +12,7 @@ type ArticleMobileTocProps = {
 };
 
 const DESKTOP_TOC_MQ = '(min-width: 80rem)';
+const PRESERVE_SCROLLBAR_REASON = 'article-mobile-toc';
 
 export default function ArticleMobileToc({ headings }: ArticleMobileTocProps) {
 	const items = filterArticleTocHeadings(headings);
@@ -42,12 +44,11 @@ export default function ArticleMobileToc({ headings }: ArticleMobileTocProps) {
 		}
 
 		document.documentElement.dataset.mobileTocOpen = 'true';
-		const previousOverflow = document.documentElement.style.overflow;
-		document.documentElement.style.overflow = 'hidden';
+		acquirePreservedScrollbar(PRESERVE_SCROLLBAR_REASON);
 
 		return () => {
 			delete document.documentElement.dataset.mobileTocOpen;
-			document.documentElement.style.overflow = previousOverflow;
+			releasePreservedScrollbar(PRESERVE_SCROLLBAR_REASON);
 		};
 	}, [open]);
 
@@ -91,7 +92,6 @@ export default function ArticleMobileToc({ headings }: ArticleMobileTocProps) {
 			setOpen(false);
 			document.documentElement.dataset.mobileTocVtHide = 'true';
 			delete document.documentElement.dataset.mobileTocOpen;
-			document.documentElement.style.overflow = '';
 		};
 
 		const showAfterViewTransition = () => {

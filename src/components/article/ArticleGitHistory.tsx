@@ -3,8 +3,11 @@ import { useEffect, useId, useMemo, useRef, useState, type RefObject } from 'rea
 import { createPortal } from 'react-dom';
 import { LuArrowLeft, LuX } from 'react-icons/lu';
 import type { GitHistoryCommit, GitHistoryPayload } from '../../lib/git-history';
+import { acquirePreservedScrollbar, releasePreservedScrollbar } from '../../lib/site-preserve-scrollbar';
 
 export const ARTICLE_GIT_HISTORY_OPEN_EVENT = 'article:git-history-open';
+
+const PRESERVE_SCROLLBAR_REASON = 'article-git-history';
 
 type ArticleGitHistoryProps = {
 	historyUrl: string;
@@ -176,12 +179,11 @@ export default function ArticleGitHistory({ historyUrl }: ArticleGitHistoryProps
 		}
 
 		document.documentElement.dataset.gitHistoryOpen = 'true';
-		const previousOverflow = document.documentElement.style.overflow;
-		document.documentElement.style.overflow = 'hidden';
+		acquirePreservedScrollbar(PRESERVE_SCROLLBAR_REASON);
 
 		return () => {
 			delete document.documentElement.dataset.gitHistoryOpen;
-			document.documentElement.style.overflow = previousOverflow;
+			releasePreservedScrollbar(PRESERVE_SCROLLBAR_REASON);
 		};
 	}, [open]);
 
@@ -214,7 +216,6 @@ export default function ArticleGitHistory({ historyUrl }: ArticleGitHistoryProps
 		const hideForViewTransition = () => {
 			setOpen(false);
 			delete document.documentElement.dataset.gitHistoryOpen;
-			document.documentElement.style.overflow = '';
 		};
 
 		document.addEventListener('astro:before-preparation', hideForViewTransition);

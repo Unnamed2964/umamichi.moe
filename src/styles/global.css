@@ -56,6 +56,21 @@ html {
 	overflow-y: scroll;
 }
 
+/* Overlay open: keep scrollbar visible (no width jump); freeze via fixed body. */
+html[data-site-preserve-scrollbar='true'] {
+	overflow-y: scroll;
+	overscroll-behavior: none;
+}
+
+html[data-site-preserve-scrollbar='true'] body {
+	position: fixed;
+	top: var(--site-preserve-scrollbar-y, 0px);
+	left: 0;
+	right: 0;
+	width: 100%;
+	overscroll-behavior: none;
+}
+
 :focus-visible {
 	outline-color: var(--site-focus-visible-outline-color);
 }
@@ -190,19 +205,6 @@ html.dark {
 		pointer-events: none;
 	}
 
-	html[data-mobile-menu-open='true'],
-	html[data-mobile-menu-closing='true'] {
-		overflow: hidden;
-		overscroll-behavior: none;
-	}
-
-	html[data-mobile-menu-open='true'] body,
-	html[data-mobile-menu-closing='true'] body {
-		overflow: hidden;
-		overscroll-behavior: none;
-		padding-right: var(--site-scrollbar-compensation, 0);
-	}
-
 	html[data-mobile-menu-open='true'] [data-site-mobile-menu].wpm-pane-menu {
 		visibility: visible;
 		transform: translateX(0);
@@ -224,7 +226,6 @@ html.dark {
 		width: 100%;
 		z-index: 10;
 		box-sizing: border-box;
-		padding-right: var(--site-scrollbar-compensation, 0);
 	}
 
 	html[data-mobile-menu-open='true'] body > * [data-site-header].wpm-pane-shift,
