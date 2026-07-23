@@ -47,7 +47,6 @@ export function initSiteMobileMenu(): void {
 	(window as unknown as Record<string, boolean>)[INIT_KEY] = true;
 
 	let menuHistoryPushed = false;
-	let skipNextSameDocumentRouteTransition = false;
 	let menuClosePromise: Promise<void> | null = null;
 
 	const finishMenuClose = () => {
@@ -193,44 +192,8 @@ export function initSiteMobileMenu(): void {
 			return;
 		}
 
-		skipNextSameDocumentRouteTransition = true;
+		// Same-URL traverse is neutralized by initSiteSameDocumentTraverseGuard.
 		closeMenu({ fromPopstate: true });
-	});
-
-	const shouldSkipSameDocumentRouteTransition = (event: Event) => {
-		if (!skipNextSameDocumentRouteTransition) {
-			return false;
-		}
-
-		const transitionEvent = event as CustomEvent & { from?: URL; to?: URL };
-		const from = transitionEvent.from;
-		const to = transitionEvent.to;
-
-		if (!(from instanceof URL) || !(to instanceof URL)) {
-			return false;
-		}
-
-		return from.href === to.href;
-	};
-
-	// Bubble phase: skip same-URL transitions after popstate menu close.
-	document.addEventListener('astro:before-preparation', (event) => {
-		if (!shouldSkipSameDocumentRouteTransition(event)) {
-			return;
-		}
-
-		skipNextSameDocumentRouteTransition = false;
-		event.preventDefault();
-	});
-
-	document.addEventListener('astro:before-swap', (event) => {
-		if (!shouldSkipSameDocumentRouteTransition(event)) {
-			return;
-		}
-
-		skipNextSameDocumentRouteTransition = false;
-		const viewTransition = (event as unknown as { viewTransition?: { skipTransition?: () => void } }).viewTransition;
-		viewTransition?.skipTransition?.();
 	});
 
 	document.addEventListener('click', (event) => {
