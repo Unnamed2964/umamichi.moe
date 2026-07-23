@@ -1,13 +1,10 @@
-import { useOverlayPresence, withOverlayOpen } from '@umamichi-ui/common-components/presence';
-import { useEffect, useId, useMemo, useRef, useState, type RefObject } from 'react';
-import { createPortal } from 'react-dom';
-import { LuArrowLeft, LuX } from 'react-icons/lu';
+import { FullscreenOverlay, OverlayStackProvider } from '@umamichi-ui/common-components/overlay';
+import { useEffect, useId, useMemo, useState } from 'react';
 import type { GitHistoryCommit, GitHistoryPayload } from '../../lib/git-history';
-import { acquirePreservedScrollbar, releasePreservedScrollbar } from '../../lib/site-preserve-scrollbar';
 
 export const ARTICLE_GIT_HISTORY_OPEN_EVENT = 'article:git-history-open';
 
-const PRESERVE_SCROLLBAR_REASON = 'article-git-history';
+const OVERLAY_ID = 'article-git-history';
 
 type ArticleGitHistoryProps = {
 	historyUrl: string;
@@ -42,7 +39,9 @@ function hasContentHunks(patch: string): boolean {
 }
 
 function DiffView({ commit }: { commit: GitHistoryCommit }) {
-	const isRename = commit.paths.status === 'R' || Boolean(commit.paths.from && commit.paths.to && commit.paths.from !== commit.paths.to);
+	const isRename =
+		commit.paths.status === 'R' ||
+		Boolean(commit.paths.from && commit.paths.to && commit.paths.from !== commit.paths.to);
 	const fromLabel = shortenRepoPath(commit.paths.from);
 	const toLabel = shortenRepoPath(commit.paths.to);
 	const showHunks = hasContentHunks(commit.patch);
@@ -70,7 +69,16 @@ function DiffView({ commit }: { commit: GitHistoryCommit }) {
 					<code>
 						{lines.map((line, index) => {
 							let kind = 'context';
-							if (line.startsWith('+++') || line.startsWith('---') || line.startsWith('diff ') || line.startsWith('index ') || line.startsWith('similarity ') || line.startsWith('rename ') || line.startsWith('new file') || line.startsWith('deleted file')) {
+							if (
+								line.startsWith('+++') ||
+								line.startsWith('---') ||
+								line.startsWith('diff ') ||
+								line.startsWith('index ') ||
+								line.startsWith('similarity ') ||
+								line.startsWith('rename ') ||
+								line.startsWith('new file') ||
+								line.startsWith('deleted file')
+							) {
 								kind = 'meta';
 							} else if (line.startsWith('@@')) {
 								kind = 'hunk';
@@ -96,16 +104,13 @@ function DiffView({ commit }: { commit: GitHistoryCommit }) {
 	);
 }
 
-export default function ArticleGitHistory({ historyUrl }: ArticleGitHistoryProps) {
+function ArticleGitHistoryInner({ historyUrl }: ArticleGitHistoryProps) {
 	const titleId = useId();
-	const backButtonRef = useRef<HTMLButtonElement>(null);
-	const closeButtonRef = useRef<HTMLButtonElement>(null);
 	const [open, setOpen] = useState(false);
 	const [payload, setPayload] = useState<GitHistoryPayload | null>(null);
 	const [loadError, setLoadError] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [selectedHash, setSelectedHash] = useState<string | null>(null);
-	const { mounted, isOpen, overlayRef } = useOverlayPresence(open);
 
 	const selectedCommit = useMemo(() => {
 		if (!payload || !selectedHash) {
@@ -179,37 +184,10 @@ export default function ArticleGitHistory({ historyUrl }: ArticleGitHistoryProps
 		}
 
 		document.documentElement.dataset.gitHistoryOpen = 'true';
-		acquirePreservedScrollbar(PRESERVE_SCROLLBAR_REASON);
 
 		return () => {
 			delete document.documentElement.dataset.gitHistoryOpen;
-			releasePreservedScrollbar(PRESERVE_SCROLLBAR_REASON);
 		};
-	}, [open]);
-
-	useEffect(() => {
-		if (!isOpen) {
-			return;
-		}
-
-		const desktop = window.matchMedia('(min-width: 48rem)').matches;
-		(desktop ? closeButtonRef : backButtonRef).current?.focus();
-	}, [isOpen]);
-
-	useEffect(() => {
-		if (!open) {
-			return;
-		}
-
-		const onKeyDown = (event: KeyboardEvent) => {
-			if (event.key === 'Escape') {
-				event.preventDefault();
-				setOpen(false);
-			}
-		};
-
-		window.addEventListener('keydown', onKeyDown);
-		return () => window.removeEventListener('keydown', onKeyDown);
 	}, [open]);
 
 	useEffect(() => {
@@ -226,112 +204,79 @@ export default function ArticleGitHistory({ historyUrl }: ArticleGitHistoryProps
 
 	const close = () => setOpen(false);
 
-	const overlay =
-		mounted &&
-		createPortal(
-			<>
-				<div
-					className={withOverlayOpen('article-git-history-backdrop', isOpen)}
-					role="presentation"
-					onClick={close}
-				/>
-				<div
-					ref={overlayRef as RefObject<HTMLDivElement>}
-					className={withOverlayOpen('article-git-history', isOpen)}
-					role="dialog"
-					aria-modal="true"
-					aria-labelledby={titleId}
-					data-article-git-history-dialog
-				>
-					<header className="article-git-history__toolbar">
-						<button
-							ref={backButtonRef}
-							type="button"
-							className="article-git-history__chrome-button article-git-history__back site-icon-button"
-							aria-label="关闭 Git 历史记录"
-							onClick={close}
-						>
-							<LuArrowLeft aria-hidden="true" focusable="false" />
-						</button>
-						<button
-							ref={closeButtonRef}
-							type="button"
-							className="article-git-history__chrome-button article-git-history__close site-icon-button"
-							aria-label="关闭 Git 历史记录"
-							onClick={close}
-						>
-							<LuX aria-hidden="true" focusable="false" />
-						</button>
-					</header>
+	return (
+		<FullscreenOverlay
+			open={open}
+			overlayId={OVERLAY_ID}
+			onDismiss={close}
+			title="Git 历史记录"
+			titleId={titleId}
+			size="page"
+			fill
+			closeAriaLabel="关闭 Git 历史记录"
+			panelClassName="article-git-history-panel"
+			bodyClassName="article-git-history__body"
+		>
+			{loading && <p className="article-git-history__status">正在加载…</p>}
+			{loadError && <p className="article-git-history__status">{loadError}</p>}
 
-					<h2 id={titleId} className="article-git-history__title">
-						Git 历史记录
-					</h2>
+			{payload && payload.commits.length === 0 && (
+				<p className="article-git-history__status">暂无 Git 修改记录。</p>
+			)}
 
-					<div className="article-git-history__body">
-						{loading && <p className="article-git-history__status">正在加载…</p>}
-						{loadError && <p className="article-git-history__status">{loadError}</p>}
+			{payload && payload.commits.length > 0 && (
+				<>
+					<nav className="article-git-history__timeline" aria-label="提交时间线">
+						<ul className="article-git-history__list">
+							{payload.commits.map((commit) => {
+								const isSelected = commit.hash === selectedHash;
+								const isRename =
+									commit.paths.status === 'R' ||
+									Boolean(
+										commit.paths.from && commit.paths.to && commit.paths.from !== commit.paths.to,
+									);
 
-						{payload && payload.commits.length === 0 && (
-							<p className="article-git-history__status">暂无 Git 修改记录。</p>
-						)}
+								return (
+									<li key={commit.hash}>
+										<button
+											type="button"
+											className={
+												isSelected
+													? 'article-git-history__commit is-selected'
+													: 'article-git-history__commit'
+											}
+											aria-current={isSelected ? 'true' : undefined}
+											onClick={() => setSelectedHash(commit.hash)}
+										>
+											<span className="article-git-history__commit-when">
+												{formatCommitWhen(commit.committedAt)}
+											</span>
+											<span className="article-git-history__commit-subject">{commit.subject}</span>
+											{isRename && <span className="article-git-history__commit-badge">移动</span>}
+										</button>
+									</li>
+								);
+							})}
+						</ul>
+					</nav>
 
-						{payload && payload.commits.length > 0 && (
-							<>
-								<nav className="article-git-history__timeline" aria-label="提交时间线">
-									<ul className="article-git-history__list">
-										{payload.commits.map((commit) => {
-											const isSelected = commit.hash === selectedHash;
-											const isRename =
-												commit.paths.status === 'R' ||
-												Boolean(
-													commit.paths.from &&
-														commit.paths.to &&
-														commit.paths.from !== commit.paths.to,
-												);
-
-											return (
-												<li key={commit.hash}>
-													<button
-														type="button"
-														className={
-															isSelected
-																? 'article-git-history__commit is-selected'
-																: 'article-git-history__commit'
-														}
-														aria-current={isSelected ? 'true' : undefined}
-														onClick={() => setSelectedHash(commit.hash)}
-													>
-														<span className="article-git-history__commit-when">
-															{formatCommitWhen(commit.committedAt)}
-														</span>
-														<span className="article-git-history__commit-subject">
-															{commit.subject}
-														</span>
-														{isRename && (
-															<span className="article-git-history__commit-badge">移动</span>
-														)}
-													</button>
-												</li>
-											);
-										})}
-									</ul>
-								</nav>
-
-								<div className="article-git-history__detail">
-									{selectedCommit ? (
-										<DiffView commit={selectedCommit} />
-									) : (
-										<p className="article-git-history__status">请选择一次修改。</p>
-									)}
-								</div>
-							</>
+					<div className="article-git-history__detail">
+						{selectedCommit ? (
+							<DiffView commit={selectedCommit} />
+						) : (
+							<p className="article-git-history__status">请选择一次修改。</p>
 						)}
 					</div>
-				</div>
-			</>,
-			document.body,
-		);
+				</>
+			)}
+		</FullscreenOverlay>
+	);
+}
 
-	return overlay;
+export default function ArticleGitHistory(props: ArticleGitHistoryProps) {
+	return (
+		<OverlayStackProvider>
+			<ArticleGitHistoryInner {...props} />
+		</OverlayStackProvider>
+	);
 }
