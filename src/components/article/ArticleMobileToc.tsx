@@ -1,10 +1,10 @@
 import { useOverlayPresence, withOverlayOpen } from '@umamichi-ui/common-components/presence';
+import { acquirePreservedScrollbar, releasePreservedScrollbar } from '@umamichi-ui/common-components/overlay';
 import { useEffect, useId, useRef, useState, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import { LuList, LuX } from 'react-icons/lu';
 import type { ArticleTocHeading } from '../../lib/article-toc';
 import { filterArticleTocHeadings } from '../../lib/article-toc';
-import { acquirePreservedScrollbar, releasePreservedScrollbar } from '../../lib/site-preserve-scrollbar';
 import { ArticleTocLinks } from './ArticleToc';
 
 type ArticleMobileTocProps = {
