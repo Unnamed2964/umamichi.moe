@@ -336,6 +336,8 @@ html {
 	pointer-events: none;
 }
 
+/* Mobile: secondary page — Toolkit SlideUpFadeIn / SlideDownFadeOut.
+   Desktop (≥48rem): ContentDialog — fade (+ light PopIn offset). */
 .article-git-history-backdrop {
 	position: fixed;
 	inset: 0;
@@ -348,12 +350,13 @@ html {
 	backdrop-filter: blur(var(--site-frosted-blur));
 	-webkit-backdrop-filter: blur(var(--site-frosted-blur));
 	background: var(--site-frosted-overlay);
-	transition: opacity var(--transition-overlay);
+	transition: opacity var(--wpm-slide-vertical-duration) var(--wpm-ease-in-exp6);
 }
 
 .article-git-history-backdrop.is-open {
 	opacity: 1;
 	pointer-events: auto;
+	transition: opacity var(--wpm-slide-vertical-duration) var(--wpm-ease-out-exp6);
 }
 
 .article-git-history {
@@ -370,20 +373,30 @@ html {
 	background: var(--site-surface);
 	color: var(--site-fg);
 	opacity: 0;
-	transform: translateY(0.75rem);
+	transform: translateY(100%);
 	pointer-events: none;
 	transition:
-		opacity var(--transition-overlay, 0.22s ease),
-		transform var(--transition-overlay, 0.22s ease);
+		opacity var(--wpm-slide-vertical-duration) var(--wpm-ease-in-exp6),
+		transform var(--wpm-slide-vertical-duration) var(--wpm-ease-in-exp6);
 }
 
 .article-git-history.is-open {
 	opacity: 1;
 	transform: none;
 	pointer-events: auto;
+	transition:
+		opacity var(--wpm-slide-vertical-duration) var(--wpm-ease-out-exp6),
+		transform var(--wpm-slide-vertical-duration) var(--wpm-ease-out-exp6);
 }
 
 @media (prefers-reduced-motion: reduce) {
+	.article-git-history-backdrop,
+	.article-git-history-backdrop.is-open,
+	.article-git-history,
+	.article-git-history.is-open {
+		transition-duration: 1ms;
+	}
+
 	.article-git-history,
 	.article-git-history.is-open {
 		transform: none;
@@ -576,11 +589,23 @@ html {
 		border: 1px solid var(--site-border);
 		grid-template-rows: auto auto minmax(0, 1fr);
 		grid-template-columns: minmax(0, 1fr);
+		/* ContentDialog: fade + light PopIn, not page Slide */
 		transform: translateY(0.5rem);
+		transition:
+			opacity var(--wpm-turnstile-out-duration) var(--wpm-ease-in-exp6),
+			transform var(--wpm-turnstile-out-duration) var(--wpm-ease-in-exp6);
 	}
 
 	.article-git-history.is-open {
 		transform: none;
+		transition:
+			opacity var(--wpm-turnstile-out-duration) var(--wpm-ease-out-exp6),
+			transform var(--wpm-turnstile-out-duration) var(--wpm-ease-out-exp6);
+	}
+
+	.article-git-history-backdrop,
+	.article-git-history-backdrop.is-open {
+		transition-duration: var(--wpm-turnstile-out-duration);
 	}
 
 	.article-git-history__toolbar {
