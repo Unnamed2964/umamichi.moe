@@ -101,9 +101,8 @@ function shouldDeferMenuNavigation(event: Event): boolean {
 /**
  * Defers in-menu link navigation until the mobile pane close animation finishes.
  *
- * Registered with capture on `astro:before-preparation` so it runs before
- * `site-mobile-menu-client` (bubble), which may call `preventDefault()` when
- * popstate closes the menu on the same URL.
+ * Registered with capture on `astro:before-preparation` so the menu can start
+ * closing before the default route loader fetches the next page.
  */
 export function initSiteMobileMenuRouteDefer(): void {
 	document.addEventListener(
