@@ -56,20 +56,7 @@ html {
 	overflow-y: scroll;
 }
 
-/* Overlay open: keep scrollbar visible (no width jump); freeze via fixed body. */
-html[data-site-preserve-scrollbar='true'] {
-	overflow-y: scroll;
-	overscroll-behavior: none;
-}
-
-html[data-site-preserve-scrollbar='true'] body {
-	position: fixed;
-	top: var(--site-preserve-scrollbar-y, 0px);
-	left: 0;
-	right: 0;
-	width: 100%;
-	overscroll-behavior: none;
-}
+/* Scroll lock while overlays open: see @umamichi-ui/common-components/styles.css */
 
 :focus-visible {
 	outline-color: var(--site-focus-visible-outline-color);
