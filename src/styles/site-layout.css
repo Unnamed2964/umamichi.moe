@@ -761,12 +761,6 @@ html[data-mobile-toc-vt-hide] .article-mobile-toc-sheet {
 	display: none !important;
 }
 
-@media screen and (min-width: 80rem) {
-	.article-mobile-toc-fab {
-		display: none;
-	}
-}
-
 .article-mobile-toc-fab {
 	position: absolute;
 	right: max(1rem, env(safe-area-inset-right, 0px));
@@ -794,6 +788,13 @@ html[data-mobile-toc-vt-hide] .article-mobile-toc-sheet {
 		background-color 0.2s ease,
 		color 0.2s ease,
 		transform 0.1s ease-out;
+}
+
+/* Same breakpoint as desktop TOC rail / mobile「导航」— must follow base display */
+@media screen and (min-width: 80rem) {
+	.article-mobile-toc-fab {
+		display: none;
+	}
 }
 
 .article-mobile-toc-fab:hover {
