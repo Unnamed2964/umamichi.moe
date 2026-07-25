@@ -5,7 +5,6 @@ import {
 	type ArticleSidebarLinkKind,
 	getArticleSidebarIndentStyle,
 	getArticleSidebarLinkClassName,
-	getArticleSidebarLinkTier,
 } from '../../lib/article-sidebar-link';
 
 export type ArticleSidebarTree = SidebarFolderNode;
@@ -35,12 +34,11 @@ function renderTreeNode(
 	currentPostId?: string,
 ): ReactElement {
 	const kind: ArticleSidebarLinkKind = node.kind === 'folder' ? 'section' : 'item';
-	const tier = getArticleSidebarLinkTier(node.level, ARTICLE_NAV_BASE_DEPTH, kind);
 	const isCurrent =
 		node.kind === 'folder'
 			? isCurrentLink(node.href, currentPath)
 			: isCurrentLink(node.href, currentPath, currentPostId, node.id);
-	const linkClassName = getArticleSidebarLinkClassName(kind, tier, isCurrent);
+	const linkClassName = getArticleSidebarLinkClassName(kind, isCurrent);
 	const indentStyle = getArticleSidebarIndentStyle(node.level, ARTICLE_NAV_BASE_DEPTH);
 
 	if (node.kind === 'folder') {
