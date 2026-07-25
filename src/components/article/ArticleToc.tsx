@@ -5,7 +5,6 @@ import {
 	type ArticleSidebarLinkKind,
 	getArticleSidebarIndentStyle,
 	getArticleSidebarLinkClassName,
-	getArticleSidebarLinkTier,
 	isArticleSidebarTopLevel,
 } from '../../lib/article-sidebar-link';
 import { filterArticleTocHeadings } from '../../lib/article-toc';
@@ -27,14 +26,13 @@ export function ArticleTocLinks({ headings }: { headings: ArticleTocHeading[] })
 				)
 					? 'section'
 					: 'item';
-				const tier = getArticleSidebarLinkTier(heading.depth, ARTICLE_TOC_BASE_DEPTH, kind);
 
 				return (
 					<a
 						key={heading.slug}
 						href={`#${heading.slug}`}
 						data-toc-link={heading.slug}
-						className={getArticleSidebarLinkClassName(kind, tier, false)}
+						className={getArticleSidebarLinkClassName(kind, false)}
 						style={getArticleSidebarIndentStyle(heading.depth, ARTICLE_TOC_BASE_DEPTH)}
 					>
 						{heading.text}
