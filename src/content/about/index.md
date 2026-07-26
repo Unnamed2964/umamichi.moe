@@ -7,6 +7,10 @@ rss: false
 
 您好，我是 Umamichi，是大学毕业后正处于 gap year 状态的含🍥MtX。
 
+<img src="/about/imgs/arona.webp" alt="一般通过世界（服务器）修复力工——阿罗娜" style="width: 250px; height: auto" />
+
+图：一般通过世界（服务器）修复力工——阿罗娜
+
 ## 词源学
 
 - Uma：把 Ama（甘）的首字母换成 「U」，与 「Unnamed2964」首字母连贯。
