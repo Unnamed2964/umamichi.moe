@@ -1,7 +1,8 @@
 import { mkdir, readdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { isIncludedContentDoc } from '../src/lib/content-doc-include.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const contentDir = path.join(root, 'src', 'content');
@@ -55,6 +56,13 @@ function warnIfShallow() {
 }
 
 /**
+ * @param {string} relativePath posix path under src/content
+ */
+export function shouldGenerateGitHistoryForContentDoc(relativePath) {
+	return /\.mdx?$/i.test(relativePath) && isIncludedContentDoc(relativePath);
+}
+
+/**
  * @param {string} dir
  * @returns {Promise<string[]>}
  */
@@ -73,7 +81,8 @@ async function listContentDocs(dir) {
 				await walk(full);
 				continue;
 			}
-			if (/\.mdx?$/i.test(entry.name)) {
+			const relativePath = path.relative(dir, full).split(path.sep).join('/');
+			if (shouldGenerateGitHistoryForContentDoc(relativePath)) {
 				files.push(full);
 			}
 		}
@@ -282,4 +291,6 @@ async function main() {
 	);
 }
 
-await main();
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+	await main();
+}
