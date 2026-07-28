@@ -32,6 +32,16 @@ const iconGithub = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512
 		data-lens-depth="0.9"
 		data-astro-transition-persist="header"
 	>
+		<div
+			class="site-route-progress"
+			data-site-route-progress
+			role="progressbar"
+			aria-hidden="true"
+			aria-valuetext="正在加载页面"
+		>
+			<span class="site-route-progress__bar site-route-progress__bar--1" aria-hidden="true"></span>
+			<span class="site-route-progress__bar site-route-progress__bar--2" aria-hidden="true"></span>
+		</div>
 		<div class="navbar-running-line" data-nav-running-line aria-hidden="true"></div>
 		{
 			navItems.map((item, index) => {
