@@ -82,6 +82,90 @@ html.dark {
 	background: var(--site-bg);
 }
 
+/*
+ * Route loading bar: WinUI ProgressBar indeterminate (IsIndeterminate), squared.
+ * Source: microsoft-ui-xaml controls/dev/ProgressBar/ProgressBar.cpp + ProgressBar.xaml
+ *   - bar1 width 40%, bar2 width 60%
+ *   - 2s loop; bar1 translate -100%→300% by 75%; bar2 hold to 37.5% then -150%→166%
+ *   - easing KeySpline 0.4,0,0.6,1; height 3px; no visible track in indeterminate
+ * CornerRadius forced to 0 (WinUI default ProgressBarCornerRadius is 1.5).
+ */
+.site-route-progress {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 3px;
+	overflow: hidden;
+	pointer-events: none;
+	z-index: 50;
+	opacity: 0;
+	visibility: hidden;
+}
+
+html[data-route-loading] .site-route-progress {
+	opacity: 1;
+	visibility: visible;
+}
+
+.site-route-progress__bar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	background: var(--site-nav-running-line-bg);
+	border-radius: 0;
+	will-change: transform;
+}
+
+.site-route-progress__bar--1 {
+	width: 40%;
+	animation: site-route-progress-bar1 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.site-route-progress__bar--2 {
+	width: 60%;
+	animation: site-route-progress-bar2 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes site-route-progress-bar1 {
+	0% {
+		transform: translateX(-100%);
+	}
+
+	75% {
+		transform: translateX(300%);
+	}
+
+	100% {
+		transform: translateX(300%);
+	}
+}
+
+@keyframes site-route-progress-bar2 {
+	0%,
+	37.5% {
+		transform: translateX(-150%);
+	}
+
+	100% {
+		transform: translateX(166%);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.site-route-progress__bar--1,
+	.site-route-progress__bar--2 {
+		animation: none;
+		transform: none;
+		width: 30%;
+	}
+
+	.site-route-progress__bar--2 {
+		left: 35%;
+	}
+}
+
 /* Route surfaces: main slide + article sidebar fade (site-slide-transition.ts). */
 
 @media (prefers-reduced-motion: reduce) {
