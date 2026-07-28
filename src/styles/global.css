@@ -115,16 +115,24 @@ html[data-route-loading] .site-route-progress {
 	height: 100%;
 	background: var(--site-nav-running-line-bg);
 	border-radius: 0;
-	will-change: transform;
 }
 
 .site-route-progress__bar--1 {
 	width: 40%;
-	animation: site-route-progress-bar1 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+	transform: translateX(-100%);
 }
 
 .site-route-progress__bar--2 {
 	width: 60%;
+	transform: translateX(-150%);
+}
+
+/* Animation only while loading — removing it resets the timeline to 0%. */
+html[data-route-loading] .site-route-progress__bar--1 {
+	animation: site-route-progress-bar1 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+html[data-route-loading] .site-route-progress__bar--2 {
 	animation: site-route-progress-bar2 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
@@ -154,14 +162,14 @@ html[data-route-loading] .site-route-progress {
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.site-route-progress__bar--1,
-	.site-route-progress__bar--2 {
+	html[data-route-loading] .site-route-progress__bar--1,
+	html[data-route-loading] .site-route-progress__bar--2 {
 		animation: none;
 		transform: none;
 		width: 30%;
 	}
 
-	.site-route-progress__bar--2 {
+	html[data-route-loading] .site-route-progress__bar--2 {
 		left: 35%;
 	}
 }
