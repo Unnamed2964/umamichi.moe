@@ -9,7 +9,7 @@ rss: false
 
 <img src="/about/imgs/arona.webp" alt="一般通过世界（服务器）修复力工——阿罗娜" style="width: 250px; height: auto" />
 
-图：一般通过世界（服务器）修复力工——阿罗娜
+图：一般通过世界（服务器）修复[^1]力工——阿罗娜
 
 ## 词源学
 
@@ -80,11 +80,11 @@ rss: false
     > 
     > 这些联想是我很难用语言结构来表达的，因此我感到很难做到诚实，我感到自己有隐瞒欺骗之嫌。人们使用的语言似乎并不是为我准备，可以将表达式无限写长（理论上）的编程语言，或者形式文法所形式化的自然语言（因为它们都允许无限层的嵌套结构）似乎才是适合我的语言。
 - 形式化方法
-  + 我正在刷 [Software Foundations](https://softwarefoundations.cis.upenn.edu/)，已基本完成 Logical Foundations 和 Programming Language Foundations 的机器判定题（`Admitted.` 数量≤10，两者在未修改时的 `Admitted.` 总数分别为415和269[^1]），正在做 Verified Functional Algorithms，进度可见 [Software-Foundations-Checklist](https://github.com/Unnamed2964/Software-Foundations-Checklist)
+  + 我正在刷 [Software Foundations](https://softwarefoundations.cis.upenn.edu/)，已基本完成 Logical Foundations 和 Programming Language Foundations 的机器判定题（`Admitted.` 数量≤10，两者在未修改时的 `Admitted.` 总数分别为415和269[^2]），正在做 Verified Functional Algorithms，进度可见 [Software-Foundations-Checklist](https://github.com/Unnamed2964/Software-Foundations-Checklist)
   + 数学式、公理系统式的逻辑系统建构是我日常生活中的少数的确定感来源，我很难做到从其他人能从他人获得确认的方式从他人的确认中获得确定感
-  + 关于证明，我会想到的图景是从皮亚诺公理系统[^2]这样的最基础、没有争议的几条公理出发，逐步证明我们所熟知，被认为「理所当然」的加法和乘法的性质，（重新）建立起来算术大厦。证明正是在这一逻辑系统中砌起一块块砖块的过程。
+  + 关于证明，我会想到的图景是从皮亚诺公理系统[^3]这样的最基础、没有争议的几条公理出发，逐步证明我们所熟知，被认为「理所当然」的加法和乘法的性质，（重新）建立起来算术大厦。证明正是在这一逻辑系统中砌起一块块砖块的过程。
   
-    这里的证明的目的，更多是关于「今天在房间里摆放的东西，如果自己没有动明天仍然会这么摆放」「做的没有恶意的事情不会因为别人的歪曲而变成有邪恶动机，应当定罪的不可饶恕的罪行」[^3]，而不是「我要证明自己比别人厉害」，这似乎是望文生义而产生的对我常见的误解
+    这里的证明的目的，更多是关于「今天在房间里摆放的东西，如果自己没有动明天仍然会这么摆放」「做的没有恶意的事情不会因为别人的歪曲而变成有邪恶动机，应当定罪的不可饶恕的罪行」[^4]，而不是「我要证明自己比别人厉害」，这似乎是望文生义而产生的对我常见的误解
   + 准确来说，这里的确并不是完全没有「他人的目光」的参与————这是一种我找到的「相对符合社会规范和期待的满足『对确定性的过度追求』的方法」
   + 以下片段可能有助于理解较完整动机：
     > 我高中时候假定：包的可信性是来自于程序员之间的私下里的推荐网络。以下是对我不能够接入这个推荐网络的绝望，以及试图找出的弥补手段：只要自己学会通过形式化证明等，鉴别软件包的绝对可靠度（形式化证明可靠度严格推导出平时的“差不多”可靠度），然后熟能生巧，开发出自动化方法，这样我就不需要任何人了！
@@ -103,7 +103,7 @@ rss: false
 - 请用具体代码与事实反馈，少用含糊的人品评价。
 - 异步优先：@ 我时写清要不要回复、以及截止日期。
 
-## 请这样对待我[^4]
+## 请这样对待我[^5]
 
 - 请不要因可怜而迁就我；我没有经济或人身安全上的现实困境。
 - 日常请用对普通人也会用的诚实、边界和反馈；不要长期当易碎品。
@@ -111,9 +111,10 @@ rss: false
 - 关系里的心理表征（含抛弃），要在真诚关系里长出来，而不是在「拯救」脚本里扭曲。
 - 若出现精神卫生危机：由我家里人决定并送医住院。
 
-[^1]: Logical Foundations 和 Programming Language Foundations 均以 Version 6.9.0 版本为准，完成的也是此版本。不同版本可能略有差异。
-[^2]: Wikipedia: </br>
+[^1]: 我认为日常修复它的任何一个局部（如日常创作、过好每一天的生活），就是修复了。这个局部并不需要有什么重要性或显著性，这件事情也没有必要有什么戏剧性，反而是无聊甚至枯燥的。就像证明一个定理的任何一个小引理，都是证明这个定理的和其他证明 term 构成部分同等重要的一部分一样。
+[^2]: Logical Foundations 和 Programming Language Foundations 均以 Version 6.9.0 版本为准，完成的也是此版本。不同版本可能略有差异。
+[^3]: Wikipedia: </br>
 [皮亚诺公理系统](https://zh.wikipedia.org/wiki/%E7%9A%AE%E4%BA%9A%E8%AF%BA%E5%85%AC%E7%90%86)</br>
 [Peano Axioms](https://en.wikipedia.org/wiki/Peano_axioms)
-[^3]: 别人怎么想我是没法控制的，但是至少可以让自己相信自己的确是没有问题的（至少带着这种期望）
-[^4]: 「请这样对待我」最初几条由 Cursor Auto 帮忙整理；本页列表结构与「协作 / 想认识我」等段落由 Composer 按 ADHD 友好版式改写，请以你自己的审阅为准。对话记录见 [对话记录](/transcripts/about-line-46-conversation-transcript.md)。
+[^4]: 别人怎么想我是没法控制的，但是至少可以让自己相信自己的确是没有问题的（至少带着这种期望）
+[^5]: 「请这样对待我」最初几条由 Cursor Auto 帮忙整理；本页列表结构与「协作 / 想认识我」等段落由 Composer 按 ADHD 友好版式改写，请以你自己的审阅为准。对话记录见 [对话记录](/transcripts/about-line-46-conversation-transcript.md)。
