@@ -6,6 +6,7 @@ const BUTTON_SELECTOR = [
 	'.article-prev-next__card',
 	'.article-block-copy',
 	'.outline-button',
+	'.article-mobile-toc-fab',
 	'.primary-button',
 	'.secondary-button',
 	'.ghost-button',
@@ -25,7 +26,7 @@ export function initSiteLensBorder(): void {
 	initChromaticFringe({
 		buttonSelector: BUTTON_SELECTOR,
 		skipClosest: '[data-site-header], [data-site-mobile-menu], .article-git-history-panel',
-		fadeBorderSelector: '.outline-button',
+		fadeBorderSelector: '.outline-button, .article-mobile-toc-fab',
 		depths: {
 			dropdown: 1.35,
 			button: 0.65,
