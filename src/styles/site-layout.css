@@ -988,6 +988,15 @@ html[data-mobile-toc-open='true'] .site-floating-layer {
 	--chromatic-fringe-border: var(--site-sidebar-border);
 }
 
+.article-mobile-toc-fab.chromatic-fringe-box--fade-border {
+	--chromatic-fringe-border: var(--site-border);
+}
+
+/* FAB stays absolute in site-floating-layer; package defaults chromatic-fringe-box to relative. */
+.article-mobile-toc-fab.chromatic-fringe-box {
+	position: absolute;
+}
+
 /*
  * Durable guard: package sets position:relative on .chromatic-fringe-box.
  * Portaled floating menus must stay fixed (misplaced panel + horizontal scroll).
