@@ -47,9 +47,22 @@ export function estimateReadingTimeSeconds(rawMarkdown: string): number {
 }
 
 export function formatReadingTimeDuration(totalSeconds: number): string {
-	const minutes = Math.floor(totalSeconds / 60);
-	const seconds = totalSeconds % 60;
-	return `${minutes} 分 ${seconds} 秒`;
+	if (totalSeconds < 60) {
+		return `${totalSeconds} 秒`;
+	}
+
+	const totalMinutes = Math.floor(totalSeconds / 60);
+	if (totalMinutes < 60) {
+		return `${totalMinutes} 分`;
+	}
+
+	const hours = Math.floor(totalMinutes / 60);
+	const minutes = totalMinutes % 60;
+	if (minutes === 0) {
+		return `${hours} 小时`;
+	}
+
+	return `${hours} 小时 ${minutes} 分`;
 }
 
 export function formatReadingTimeLabel(rawMarkdown: string): string | undefined {
