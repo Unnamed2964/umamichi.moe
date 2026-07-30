@@ -76,12 +76,7 @@ flowchart TD
   + 我对电视台的应急处理也很感兴趣；这种需要应急处理的情况被称为「放送事故」
   + 我在 B 站上有一个[放送文化（含架空）](https://b23.tv/J04gvta)收藏夹（如果在手机版需要在 App 中打开后显示），里面收藏了一些放送文化相关的视频
 - 函数式编程
-  + 以下片段可能有助于理解动机：
-    > 我比较容易产生奇怪的联想，往往是基于字面意义上的联想
-    > 
-    > ...
-    > 
-    > 这些联想是我很难用语言结构来表达的，因此我感到很难做到诚实，我感到自己有隐瞒欺骗之嫌。人们使用的语言似乎并不是为我准备，可以将表达式无限写长（理论上）的编程语言，或者形式文法所形式化的自然语言（因为它们都允许无限层的嵌套结构）似乎才是适合我的语言。
+  + 我对允许无限嵌套从句的语言有好感，这也扩散到了 lambda expression 上
 - 形式化方法
   + 我正在刷 [Software Foundations](https://softwarefoundations.cis.upenn.edu/)，已基本完成 Logical Foundations、Programming Language Foundations 和 Verified Functional Algorithms 的机器判定题（`Admitted.` 数量≤10，三者在未修改时的 `Admitted.` 总数分别为415、269和232[^2]），正在做 Verified Functional Algorithms，进度可见 [Software-Foundations-Checklist](https://github.com/Unnamed2964/Software-Foundations-Checklist)
   + 关于证明，我会想到的图景是从皮亚诺公理系统[^3]这样的最基础、没有争议的几条公理出发，逐步证明我们所熟知，被认为「理所当然」的加法和乘法的性质，（重新）建立起来算术大厦。证明正是在这一逻辑系统中砌起一块块砖块的过程。
