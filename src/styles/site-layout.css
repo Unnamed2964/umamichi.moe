@@ -136,9 +136,10 @@ html {
 .article-header__meta {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.5rem 1.25rem;
+	gap: 0.5rem 1rem;
 	margin: 0;
 	color: var(--article-muted-fg);
+	font-size: 0.875rem;
 	font-weight: var(--site-weight-regular);
 }
 
