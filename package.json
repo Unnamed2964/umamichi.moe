@@ -31,7 +31,7 @@
     "@types/react-dom": "^19.2.3",
     "@umamichi-ui/chromatic-fringe": "^0.4.3",
     "@umamichi-ui/common-components": "^0.4.1",
-    "@umamichi-ui/common-css": "^0.19.1",
+    "@umamichi-ui/common-css": "^0.19.2",
     "@umamichi-ui/giscus-theme": "^0.5.10",
     "@umamichi-ui/windows-phone-motion": "^0.1.1",
     "astro": "^6.4.8",
