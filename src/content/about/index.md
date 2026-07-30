@@ -3,11 +3,11 @@ title: 关于
 rss: false
 ---
 
-> 我的总结能力偏弱，所以以下内容是请 Cursor Auto 通过我亲自写的日常杂记（非常散乱也有很多隐私信息，所以不能直接发出来），以可能的 GitHub 合作者和希望和我交朋友的人为导向整理总结出来主干的，括号内的内容则主要手动编写。以下内容经过我的审核，可以当作反映了我的意见。
+> 部分内容由 Cursor Auto 辅助编写，但经过我的审核
 
 您好，我是 Umamichi，是大学毕业后正处于 gap year 状态的含🍥MtX。
 
-<img src="/about/imgs/arona.webp" alt="一般通过世界（服务器）修复力工——阿罗娜" style="width: 250px; height: auto" />
+<img src="/about/imgs/arona.webp" alt="一名世界（服务器）修复力工——阿罗娜" style="width: 250px; height: auto" />
 
 图：一般通过世界（服务器）修复[^1]力工——阿罗娜
 
