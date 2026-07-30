@@ -80,7 +80,7 @@ rss: false
     > 
     > 这些联想是我很难用语言结构来表达的，因此我感到很难做到诚实，我感到自己有隐瞒欺骗之嫌。人们使用的语言似乎并不是为我准备，可以将表达式无限写长（理论上）的编程语言，或者形式文法所形式化的自然语言（因为它们都允许无限层的嵌套结构）似乎才是适合我的语言。
 - 形式化方法
-  + 我正在刷 [Software Foundations](https://softwarefoundations.cis.upenn.edu/)，已基本完成 Logical Foundations 和 Programming Language Foundations 的机器判定题（`Admitted.` 数量≤10，两者在未修改时的 `Admitted.` 总数分别为415和269[^2]），正在做 Verified Functional Algorithms，进度可见 [Software-Foundations-Checklist](https://github.com/Unnamed2964/Software-Foundations-Checklist)
+  + 我正在刷 [Software Foundations](https://softwarefoundations.cis.upenn.edu/)，已基本完成 Logical Foundations、Programming Language Foundations 和 Verified Functional Algorithms 的机器判定题（`Admitted.` 数量≤10，三者在未修改时的 `Admitted.` 总数分别为415、269和232[^2]），正在做 Verified Functional Algorithms，进度可见 [Software-Foundations-Checklist](https://github.com/Unnamed2964/Software-Foundations-Checklist)
   + 数学式、公理系统式的逻辑系统建构是我日常生活中的少数的确定感来源，我很难做到从其他人能从他人获得确认的方式从他人的确认中获得确定感
   + 关于证明，我会想到的图景是从皮亚诺公理系统[^3]这样的最基础、没有争议的几条公理出发，逐步证明我们所熟知，被认为「理所当然」的加法和乘法的性质，（重新）建立起来算术大厦。证明正是在这一逻辑系统中砌起一块块砖块的过程。
   
@@ -112,7 +112,7 @@ rss: false
 - 若出现精神卫生危机：由我家里人决定并送医住院。
 
 [^1]: 我认为日常修复它的任何一个局部（如日常创作、过好每一天的生活），就是修复了。这个局部并不需要有什么重要性或显著性，这件事情也没有必要有什么戏剧性，反而是无聊甚至枯燥的。就像证明一个定理的任何一个小引理，都是证明这个定理的和其他证明 term 构成部分同等重要的一部分一样。
-[^2]: Logical Foundations 和 Programming Language Foundations 均以 Version 6.9.0 版本为准，完成的也是此版本。不同版本可能略有差异。
+[^2]: Logical Foundations 和 Programming Language Foundations 均以所完成的 Version 6.9.0 版本为准，Verified Functional Algorithms 以所完成的 Version 1.6.0 版本为准。不同版本的题目数可能略有差异。
 [^3]: Wikipedia: </br>
 [皮亚诺公理系统](https://zh.wikipedia.org/wiki/%E7%9A%AE%E4%BA%9A%E8%AF%BA%E5%85%AC%E7%90%86)</br>
 [Peano Axioms](https://en.wikipedia.org/wiki/Peano_axioms)
