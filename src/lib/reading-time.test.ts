@@ -36,15 +36,20 @@ describe('countReadableUnits', () => {
 });
 
 describe('estimateReadingTimeSeconds / format', () => {
-	it('formats minutes and seconds', () => {
-		expect(formatReadingTimeDuration(80)).toBe('1 分 20 秒');
-		expect(formatReadingTimeDuration(5)).toBe('0 分 5 秒');
+	it('uses on-demand units without false-precision seconds', () => {
+		expect(formatReadingTimeDuration(5)).toBe('5 秒');
+		expect(formatReadingTimeDuration(59)).toBe('59 秒');
+		expect(formatReadingTimeDuration(60)).toBe('1 分');
+		expect(formatReadingTimeDuration(80)).toBe('1 分');
+		expect(formatReadingTimeDuration(3599)).toBe('59 分');
+		expect(formatReadingTimeDuration(3600)).toBe('1 小时');
+		expect(formatReadingTimeDuration(6576)).toBe('1 小时 49 分');
 	});
 
 	it('returns a Chinese label for real prose', () => {
 		const body = '这是一段用于估算阅读时长的中文句子。'.repeat(40);
 		const label = formatReadingTimeLabel(`---\ntitle: t\n---\n${body}`);
-		expect(label).toMatch(/^本文预计阅读时长 \d+ 分 \d+ 秒$/);
+		expect(label).toMatch(/^本文预计阅读时长 (\d+ 秒|\d+ 分|\d+ 小时( \d+ 分)?)$/);
 		expect(estimateReadingTimeSeconds(`---\ntitle: t\n---\n${body}`)).toBeGreaterThan(0);
 	});
 
