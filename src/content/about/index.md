@@ -78,7 +78,7 @@ flowchart TD
 - 函数式编程
   + 我对允许无限嵌套从句的语言有好感，这也扩散到了 lambda expression 上
 - 形式化方法
-  + 我正在刷 [Software Foundations](https://softwarefoundations.cis.upenn.edu/)，已基本完成 Logical Foundations、Programming Language Foundations 和 Verified Functional Algorithms 的机器判定题（`Admitted.` 数量≤10，三者在未修改时的 `Admitted.` 总数分别为415、269和232[^2]），正在做 Verified Functional Algorithms，进度可见 [Unnamed2964/Software-Foundations-Checklist](https://github.com/Unnamed2964/Software-Foundations-Checklist)
+  + 我正在刷 [Software Foundations](https://softwarefoundations.cis.upenn.edu/)，已基本完成 Logical Foundations、Programming Language Foundations 和 Verified Functional Algorithms 的机器判定题（`Admitted.` 数量≤10，三者在未修改时的 `Admitted.` 总数分别为415、269和232[^2]），正在做 Verifiable C，进度可见 [Unnamed2964/Software-Foundations-Checklist](https://github.com/Unnamed2964/Software-Foundations-Checklist)
   + 关于证明，我会想到的图景是从皮亚诺公理系统[^3]这样的最基础、没有争议的几条公理出发，逐步证明我们所熟知，被认为「理所当然」的加法和乘法的性质，（重新）建立起来算术大厦。证明正是在这一逻辑系统中砌起一块块砖块的过程。
   + 其作为一个自治的秩序，和白日梦有着相通之处。而且其也有着自洽、与现实可以建立联系的优点。
 - ~~客家历史（「我不是客家人为什么要感兴趣这个」🥺）、犹太文化（「我是 goyim 为什么要感兴趣这个」🥺）~~
