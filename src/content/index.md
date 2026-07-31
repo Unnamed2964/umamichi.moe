@@ -15,7 +15,7 @@ rss: false
   <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=3638545&bvid=BV19s411R7Tb&cid=5820574&p=1&autoplay=false" scrolling="yes" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="100%" style="aspect-ratio: 1.5; max-height: 600px;" loading="lazy"></iframe>
   这也是希望能够借这一折腾的机会熟悉 CSS 和思考 UI 组件设计
   
-  ![誓死效忠 Microsoft](/imgs/shisixiaozhong-microsoft.jpg)
+  <img src="/imgs/shisixiaozhong-microsoft.jpg" alt="誓死效忠 Microsoft" style="width: 200px; height: auto" />
 - 上海地铁：导航栏的具有隐喻含义的图标的来源
 
   ![现实世界的上海地铁线路图的示例](/imgs/shanghai-metro-realworld-map-example-line-2.webp)
