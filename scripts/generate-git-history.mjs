@@ -155,13 +155,32 @@ function historyFileNameForEntryId(entryId) {
 
 /**
  * @param {string} patch
+ * @returns {[string, string] | null}
+ */
+function parseDiffGitPaths(patch) {
+	const line = patch.split('\n').find((entry) => entry.startsWith('diff --git a/'));
+	if (!line) {
+		return null;
+	}
+
+	const rest = line.slice('diff --git a/'.length);
+	const mid = rest.indexOf(' b/');
+	if (mid < 0) {
+		return null;
+	}
+
+	return [rest.slice(0, mid), rest.slice(mid + 3)];
+}
+
+/**
+ * @param {string} patch
  */
 function parsePathsFromPatch(patch) {
 	const renameFrom = patch.match(/^rename from (.+)$/m)?.[1]?.trim();
 	const renameTo = patch.match(/^rename to (.+)$/m)?.[1]?.trim();
 	const similarityRaw = patch.match(/^similarity index (\d+)%$/m)?.[1];
 	const similarity = similarityRaw ? Number(similarityRaw) : undefined;
-	const diffHeader = patch.match(/^diff --git a\/(.+?) b\/(.+)$/m);
+	const diffHeader = parseDiffGitPaths(patch);
 
 	if (renameFrom && renameTo) {
 		return {
@@ -173,18 +192,18 @@ function parsePathsFromPatch(patch) {
 	}
 
 	if (patch.includes('\nnew file mode ') || /^new file mode /m.test(patch)) {
-		const to = diffHeader?.[2];
+		const to = diffHeader?.[1];
 		return { status: 'A', to: to ?? undefined };
 	}
 
 	if (patch.includes('\ndeleted file mode ') || /^deleted file mode /m.test(patch)) {
-		const from = diffHeader?.[1];
+		const from = diffHeader?.[0];
 		return { status: 'D', from: from ?? undefined };
 	}
 
 	if (diffHeader) {
-		const from = diffHeader[1];
-		const to = diffHeader[2];
+		const from = diffHeader[0];
+		const to = diffHeader[1];
 		if (from !== to) {
 			return {
 				status: 'R',
