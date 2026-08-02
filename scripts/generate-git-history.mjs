@@ -1,3 +1,4 @@
+import { accessSync, constants } from 'node:fs';
 import { mkdir, readdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -10,12 +11,56 @@ const manifestPath = path.join(root, 'src', 'generated', 'git-history-manifest.j
 const COMMIT_MARKER = '__COMMIT__';
 const END_META_MARKER = '__ENDMETA__';
 
+/** Absolute paths only — avoid resolving `git` via a potentially writable PATH. */
+const GIT_BIN_CANDIDATES =
+	process.platform === 'win32'
+		? [
+				'C:\\Program Files\\Git\\cmd\\git.exe',
+				'C:\\Program Files\\Git\\bin\\git.exe',
+				'C:\\Program Files (x86)\\Git\\cmd\\git.exe',
+			]
+		: ['/usr/bin/git', '/bin/git', '/usr/local/bin/git', '/opt/homebrew/bin/git'];
+
+/**
+ * @returns {string | null}
+ */
+function resolveGitBin() {
+	const fromEnv = process.env.GIT_BIN;
+	if (typeof fromEnv === 'string' && path.isAbsolute(fromEnv)) {
+		try {
+			accessSync(fromEnv, constants.F_OK);
+			return fromEnv;
+		} catch {
+			return null;
+		}
+	}
+
+	for (const candidate of GIT_BIN_CANDIDATES) {
+		try {
+			accessSync(candidate, constants.F_OK);
+			return candidate;
+		} catch {
+			// try next trusted path
+		}
+	}
+
+	return null;
+}
+
+const gitBin = resolveGitBin();
+
 /**
  * @param {string[]} args
  * @param {{ cwd?: string }} [options]
  */
 function runGit(args, options = {}) {
-	const result = spawnSync('git', args, {
+	if (!gitBin) {
+		throw new Error(
+			`git executable not found in trusted paths (${GIT_BIN_CANDIDATES.join(', ')}). Set GIT_BIN to an absolute path if needed.`,
+		);
+	}
+
+	const result = spawnSync(gitBin, args, {
 		cwd: options.cwd ?? root,
 		encoding: 'utf8',
 		maxBuffer: 64 * 1024 * 1024,
@@ -34,7 +79,11 @@ function runGit(args, options = {}) {
 }
 
 function gitAvailable() {
-	const result = spawnSync('git', ['rev-parse', '--is-inside-work-tree'], {
+	if (!gitBin) {
+		return false;
+	}
+
+	const result = spawnSync(gitBin, ['rev-parse', '--is-inside-work-tree'], {
 		cwd: root,
 		encoding: 'utf8',
 	});
