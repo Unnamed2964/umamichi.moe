@@ -26,7 +26,12 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        # Sonar githubactions:S6505 — do not run arbitrary package lifecycle scripts on install.
+        run: npm ci --ignore-scripts
+
+      - name: Rebuild trusted native dependencies
+        # Explicitly run install scripts only for packages that need platform binaries.
+        run: npm rebuild sharp esbuild workerd
 
       - name: Install Playwright Chromium
         # Use the lockfile-installed CLI; avoid `npx` on-demand installs.
