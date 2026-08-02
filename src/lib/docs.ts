@@ -595,21 +595,17 @@ function buildSidebarTree(folderPath: string, folderStateMap: Map<string, Folder
 	};
 }
 
-export function buildDocsStructure(entries: DocEntry[], scannedContent: ScannedContent = scanContentFromDisk()): DocsStructure {
-	const docsById = new Map(entries.map((entry) => [entry.id, entry]));
-	const docDataById = new Map<string, { comment?: boolean; copyright?: CopyrightConfig; rawContent: string; routePath: string; sourcePath: string }>();
-	const entryRouteMap = new Map<string, string>();
+function seedFolderMaps(
+	folderPaths: string[],
+	rawFolderMetaMap: Map<string, RawFolderMeta>,
+): { folderMetaMap: Map<string, FolderMeta>; folderStateMap: Map<string, FolderState> } {
 	const folderMetaMap = new Map<string, FolderMeta>();
 	const folderStateMap = new Map<string, FolderState>();
-	const folderRoutes: FolderRoute[] = [];
-	const generatedFolderRoutes: GeneratedFolderRoute[] = [];
-	const articleRoutes: DocRoute[] = [];
-	const tagMap = new Map<string, DocListItem[]>();
 
-	for (const folderPath of scannedContent.folderPaths) {
+	for (const folderPath of folderPaths) {
 		const parentPath = getParentFolderPath(folderPath);
 		const parentMeta = parentPath === undefined ? undefined : folderMetaMap.get(parentPath);
-		const meta = resolveFolderMeta(folderPath, scannedContent.rawFolderMetaMap.get(folderPath), parentMeta);
+		const meta = resolveFolderMeta(folderPath, rawFolderMetaMap.get(folderPath), parentMeta);
 
 		folderMetaMap.set(folderPath, meta);
 		folderStateMap.set(folderPath, {
@@ -625,7 +621,7 @@ export function buildDocsStructure(entries: DocEntry[], scannedContent: ScannedC
 		});
 	}
 
-	for (const folderPath of scannedContent.folderPaths) {
+	for (const folderPath of folderPaths) {
 		const parentPath = getParentFolderPath(folderPath);
 
 		if (parentPath === undefined) {
@@ -635,7 +631,18 @@ export function buildDocsStructure(entries: DocEntry[], scannedContent: ScannedC
 		folderStateMap.get(parentPath)?.directChildFolders.push(folderPath);
 	}
 
-	const resolvedDocs: ResolvedDocMeta[] = scannedContent.sourceDocs.map((sourceDoc) => {
+	return { folderMetaMap, folderStateMap };
+}
+
+function resolveDocsIntoFolders(
+	sourceDocs: SourceDocMeta[],
+	docsById: Map<string, DocEntry>,
+	folderMetaMap: Map<string, FolderMeta>,
+	folderStateMap: Map<string, FolderState>,
+	docDataById: DocsStructure['docDataById'],
+	entryRouteMap: Map<string, string>,
+): ResolvedDocMeta[] {
+	return sourceDocs.map((sourceDoc) => {
 		const entry = docsById.get(sourceDoc.id);
 
 		if (!entry) {
@@ -679,6 +686,14 @@ export function buildDocsStructure(entries: DocEntry[], scannedContent: ScannedC
 
 		return resolvedDoc;
 	});
+}
+
+function finalizeFolderRoutes(folderStateMap: Map<string, FolderState>): {
+	folderRoutes: FolderRoute[];
+	generatedFolderRoutes: GeneratedFolderRoute[];
+} {
+	const folderRoutes: FolderRoute[] = [];
+	const generatedFolderRoutes: GeneratedFolderRoute[] = [];
 
 	for (const folderState of folderStateMap.values()) {
 		const childFolderItems = folderState.directChildFolders
@@ -711,6 +726,16 @@ export function buildDocsStructure(entries: DocEntry[], scannedContent: ScannedC
 		}
 	}
 
+	return { folderRoutes, generatedFolderRoutes };
+}
+
+function collectArticleAndTagMaps(resolvedDocs: ResolvedDocMeta[]): {
+	articleRoutes: DocRoute[];
+	tagMap: Map<string, DocListItem[]>;
+} {
+	const articleRoutes: DocRoute[] = [];
+	const tagMap = new Map<string, DocListItem[]>();
+
 	for (const resolvedDoc of resolvedDocs) {
 		if (!resolvedDoc.isIndex) {
 			articleRoutes.push({
@@ -732,6 +757,13 @@ export function buildDocsStructure(entries: DocEntry[], scannedContent: ScannedC
 		}
 	}
 
+	return { articleRoutes, tagMap };
+}
+
+function buildTopLevelNavigation(folderStateMap: Map<string, FolderState>): {
+	topLevelFolderTrees: Map<string, SidebarFolderNode>;
+	topLevelNavItems: TopLevelNavItem[];
+} {
 	const topLevelFolderTrees = new Map<string, SidebarFolderNode>();
 	const rootFolderState = folderStateMap.get('');
 	const topLevelNavSourceItems = [
@@ -756,7 +788,11 @@ export function buildDocsStructure(entries: DocEntry[], scannedContent: ScannedC
 			};
 		});
 
-	const tagRoutes = [...tagMap.entries()]
+	return { topLevelFolderTrees, topLevelNavItems };
+}
+
+function buildSortedTagRoutes(tagMap: Map<string, DocListItem[]>): TagRoute[] {
+	return [...tagMap.entries()]
 		.sort(([leftTag], [rightTag]) => leftTag.localeCompare(rightTag, 'zh-CN'))
 		.map(([tag, items]) => {
 			assertUniqueFixOrders(items, `Tag ${tag}`);
@@ -767,6 +803,28 @@ export function buildDocsStructure(entries: DocEntry[], scannedContent: ScannedC
 				tag,
 			};
 		});
+}
+
+export function buildDocsStructure(entries: DocEntry[], scannedContent: ScannedContent = scanContentFromDisk()): DocsStructure {
+	const docsById = new Map(entries.map((entry) => [entry.id, entry]));
+	const docDataById = new Map<string, { comment?: boolean; copyright?: CopyrightConfig; rawContent: string; routePath: string; sourcePath: string }>();
+	const entryRouteMap = new Map<string, string>();
+	const { folderMetaMap, folderStateMap } = seedFolderMaps(
+		scannedContent.folderPaths,
+		scannedContent.rawFolderMetaMap,
+	);
+	const resolvedDocs = resolveDocsIntoFolders(
+		scannedContent.sourceDocs,
+		docsById,
+		folderMetaMap,
+		folderStateMap,
+		docDataById,
+		entryRouteMap,
+	);
+	const { folderRoutes, generatedFolderRoutes } = finalizeFolderRoutes(folderStateMap);
+	const { articleRoutes, tagMap } = collectArticleAndTagMaps(resolvedDocs);
+	const { topLevelFolderTrees, topLevelNavItems } = buildTopLevelNavigation(folderStateMap);
+	const tagRoutes = buildSortedTagRoutes(tagMap);
 
 	return {
 		docDataById,
