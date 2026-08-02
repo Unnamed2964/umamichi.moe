@@ -1,11 +1,11 @@
 import { LuCalendar, LuClock } from 'react-icons/lu';
 
-type ArticleHeaderProps = {
+type ArticleHeaderProps = Readonly<{
 	title: string;
 	pubDate?: string;
 	readingTimeLabel?: string;
 	updatedDate?: string;
-};
+}>;
 
 export function ArticleHeader({
 	title,
