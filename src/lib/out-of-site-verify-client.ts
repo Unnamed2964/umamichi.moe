@@ -5,7 +5,7 @@ function spkiB64ToUint8Array(b64: string) {
 	const binary = atob(b64.trim());
 	const out = new Uint8Array(binary.length);
 	for (let i = 0; i < binary.length; i += 1) {
-		out[i] = binary.charCodeAt(i);
+		out[i] = binary.codePointAt(i)!;
 	}
 	return out;
 }
@@ -22,7 +22,7 @@ function base64UrlToUint8Array(value: string) {
 	const binary = atob(b64);
 	const out = new Uint8Array(binary.length);
 	for (let i = 0; i < binary.length; i += 1) {
-		out[i] = binary.charCodeAt(i);
+		out[i] = binary.codePointAt(i)!;
 	}
 	return out;
 }

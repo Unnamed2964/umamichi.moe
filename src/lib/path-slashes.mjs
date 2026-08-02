@@ -8,7 +8,7 @@
  */
 export function stripTrailingSlashes(value) {
 	let end = value.length;
-	while (end > 0 && value.charCodeAt(end - 1) === 47 /* / */) {
+	while (end > 0 && value.codePointAt(end - 1) === 47 /* / */) {
 		end -= 1;
 	}
 	return value.slice(0, end);
@@ -19,7 +19,7 @@ export function stripTrailingSlashes(value) {
  */
 export function stripLeadingSlashes(value) {
 	let start = 0;
-	while (start < value.length && value.charCodeAt(start) === 47 /* / */) {
+	while (start < value.length && value.codePointAt(start) === 47 /* / */) {
 		start += 1;
 	}
 	return value.slice(start);

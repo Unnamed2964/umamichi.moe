@@ -5,7 +5,7 @@ function utf8Bytes(value: string) {
 function bytesToBase64Url(bytes: Uint8Array) {
 	let binary = '';
 	for (let i = 0; i < bytes.length; i += 1) {
-		binary += String.fromCharCode(bytes[i]);
+		binary += String.fromCodePoint(bytes[i]);
 	}
 	const b64 = btoa(binary);
 	return b64.replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
