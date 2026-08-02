@@ -196,6 +196,55 @@ export function initSiteMobileMenu(): void {
 		closeMenu({ fromPopstate: true });
 	});
 
+	const toggleMenuFromButton = (toggleButton: Element) => {
+		const isCurrentlyOpen = toggleButton.getAttribute('aria-expanded') === 'true';
+
+		if (isCurrentlyOpen) {
+			closeMenu();
+			return;
+		}
+
+		openMenu();
+	};
+
+	const shouldCloseFromDismissTarget = (target: Element) => {
+		if (!isMenuOpen()) {
+			return false;
+		}
+
+		return Boolean(
+			target.closest('[data-site-mobile-dimmer]')
+			|| target.closest('[data-site-header]')
+			|| target.closest('main')
+			|| target.closest('footer'),
+		);
+	};
+
+	const shouldKeepMenuOpenForNavigation = (target: Element) => {
+		if (!target.closest('[data-site-menu-link]') || !isMenuOpen()) {
+			return false;
+		}
+
+		const menuLink = target.closest('a[href]');
+
+		if (!(menuLink instanceof HTMLAnchorElement)) {
+			return false;
+		}
+
+		try {
+			const url = new URL(menuLink.href, window.location.href);
+			const isSameOrigin = url.origin === window.location.origin;
+			const isSameLocation =
+				url.pathname === window.location.pathname
+				&& url.search === window.location.search
+				&& url.hash === window.location.hash;
+
+			return isSameOrigin && !isSameLocation;
+		} catch {
+			return false;
+		}
+	};
+
 	document.addEventListener('click', (event) => {
 		const target = event.target;
 
@@ -204,54 +253,22 @@ export function initSiteMobileMenu(): void {
 		}
 
 		const toggleButton = target.closest('[data-site-menu-toggle]');
-		const dimmer = target.closest('[data-site-mobile-dimmer]');
-		const pageHeader = target.closest('[data-site-header]');
-		const pageMain = target.closest('main');
-		const pageFooter = target.closest('footer');
 
 		if (toggleButton) {
-			const isCurrentlyOpen = toggleButton.getAttribute('aria-expanded') === 'true';
-
-			if (isCurrentlyOpen) {
-				closeMenu();
-			} else {
-				openMenu();
-			}
-
+			toggleMenuFromButton(toggleButton);
 			return;
 		}
 
-		if (
-			isMenuOpen()
-			&& (dimmer || pageHeader || pageMain || pageFooter)
-		) {
+		if (shouldCloseFromDismissTarget(target)) {
 			closeMenu();
 			return;
 		}
 
 		if (target.closest('[data-site-menu-link]') && isMenuOpen()) {
-			const menuLink = target.closest('a[href]');
-
-			if (menuLink instanceof HTMLAnchorElement) {
-				try {
-					const url = new URL(menuLink.href, window.location.href);
-
-					if (
-						url.origin === window.location.origin
-						&& (
-							url.pathname !== window.location.pathname
-							|| url.search !== window.location.search
-							|| url.hash !== window.location.hash
-						)
-					) {
-						return;
-					}
-				} catch {
-					// Fall through to close the menu.
-				}
+			if (!shouldKeepMenuOpenForNavigation(target)) {
+				closeMenu();
 			}
 
-			closeMenu();
 			return;
 		}
 
