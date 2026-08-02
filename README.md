@@ -87,6 +87,8 @@ npm run dev
 
 ### 出站链接校验（out-of-site）
 
+更完整的参数、签名与数据流说明见 [`docs/out-of-site-interstitial.md`](docs/out-of-site-interstitial.md)；全站 chrome 脚本模块图见 [`docs/site-chrome-clients.md`](docs/site-chrome-clients.md)。
+
 - `PUBLIC_OUT_OF_SITE_LINK_HMAC_KEY`
   - 用途：`/out-of-site/` 页面校验 `hash`（HMAC-SHA256，对称密钥）。
   - 可见性：前端可见（`PUBLIC_` 前缀）。
