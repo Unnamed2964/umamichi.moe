@@ -12,6 +12,9 @@ src/generated/
 # dependencies
 node_modules/
 
+# vitest coverage (lcov for Sonar)
+/coverage/
+
 # logs
 npm-debug.log*
 yarn-debug.log*
