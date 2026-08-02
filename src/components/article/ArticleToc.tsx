@@ -9,17 +9,12 @@ import {
 } from '../../lib/article-sidebar-link';
 import { filterArticleTocHeadings } from '../../lib/article-toc';
 
-type ArticleTocProps = Readonly<{
+type ArticleTocProps = {
 	headings: ArticleTocHeading[];
 	maxH?: string;
-}>;
+};
 
-type ArticleTocLinksProps = Readonly<{
-	headings: ArticleTocHeading[];
-	onNavigate?: () => void;
-}>;
-
-export function ArticleTocLinks({ headings, onNavigate }: ArticleTocLinksProps) {
+export function ArticleTocLinks({ headings }: { headings: ArticleTocHeading[] }) {
 	const items = filterArticleTocHeadings(headings);
 
 	return (
@@ -39,7 +34,6 @@ export function ArticleTocLinks({ headings, onNavigate }: ArticleTocLinksProps) 
 						data-toc-link={heading.slug}
 						className={getArticleSidebarLinkClassName(kind, false)}
 						style={getArticleSidebarIndentStyle(heading.depth, ARTICLE_TOC_BASE_DEPTH)}
-						onClick={() => onNavigate?.()}
 					>
 						{heading.text}
 					</a>
