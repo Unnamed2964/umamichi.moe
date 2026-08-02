@@ -61,7 +61,7 @@ export function canonicalize(value: JsonValue): JsonValue {
 
 	if (value && typeof value === 'object') {
 		return Object.keys(value)
-			.sort()
+			.sort((left, right) => left.localeCompare(right))
 			.reduce((result, key) => {
 				result[key] = canonicalize(value[key]);
 				return result;
