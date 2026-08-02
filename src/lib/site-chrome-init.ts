@@ -1,9 +1,11 @@
 import { initSiteAppearanceBeforeSwap } from './site-appearance-before-swap';
 import { initSiteAppearanceControls } from './site-appearance-client';
+import { initSiteCopyTools } from './site-copy-tools-client';
 import { initSiteHeaderOffset } from './site-header-offset-client';
 import { initSiteLensBorder } from './site-lens-border-client';
 import { initSiteMobileMenu } from './site-mobile-menu-client';
 import { initSiteMobileMenuRouteDefer } from './site-mobile-menu-route-defer';
+import { initSiteNavRunningLine } from './site-nav-running-line-client';
 import { initSiteRouteLoading } from './site-route-loading-client';
 import { initSiteSameDocumentTraverseGuard } from './site-same-document-traverse';
 import { initSiteThemeColorSync } from './site-theme-color-client';
@@ -20,4 +22,6 @@ export function initSiteChromeClients(): void {
 	initSiteMobileMenuRouteDefer();
 	initSiteRouteLoading();
 	initSiteLensBorder();
+	initSiteCopyTools();
+	initSiteNavRunningLine();
 }
