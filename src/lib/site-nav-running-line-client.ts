@@ -1,34 +1,19 @@
 /**
  * Metro-style running line alignment for header and mobile nav icons.
  */
-// Migrated from inline SiteChromeScripts; keep permissive while behavior stays gold.
-// @ts-nocheck
 import { stripTrailingSlashes } from './path-slashes.mjs';
+import { getMetroNavIconTone, type MetroNavIconTone } from './site-frame';
 import { onBeforePreparation, registerAfterSwap } from './view-transition-lifecycle';
 
 const INIT_KEY = '__siteNavRunningLineInit';
-
-export function initSiteNavRunningLine(): void {
-	if (typeof window === 'undefined' || (window as unknown as Record<string, boolean>)[INIT_KEY]) {
-		return;
-	}
-	(window as unknown as Record<string, boolean>)[INIT_KEY] = true;
-
-let navItems = [], navIcons = [], activeNavItem = null, runningLine = null, reverseRunningLine = null, siteHeader = null;
-let mobileNavItems = [], mobileNavIcons = [], mobileActiveNavItem = null, mobileRunningLine = null, mobileReverseRunningLine = null, mobileMenu = null;
-let navUpdateFrame = 0;
-let pendingWidthTransition = false;
-let fromWidth = null;
-let toWidth = null;
-let pendingNavigationPath = null;
 const transferIconBaselineY = 100;
 
-function normalizeNavPath(path) {
+function normalizeNavPath(path: string): string {
 	const trimmed = stripTrailingSlashes(path);
 	return trimmed || '/';
 }
 
-function isActiveNavHref(href, currentPath) {
+function isActiveNavHref(href: string | null, currentPath: string): boolean {
 	if (!href) {
 		return false;
 	}
@@ -43,155 +28,46 @@ function isActiveNavHref(href, currentPath) {
 	return normalizedCurrentPath === normalizedHref || normalizedCurrentPath.startsWith(`${normalizedHref}/`);
 }
 
-function syncPersistedHeaderNavState(currentPath) {
-	for (const link of document.querySelectorAll('[data-nav-item]')) {
-		if (!(link instanceof HTMLAnchorElement)) {
-			continue;
-		}
-
-		const active = isActiveNavHref(link.getAttribute('href'), currentPath);
-
-		if (active) {
-			link.setAttribute('data-nav-active-item', 'true');
-			link.setAttribute('aria-current', 'page');
-		} else {
-			link.removeAttribute('data-nav-active-item');
-			link.removeAttribute('aria-current');
-		}
-
-		link.style.removeProperty('color');
-		link.style.removeProperty('font-weight');
+function applyNavIconTone(navIcon: Element, tone: MetroNavIconTone): void {
+	if (!(navIcon instanceof HTMLElement)) {
+		return;
 	}
 
-	for (const link of document.querySelectorAll('[data-mobile-nav-item]')) {
-		if (!(link instanceof HTMLAnchorElement)) {
-			continue;
-		}
+	navIcon.dataset.navIconTone = tone;
 
-		const active = isActiveNavHref(link.getAttribute('href'), currentPath);
-
-		if (active) {
-			link.setAttribute('data-mobile-nav-active-item', 'true');
-			link.setAttribute('aria-current', 'page');
-		} else {
-			link.removeAttribute('data-mobile-nav-active-item');
-			link.removeAttribute('aria-current');
-		}
-
-		link.style.removeProperty('color');
-		link.style.removeProperty('font-weight');
+	if (tone === 'current') {
+		navIcon.dataset.navIconCurrent = 'true';
+	} else {
+		delete navIcon.dataset.navIconCurrent;
 	}
 
-	const desktopNavItems = Array.from(document.querySelectorAll('[data-nav-item]'));
-	const activeNavIndex = desktopNavItems.findIndex((item) => item.hasAttribute('data-nav-active-item'));
+	const svg = navIcon.querySelector('svg');
 
-	for (const [index, navIcon] of Array.from(document.querySelectorAll('[data-nav-icon]')).entries()) {
-		const tone = index === activeNavIndex
-			? 'current'
-			: activeNavIndex !== -1 && index > activeNavIndex
-				? 'future'
-				: 'past';
-
-		navIcon.setAttribute('data-nav-icon-tone', tone);
-
-		if (tone === 'current') {
-			navIcon.setAttribute('data-nav-icon-current', 'true');
-		} else {
-			navIcon.removeAttribute('data-nav-icon-current');
-		}
-
-		const svg = navIcon.querySelector('svg');
-
-		if (svg instanceof SVGElement) {
-			svg.style.color = tone === 'future'
-				? 'var(--site-nav-future-icon)'
-				: 'var(--site-nav-running-line-bg)';
-		}
-	}
-
-	for (const [index, navIcon] of Array.from(document.querySelectorAll('[data-mobile-nav-icon]')).entries()) {
-		const tone = index === activeNavIndex
-			? 'current'
-			: activeNavIndex !== -1 && index > activeNavIndex
-				? 'future'
-				: 'past';
-
-		const svg = navIcon.querySelector('svg');
-
-		if (svg instanceof SVGElement) {
-			svg.style.color = tone === 'future'
-				? 'var(--site-nav-future-icon)'
-				: 'var(--site-nav-running-line-bg)';
-		}
+	if (svg instanceof SVGElement) {
+		svg.style.color = tone === 'future'
+			? 'var(--site-nav-future-icon)'
+			: 'var(--site-nav-running-line-bg)';
 	}
 }
 
-function resolveNavTargetPath(event) {
-	if (event && 'to' in event && typeof event.to === 'string') {
-		return new URL(event.to, window.location.href).pathname;
+function syncLinkActiveState(
+	link: HTMLAnchorElement,
+	active: boolean,
+	activeDatasetKey: 'navActiveItem' | 'mobileNavActiveItem',
+): void {
+	if (active) {
+		link.dataset[activeDatasetKey] = 'true';
+		link.setAttribute('aria-current', 'page');
+	} else {
+		delete link.dataset[activeDatasetKey];
+		link.removeAttribute('aria-current');
 	}
 
-	return pendingNavigationPath ?? window.location.pathname;
+	link.style.removeProperty('color');
+	link.style.removeProperty('font-weight');
 }
 
-document.addEventListener('click', (event) => {
-	const target = event.target;
-
-	if (!(target instanceof Element)) {
-		return;
-	}
-
-	const anchor = target.closest('a[href]');
-
-	if (!(anchor instanceof HTMLAnchorElement)) {
-		return;
-	}
-
-	if (anchor.hasAttribute('download')) {
-		return;
-	}
-
-	const href = anchor.getAttribute('href');
-
-	if (!href || href.startsWith('#')) {
-		return;
-	}
-
-	if (anchor.target === '_blank' || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-		return;
-	}
-
-	let url;
-
-	try {
-		url = new URL(anchor.href, window.location.href);
-	} catch {
-		return;
-	}
-
-	if (url.origin !== window.location.origin) {
-		return;
-	}
-
-	pendingNavigationPath = url.pathname;
-}, true);
-
-function resolveNavElements() {
-	navItems = Array.from(document.querySelectorAll('[data-nav-item]'));
-	navIcons = Array.from(document.querySelectorAll('[data-nav-icon]'));
-	activeNavItem = document.querySelector('[data-nav-active-item]');
-	runningLine = document.querySelector('[data-nav-running-line]');
-	reverseRunningLine = document.querySelector('[data-nav-running-line-reverse]');
-	siteHeader = document.querySelector('[data-site-header]');
-	mobileNavItems = Array.from(document.querySelectorAll('[data-mobile-nav-item]'));
-	mobileNavIcons = Array.from(document.querySelectorAll('[data-mobile-nav-icon]'));
-	mobileActiveNavItem = document.querySelector('[data-mobile-nav-active-item]');
-	mobileRunningLine = document.querySelector('[data-mobile-nav-running-line]');
-	mobileReverseRunningLine = document.querySelector('[data-mobile-nav-running-line-reverse]');
-	mobileMenu = document.querySelector('[data-site-mobile-menu]');
-}
-
-function getSvgNavAnchorScreenPoint(svg) {
+function getSvgNavAnchorScreenPoint(svg: SVGSVGElement): DOMPoint | null {
 	const viewBox = svg.viewBox.baseVal;
 	const matrix = svg.getScreenCTM();
 
@@ -206,19 +82,147 @@ function getSvgNavAnchorScreenPoint(svg) {
 	return point.matrixTransform(matrix);
 }
 
-function updateNavRunningLine() {
-	navUpdateFrame = 0;
+export function initSiteNavRunningLine(): void {
+	if (typeof window === 'undefined' || (window as unknown as Record<string, boolean>)[INIT_KEY]) {
+		return;
+	}
+	(window as unknown as Record<string, boolean>)[INIT_KEY] = true;
 
-	if (siteHeader) {
-		const headerRect = siteHeader.getBoundingClientRect();
-		const runningLineRect = runningLine instanceof HTMLElement ? runningLine.getBoundingClientRect() : null;
-		const navBottomY = runningLineRect && runningLineRect.height > 0 ? runningLineRect.bottom : headerRect.bottom;
+	let navItems: Element[] = [];
+	let navIcons: Element[] = [];
+	let activeNavItem: Element | null = null;
+	let runningLine: HTMLElement | null = null;
+	let reverseRunningLine: HTMLElement | null = null;
+	let siteHeader: HTMLElement | null = null;
+	let mobileNavItems: Element[] = [];
+	let mobileNavIcons: Element[] = [];
+	let mobileActiveNavItem: Element | null = null;
+	let mobileRunningLine: HTMLElement | null = null;
+	let mobileReverseRunningLine: HTMLElement | null = null;
+	let mobileMenu: HTMLElement | null = null;
+	let navUpdateFrame = 0;
+	let pendingWidthTransition = false;
+	let fromWidth: number | null = null;
+	let toWidth: number | null = null;
+	let pendingNavigationPath: string | null = null;
 
+	const syncPersistedHeaderNavState = (currentPath: string): void => {
+		for (const link of document.querySelectorAll('[data-nav-item]')) {
+			if (!(link instanceof HTMLAnchorElement)) {
+				continue;
+			}
+
+			syncLinkActiveState(
+				link,
+				isActiveNavHref(link.getAttribute('href'), currentPath),
+				'navActiveItem',
+			);
+		}
+
+		for (const link of document.querySelectorAll('[data-mobile-nav-item]')) {
+			if (!(link instanceof HTMLAnchorElement)) {
+				continue;
+			}
+
+			syncLinkActiveState(
+				link,
+				isActiveNavHref(link.getAttribute('href'), currentPath),
+				'mobileNavActiveItem',
+			);
+		}
+
+		const desktopNavItems = Array.from(document.querySelectorAll('[data-nav-item]'));
+		const activeNavIndex = desktopNavItems.findIndex(
+			(item) => item instanceof HTMLElement && item.dataset.navActiveItem !== undefined,
+		);
+
+		for (const [index, navIcon] of Array.from(document.querySelectorAll('[data-nav-icon]')).entries()) {
+			applyNavIconTone(navIcon, getMetroNavIconTone(index, activeNavIndex));
+		}
+
+		for (const [index, navIcon] of Array.from(document.querySelectorAll('[data-mobile-nav-icon]')).entries()) {
+			const tone = getMetroNavIconTone(index, activeNavIndex);
+			const svg = navIcon.querySelector('svg');
+
+			if (svg instanceof SVGElement) {
+				svg.style.color = tone === 'future'
+					? 'var(--site-nav-future-icon)'
+					: 'var(--site-nav-running-line-bg)';
+			}
+		}
+	};
+
+	const resolveNavTargetPath = (event: Event): string => {
+		if ('to' in event && typeof event.to === 'string') {
+			return new URL(event.to, window.location.href).pathname;
+		}
+
+		return pendingNavigationPath ?? window.location.pathname;
+	};
+
+	document.addEventListener('click', (event) => {
+		const target = event.target;
+
+		if (!(target instanceof Element)) {
+			return;
+		}
+
+		const anchor = target.closest('a[href]');
+
+		if (!(anchor instanceof HTMLAnchorElement)) {
+			return;
+		}
+
+		if (anchor.hasAttribute('download')) {
+			return;
+		}
+
+		const href = anchor.getAttribute('href');
+
+		if (!href || href.startsWith('#')) {
+			return;
+		}
+
+		if (anchor.target === '_blank' || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+			return;
+		}
+
+		let url: URL;
+
+		try {
+			url = new URL(anchor.href, window.location.href);
+		} catch {
+			return;
+		}
+
+		if (url.origin !== window.location.origin) {
+			return;
+		}
+
+		pendingNavigationPath = url.pathname;
+	}, true);
+
+	const resolveNavElements = (): void => {
+		navItems = Array.from(document.querySelectorAll('[data-nav-item]'));
+		navIcons = Array.from(document.querySelectorAll('[data-nav-icon]'));
+		activeNavItem = document.querySelector('[data-nav-active-item]');
+		runningLine = document.querySelector('[data-nav-running-line]');
+		reverseRunningLine = document.querySelector('[data-nav-running-line-reverse]');
+		siteHeader = document.querySelector('[data-site-header]');
+		mobileNavItems = Array.from(document.querySelectorAll('[data-mobile-nav-item]'));
+		mobileNavIcons = Array.from(document.querySelectorAll('[data-mobile-nav-icon]'));
+		mobileActiveNavItem = document.querySelector('[data-mobile-nav-active-item]');
+		mobileRunningLine = document.querySelector('[data-mobile-nav-running-line]');
+		mobileReverseRunningLine = document.querySelector('[data-mobile-nav-running-line-reverse]');
+		mobileMenu = document.querySelector('[data-site-mobile-menu]');
+	};
+
+	const updateDesktopIcons = (navBottomY: number): void => {
 		navIcons.forEach((navIcon, index) => {
 			const navItem = navItems[index];
 			const svg = navIcon.querySelector('svg');
 
-			if (!navItem || !svg) {
+			if (!(navItem instanceof HTMLElement) || !(navIcon instanceof HTMLElement) || !(svg instanceof SVGSVGElement)) {
 				return;
 			}
 
@@ -233,9 +237,13 @@ function updateNavRunningLine() {
 				navIcon.style.transform = `translate(${anchorX - baselinePoint.x}px, ${navBottomY - baselinePoint.y}px)`;
 			}
 		});
-	}
+	};
 
-	if (activeNavItem && runningLine && siteHeader) {
+	const updateDesktopRunningLine = (): void => {
+		if (!(activeNavItem instanceof HTMLElement) || !runningLine || !siteHeader) {
+			return;
+		}
+
 		const rect = activeNavItem.getBoundingClientRect();
 		const headerRect = siteHeader.getBoundingClientRect();
 		const anchorX = (rect.left + rect.right) / 2;
@@ -252,7 +260,7 @@ function updateNavRunningLine() {
 					return;
 				}
 
-				const cleanup = (event) => {
+				const cleanup = (event: TransitionEvent) => {
 					if (event.propertyName !== 'width') {
 						return;
 					}
@@ -274,9 +282,13 @@ function updateNavRunningLine() {
 			reverseRunningLine.style.left = `${nextWidth}px`;
 			reverseRunningLine.style.width = `${headerRect.right - anchorX}px`;
 		}
-	}
+	};
 
-	if (mobileMenu instanceof HTMLElement) {
+	const updateMobileRunningLine = (): void => {
+		if (!(mobileMenu instanceof HTMLElement)) {
+			return;
+		}
+
 		const menuRect = mobileMenu.getBoundingClientRect();
 
 		if (menuRect.width === 0 && menuRect.height === 0) {
@@ -292,7 +304,7 @@ function updateNavRunningLine() {
 			const navItem = mobileNavItems[index];
 			const svg = navIcon.querySelector('svg');
 
-			if (!navItem || !svg) {
+			if (!(navItem instanceof HTMLElement) || !(navIcon instanceof HTMLElement) || !(svg instanceof SVGSVGElement)) {
 				return;
 			}
 
@@ -308,7 +320,7 @@ function updateNavRunningLine() {
 			}
 		});
 
-		if (mobileActiveNavItem && mobileRunningLine) {
+		if (mobileActiveNavItem instanceof HTMLElement && mobileRunningLine) {
 			const rect = mobileActiveNavItem.getBoundingClientRect();
 			const anchorY = (rect.top + rect.bottom) / 2;
 
@@ -319,37 +331,50 @@ function updateNavRunningLine() {
 				mobileReverseRunningLine.style.height = `${menuRect.bottom - anchorY}px`;
 			}
 		}
-	}
-}
+	};
 
-function scheduleNavRunningLineUpdate() {
-	if (!navUpdateFrame) {
-		navUpdateFrame = requestAnimationFrame(updateNavRunningLine);
-	}
-}
+	const updateNavRunningLine = (): void => {
+		navUpdateFrame = 0;
 
-resolveNavElements();
-syncPersistedHeaderNavState(window.location.pathname);
-scheduleNavRunningLineUpdate();
+		if (siteHeader) {
+			const headerRect = siteHeader.getBoundingClientRect();
+			const runningLineRect = runningLine instanceof HTMLElement ? runningLine.getBoundingClientRect() : null;
+			const navBottomY = runningLineRect && runningLineRect.height > 0 ? runningLineRect.bottom : headerRect.bottom;
+			updateDesktopIcons(navBottomY);
+		}
 
-onBeforePreparation((event) => {
-	const targetPath = resolveNavTargetPath(event);
-	pendingNavigationPath = null;
-	syncPersistedHeaderNavState(targetPath);
+		updateDesktopRunningLine();
+		updateMobileRunningLine();
+	};
+
+	const scheduleNavRunningLineUpdate = (): void => {
+		if (!navUpdateFrame) {
+			navUpdateFrame = requestAnimationFrame(updateNavRunningLine);
+		}
+	};
+
 	resolveNavElements();
-
-	const currentWidth = runningLine instanceof HTMLElement ? runningLine.getBoundingClientRect().width : 0;
-	fromWidth = Number.isFinite(currentWidth) ? currentWidth : 0;
-	pendingWidthTransition = true;
-});
-
-registerAfterSwap(() => {
 	syncPersistedHeaderNavState(window.location.pathname);
-	resolveNavElements();
 	scheduleNavRunningLineUpdate();
-});
-document.addEventListener('site:nav-layout-change', scheduleNavRunningLineUpdate);
 
-window.addEventListener('resize', scheduleNavRunningLineUpdate, { passive: true });
-window.visualViewport?.addEventListener('resize', scheduleNavRunningLineUpdate, { passive: true });
+	onBeforePreparation((event) => {
+		const targetPath = resolveNavTargetPath(event);
+		pendingNavigationPath = null;
+		syncPersistedHeaderNavState(targetPath);
+		resolveNavElements();
+
+		const currentWidth = runningLine instanceof HTMLElement ? runningLine.getBoundingClientRect().width : 0;
+		fromWidth = Number.isFinite(currentWidth) ? currentWidth : 0;
+		pendingWidthTransition = true;
+	});
+
+	registerAfterSwap(() => {
+		syncPersistedHeaderNavState(window.location.pathname);
+		resolveNavElements();
+		scheduleNavRunningLineUpdate();
+	});
+	document.addEventListener('site:nav-layout-change', scheduleNavRunningLineUpdate);
+
+	window.addEventListener('resize', scheduleNavRunningLineUpdate, { passive: true });
+	window.visualViewport?.addEventListener('resize', scheduleNavRunningLineUpdate, { passive: true });
 }
