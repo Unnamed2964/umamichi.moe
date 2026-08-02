@@ -184,7 +184,7 @@ html[data-route-loading] .site-route-progress__bar--2 {
 }
 
 .site-emoji {
-	font-family: 'Noto Color Emoji Web';
+	font-family: 'Noto Color Emoji Web', emoji, sans-serif;
 }
 
 .site-button[hidden] {

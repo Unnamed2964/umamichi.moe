@@ -12,7 +12,7 @@ export function mergeExternalAnchorRel(existing) {
 	tokens.delete('nofollow');
 	tokens.add('noopener');
 	tokens.add('noreferrer');
-	return [...tokens].sort().join(' ');
+	return [...tokens].sort((left, right) => left.localeCompare(right)).join(' ');
 }
 
 /**
