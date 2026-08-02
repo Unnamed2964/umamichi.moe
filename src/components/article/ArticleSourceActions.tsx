@@ -1,11 +1,11 @@
 import { FaGithub } from 'react-icons/fa6';
 import { LuChevronDown, LuCopy, LuHistory } from 'react-icons/lu';
 
-type ArticleSourceActionsProps = {
+type ArticleSourceActionsProps = Readonly<{
 	sourceMarkdown: string;
 	sourceUrl: string;
 	historyUrl?: string;
-};
+}>;
 
 export default function ArticleSourceActions({
 	sourceMarkdown,

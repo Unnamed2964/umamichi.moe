@@ -20,11 +20,15 @@ export function getMetroNavIconTone(
 	index: number,
 	activeNavIndex: number,
 ): MetroNavIconTone {
-	return index === activeNavIndex
-		? 'current'
-		: activeNavIndex !== -1 && index > activeNavIndex
-			? 'future'
-			: 'past';
+	if (index === activeNavIndex) {
+		return 'current';
+	}
+
+	if (activeNavIndex !== -1 && index > activeNavIndex) {
+		return 'future';
+	}
+
+	return 'past';
 }
 
 export function getActiveNavIndex(

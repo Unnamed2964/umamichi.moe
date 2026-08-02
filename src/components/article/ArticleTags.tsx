@@ -1,8 +1,8 @@
 import type { ArticleTag } from '../../lib/article';
 
-type ArticleTagsProps = {
+type ArticleTagsProps = Readonly<{
 	tags?: ArticleTag[];
-};
+}>;
 
 export function ArticleTags({ tags = [] }: ArticleTagsProps) {
 	if (tags.length === 0) {

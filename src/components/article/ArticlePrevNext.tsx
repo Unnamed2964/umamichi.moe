@@ -1,16 +1,16 @@
 import type { AdjacentArticleLink } from '../../lib/article';
 
-type ArticlePrevNextProps = {
+type ArticlePrevNextProps = Readonly<{
 	previousPost?: AdjacentArticleLink;
 	nextPost?: AdjacentArticleLink;
 	showDivider?: boolean;
-};
+}>;
 
 function ArticleNavCard({
 	href,
 	title,
 	direction,
-}: AdjacentArticleLink & { direction: 'previous' | 'next' }) {
+}: Readonly<AdjacentArticleLink & { direction: 'previous' | 'next' }>) {
 	const isNext = direction === 'next';
 
 	return (
