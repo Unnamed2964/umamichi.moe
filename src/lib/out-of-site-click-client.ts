@@ -1,5 +1,6 @@
 import { buildCanonicalOutOfSiteMessage } from './out-of-site-payload.mjs';
 import { hmacSha256Base64Url } from './out-of-site-giscus-hmac';
+import { stripTrailingSlashes } from './path-slashes.mjs';
 
 const INIT_KEY = '__outOfSiteClickInit';
 
@@ -68,7 +69,7 @@ export function initOutOfSiteClickHandler(options: { outOfSiteLinkHmacKey: strin
 			}
 
 			if (resolved.origin === window.location.origin) {
-				const path = resolved.pathname.replace(/\/+$/, '') || '/';
+				const path = stripTrailingSlashes(resolved.pathname) || '/';
 				if (path === '/out-of-site' || resolved.pathname.startsWith('/out-of-site/')) {
 					return;
 				}

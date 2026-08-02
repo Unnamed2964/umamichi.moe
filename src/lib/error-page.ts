@@ -1,5 +1,6 @@
 import { getCollection } from 'astro:content';
 import { buildDocsStructure } from './docs';
+import { stripEdgeSlashes } from './path-slashes.mjs';
 
 const ERROR_PAGE_PATHS = new Set(['/404/', '/500/', '/502/', '/503/', '/504/']);
 
@@ -8,7 +9,7 @@ function normalizePathname(pathname: string) {
 		return '/';
 	}
 
-	const trimmed = pathname.replace(/^\/+|\/+$/g, '');
+	const trimmed = stripEdgeSlashes(pathname);
 
 	return trimmed ? `/${trimmed}/` : '/';
 }

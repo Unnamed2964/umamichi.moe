@@ -1,3 +1,5 @@
+import { stripTrailingSlashes } from './path-slashes.mjs';
+
 export type MetroNavIconTone = 'past' | 'current' | 'future';
 
 export function isActiveLink(href: string, currentPath: string): boolean {
@@ -5,8 +7,8 @@ export function isActiveLink(href: string, currentPath: string): boolean {
 		return currentPath === '/';
 	}
 
-	const normalizedHref = href.replace(/\/+$/, '');
-	const normalizedCurrentPath = currentPath.replace(/\/+$/, '');
+	const normalizedHref = stripTrailingSlashes(href);
+	const normalizedCurrentPath = stripTrailingSlashes(currentPath);
 
 	return (
 		normalizedCurrentPath === normalizedHref ||

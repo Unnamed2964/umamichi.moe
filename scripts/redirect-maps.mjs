@@ -1,3 +1,5 @@
+import { stripLeadingSlashes, stripTrailingSlashes } from '../src/lib/path-slashes.mjs';
+
 /**
  * MkDocs-style content doc path → site route (directory URL with trailing slash).
  * @param {string} docPath relative to src/content, e.g. `blog/post.md`
@@ -43,8 +45,8 @@ export function isExternalRedirectTarget(target) {
  * @param {string} relativePath
  */
 export function resolveContentPath(contentRoot, relativePath) {
-	const root = contentRoot.replace(/\\/g, '/').replace(/\/+$/u, '');
-	const rel = relativePath.replace(/\\/g, '/').replace(/^\/+/u, '');
+	const root = stripTrailingSlashes(contentRoot.replace(/\\/g, '/'));
+	const rel = stripLeadingSlashes(relativePath.replace(/\\/g, '/'));
 	return `${root}/${rel}`;
 }
 
