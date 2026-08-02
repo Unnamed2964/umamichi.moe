@@ -21,7 +21,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install wayback-machine-archiver
-        run: pip install wayback-machine-archiver==3.5.0
+        run: pip install --only-binary=:all: wayback-machine-archiver==3.5.0
 
       - name: Submit sitemap URLs to Internet Archive
         run: |
