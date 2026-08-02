@@ -5,7 +5,7 @@ import { stripLeadingSlashes, stripTrailingSlashes } from '../src/lib/path-slash
  * @param {string} docPath relative to src/content, e.g. `blog/post.md`
  */
 export function contentDocPathToRoutePath(docPath) {
-	const normalized = docPath.replace(/\\/g, '/').replace(/^\.\//, '');
+	const normalized = docPath.replaceAll('\\', '/').replace(/^\.\//, '');
 	const withoutExt = normalized.replace(/\.mdx?$/u, '');
 
 	if (withoutExt === 'index') {
@@ -45,8 +45,8 @@ export function isExternalRedirectTarget(target) {
  * @param {string} relativePath
  */
 export function resolveContentPath(contentRoot, relativePath) {
-	const root = stripTrailingSlashes(contentRoot.replace(/\\/g, '/'));
-	const rel = stripLeadingSlashes(relativePath.replace(/\\/g, '/'));
+	const root = stripTrailingSlashes(contentRoot.replaceAll('\\', '/'));
+	const rel = stripLeadingSlashes(relativePath.replaceAll('\\', '/'));
 	return `${root}/${rel}`;
 }
 
