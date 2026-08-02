@@ -7,9 +7,9 @@ import type { ArticleTocHeading } from '../../lib/article-toc';
 import { filterArticleTocHeadings } from '../../lib/article-toc';
 import { ArticleTocLinks } from './ArticleToc';
 
-type ArticleMobileTocProps = {
+type ArticleMobileTocProps = Readonly<{
 	headings: ArticleTocHeading[];
-};
+}>;
 
 const DESKTOP_TOC_MQ = '(min-width: 80rem)';
 const PRESERVE_SCROLLBAR_REASON = 'article-mobile-toc';
@@ -18,6 +18,7 @@ export default function ArticleMobileToc({ headings }: ArticleMobileTocProps) {
 	const items = filterArticleTocHeadings(headings);
 	const titleId = useId();
 	const closeButtonRef = useRef<HTMLButtonElement>(null);
+	const dialogRef = useRef<HTMLDialogElement | null>(null);
 	const [open, setOpen] = useState(false);
 	const { mounted, isOpen, overlayRef } = useOverlayPresence(open);
 
@@ -72,20 +73,17 @@ export default function ArticleMobileToc({ headings }: ArticleMobileTocProps) {
 	}, [isOpen]);
 
 	useEffect(() => {
-		if (!open) {
+		const dialog = dialogRef.current;
+		if (!dialog) {
 			return;
 		}
 
-		const onKeyDown = (event: KeyboardEvent) => {
-			if (event.key === 'Escape') {
-				event.preventDefault();
-				setOpen(false);
-			}
-		};
-
-		window.addEventListener('keydown', onKeyDown);
-		return () => window.removeEventListener('keydown', onKeyDown);
-	}, [open]);
+		if (isOpen && !dialog.open) {
+			dialog.showModal();
+		} else if (!isOpen && dialog.open) {
+			dialog.close();
+		}
+	}, [isOpen, mounted]);
 
 	useEffect(() => {
 		const hideForViewTransition = () => {
@@ -96,7 +94,7 @@ export default function ArticleMobileToc({ headings }: ArticleMobileTocProps) {
 
 		const showAfterViewTransition = () => {
 			const reveal = () => {
-				if (document.documentElement.hasAttribute('data-astro-transition')) {
+				if (document.documentElement.dataset.astroTransition !== undefined) {
 					return false;
 				}
 				delete document.documentElement.dataset.mobileTocVtHide;
@@ -137,55 +135,50 @@ export default function ArticleMobileToc({ headings }: ArticleMobileTocProps) {
 
 	const close = () => setOpen(false);
 
+	const setDialogRefs = (node: HTMLDialogElement | null) => {
+		dialogRef.current = node;
+		(overlayRef as RefObject<HTMLDialogElement | null>).current = node;
+	};
+
 	const overlay =
 		mounted &&
 		createPortal(
-			<>
-				<div
-					className={withOverlayOpen('article-mobile-toc-backdrop', isOpen)}
-					role="presentation"
-					onClick={close}
-				/>
-				<div
-					ref={overlayRef as RefObject<HTMLDivElement>}
-					className={withOverlayOpen('article-mobile-toc-sheet', isOpen)}
-					role="dialog"
-					aria-modal="true"
-					aria-labelledby={titleId}
-					data-mobile-toc-sheet
-				>
-					<header className="article-mobile-toc-sheet__header">
-						<p id={titleId} className="article-mobile-toc-sheet__title">
-							目录
-						</p>
-						<button
-							ref={closeButtonRef}
-							type="button"
-							className="article-mobile-toc-sheet__close site-icon-button"
-							aria-label="关闭目录"
-							onClick={close}
-						>
-							<LuX aria-hidden="true" focusable="false" />
-						</button>
-					</header>
-
-					<nav
-						aria-label="文章目录"
-						data-toc
-						className="article-mobile-toc-sheet__nav"
-						onClick={(event) => {
-							const link = (event.target as HTMLElement).closest('[data-toc-link]');
-							if (link) {
-								close();
-							}
-						}}
+			<dialog
+				ref={setDialogRefs}
+				className={withOverlayOpen('article-mobile-toc-sheet', isOpen)}
+				aria-labelledby={titleId}
+				data-mobile-toc-sheet
+				onCancel={(event) => {
+					event.preventDefault();
+					close();
+				}}
+				onClick={(event) => {
+					if (event.target === event.currentTarget) {
+						close();
+					}
+				}}
+			>
+				<header className="article-mobile-toc-sheet__header">
+					<p id={titleId} className="article-mobile-toc-sheet__title">
+						目录
+					</p>
+					<button
+						ref={closeButtonRef}
+						type="button"
+						className="article-mobile-toc-sheet__close site-icon-button"
+						aria-label="关闭目录"
+						onClick={close}
 					>
-						<div className="article-mobile-toc-sheet__scroll">
-							<ArticleTocLinks headings={items} />
-						</div>
-					</nav>
-				</div>
-			</>,
+						<LuX aria-hidden="true" focusable="false" />
+					</button>
+				</header>
+
+				<nav aria-label="文章目录" data-toc className="article-mobile-toc-sheet__nav">
+					<div className="article-mobile-toc-sheet__scroll">
+						<ArticleTocLinks headings={items} onNavigate={close} />
+					</div>
+				</nav>
+			</dialog>,
 			document.body,
 		);
 
