@@ -1,6 +1,6 @@
-type ArticleHeroImageProps = {
+type ArticleHeroImageProps = Readonly<{
 	src: string;
-};
+}>;
 
 export function ArticleHeroImage({ src }: ArticleHeroImageProps) {
 	return (

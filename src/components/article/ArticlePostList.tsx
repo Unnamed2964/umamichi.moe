@@ -9,12 +9,12 @@ import {
 
 export type ArticleSidebarTree = SidebarFolderNode;
 
-type ArticlePostListProps = {
+type ArticlePostListProps = Readonly<{
 	currentPath: string;
 	currentPostId?: string;
 	tree?: ArticleSidebarTree;
 	variant?: 'desktop' | 'mobile';
-};
+}>;
 
 function isCurrentLink(href: string, currentPath: string, currentPostId?: string, nodeId?: string) {
 	if (currentPostId && nodeId) {

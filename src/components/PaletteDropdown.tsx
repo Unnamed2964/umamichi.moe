@@ -4,12 +4,12 @@ import {
 	paletteManifest,
 } from '../lib/site-palette';
 
-type PaletteDropdownProps = {
+type PaletteDropdownProps = Readonly<{
 	className?: string;
 	wrapClassName?: string;
-};
+}>;
 
-function PaletteMenuLabel({ swatch, text }: { swatch: string; text: string }) {
+function PaletteMenuLabel({ swatch, text }: Readonly<{ swatch: string; text: string }>) {
 	return (
 		<span className="site-palette-menu-item">
 			<span

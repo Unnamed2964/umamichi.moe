@@ -1,8 +1,8 @@
 import { COPYRIGHT_CC_LICENSES, type CopyrightConfig } from '../../lib/copyright';
 
-type ArticleCopyrightProps = {
+type ArticleCopyrightProps = Readonly<{
 	copyright?: CopyrightConfig;
-};
+}>;
 
 export function ArticleCopyright({ copyright }: ArticleCopyrightProps) {
 	if (!copyright) {
