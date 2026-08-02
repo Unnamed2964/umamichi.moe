@@ -219,10 +219,32 @@ function parsePathsFromPatch(patch) {
 }
 
 /**
+ * Keep body; drop leading newlines; collapse trailing newlines to one.
+ * @param {string} patch
+ */
+function normalizePatchNewlines(patch) {
+	let end = patch.length;
+	while (end > 0 && patch.charCodeAt(end - 1) === 10 /* \n */) {
+		end -= 1;
+	}
+
+	let start = 0;
+	while (start < end && patch.charCodeAt(start) === 10 /* \n */) {
+		start += 1;
+	}
+
+	if (start >= end) {
+		return '';
+	}
+
+	return `${patch.slice(start, end)}\n`;
+}
+
+/**
  * @param {string} output
  */
 function parseFollowPatchLog(output) {
-	const normalized = output.replace(/\r\n/g, '\n');
+	const normalized = output.replaceAll('\r\n', '\n');
 	if (!normalized.trim()) {
 		return [];
 	}
@@ -248,10 +270,10 @@ function parseFollowPatchLog(output) {
 				continue;
 			}
 			metaBlock = trimmed.slice(0, endOnly);
-			patch = trimmed.slice(endOnly + END_META_MARKER.length + 2).replace(/^\n/, '');
+			patch = normalizePatchNewlines(trimmed.slice(endOnly + END_META_MARKER.length + 2));
 		} else {
 			metaBlock = trimmed.slice(0, metaEnd);
-			patch = trimmed.slice(metaEnd + END_META_MARKER.length + 2).replace(/^\n/, '');
+			patch = normalizePatchNewlines(trimmed.slice(metaEnd + END_META_MARKER.length + 2));
 		}
 
 		// Drop trailing next-commit leakage — patches end before next marker (already split)
@@ -264,13 +286,12 @@ function parseFollowPatchLog(output) {
 			continue;
 		}
 
-		const cleanPatch = patch.replace(/\n+$/, '\n').replace(/^\n+/, '');
 		commits.push({
 			hash,
 			committedAt,
 			subject,
-			paths: parsePathsFromPatch(cleanPatch),
-			patch: cleanPatch,
+			paths: parsePathsFromPatch(patch),
+			patch,
 		});
 	}
 
