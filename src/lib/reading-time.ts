@@ -5,14 +5,14 @@ const LATIN_WORDS_PER_MINUTE = 230;
 
 const FRONTMATTER_RE = /^---\r?\n[\s\S]*?\r?\n---\r?\n?/;
 const FENCED_CODE_RE = /```[\s\S]*?```|~~~[\s\S]*?~~~/g;
-const INLINE_CODE_RE = /`[^`]+`/g;
-const IMAGE_RE = /!\[[^\]]*\]\([^)]*\)/g;
-const LINK_RE = /\[([^\]]*)\]\([^)]*\)/g;
-const HTML_TAG_RE = /<[^>]+>/g;
+const INLINE_CODE_RE = /`[^`\r\n]+`/g;
+const IMAGE_RE = /!\[[^\]\r\n]*\]\([^)\r\n]*\)/g;
+const LINK_RE = /\[([^\]\r\n]*)\]\([^)\r\n]*\)/g;
+const HTML_TAG_RE = /<[^>\r\n]+>/g;
 const HEADING_MARK_RE = /^#{1,6}\s+/gm;
 const BLOCKQUOTE_MARK_RE = /^>\s?/gm;
 const EMPHASIS_MARK_RE = /[*_~]+/g;
-const FOOTNOTE_REF_RE = /\[\^[^\]]*\]/g;
+const FOOTNOTE_REF_RE = /\[\^[^\]]*?\]/g;
 const CJK_RE = /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/g;
 const LATIN_WORD_RE = /[A-Za-z0-9]+(?:'[A-Za-z0-9]+)*/g;
 
