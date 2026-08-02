@@ -58,19 +58,7 @@ function replaceWithErrorRecovery(path: '/404/' | '/500/' | '/503/') {
 	window.location.replace(path);
 }
 
-export type OutOfSiteVerifyEnv = {
-	ed25519SpkiB64: string;
-	outOfSiteLinkHmacKey: string;
-};
-
-export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
-	const { ed25519SpkiB64, outOfSiteLinkHmacKey } = env;
-	const params = new URLSearchParams(window.location.search);
-	const to = params.get('to');
-	const sig = params.get('sig');
-	const kind = params.get('kind');
-	const hash = params.get('hash');
-
+function bindProceedControls() {
 	const closeButton = document.getElementById('out-of-site-close');
 	if (closeButton instanceof HTMLButtonElement) {
 		closeButton.addEventListener('click', () => {
@@ -80,6 +68,7 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 
 	const proceed = document.getElementById('out-of-site-proceed');
 	let proceedDestination: string | null = null;
+
 	if (proceed instanceof HTMLAnchorElement) {
 		proceed.addEventListener('click', (event) => {
 			if (!proceedDestination) {
@@ -89,12 +78,14 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 			window.location.replace(proceedDestination);
 		});
 	}
+
 	const setProceedButtonTone = (tone: 'secondary' | 'danger') => {
 		if (proceed instanceof HTMLAnchorElement) {
 			proceed.classList.toggle('secondary-button', tone === 'secondary');
 			proceed.classList.toggle('danger-button', tone === 'danger');
 		}
 	};
+
 	const lockProceed = () => {
 		proceedDestination = null;
 		if (proceed instanceof HTMLAnchorElement) {
@@ -108,10 +99,11 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 			setProceedButtonTone('secondary');
 		}
 	};
-	const showProceed = (tone: 'secondary' | 'danger' = 'secondary') => {
-		proceedDestination = destination.href;
+
+	const showProceed = (href: string, tone: 'secondary' | 'danger' = 'secondary') => {
+		proceedDestination = href;
 		if (proceed instanceof HTMLAnchorElement) {
-			proceed.href = destination.href;
+			proceed.href = href;
 			proceed.removeAttribute('target');
 			proceed.removeAttribute('rel');
 			proceed.removeAttribute('aria-disabled');
@@ -121,28 +113,107 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 			proceed.hidden = false;
 		}
 	};
-	lockProceed();
 
-	if (!to || !kind) {
-		replaceWithErrorRecovery('/404/');
-		return;
-	}
+	return { lockProceed, showProceed };
+}
 
-	if (kind !== 'ssr' && kind !== 'giscus') {
-		replaceWithErrorRecovery('/404/');
-		return;
-	}
-
+function parseHttpDestination(to: string): URL | null {
 	let destination: URL;
 	try {
 		destination = new URL(to);
 	} catch (err) {
 		console.log('[out-of-site]', 'invalid to URL', err);
+		return null;
+	}
+
+	if (destination.protocol !== 'http:' && destination.protocol !== 'https:') {
+		return null;
+	}
+
+	return destination;
+}
+
+type Ed25519VerifyResult = 'verified' | 'unverified' | 'error-404' | 'error-500' | 'error-503';
+
+async function verifyOptionalEd25519Sig(
+	sig: string | null,
+	destination: URL,
+	ed25519SpkiB64: string,
+): Promise<Ed25519VerifyResult> {
+	if (!sig) {
+		return 'unverified';
+	}
+
+	if (!ed25519SpkiB64) {
+		return 'error-503';
+	}
+
+	setStatus('正在校验签名…');
+
+	const message = buildCanonicalOutOfSiteMessage({
+		kind: 'ssr',
+		toHref: destination.href,
+	});
+	const messageBytes = new TextEncoder().encode(message);
+
+	let signatureBytes: Uint8Array;
+	try {
+		signatureBytes = base64UrlToUint8Array(sig);
+	} catch (err) {
+		console.log('[out-of-site]', 'sig base64url decode failed', err);
+		return 'error-404';
+	}
+
+	let publicKey: CryptoKey;
+	try {
+		publicKey = await crypto.subtle.importKey(
+			'spki',
+			spkiB64ToSpkiBuffer(ed25519SpkiB64),
+			{ name: 'Ed25519' },
+			false,
+			['verify'],
+		);
+	} catch (err) {
+		console.log('[out-of-site]', 'crypto.subtle.importKey (Ed25519 SPKI) failed', err);
+		return 'error-500';
+	}
+
+	try {
+		const verified = await crypto.subtle.verify(
+			{ name: 'Ed25519' },
+			publicKey,
+			toArrayBuffer(signatureBytes),
+			toArrayBuffer(messageBytes),
+		);
+		return verified ? 'verified' : 'unverified';
+	} catch (err) {
+		console.log('[out-of-site]', 'crypto.subtle.verify (Ed25519) failed', err);
+		return 'error-500';
+	}
+}
+
+export type OutOfSiteVerifyEnv = {
+	ed25519SpkiB64: string;
+	outOfSiteLinkHmacKey: string;
+};
+
+export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
+	const { ed25519SpkiB64, outOfSiteLinkHmacKey } = env;
+	const params = new URLSearchParams(window.location.search);
+	const to = params.get('to');
+	const sig = params.get('sig');
+	const kind = params.get('kind');
+	const hash = params.get('hash');
+	const { lockProceed, showProceed } = bindProceedControls();
+	lockProceed();
+
+	if (!to || !kind || (kind !== 'ssr' && kind !== 'giscus')) {
 		replaceWithErrorRecovery('/404/');
 		return;
 	}
 
-	if (destination.protocol !== 'http:' && destination.protocol !== 'https:') {
+	const destination = parseHttpDestination(to);
+	if (!destination) {
 		replaceWithErrorRecovery('/404/');
 		return;
 	}
@@ -166,70 +237,31 @@ export async function runOutOfSitePage(env: OutOfSiteVerifyEnv) {
 
 	if (kind === 'giscus') {
 		setStatus('您即将访问第三方网站，本链接由用户提供，本站不对其内容与安全性负责。', destination.href);
-		showProceed();
+		showProceed(destination.href);
 		return;
 	}
 
 	/* kind === 'ssr' — 对称 HMAC（hash）已通过；可选 Ed25519（sig） */
-	let verified = false;
-	if (sig) {
-		if (!ed25519SpkiB64) {
-			replaceWithErrorRecovery('/503/');
-			return;
-		}
-
-		setStatus('正在校验签名…');
-
-		const message = buildCanonicalOutOfSiteMessage({
-			kind: 'ssr',
-			toHref: destination.href,
-		});
-		const messageBytes = new TextEncoder().encode(message);
-
-		let signatureBytes: Uint8Array;
-		try {
-			signatureBytes = base64UrlToUint8Array(sig);
-		} catch (err) {
-			console.log('[out-of-site]', 'sig base64url decode failed', err);
-			replaceWithErrorRecovery('/404/');
-			return;
-		}
-
-		let publicKey: CryptoKey;
-		try {
-			publicKey = await crypto.subtle.importKey(
-				'spki',
-				spkiB64ToSpkiBuffer(ed25519SpkiB64),
-				{ name: 'Ed25519' },
-				false,
-				['verify'],
-			);
-		} catch (err) {
-			console.log('[out-of-site]', 'crypto.subtle.importKey (Ed25519 SPKI) failed', err);
-			replaceWithErrorRecovery('/500/');
-			return;
-		}
-
-		try {
-			verified = await crypto.subtle.verify(
-				{ name: 'Ed25519' },
-				publicKey,
-				toArrayBuffer(signatureBytes),
-				toArrayBuffer(messageBytes),
-			);
-		} catch (err) {
-			console.log('[out-of-site]', 'crypto.subtle.verify (Ed25519) failed', err);
-			replaceWithErrorRecovery('/500/');
-			return;
-		}
+	const ed25519Result = await verifyOptionalEd25519Sig(sig, destination, ed25519SpkiB64);
+	if (ed25519Result === 'error-404') {
+		replaceWithErrorRecovery('/404/');
+		return;
+	}
+	if (ed25519Result === 'error-500') {
+		replaceWithErrorRecovery('/500/');
+		return;
+	}
+	if (ed25519Result === 'error-503') {
+		replaceWithErrorRecovery('/503/');
+		return;
 	}
 
-	if (!verified) {
+	if (ed25519Result !== 'verified') {
 		setStatus('安全警告：未期望的未知链接。该链接可能并不来自网站原本的内容。', destination.href, 'warning');
-		showProceed('danger');
+		showProceed(destination.href, 'danger');
 		return;
 	}
 
 	setStatus('您即将访问第三方网站，本站不对其内容与安全性负责。', destination.href);
-	showProceed();
+	showProceed(destination.href);
 }
