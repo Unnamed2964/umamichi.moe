@@ -18,7 +18,7 @@ function spkiB64ToSpkiBuffer(b64: string): ArrayBuffer {
 
 function base64UrlToUint8Array(value: string) {
 	const pad = '='.repeat((4 - (value.length % 4)) % 4);
-	const b64 = (value + pad).replace(/-/g, '+').replace(/_/g, '/');
+	const b64 = (value + pad).replaceAll('-', '+').replaceAll('_', '/');
 	const binary = atob(b64);
 	const out = new Uint8Array(binary.length);
 	for (let i = 0; i < binary.length; i += 1) {

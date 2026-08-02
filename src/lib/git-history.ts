@@ -7,7 +7,7 @@
  */
 
 export function historyFileNameForEntryId(entryId: string): string {
-	return `${entryId.split('/').join('__')}.json`;
+	return `${entryId.replaceAll('/', '__')}.json`;
 }
 
 export function historyUrlForEntryId(entryId: string): string {
