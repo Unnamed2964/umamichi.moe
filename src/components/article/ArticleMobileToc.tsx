@@ -7,9 +7,9 @@ import type { ArticleTocHeading } from '../../lib/article-toc';
 import { filterArticleTocHeadings } from '../../lib/article-toc';
 import { ArticleTocLinks } from './ArticleToc';
 
-type ArticleMobileTocProps = {
+type ArticleMobileTocProps = Readonly<{
 	headings: ArticleTocHeading[];
-};
+}>;
 
 const DESKTOP_TOC_MQ = '(min-width: 80rem)';
 const PRESERVE_SCROLLBAR_REASON = 'article-mobile-toc';
@@ -96,7 +96,7 @@ export default function ArticleMobileToc({ headings }: ArticleMobileTocProps) {
 
 		const showAfterViewTransition = () => {
 			const reveal = () => {
-				if (document.documentElement.hasAttribute('data-astro-transition')) {
+				if (document.documentElement.dataset.astroTransition !== undefined) {
 					return false;
 				}
 				delete document.documentElement.dataset.mobileTocVtHide;
@@ -141,11 +141,14 @@ export default function ArticleMobileToc({ headings }: ArticleMobileTocProps) {
 		mounted &&
 		createPortal(
 			<>
-				<div
+				<button
+					type="button"
 					className={withOverlayOpen('article-mobile-toc-backdrop', isOpen)}
-					role="presentation"
+					aria-label="关闭目录"
+					tabIndex={isOpen ? 0 : -1}
 					onClick={close}
 				/>
+				{/* Native <dialog> + showModal() becomes full-screen on mobile for this bottom sheet. */}
 				<div
 					ref={overlayRef as RefObject<HTMLDivElement>}
 					className={withOverlayOpen('article-mobile-toc-sheet', isOpen)}
@@ -169,19 +172,9 @@ export default function ArticleMobileToc({ headings }: ArticleMobileTocProps) {
 						</button>
 					</header>
 
-					<nav
-						aria-label="文章目录"
-						data-toc
-						className="article-mobile-toc-sheet__nav"
-						onClick={(event) => {
-							const link = (event.target as HTMLElement).closest('[data-toc-link]');
-							if (link) {
-								close();
-							}
-						}}
-					>
+					<nav aria-label="文章目录" data-toc className="article-mobile-toc-sheet__nav">
 						<div className="article-mobile-toc-sheet__scroll">
-							<ArticleTocLinks headings={items} />
+							<ArticleTocLinks headings={items} onNavigate={close} />
 						</div>
 					</nav>
 				</div>
