@@ -6,6 +6,25 @@ timeless: true
 
 > 以下内容为 Cursor Agent 辅助编写，如需对外引用请以仓库实现与源码为准。
 
+## 模块总览
+
+```mermaid
+flowchart TD
+  build["astro build"] --> postbuild["out-of-site-html-postbuild"]
+  postbuild -->|"optional Ed25519 sig on a href"| html["static HTML"]
+  chrome["SiteChromeScripts.astro"] --> click["out-of-site-click-client"]
+  click -->|"new tab /out-of-site/?to&kind&hash&sig?"| page["out-of-site.astro"]
+  page --> verify["out-of-site-verify-client"]
+  verify -->|"MAC fail / bad to"| recover404["/404/"]
+  verify -->|"missing HMAC key or pubkey"| recover503["/503/"]
+  verify -->|"Ed25519 crypto throw"| recover500["/500/"]
+  verify -->|"sig present but verify false"| warn["in-page warning + continue"]
+  verify -->|"ok"| continue["continue to target"]
+  giscus["ArticleComments data-out-of-site-ugc=giscus"] -.->|"kind=giscus hash only; iframe contents not interceptable"| click
+```
+
+对称 **`hash`（HMAC-SHA256）** 与非对称 **`sig`（Ed25519）** 共用规范串 `v1|kind|toHref`；Giscus 路径只有 `hash`，没有 `sig`。
+
 ## 行为概览
 
 - **预渲染 HTML（构建完成后）**：集成 `out-of-site-html-postbuild` 在 `astro build` 结束后用 **parse5** 扫描输出目录下的 **`*.html`**（默认优先 `dist/client`，否则为 `dist`），对站外 `http` / `https` 的 `<a href>` 设置 `target="_blank"`、`rel`（`noopener` `noreferrer`，并移除 `nofollow`）。若配置了 `OUT_OF_SITE_ED25519_PRIVATE_KEY`，还会写入 **`data-ssr-out-of-site-sig`**（Ed25519，Base64URL）。这样 **Markdown、MDX、Astro、React SSR 等凡写入静态 HTML 的外链** 都会统一处理，而不只依赖 Markdown 管道。**不再使用** `data-out-of-site` 等标记属性。说明：parse5 面向 **HTML5**；RSS、sitemap 等 **XML** 不在扫描范围内。纯客户端岛（hydration 后才出现的 `href`）若未出现在预渲染 HTML 中，则不会被打上 `sig`。
@@ -51,16 +70,16 @@ v1|<kind>|<toHref>
 
 ## 相关源码
 
-- `src/integrations/out-of-site-html-postbuild.mjs`
-- `src/lib/out-of-site-sign-build.mjs`
-- `src/lib/out-of-site-payload.mjs`
-- `src/lib/out-of-site-click-client.ts`
-- `src/lib/out-of-site-giscus-hmac.ts`
-- `src/lib/out-of-site-verify-client.ts`
-- `src/lib/error-page.ts`
-- `src/components/SiteChromeScripts.astro`
-- `src/pages/out-of-site.astro`
-- `src/components/ArticleComments.tsx`
+- `src/integrations/out-of-site-html-postbuild.mjs` — 构建后 HTML 扫描 / `data-ssr-out-of-site-sig`
+- `src/lib/out-of-site-sign-build.mjs` — Ed25519 签名
+- `src/lib/out-of-site-payload.mjs` — 规范报文（`buildCanonicalOutOfSiteMessage`）
+- `src/components/SiteChromeScripts.astro` — 挂载 click 拦截（与 site chrome 并行的第二个 `<script>`）
+- `src/lib/out-of-site-click-client.ts` — 捕获阶段外链拦截与跳转 `/out-of-site/`
+- `src/lib/out-of-site-giscus-hmac.ts` — Giscus 容器内 `hash`
+- `src/lib/out-of-site-verify-client.ts` — `/out-of-site/` 页校验与恢复页跳转
+- `src/lib/error-page.ts` — 恢复页路由辅助
+- `src/pages/out-of-site.astro` — 出站中间页
+- `src/components/ArticleComments.tsx` — `data-out-of-site-ugc="giscus"`
 
 ## Astro 配置注意
 
