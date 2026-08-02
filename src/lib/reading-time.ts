@@ -6,8 +6,6 @@ const LATIN_WORDS_PER_MINUTE = 230;
 const FRONTMATTER_RE = /^---\r?\n[\s\S]*?\r?\n---\r?\n?/;
 const FENCED_CODE_RE = /```[\s\S]*?```|~~~[\s\S]*?~~~/g;
 const INLINE_CODE_RE = /`[^`\r\n]+`/g;
-const IMAGE_RE = /!\[[^\]\r\n]*\]\([^)\r\n]*\)/g;
-const LINK_RE = /\[([^\]\r\n]*)\]\([^)\r\n]*\)/g;
 const HTML_TAG_RE = /<[^>\r\n]+>/g;
 const HEADING_MARK_RE = /^#{1,6}\s+/gm;
 const BLOCKQUOTE_MARK_RE = /^>\s?/gm;
@@ -16,18 +14,57 @@ const FOOTNOTE_REF_RE = /\[\^[^\]]*?\]/g;
 const CJK_RE = /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/g;
 const LATIN_WORD_RE = /[A-Za-z0-9]+(?:'[A-Za-z0-9]+)*/g;
 
+/**
+ * Strip `![alt](url)` and replace `[label](url)` with `label` without regex backtracking.
+ */
+function stripMarkdownImagesAndLinks(text: string): string {
+	let out = '';
+	let i = 0;
+
+	while (i < text.length) {
+		if (text.startsWith('![', i)) {
+			const closeAlt = text.indexOf(']', i + 2);
+			if (closeAlt !== -1 && text[closeAlt + 1] === '(') {
+				const closeUrl = text.indexOf(')', closeAlt + 2);
+				if (closeUrl !== -1) {
+					out += ' ';
+					i = closeUrl + 1;
+					continue;
+				}
+			}
+		}
+
+		if (text[i] === '[' && text[i + 1] !== '^') {
+			const closeLabel = text.indexOf(']', i + 1);
+			if (closeLabel !== -1 && text[closeLabel + 1] === '(') {
+				const closeUrl = text.indexOf(')', closeLabel + 2);
+				if (closeUrl !== -1) {
+					out += text.slice(i + 1, closeLabel);
+					i = closeUrl + 1;
+					continue;
+				}
+			}
+		}
+
+		out += text[i];
+		i += 1;
+	}
+
+	return out;
+}
+
 export function stripMarkdownForReading(rawMarkdown: string): string {
-	return rawMarkdown
-		.replace(FRONTMATTER_RE, '')
-		.replace(FENCED_CODE_RE, ' ')
-		.replace(INLINE_CODE_RE, ' ')
-		.replace(IMAGE_RE, ' ')
-		.replace(LINK_RE, '$1')
-		.replace(HTML_TAG_RE, ' ')
-		.replace(HEADING_MARK_RE, '')
-		.replace(BLOCKQUOTE_MARK_RE, '')
-		.replace(EMPHASIS_MARK_RE, '')
-		.replace(FOOTNOTE_REF_RE, ' ');
+	return stripMarkdownImagesAndLinks(
+		rawMarkdown
+			.replace(FRONTMATTER_RE, '')
+			.replace(FENCED_CODE_RE, ' ')
+			.replace(INLINE_CODE_RE, ' ')
+			.replace(HTML_TAG_RE, ' ')
+			.replace(HEADING_MARK_RE, '')
+			.replace(BLOCKQUOTE_MARK_RE, '')
+			.replace(EMPHASIS_MARK_RE, '')
+			.replace(FOOTNOTE_REF_RE, ' '),
+	);
 }
 
 export function countReadableUnits(text: string): { cjkCount: number; wordCount: number } {
