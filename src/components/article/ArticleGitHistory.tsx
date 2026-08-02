@@ -6,9 +6,9 @@ export const ARTICLE_GIT_HISTORY_OPEN_EVENT = 'article:git-history-open';
 
 const OVERLAY_ID = 'article-git-history';
 
-type ArticleGitHistoryProps = {
+type ArticleGitHistoryProps = Readonly<{
 	historyUrl: string;
-};
+}>;
 
 const dateTimeFormatter = new Intl.DateTimeFormat('zh-CN', {
 	year: 'numeric',
@@ -38,7 +38,19 @@ function hasContentHunks(patch: string): boolean {
 	return /^@@/m.test(patch);
 }
 
-function DiffView({ commit }: { commit: GitHistoryCommit }) {
+function renameSummary(fromLabel: string, toLabel: string, showHunks: boolean): string {
+	if (!fromLabel || !toLabel) {
+		return '文件路径已变更';
+	}
+
+	if (showHunks) {
+		return `文件由 ${fromLabel} 移动至 ${toLabel}`;
+	}
+
+	return `文件由 ${fromLabel} 移动至 ${toLabel}（内容未变）`;
+}
+
+function DiffView({ commit }: Readonly<{ commit: GitHistoryCommit }>) {
 	const isRename =
 		commit.paths.status === 'R' ||
 		Boolean(commit.paths.from && commit.paths.to && commit.paths.from !== commit.paths.to);
@@ -51,11 +63,7 @@ function DiffView({ commit }: { commit: GitHistoryCommit }) {
 		<div className="article-git-history__diff">
 			{isRename && (
 				<p className="article-git-history__rename">
-					{fromLabel && toLabel
-						? showHunks
-							? `文件由 ${fromLabel} 移动至 ${toLabel}`
-							: `文件由 ${fromLabel} 移动至 ${toLabel}（内容未变）`
-						: '文件路径已变更'}
+					{renameSummary(fromLabel, toLabel, showHunks)}
 					{commit.paths.similarity !== undefined ? ` · 相似度 ${commit.paths.similarity}%` : ''}
 				</p>
 			)}
@@ -65,7 +73,7 @@ function DiffView({ commit }: { commit: GitHistoryCommit }) {
 			)}
 
 			{showHunks && (
-				<pre className="article-git-history__patch" tabIndex={0}>
+				<pre className="article-git-history__patch">
 					<code>
 						{lines.map((line, index) => {
 							let kind = 'context';
@@ -220,7 +228,7 @@ function ArticleGitHistoryInner({ historyUrl }: ArticleGitHistoryProps) {
 			{loading && <p className="article-git-history__status">正在加载…</p>}
 			{loadError && <p className="article-git-history__status">{loadError}</p>}
 
-			{payload && payload.commits.length === 0 && (
+			{payload?.commits.length === 0 && (
 				<p className="article-git-history__status">暂无 Git 修改记录。</p>
 			)}
 
@@ -273,7 +281,7 @@ function ArticleGitHistoryInner({ historyUrl }: ArticleGitHistoryProps) {
 	);
 }
 
-export default function ArticleGitHistory(props: ArticleGitHistoryProps) {
+export default function ArticleGitHistory(props: Readonly<ArticleGitHistoryProps>) {
 	return (
 		<OverlayStackProvider>
 			<ArticleGitHistoryInner {...props} />
