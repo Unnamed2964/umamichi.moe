@@ -224,12 +224,12 @@ function parsePathsFromPatch(patch) {
  */
 function normalizePatchNewlines(patch) {
 	let end = patch.length;
-	while (end > 0 && patch.charCodeAt(end - 1) === 10 /* \n */) {
+	while (end > 0 && patch.codePointAt(end - 1) === 10 /* \n */) {
 		end -= 1;
 	}
 
 	let start = 0;
-	while (start < end && patch.charCodeAt(start) === 10 /* \n */) {
+	while (start < end && patch.codePointAt(start) === 10 /* \n */) {
 		start += 1;
 	}
 
