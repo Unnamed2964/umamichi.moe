@@ -5,12 +5,12 @@ export const excludeDocGlobs = umamichiConfig.content.excludeDocGlobs;
 
 /** @param {string} glob */
 function globToRegExp(glob) {
-	const normalized = glob.replace(/\\/g, '/');
+	const normalized = glob.replaceAll('\\', '/');
 	const escaped = normalized
-		.replace(/[.+^${}()|[\]\\]/g, '\\$&')
-		.replace(/\*\*/g, '<<<GLOBSTAR>>>')
-		.replace(/\*/g, '[^/]*')
-		.replace(/<<<GLOBSTAR>>>/g, '.*');
+		.replaceAll(/[.+^${}()|[\]\\]/g, '\\$&')
+		.replaceAll('**', '<<<GLOBSTAR>>>')
+		.replaceAll('*', '[^/]*')
+		.replaceAll('<<<GLOBSTAR>>>', '.*');
 
 	return new RegExp(`^${escaped}$`);
 }
@@ -23,6 +23,6 @@ const excludeDocPatterns = excludeDocGlobs.map(globToRegExp);
  * @param {string} relativePath path relative to src/content, e.g. `blog/post.md`
  */
 export function isIncludedContentDoc(relativePath) {
-	const normalized = relativePath.replace(/\\/g, '/');
+	const normalized = relativePath.replaceAll('\\', '/');
 	return !excludeDocPatterns.some((pattern) => pattern.test(normalized));
 }

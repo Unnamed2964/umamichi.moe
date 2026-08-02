@@ -17,7 +17,7 @@ const copyrightSchema = z.discriminatedUnion('kind', [
 
 /** Keep entry ids aligned with filesystem routes in `src/lib/docs.ts` (do not github-slug spaces). */
 function contentEntryIdFromPath(entry: string) {
-	const withoutExt = entry.replace(/\\/g, '/').replace(/\.mdx?$/u, '');
+	const withoutExt = entry.replaceAll('\\', '/').replace(/\.mdx?$/u, '');
 
 	if (withoutExt === 'index') {
 		return 'index';

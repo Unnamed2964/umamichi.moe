@@ -77,7 +77,7 @@ async function collectHtmlFiles(root) {
 export async function processHtmlFilesUnder(htmlRoot, opts) {
 	const origin = stripTrailingSlashes(opts.siteOrigin);
 	const siteUrl = new URL('/', origin + '/');
-	const pem = opts.privateKeyPem.replace(/\\n/g, '\n');
+	const pem = opts.privateKeyPem.replaceAll('\\n', '\n');
 	const sigCache = new Map();
 
 	/** @param {string} toHref */

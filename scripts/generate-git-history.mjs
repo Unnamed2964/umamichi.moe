@@ -150,7 +150,7 @@ function entryIdFromRelativePath(relativePath) {
  * @param {string} entryId
  */
 function historyFileNameForEntryId(entryId) {
-	return `${entryId.split('/').join('__')}.json`;
+	return `${entryId.replaceAll('/', '__')}.json`;
 }
 
 /**

@@ -21,7 +21,7 @@ export function mergeExternalAnchorRel(existing) {
  * @returns {string | null} Base64URL signature or null if no key
  */
 export function signSsrOutOfSiteLink(toHref, privateKeyPem) {
-	const pem = privateKeyPem.replace(/\\n/g, '\n');
+	const pem = privateKeyPem.replaceAll('\\n', '\n');
 	if (!pem) {
 		return null;
 	}
