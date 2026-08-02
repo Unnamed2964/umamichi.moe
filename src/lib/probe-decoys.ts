@@ -1,3 +1,5 @@
+import { stripTrailingSlashes } from './path-slashes.mjs';
+
 const ENV_PROBE_PATHS = new Set([
 	'/.env.dev',
 	'/.env.development',
@@ -156,7 +158,7 @@ const PHPINFO_DECOY_BODY = `<!doctype html>
 `;
 
 function normalizePathname(pathname: string) {
-	const normalizedPath = pathname.replace(/\/+$/, '');
+	const normalizedPath = stripTrailingSlashes(pathname);
 
 	return normalizedPath === '' ? '/' : normalizedPath.toLowerCase();
 }

@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse, serialize } from 'parse5';
 import { mergeExternalAnchorRel, signSsrOutOfSiteLink } from '../lib/out-of-site-sign-build.mjs';
+import { stripTrailingSlashes } from '../lib/path-slashes.mjs';
 
 function toFsPath(dir) {
 	return typeof dir === 'string' ? dir : fileURLToPath(dir);
@@ -16,7 +17,7 @@ function toFsPath(dir) {
  * @param {string} siteOrigin e.g. https://example.com (trailing slashes tolerated)
  */
 export function htmlFilePathToPageBaseUrl(absoluteFilePath, htmlRoot, siteOrigin) {
-	const site = siteOrigin.replace(/\/+$/, '');
+	const site = stripTrailingSlashes(siteOrigin);
 	const rel = path.relative(htmlRoot, absoluteFilePath).replaceAll('\\', '/');
 	if (!rel || rel.startsWith('..')) {
 		return new URL('/', site + '/');
@@ -74,7 +75,7 @@ async function collectHtmlFiles(root) {
  * @param {{ siteOrigin: string, privateKeyPem: string }} opts
  */
 export async function processHtmlFilesUnder(htmlRoot, opts) {
-	const origin = opts.siteOrigin.replace(/\/+$/, '');
+	const origin = stripTrailingSlashes(opts.siteOrigin);
 	const siteUrl = new URL('/', origin + '/');
 	const pem = opts.privateKeyPem.replace(/\\n/g, '\n');
 	const sigCache = new Map();
@@ -137,7 +138,7 @@ function resolveHtmlRootFromBuildDir(buildDirPath) {
  * @param {{ site?: string, privateKeyPem?: string }} [options]
  */
 export default function outOfSiteHtmlPostbuildIntegration(options = {}) {
-	const siteOrigin = (options.site ?? 'https://umamichi.moe').replace(/\/+$/, '');
+	const siteOrigin = stripTrailingSlashes(options.site ?? 'https://umamichi.moe');
 	const privateKeyPem = options.privateKeyPem ?? '';
 
 	return {

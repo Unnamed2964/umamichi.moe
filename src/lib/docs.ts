@@ -2,6 +2,7 @@ import type { CollectionEntry } from 'astro:content';
 import { parse as parseYaml } from 'yaml';
 import { isIncludedContentDoc } from './content-doc-include.mjs';
 import { parseCopyrightConfig, type CopyrightConfig } from './copyright';
+import { stripEdgeSlashes } from './path-slashes.mjs';
 
 type DocEntry = CollectionEntry<'docs'>;
 
@@ -218,7 +219,7 @@ function toHref(routePath: string) {
 }
 
 function normalizeRoutePath(routePath: string) {
-	return routePath.replace(/^\/+|\/+$/g, '');
+	return stripEdgeSlashes(routePath);
 }
 
 function formatFolderSegment(segment: string) {
