@@ -7,7 +7,7 @@ rss: false
 
 ## 地铁相关工具
 
-[@kyuri-metro](https://www.npmjs.com/org/kyuri-metro) 组织下的线路号方块、地贴、吊板贴纸等生成器，均可导出为 SVG / PNG / JPG / WebP。
+[@kyuri-metro](https://www.npmjs.com/org/kyuri-metro) 组织下的线路号方块、悬挂指示牌线路标识、地贴、吊板贴纸等生成器，均可导出为 SVG / PNG / JPG / WebP。
 
 ### 上海地铁
 
@@ -31,9 +31,23 @@ NPM 包见[单独页面](/tools/shmetro-line-id-block-generator/)。
 
   <img src="/tools/imgs/shmetro-idblock/output-example-2020-type2.webp" alt="上海地铁线路号方块生成器 2020 样式 2 输出示例" style="max-height: 60px" />
 
+#### [悬挂指示牌线路标识生成器](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-hanging-sign-line-label-2025-svg-generator--docs)
+
+根据上海 2025 版《城市轨道交通导向标识系统设计规范（征求意见稿）》图 10 描摹绘制的上海地铁悬挂指示牌线路标识[^1] SVG 生成器，支持一或多个线路号并列展示，并可分别自定义线路号方块颜色。
+
+NPM：[@kyuri-metro/shmetro-hanging-sign-line-label-2025-svg-generator](https://www.npmjs.com/package/@kyuri-metro/shmetro-hanging-sign-line-label-2025-svg-generator)
+
+GitHub：[kyuri-metro/shmetro-hanging-sign-line-label-2025-svg-generator](https://github.com/kyuri-metro/shmetro-hanging-sign-line-label-2025-svg-generator)
+
+示例：
+
+<img src="/tools/imgs/shmetro-hanging-sign-line-label/line-3-4-10-hanging-sign-line-label-2025.webp" alt="上海地铁悬挂指示牌线路标识生成器输出示例（3、4、10 号线）" style="max-height: 120px" />
+
+<img src="/tools/imgs/shmetro-hanging-sign-line-label/line-9-22-hanging-sign-line-label-2025.webp" alt="上海地铁悬挂指示牌线路标识生成器输出示例（9、22 号线）" style="max-height: 120px" />
+
 #### [数字线路号地贴生成器](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-numeric-floor-sticker-2025-svg-generator--docs)
 
-根据 2025 版《城市轨道交通导向标识系统设计规范（征求意见稿）》绘制的上海地铁数字线路号地贴（竖向箭头，显示线路号）SVG 生成器。
+根据上海 2025 版《城市轨道交通导向标识系统设计规范（征求意见稿）》描摹绘制的上海地铁数字线路号地贴（竖向箭头，显示线路号）SVG 生成器。
 
 NPM：[@kyuri-metro/shmetro-numeric-floor-sticker-2025-svg-generator](https://www.npmjs.com/package/@kyuri-metro/shmetro-numeric-floor-sticker-2025-svg-generator)
 
@@ -86,3 +100,5 @@ GitHub：[Unnamed2964/kyuri-railroad-spline-experiment](https://github.com/Unnam
 ## 说明
 
 这个页面会继续补充新的小工具。若某个工具失效或你有想法，请通过 GitHub 或邮箱 umamichi#outlook.com（将“#”替换为“@”）联系我。
+
+[^1]: 尚未知其他场合是否采用相同的方块-汉字-英文比例
