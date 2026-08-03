@@ -42,11 +42,11 @@ GitHub：[kyuri-metro/shmetro-hanging-sign-line-label-2025-svg-generator](https:
 示例：
 
 <p>
-<img src="/tools/imgs/shmetro-hanging-sign-line-label/line-3-4-10-hanging-sign-line-label-2025.webp" alt="上海地铁悬挂指示牌线路标识生成器输出示例（3、4、10 号线）" style="max-height: 240px" />
+<img src="/tools/imgs/shmetro-hanging-sign-line-label/line-3-4-10-hanging-sign-line-label-2025.webp" alt="上海地铁悬挂指示牌线路标识生成器输出示例（3、4、10 号线）" style="max-height: 120px" />
 </p>
 
 <p>
-<img src="/tools/imgs/shmetro-hanging-sign-line-label/line-9-22-hanging-sign-line-label-2025.webp" alt="上海地铁悬挂指示牌线路标识生成器输出示例（9、22 号线）" style="max-height: 240px" />
+<img src="/tools/imgs/shmetro-hanging-sign-line-label/line-9-22-hanging-sign-line-label-2025.webp" alt="上海地铁悬挂指示牌线路标识生成器输出示例（9、22 号线）" style="max-height: 120px" />
 </p>
 
 #### [数字线路号地贴生成器](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-numeric-floor-sticker-2025-svg-generator--docs)
