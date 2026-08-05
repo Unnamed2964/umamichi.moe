@@ -60,11 +60,11 @@ GitHub：[kyuri-metro/shmetro-outdoor-directional-sign-2025-svg-generator](https
 示例：
 
 <p>
-<img src="/tools/imgs/shmetro-outdoor-directional-sign/line-l-2-7-16-18-outdoor-directional-sign-2025.webp" alt="上海地铁站外指向牌生成器输出示例（左向，2、7、16、18 号线）" style="height: 150px; width: auto" />
+<img src="/tools/imgs/shmetro-outdoor-directional-sign/line-l-2-7-16-18-outdoor-directional-sign-2025.webp" alt="上海地铁站外指向牌生成器输出示例（左向，2、7、16、18 号线）" style="max-height: 150px; max-width: 100%; width: auto; height: auto" />
 </p>
 
 <p>
-<img src="/tools/imgs/shmetro-outdoor-directional-sign/line-r-airport-link-line-fengxian-line-outdoor-directional-sign-2025.webp" alt="上海地铁站外指向牌生成器输出示例（右向，机场联络线、奉贤线）" style="height: 150px; width: auto" />
+<img src="/tools/imgs/shmetro-outdoor-directional-sign/line-r-airport-link-line-fengxian-line-outdoor-directional-sign-2025.webp" alt="上海地铁站外指向牌生成器输出示例（右向，机场联络线、奉贤线）" style="max-height: 150px; max-width: 100%; width: auto; height: auto" />
 </p>
 
 #### [数字线路号地贴生成器](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-numeric-floor-sticker-2025-svg-generator--docs)
