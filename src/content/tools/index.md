@@ -81,6 +81,16 @@ GitHub：[kyuri-metro/shmetro-numeric-floor-sticker-2025-svg-generator](https://
 
 ### 南京地铁
 
+#### [线路号方块生成器](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-njmetro-line-id-block-svg-generator--docs)
+
+参考实拍的南京地铁系统内导向标识图片制作的南京地铁线路号方块生成器，用于南京地铁屏蔽门上方贴纸生成器，也可单独使用。
+
+NPM：[@kyuri-metro/njmetro-line-id-block-svg-generator](https://www.npmjs.com/package/@kyuri-metro/njmetro-line-id-block-svg-generator)
+
+示例：
+
+<img src="/tools/imgs/njmetro-idblock/output-example-v0.3.1.webp" alt="南京地铁线路号方块生成器输出示例" style="max-height: 120px" />
+
 #### [屏蔽门上方贴纸生成器（Beta）](https://njmetro-railmap-creator.umamichi.moe/)
 
 根据实拍的南京地铁3号线吊板制作的南京地铁屏蔽门上方贴纸生成器。
@@ -96,16 +106,6 @@ GitHub：[kyuri-metro/njmetro-railmap-creator](https://github.com/kyuri-metro/nj
 ![南京地铁屏蔽门上方贴纸生成器方向牌示例](/tools/imgs/njmetro-railmap-creator/direction-badge-long-station-name.webp)
 
 ![南京地铁屏蔽门上方贴纸生成器终点站牌示例](/tools/imgs/njmetro-railmap-creator/terminus-badge.webp)
-
-#### [线路号方块生成器](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-njmetro-line-id-block-svg-generator--docs)
-
-参考实拍的南京地铁系统内导向标识图片制作的南京地铁线路号方块生成器，用于南京地铁屏蔽门上方贴纸生成器，也可单独使用。
-
-NPM：[@kyuri-metro/njmetro-line-id-block-svg-generator](https://www.npmjs.com/package/@kyuri-metro/njmetro-line-id-block-svg-generator)
-
-示例：
-
-<img src="/tools/imgs/njmetro-idblock/output-example-v0.3.1.webp" alt="南京地铁线路号方块生成器输出示例" style="max-height: 120px" />
 
 ---
 
