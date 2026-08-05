@@ -432,9 +432,17 @@ html {
 	white-space: pre;
 }
 
+/* Grow with the longest line so add/del backgrounds fill the horizontal scrollport. */
+.article-git-history__patch > code {
+	display: grid;
+	width: max-content;
+	min-width: 100%;
+}
+
 .article-git-history__line {
 	display: block;
 	min-height: 1.45em;
+	box-sizing: border-box;
 }
 
 .article-git-history__line--add {
