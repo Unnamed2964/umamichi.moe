@@ -7,7 +7,7 @@ rss: false
 
 ## 地铁相关工具
 
-[@kyuri-metro](https://www.npmjs.com/org/kyuri-metro) 组织下的线路号方块、悬挂指示牌线路标识、地贴、吊板贴纸等生成器，均可导出为 SVG / PNG / JPG / WebP。
+[@kyuri-metro](https://www.npmjs.com/org/kyuri-metro) 组织下的线路号方块、悬挂指示牌线路标识、站外指向牌、地贴、吊板贴纸等生成器，均可导出为 SVG / PNG / JPG / WebP。
 
 ### 上海地铁
 
@@ -47,6 +47,24 @@ GitHub：[kyuri-metro/shmetro-hanging-sign-line-label-2025-svg-generator](https:
 
 <p>
 <img src="/tools/imgs/shmetro-hanging-sign-line-label/line-9-22-hanging-sign-line-label-2025.webp" alt="上海地铁悬挂指示牌线路标识生成器输出示例（9、22 号线）" style="max-height: 120px" />
+</p>
+
+#### [站外指向牌生成器](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-outdoor-directional-sign-2025-svg-generator--docs)
+
+根据上海 2025 版《城市轨道交通导向标识系统设计规范（征求意见稿）》描摹绘制的上海地铁站外指向牌 SVG 生成器，支持左/右向、普线线路号（1～4个）或市域命名线路（1～2个），并可分别自定义线路号方块颜色。
+
+NPM：[@kyuri-metro/shmetro-outdoor-directional-sign-2025-svg-generator](https://www.npmjs.com/package/@kyuri-metro/shmetro-outdoor-directional-sign-2025-svg-generator)
+
+GitHub：[kyuri-metro/shmetro-outdoor-directional-sign-2025-svg-generator](https://github.com/kyuri-metro/shmetro-outdoor-directional-sign-2025-svg-generator)
+
+示例：
+
+<p>
+<img src="/tools/imgs/shmetro-outdoor-directional-sign/line-l-2-7-16-18-outdoor-directional-sign-2025.webp" alt="上海地铁站外指向牌生成器输出示例（左向，2、7、16、18 号线）" style="height: 150px; width: auto" />
+</p>
+
+<p>
+<img src="/tools/imgs/shmetro-outdoor-directional-sign/line-r-airport-link-line-fengxian-line-outdoor-directional-sign-2025.webp" alt="上海地铁站外指向牌生成器输出示例（右向，机场联络线、奉贤线）" style="height: 150px; width: auto" />
 </p>
 
 #### [数字线路号地贴生成器](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-numeric-floor-sticker-2025-svg-generator--docs)
