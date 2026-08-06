@@ -29,6 +29,7 @@ export function initSiteLensBorder(): void {
 		fadeBorderSelector: '.outline-button, .article-mobile-toc-fab',
 		depths: {
 			dropdown: 1.35,
+			dialog: 1.55,
 			button: 0.65,
 			default: 1,
 		},

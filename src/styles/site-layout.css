@@ -1038,8 +1038,8 @@ html[data-mobile-menu-open='true'] {
 .site-header .chromatic-fringe-box::after,
 .site-mobile-menu .chromatic-fringe-box::before,
 .site-mobile-menu .chromatic-fringe-box::after,
-.article-git-history .chromatic-fringe-box::before,
-.article-git-history .chromatic-fringe-box::after {
+.article-git-history-panel .chromatic-fringe-box:not(.fullscreen-overlay)::before,
+.article-git-history-panel .chromatic-fringe-box:not(.fullscreen-overlay)::after {
 	content: none;
 }
 
