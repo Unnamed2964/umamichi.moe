@@ -45,6 +45,7 @@
 	color: var(--site-button-fg);
 	cursor: pointer;
 	opacity: 0;
+	-webkit-tap-highlight-color: transparent;
 	transition:
 		opacity 120ms ease,
 		background-color 0.2s ease,
