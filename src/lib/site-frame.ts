@@ -16,6 +16,12 @@ export function normalizeNavPath(path: string): string {
 	return trimmed || '/';
 }
 
+/** Exact path match after normalize (for sidebar leaf/current folder only). */
+export function isExactActiveLink(href: string, currentPath: string): boolean {
+	return normalizeNavPath(href) === normalizeNavPath(currentPath);
+}
+
+/** Prefix-aware match for top-level chrome nav (ancestors stay active on child routes). */
 export function isActiveLink(href: string, currentPath: string): boolean {
 	const normalizedHref = normalizeNavPath(href);
 	const normalizedCurrentPath = normalizeNavPath(currentPath);

@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { getActiveNavIndex, isActiveLink, normalizeNavPath } from './site-frame';
+import {
+	getActiveNavIndex,
+	isActiveLink,
+	isExactActiveLink,
+	normalizeNavPath,
+} from './site-frame';
 
 describe('normalizeNavPath', () => {
 	it('strips trailing slashes and maps root to /', () => {
@@ -11,6 +16,21 @@ describe('normalizeNavPath', () => {
 	it('decodes percent-encoded segments', () => {
 		expect(normalizeNavPath('/blog/shanghai-jeju%20hsr/')).toBe('/blog/shanghai-jeju hsr');
 		expect(normalizeNavPath('/blog/shanghai-jeju hsr/')).toBe('/blog/shanghai-jeju hsr');
+	});
+});
+
+describe('isExactActiveLink', () => {
+	it('matches only the exact path after normalize', () => {
+		expect(isExactActiveLink('/blog/shanghai-jeju hsr/', '/blog/shanghai-jeju%20hsr/')).toBe(
+			true,
+		);
+		expect(isExactActiveLink('/blog/', '/blog/shanghai-jeju%20hsr/')).toBe(false);
+		expect(
+			isExactActiveLink(
+				'/blog/shanghai-jeju hsr/',
+				'/blog/shanghai-jeju%20hsr/shanghai-jeju-hsr-imaginary-yuanbao-dialogue/',
+			),
+		).toBe(false);
 	});
 });
 
