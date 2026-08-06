@@ -51,6 +51,7 @@ html {
 	color: var(--site-button-fg);
 	font-weight: var(--site-weight-regular);
 	text-decoration: none;
+	-webkit-tap-highlight-color: transparent;
 	transition:
 		background-color 0.2s ease,
 		color 0.2s ease;
@@ -540,6 +541,7 @@ html {
 	background: var(--site-button-bg);
 	color: var(--site-button-fg);
 	text-decoration: none;
+	-webkit-tap-highlight-color: transparent;
 	transition:
 		background-color 0.2s ease,
 		color 0.2s ease;
@@ -773,6 +775,7 @@ html[data-mobile-toc-vt-hide] .article-mobile-toc-sheet {
 	line-height: 1.2;
 	cursor: pointer;
 	pointer-events: auto;
+	-webkit-tap-highlight-color: transparent;
 	transition:
 		background-color 0.2s ease,
 		color 0.2s ease,
@@ -1277,6 +1280,7 @@ html[data-mobile-menu-open='true'] {
 	color: var(--site-header-fg);
 	cursor: pointer;
 	font: inherit;
+	-webkit-tap-highlight-color: transparent;
 }
 
 .site-icon-button[data-site-theme-toggle] {
@@ -1347,6 +1351,7 @@ html.dark .site-icon-button[data-site-theme-toggle] [data-site-theme-icon='dark'
 	border-radius: 9999px;
 	color: var(--site-header-fg);
 	text-decoration: none;
+	-webkit-tap-highlight-color: transparent;
 }
 
 .site-header__social-link:hover {
