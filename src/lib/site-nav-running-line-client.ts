@@ -1,31 +1,18 @@
 /**
  * Metro-style running line alignment for header and mobile nav icons.
  */
-import { stripTrailingSlashes } from './path-slashes.mjs';
-import { getMetroNavIconTone, type MetroNavIconTone } from './site-frame';
+import { getMetroNavIconTone, isActiveLink, type MetroNavIconTone } from './site-frame';
 import { onBeforePreparation, registerAfterSwap } from './view-transition-lifecycle';
 
 const INIT_KEY = '__siteNavRunningLineInit';
 const transferIconBaselineY = 100;
-
-function normalizeNavPath(path: string): string {
-	const trimmed = stripTrailingSlashes(path);
-	return trimmed || '/';
-}
 
 function isActiveNavHref(href: string | null, currentPath: string): boolean {
 	if (!href) {
 		return false;
 	}
 
-	const normalizedHref = normalizeNavPath(href);
-	const normalizedCurrentPath = normalizeNavPath(currentPath);
-
-	if (normalizedHref === '/') {
-		return normalizedCurrentPath === '/';
-	}
-
-	return normalizedCurrentPath === normalizedHref || normalizedCurrentPath.startsWith(`${normalizedHref}/`);
+	return isActiveLink(href, currentPath);
 }
 
 function applyNavIconTone(navIcon: Element, tone: MetroNavIconTone): void {
