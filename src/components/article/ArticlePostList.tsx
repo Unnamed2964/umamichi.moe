@@ -6,6 +6,7 @@ import {
 	getArticleSidebarIndentStyle,
 	getArticleSidebarLinkClassName,
 } from '../../lib/article-sidebar-link';
+import { isActiveLink } from '../../lib/site-frame';
 
 export type ArticleSidebarTree = SidebarFolderNode;
 
@@ -21,11 +22,7 @@ function isCurrentLink(href: string, currentPath: string, currentPostId?: string
 		return currentPostId === nodeId;
 	}
 
-	if (href === '/') {
-		return currentPath === '/';
-	}
-
-	return currentPath === href || currentPath.startsWith(`${href}/`);
+	return isActiveLink(href, currentPath);
 }
 
 function renderTreeNode(
