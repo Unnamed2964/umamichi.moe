@@ -6,7 +6,7 @@ import {
 	getArticleSidebarIndentStyle,
 	getArticleSidebarLinkClassName,
 } from '../../lib/article-sidebar-link';
-import { isActiveLink } from '../../lib/site-frame';
+import { isExactActiveLink } from '../../lib/site-frame';
 
 export type ArticleSidebarTree = SidebarFolderNode;
 
@@ -22,7 +22,7 @@ function isCurrentLink(href: string, currentPath: string, currentPostId?: string
 		return currentPostId === nodeId;
 	}
 
-	return isActiveLink(href, currentPath);
+	return isExactActiveLink(href, currentPath);
 }
 
 function renderTreeNode(
