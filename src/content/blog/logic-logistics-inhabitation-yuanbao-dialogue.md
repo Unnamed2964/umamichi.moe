@@ -596,7 +596,7 @@ Halakhic_Inhabitation(P, Place) :=
 
 首先定义基础的时空与律法概念：
 
-```
+```coq
 (* 基本定义域 *)
 Parameter Place : Type.          (* 物理空间 *)
 Parameter Person : Type.         (* 人 *)
@@ -613,7 +613,7 @@ Parameter handbreadth : nat.     (* 约 8-10 cm *)
 
 按你给出的十项条件，每一项对应构造函数中的一个字段（field）。一个合法的"律法住所"证明项，必须**同时**提供这十项证据：
 
-```
+```coq
 Inductive Halakhic_Dwelling : Place -> Prop :=
 | mk_halakhic_dwelling :
     forall (p : Place),
@@ -643,7 +643,7 @@ Inductive Halakhic_Dwelling : Place -> Prop :=
 
 其中各项条件的类型声明：
 
-```
+```coq
 (* 十项条件作为命题 *)
 Parameter min_area : Place -> Prop.
 Parameter has_doorpost : Place -> Prop.
@@ -663,7 +663,7 @@ Parameter permanent_dwelling : Place -> Prop.
 
 现在我们构造一个具体的场所 `my_house_in_Tzfat`，并证明它是律法意义上的住所。
 
-```
+```coq
 (* 定义一所位于以色列地 Tzfat 的房子 *)
 Parameter my_house_in_Tzfat : Place.
 
@@ -701,7 +701,7 @@ Qed.
 
 为了展示这个定义的判别力，我们证明一个**反例**——一个谷仓（barn）虽然可能有屋顶、门、门柱，但因缺乏"尊贵住所"和"为人居住意图"等条件，故不是律法住所：
 
-```
+```coq
 Parameter barn_in_dispersion : Place.
 
 Axiom barn_H_area : min_area barn_in_dispersion.
@@ -732,7 +732,7 @@ Qed.
 
 Rambam 提到，在以色列地，迁入新房**立即**负有门柱经文义务（因为居住本身是诫命，赋予永久居留特征）；而在散居地，需满 30 天才算永久住所。我们可以用**索引类型（Indexed Type）**来区分：
 
-```
+```coq
 Inductive Land : Type :=
 | Eretz_Yisrael : Land
 | Diaspora : Land.
