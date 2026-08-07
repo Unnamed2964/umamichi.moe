@@ -103,7 +103,7 @@ html {
 	font-size: 0.875rem;
 	font-weight: var(--site-weight-regular);
 	line-height: 1.6;
-	overflow-wrap: anywhere;
+	overflow-wrap: break-word;
 	text-decoration: none;
 	transition: color var(--transition-fast);
 }
@@ -172,7 +172,7 @@ html {
 	font-weight: var(--site-weight-page-title);
 	line-height: 1.1;
 	letter-spacing: 0;
-	overflow-wrap: anywhere;
+	overflow-wrap: break-word;
 }
 
 @media screen and (min-width: 48rem) {
