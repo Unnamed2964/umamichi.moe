@@ -1,5 +1,5 @@
 ---
-title: '元宝问答：Logic&Logistics'
+title: '元宝问答：Logic & Logistics'
 tags: ['LLM 问答', '词源', '逻辑', '铁路', '犹太教', 'Coq']
 pubDate: '2026-08-07'
 copyright:
