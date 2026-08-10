@@ -31,7 +31,7 @@ rss: false
   + 我对允许无限嵌套从句的语言有好感，这也扩散到了 lambda expression 上
 - 形式化方法
   + 我正在刷 [Software Foundations](https://softwarefoundations.cis.upenn.edu/)，已基本完成 Logical Foundations、Programming Language Foundations 和 Verified Functional Algorithms 的机器判定题（`Admitted.` 数量≤10，三者在未修改时的 `Admitted.` 总数分别为415、269和232[^1]），正在做 Verifiable C，进度可见 [Unnamed2964/Software-Foundations-Checklist](https://github.com/Unnamed2964/Software-Foundations-Checklist)
-  + 使用形式化验证语言（如 Coq）进行证明的过程就是通过 tactics（一种指令），逐步构造证明 term 的过程。形式化验证工具的内核仅接受符合类型检查的证明 term，如果类型检查通过那么这个证明一定得证，否则不得证。这既最大地避免了人际接触，也排除了单方面自称证明了 xxx 的情况。
+  + 使用形式化验证语言（如 Coq）进行证明的过程就是通过 tactics（一种指令），逐步构造证明 term 的过程。形式化验证工具的内核仅接受符合类型检查的证明 term，如果类型检查通过那么这个证明一定得证，否则不得证。这既最大地避免了人际接触，**也排除了单方面自称证明了 xxx 的情况**。
 - ~~客家历史、犹太文化~~
   + 打删除线的原因是，这可能对真正的客家人或（和）犹太人非常不敬！
   + 但是有朋友的确感兴趣这方面，所以我也愿意了解并放在这里
