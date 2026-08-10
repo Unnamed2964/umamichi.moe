@@ -74,8 +74,8 @@ flowchart TD
   + 我对允许无限嵌套从句的语言有好感，这也扩散到了 lambda expression 上
 - 形式化方法
   + 我正在刷 [Software Foundations](https://softwarefoundations.cis.upenn.edu/)，已基本完成 Logical Foundations、Programming Language Foundations 和 Verified Functional Algorithms 的机器判定题（`Admitted.` 数量≤10，三者在未修改时的 `Admitted.` 总数分别为415、269和232[^2]），正在做 Verifiable C，进度可见 [Unnamed2964/Software-Foundations-Checklist](https://github.com/Unnamed2964/Software-Foundations-Checklist)
-  + 关于证明，我会想到的图景是从皮亚诺公理系统[^3]这样的最基础、没有争议的几条公理出发，逐步证明我们所熟知，被认为「理所当然」的加法和乘法的性质，（重新）建立起来算术大厦。证明正是在这一逻辑系统中砌起一块块砖块的过程。
   + 其作为一个自治的秩序，和白日梦有着相通之处。而且其也有着自洽、与现实可以建立联系的优点。
+  + 使用形式化验证语言（如 Coq）进行证明的过程就是通过 tactics（一种指令），逐步构造证明 term 的过程。形式化验证工具的内核仅接受符合类型检查的证明 term，如果类型检查通过那么这个证明一定得证，否则不得证。这既最大地避免了人际接触，也排除了单方面自称证明了 xxx 的情况。
 - ~~客家历史（「我不是客家人为什么要感兴趣这个」🥺）、犹太文化（「我是 goyim 为什么要感兴趣这个」🥺）~~
   + 打删除线的原因还有，这可能对真正的客家人或（和）犹太人非常不敬！
 - 东北亚历史（我提醒自己谨慎对待，因为涉及到自己本人的民族身份，容易形成拉踩）
@@ -85,6 +85,3 @@ flowchart TD
 
 [^1]: 我认为日常修复它的任何一个局部（如日常创作、过好每一天的生活），就是修复了。这个局部并不需要有什么重要性或显著性，这件事情也没有必要有什么戏剧性，反而是无聊甚至枯燥的。就像证明一个定理的任何一个小引理，都是证明这个定理的和其他证明 term 构成部分同等重要的一部分一样。
 [^2]: Logical Foundations 和 Programming Language Foundations 均以所完成的 Version 6.9.0 版本为准，Verified Functional Algorithms 以所完成的 Version 1.6.0 版本为准。不同版本的题目数可能略有差异。
-[^3]: Wikipedia: </br>
-[皮亚诺公理系统](https://zh.wikipedia.org/wiki/%E7%9A%AE%E4%BA%9A%E8%AF%BA%E5%85%AC%E7%90%86)</br>
-[Peano Axioms](https://en.wikipedia.org/wiki/Peano_axioms)
