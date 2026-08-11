@@ -95,6 +95,7 @@ Umamichi 与 Umaichi 均为正确拼写，可交替使用。在文档、称呼�
 
 - 正在学习 [Software Foundations](https://softwarefoundations.cis.upenn.edu/)。Logical Foundations、Programming Language Foundations 与 Verified Functional Algorithms 的机器判定题已基本完成（`Admitted.` 数量 ≤ 10；三者在未修改时的 `Admitted.` 总数分别为 415、269 和 232[^2]）。正在进行 Verifiable C。进度见 [Unnamed2964/Software-Foundings-Checklist](https://github.com/Unnamed2964/Software-Foundings-Checklist)。
 - 使用形式化验证语言（例如此处提到的 Coq）进行证明，是通过 tactics（一种指令）逐步构造证明 term 的过程。工具内核仅接受通过类型检查的证明 term：类型检查通过则证明成立，否则不成立。这最大程度减少了对人际信任的依赖，并使任何安装了相应工具链的机器都能复现结果，从而**很大程度避免了单方面自称证明了 xxx 的情况**。
+- 对自然语言的记叙文和议论文写作很吃力；形式化验证语言作为一类语言避免了这一短处。
 
 ### 东北亚历史
 
