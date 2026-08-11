@@ -7,7 +7,7 @@ rss: false
 > 
 > 有一版按 Windows XP 发行说明体 AI 改写版本，但是过于中二所以没有作为本页：[发行说明](/about/release-notes/)。
 
-您好，我是 Umamichi，是大学毕业后正处于 gap year 状态的含🍥MtX。
+您好，我是 Umamichi，是大学毕业后正处于 gap year 状态的含🍥MtX[^1]。
 
 ## 词源学
 
@@ -32,7 +32,7 @@ rss: false
 - 函数式编程
   + 我对允许无限嵌套从句的语言有好感，这也扩散到了 lambda expression 上
 - 形式化方法
-  + 我正在刷 [Software Foundations](https://softwarefoundations.cis.upenn.edu/)，已基本完成 Logical Foundations、Programming Language Foundations 和 Verified Functional Algorithms 的机器判定题（`Admitted.` 数量≤10，三者在未修改时的 `Admitted.` 总数分别为415、269和232[^1]），正在做 Verifiable C，进度可见 [Unnamed2964/Software-Foundations-Checklist](https://github.com/Unnamed2964/Software-Foundings-Checklist)
+  + 我正在刷 [Software Foundations](https://softwarefoundations.cis.upenn.edu/)，已基本完成 Logical Foundations、Programming Language Foundations 和 Verified Functional Algorithms 的机器判定题（`Admitted.` 数量≤10，三者在未修改时的 `Admitted.` 总数分别为415、269和232[^2]），正在做 Verifiable C，进度可见 [Unnamed2964/Software-Foundations-Checklist](https://github.com/Unnamed2964/Software-Foundings-Checklist)
   + 使用形式化验证语言（如这里提到的 Coq）进行证明的过程就是通过 tactics（一种指令），逐步构造证明 term 的过程。形式化验证工具的内核仅接受符合类型检查的证明 term，如果类型检查通过那么这个证明一定得证，否则不得证。这最大地避免了人际接触，而且任何人在安装相应工具链的电脑上都能复现，降低了验证门槛，**很大程度避免了单方面自称证明了 xxx 的情况**。
 - ~~客家历史、犹太文化~~
   + 打删除线的原因是，这可能对真正的客家人或（和）犹太人非常不敬！
@@ -77,4 +77,5 @@ flowchart TD
 - 我习惯通过笔记/存档来帮助维持连贯性。
 - 在心理状况最糟糕的期间，插入的层出不穷的白日梦片段会完全阻止正常的阅读和思考，导致阅读、学习和工作方面的障碍。但是这已经过去了。
 
-[^1]: Logical Foundations 和 Programming Language Foundations 均以所完成的 Version 6.9.0 版本为准，Verified Functional Algorithms 以所完成的 Version 1.6.0 版本为准。不同版本的题目数可能略有差异。
+[^1]: 这里取对男性和女性身份都缺乏认同之意。但是我会穿 JK 制服等服装。
+[^2]: Logical Foundations 和 Programming Language Foundations 均以所完成的 Version 6.9.0 版本为准，Verified Functional Algorithms 以所完成的 Version 1.6.0 版本为准。不同版本的题目数可能略有差异。

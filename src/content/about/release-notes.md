@@ -10,7 +10,7 @@ rss: false
 
 ## 关于本版本的重要信息
 
-本发行将 Umamichi 描述为：**大学毕业后、正处于 gap year 状态的含🍥MtX**。
+本发行将 Umamichi 描述为：**大学毕业后、正处于 gap year 状态的含🍥MtX**[^1]。
 
 除非另行说明，「Umamichi」同时涵盖拼写变体 Umaichi。
 
@@ -93,7 +93,7 @@ Umamichi 与 Umaichi 均为正确拼写，可交替使用。在文档、称呼�
 
 ### 形式化方法
 
-- 正在学习 [Software Foundations](https://softwarefoundations.cis.upenn.edu/)。Logical Foundations、Programming Language Foundations 与 Verified Functional Algorithms 的机器判定题已基本完成（`Admitted.` 数量 ≤ 10；三者在未修改时的 `Admitted.` 总数分别为 415、269 和 232[^1]）。正在进行 Verifiable C。进度见 [Unnamed2964/Software-Foundings-Checklist](https://github.com/Unnamed2964/Software-Foundings-Checklist)。
+- 正在学习 [Software Foundations](https://softwarefoundations.cis.upenn.edu/)。Logical Foundations、Programming Language Foundations 与 Verified Functional Algorithms 的机器判定题已基本完成（`Admitted.` 数量 ≤ 10；三者在未修改时的 `Admitted.` 总数分别为 415、269 和 232[^2]）。正在进行 Verifiable C。进度见 [Unnamed2964/Software-Foundings-Checklist](https://github.com/Unnamed2964/Software-Foundings-Checklist)。
 - 使用形式化验证语言（例如此处提到的 Coq）进行证明，是通过 tactics（一种指令）逐步构造证明 term 的过程。工具内核仅接受通过类型检查的证明 term：类型检查通过则证明成立，否则不成立。这最大程度减少了对人际信任的依赖，并使任何安装了相应工具链的机器都能复现结果，从而**很大程度避免了单方面自称证明了 xxx 的情况**。
 
 ### 东北亚历史
@@ -152,4 +152,5 @@ flowchart TD
 - [Unnamed2964/Software-Foundings-Checklist](https://github.com/Unnamed2964/Software-Foundings-Checklist)
 - [放送文化（含架空）收藏夹](https://b23.tv/J04gvta)
 
-[^1]: Logical Foundations 与 Programming Language Foundations 均以所完成的 Version 6.9.0 为准；Verified Functional Algorithms 以所完成的 Version 1.6.0 为准。不同版本的题目数可能略有差异。
+[^1]: 这里取对男性和女性身份都缺乏认同之意。但是我会穿 JK 制服等服装。
+[^2]: Logical Foundations 与 Programming Language Foundations 均以所完成的 Version 6.9.0 为准；Verified Functional Algorithms 以所完成的 Version 1.6.0 为准。不同版本的题目数可能略有差异。
