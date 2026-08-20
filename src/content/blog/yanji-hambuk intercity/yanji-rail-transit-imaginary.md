@@ -3,6 +3,9 @@ title: '关于延吉轨道交通的幻想'
 tags: ['延吉', '延边', '龙井', '轨道交通', '地铁', '市郊铁路', '市域铁路', '白日梦']
 pubDate: '2026-05-27'
 ---
+
+> 以下内容已经不是该内容的最新版本，最新版本在 Github 仓库 [Unnamed2964/yanji-metro-draft](https://github.com/Unnamed2964/yanji-metro-draft/) 更新
+
 这是一则关于延吉轨道交通系统的架空设定，与现实规划、在建项目无关。
 
 ![延吉地铁规划](/blog/imgs/plan.webp)
