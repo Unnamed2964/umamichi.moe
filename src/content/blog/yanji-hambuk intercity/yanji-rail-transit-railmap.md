@@ -4,6 +4,8 @@ tags: ['延吉', '延边', '龙井', '轨道交通', '地铁', '市郊铁路', '
 pubDate: '2026-06-01'
 ---
 
+> 以下内容已经不是该内容的最新版本，最新版本在 Github 仓库 [Unnamed2964/yanji-metro-draft](https://github.com/Unnamed2964/yanji-metro-draft/) 更新
+
 [关于延吉轨道交通的幻想（来自 umamichi.moe/blog/yanji-hambuk intercity/yanji-rail-transit-imaginary/）](https://umamichi.moe/blog/yanji-hambuk%20intercity/yanji-rail-transit-imaginary/) 的续篇
 
 RMP 版（包括 S2 延雄线、S3 延和线、S4 延敦线）：
