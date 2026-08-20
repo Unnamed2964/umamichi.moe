@@ -7,33 +7,39 @@ rss: false
 
 ## 地铁相关工具
 
-[@kyuri-metro](https://www.npmjs.com/org/kyuri-metro) 组织下的线路号方块、悬挂指示牌线路标识、站外指向牌、地贴、吊板贴纸等生成器，均可导出为 SVG / PNG / JPG / WebP。
-
 ### 上海地铁
 
-#### [线路号方块生成器](https://kyuri-metro-storybook.umamichi.moe/)
+#### 线路号方块生成器
 
-根据实拍的 13 号线竖立线路图等（2020 样式 2）、9 号线站台门线路图（2020 样式）和 2 号线竖立线路图（2025 样式）制作的上海地铁线路号方块生成器，还原了上海地铁导向系统中几种典型的线路号方块样式。
+➡️ [前往](https://kyuri-metro-storybook.umamichi.moe/)
+
+本项目还原了上海地铁导向系统中三种典型的线路号方块样式
 
 NPM 包见[单独页面](/tools/shmetro-line-id-block-generator/)。
 
 链接&示例：
 
-- [2025](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-line-id-block-2025-svg-generator--docs)
+- 2025
+
+  ➡️ [前往](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-line-id-block-2025-svg-generator--docs)
 
   <img src="/tools/imgs/shmetro-idblock/output-example-2025.webp" alt="上海地铁线路号方块生成器 2025 样式输出示例" style="max-height: 60px" />
 
-- [2020](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-line-id-block-2020-svg-generator--docs)
+- 2020
+
+  ➡️ [前往](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-line-id-block-2020-svg-generator--docs)
 
   <img src="/tools/imgs/shmetro-idblock/output-example.webp" alt="上海地铁线路号方块生成器 2020 样式输出示例" style="max-height: 60px" />
 
-- [2020 样式 2](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-line-id-block-2020-type-2-svg-generator--docs)
+- 2020 样式 2
+
+  ➡️ [前往](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-line-id-block-2020-type-2-svg-generator--docs)
 
   <img src="/tools/imgs/shmetro-idblock/output-example-2020-type2.webp" alt="上海地铁线路号方块生成器 2020 样式 2 输出示例" style="max-height: 60px" />
 
-#### [悬挂指示牌线路标识生成器](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-hanging-sign-line-label-2025-svg-generator--docs)
+#### 悬挂指示牌线路标识生成器
 
-根据上海 2025 版《城市轨道交通导向标识系统设计规范（征求意见稿）》图 10 描摹绘制的上海地铁悬挂指示牌线路标识[^1] SVG 生成器，支持一或多个线路号并列展示，并可分别自定义线路号方块颜色。
+➡️ [前往](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-hanging-sign-line-label-2025-svg-generator--docs)
 
 NPM：[@kyuri-metro/shmetro-hanging-sign-line-label-2025-svg-generator](https://www.npmjs.com/package/@kyuri-metro/shmetro-hanging-sign-line-label-2025-svg-generator)
 
@@ -49,9 +55,9 @@ GitHub：[kyuri-metro/shmetro-hanging-sign-line-label-2025-svg-generator](https:
 <img src="/tools/imgs/shmetro-hanging-sign-line-label/line-9-22-hanging-sign-line-label-2025.webp" alt="上海地铁悬挂指示牌线路标识生成器输出示例（9、22 号线）" style="max-height: 120px" />
 </p>
 
-#### [站外指向牌生成器](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-outdoor-directional-sign-2025-svg-generator--docs)
+#### 站外指向牌生成器
 
-根据上海 2025 版《城市轨道交通导向标识系统设计规范（征求意见稿）》描摹绘制的上海地铁站外指向牌 SVG 生成器，支持左/右向、普线线路号（1～4个）或市域命名线路（1～2个），并可分别自定义线路号方块颜色。
+➡️ [前往](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-outdoor-directional-sign-2025-svg-generator--docs)
 
 NPM：[@kyuri-metro/shmetro-outdoor-directional-sign-2025-svg-generator](https://www.npmjs.com/package/@kyuri-metro/shmetro-outdoor-directional-sign-2025-svg-generator)
 
@@ -67,9 +73,9 @@ GitHub：[kyuri-metro/shmetro-outdoor-directional-sign-2025-svg-generator](https
 <img src="/tools/imgs/shmetro-outdoor-directional-sign/line-r-airport-link-line-fengxian-line-outdoor-directional-sign-2025.webp" alt="上海地铁站外指向牌生成器输出示例（右向，机场联络线、奉贤线）" style="max-height: 150px; max-width: 100%; width: auto; height: auto" />
 </p>
 
-#### [数字线路号地贴生成器](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-numeric-floor-sticker-2025-svg-generator--docs)
+#### 数字线路号地贴生成器
 
-根据上海 2025 版《城市轨道交通导向标识系统设计规范（征求意见稿）》描摹绘制的上海地铁数字线路号地贴（竖向箭头，显示线路号）SVG 生成器。
+➡️ [前往](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-shmetro-numeric-floor-sticker-2025-svg-generator--docs)
 
 NPM：[@kyuri-metro/shmetro-numeric-floor-sticker-2025-svg-generator](https://www.npmjs.com/package/@kyuri-metro/shmetro-numeric-floor-sticker-2025-svg-generator)
 
@@ -81,9 +87,9 @@ GitHub：[kyuri-metro/shmetro-numeric-floor-sticker-2025-svg-generator](https://
 
 ### 南京地铁
 
-#### [线路号方块生成器](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-njmetro-line-id-block-svg-generator--docs)
+#### 线路号方块生成器
 
-参考实拍的南京地铁系统内导向标识图片制作的南京地铁线路号方块生成器，用于南京地铁屏蔽门上方贴纸生成器，也可单独使用。
+➡️ [前往](https://kyuri-metro-storybook.umamichi.moe/?path=/docs/kyuri-metro-njmetro-line-id-block-svg-generator--docs)
 
 NPM：[@kyuri-metro/njmetro-line-id-block-svg-generator](https://www.npmjs.com/package/@kyuri-metro/njmetro-line-id-block-svg-generator)
 
@@ -91,13 +97,11 @@ NPM：[@kyuri-metro/njmetro-line-id-block-svg-generator](https://www.npmjs.com/p
 
 <img src="/tools/imgs/njmetro-idblock/output-example-v0.3.1.webp" alt="南京地铁线路号方块生成器输出示例" style="max-height: 120px" />
 
-#### [屏蔽门上方贴纸生成器（Beta）](https://njmetro-railmap-creator.umamichi.moe/)
+#### 屏蔽门上方贴纸生成器（Beta）
 
-根据实拍的南京地铁3号线吊板制作的南京地铁屏蔽门上方贴纸生成器。
+➡️ [前往](https://njmetro-railmap-creator.umamichi.moe/)
 
 GitHub：[kyuri-metro/njmetro-railmap-creator](https://github.com/kyuri-metro/njmetro-railmap-creator)
-
-参考资料与推导草图见 [docs 目录](https://github.com/kyuri-metro/njmetro-railmap-creator/tree/main/docs)。
 
 示例：
 
