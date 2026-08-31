@@ -90,11 +90,11 @@ export default function rehypeWrapMermaidSource() {
 				children: [
 					{
 						type: 'element',
-						tagName: 'script',
+						tagName: 'textarea',
 						properties: {
-							type: 'text/plain',
 							className: ['article-copy-source'],
 							hidden: true,
+							readOnly: true,
 						},
 						children: [{ type: 'text', value: diagram }],
 					},
