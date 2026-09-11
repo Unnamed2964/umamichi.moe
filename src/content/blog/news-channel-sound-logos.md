@@ -8,7 +8,9 @@ pubDate: '2026-09-11'
 
 除了下面所示的旋律以外，乐器及其组合事实上也是声音标识的一部分，但是难以通过以下表记来体现。
 
-以下为在电脑键盘软件（AudioTheory Piano Keys）上尝试来复刻，本人不具有音乐相关专业技能。以下用+/-表示高/低一个八度，为便于对照，记为以 A 为中心。
+以下为在电脑键盘软件（AudioTheory Piano Keys）上尝试来复刻，本人不具有音乐相关专业技能。为便于对照，以 A 为调性中心记录。将连续的一段 A~G 记为一个八度，低或高一个八度记为“-”或“+”。
+
+以下提供了软件合成的音频预览（不是录制于 AudioTheory Piano Keys），可供对照听感。
 
 ### 中国
 
@@ -18,11 +20,15 @@ pubDate: '2026-09-11'
 
 > C D G
 
+<audio controls preload="none" src="/blog/files/news-channel-sound-logos/cctv-2.wav">你的浏览器不支持 audio 元素。</audio>
+
 这一旋律出现于新闻节目开头及结尾[^1]，以及频道 ID[^2]。
 
 #### CGTN
 
 > A E C D A+ A+
+
+<audio controls preload="none" src="/blog/files/news-channel-sound-logos/cgtn.wav">你的浏览器不支持 audio 元素。</audio>
 
 这一旋律出现在新闻节目开头和结尾[^3]，以及频道 ID[^4]。
 
@@ -34,6 +40,8 @@ pubDate: '2026-09-11'
 
 > A D E D E A+
 
+<audio controls preload="none" src="/blog/files/news-channel-sound-logos/rossiya-24.wav">你的浏览器不支持 audio 元素。</audio>
+
 根据 BV19fXhYEEVE，曾使用于频道 ID、节目预告、版权页及一些其他节目的片头（虽然该合集中也有不少没有采用这种完整形式，或者根本没有包含这种旋律，仅仅包含一种“氛围”）。
 
 ### 以色列
@@ -42,13 +50,17 @@ pubDate: '2026-09-11'
 
 > E D C D E A
 
+<audio controls preload="none" src="/blog/files/news-channel-sound-logos/kan.wav">你的浏览器不支持 audio 元素。</audio>
+
 这一旋律出现在电视新闻节目开头、结尾、新闻简要[^5]和电视频道 ID。Kan Reshet Bet（新闻广播电台）也有类似的表达[^6]。
 
 ### 德国
 
 #### ZDF
 
-> A D- A D C G G C G A
+> A D- A D C G- G- C G- A
+
+<audio controls preload="none" src="/blog/files/news-channel-sound-logos/zdf.wav">你的浏览器不支持 audio 元素。</audio>
 
 这一旋律及其变体出现在新闻节目开头、结尾[^7]。
 
@@ -57,6 +69,8 @@ pubDate: '2026-09-11'
 #### RTVE
 
 > A E C D A+...
+
+<audio controls preload="none" src="/blog/files/news-channel-sound-logos/rtve.wav">你的浏览器不支持 audio 元素。</audio>
 
 这一旋律出现在新闻节目片头、新闻简要以及片尾[^8][^9]。
 
