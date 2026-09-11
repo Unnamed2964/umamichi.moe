@@ -118,7 +118,6 @@
 			const anchorRect = ref.getBoundingClientRect();
 			preview.style.visibility = 'hidden';
 			preview.hidden = false;
-			preview.classList.remove('is-visible');
 
 			const previewRect = preview.getBoundingClientRect();
 			const spaceBelow = window.innerHeight - anchorRect.bottom - offset - viewportPadding;
@@ -224,10 +223,19 @@
 			}, hideDelayMs);
 		};
 
-		const repositionVisiblePreview = () => {
+		const repositionVisiblePreview = (event) => {
 			const preview = document.getElementById(previewId);
 
 			if (!(preview instanceof HTMLDivElement) || preview.hidden || !activeRef) {
+				return;
+			}
+
+			// Ignore scrolling inside the tooltip itself (overflow: auto).
+			if (
+				event instanceof Event &&
+				event.target instanceof Node &&
+				preview.contains(event.target)
+			) {
 				return;
 			}
 
