@@ -143,3 +143,10 @@ html.dark .article-content .astro-code span {
 .article-footnote-preview .katex-display {
 	overflow-x: auto;
 }
+
+.article-content audio {
+	display: block;
+	width: 100%;
+	max-width: 28rem;
+	margin: 0.75rem 0 1rem;
+}
