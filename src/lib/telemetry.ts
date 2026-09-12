@@ -54,32 +54,6 @@ export interface HesterTelemetryEvent extends BaseTelemetryEvent {
 	};
 }
 
-export function canonicalize(value: JsonValue): JsonValue {
-	if (Array.isArray(value)) {
-		return value.map(canonicalize);
-	}
-
-	if (value && typeof value === 'object') {
-		return Object.keys(value)
-			.sort((left, right) => left.localeCompare(right))
-			.reduce((result, key) => {
-				result[key] = canonicalize(value[key]);
-				return result;
-			}, {} as { [key: string]: JsonValue });
-	}
-
-	return value;
-}
-
-export async function sha256Hex(input: string) {
-	const bytes = new TextEncoder().encode(input);
-	const digest = await crypto.subtle.digest('SHA-256', bytes);
-
-	return Array.from(new Uint8Array(digest))
-		.map((byte) => byte.toString(16).padStart(2, '0'))
-		.join('');
-}
-
 export function normalizePage(page: unknown): PageTelemetry {
 	const candidate = page as { pathname?: unknown; referrer?: unknown } | null | undefined;
 	let referrer = null;

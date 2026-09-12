@@ -1,9 +1,4 @@
-import {
-	canonicalize,
-	sha256Hex,
-	type BaseTelemetryEvent,
-	type JsonValue,
-} from './telemetry';
+import type { BaseTelemetryEvent } from './telemetry';
 
 type NavigatorWithTelemetry = Navigator & {
 	deviceMemory?: number;
@@ -58,12 +53,10 @@ export function createBaseTelemetryEvent(version: number, siteId: string): BaseT
 }
 
 export async function postTelemetry<T extends object>(endpoint: string, event: T) {
-	const hash = await sha256Hex(JSON.stringify(canonicalize(event as JsonValue)));
-
 	return fetch(endpoint, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ ...(event as object), hash }),
+		body: JSON.stringify(event),
 		keepalive: true,
 	});
 }
