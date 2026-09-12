@@ -34,7 +34,7 @@
 }
 
 html {
-	--site-header-offset: 9.5rem;
+	--site-header-offset: 3.5rem;
 	--site-nav-running-line-bg: var(--theme-400);
 	--site-nav-future-icon: var(--gray-300);
 	--site-copy-toast-bg: var(--site-bg);
@@ -341,15 +341,3 @@ html[data-theme-switching='true'] *::after {
 	transition: none !important;
 }
 
-@media screen and (min-width: 30rem) {
-	html {
-		--site-header-offset: 7rem;
-	}
-}
-
-@media screen and (min-width: 48rem) {
-	html {
-		/* Matches mobile: padding-block 0.75rem × 2 + 2rem controls */
-		--site-header-offset: 3.5rem;
-	}
-}

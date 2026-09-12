@@ -3,6 +3,7 @@
 		window.siteArticleTocInitialized = true;
 		let headings = [];
 		let observer = null;
+		let headerOffsetPx = 56;
 		const anchorButtonClass = 'article-heading-anchor-copy';
 		const copiedLabel = '已复制';
 
@@ -96,10 +97,7 @@
 				return '';
 			}
 
-			const headerOffset = Number.parseFloat(
-				getComputedStyle(document.documentElement).getPropertyValue('--site-header-offset'),
-			) || 0;
-			const activationY = headerOffset;
+			const activationY = headerOffsetPx;
 			const activationTolerancePx = 2;
 
 			let current = headings[0].slug;
@@ -129,6 +127,9 @@
 			observer = null;
 			headings = [];
 
+			const rootFontSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+			headerOffsetPx = Math.round(3.5 * rootFontSize);
+
 			const links = Array.from(document.querySelectorAll('[data-toc-link]'));
 			const bySlug = new Map();
 
@@ -156,7 +157,7 @@
 			observer = new IntersectionObserver(
 				() => refreshActive(),
 				{
-					rootMargin: '0px 0px -70% 0px',
+					rootMargin: `-${headerOffsetPx}px 0px -70% 0px`,
 					threshold: [0, 1],
 				},
 			);
@@ -166,11 +167,10 @@
 			}
 
 			refreshActive();
-		}
+		};
 
 		window.addEventListener('hashchange', refreshActive);
 		window.addEventListener('resize', refreshActive, { passive: true });
-		document.addEventListener('scroll', refreshActive, { passive: true });
 		window.addEventListener('site:toc-refresh', setupToc);
 		registerAfterSwap(setupToc);
 	}
