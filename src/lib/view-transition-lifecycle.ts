@@ -10,8 +10,6 @@ const beforeSwapCallbacks = new Set<TransitionEventCallback>();
 declare global {
 	interface Window {
 		[INIT_KEY]?: boolean;
-		__siteRegisterAfterSwap?: (callback: LifecycleCallback, runImmediately?: boolean) => () => void;
-		__siteRegisterBeforePreparation?: (callback: TransitionEventCallback) => () => void;
 	}
 }
 
@@ -46,9 +44,6 @@ export function initViewTransitionLifecycle(): void {
 	}
 
 	window[INIT_KEY] = true;
-
-	window.__siteRegisterAfterSwap = registerAfterSwap;
-	window.__siteRegisterBeforePreparation = onBeforePreparation;
 
 	document.addEventListener('astro:after-swap', () => {
 		for (const callback of afterSwapCallbacks) {
