@@ -123,14 +123,20 @@ function refreshActive(): void {
 	}
 }
 
+function syncHeaderOffset(): void {
+	const header = document.querySelector('[data-site-header]');
+	if (header instanceof HTMLElement) {
+		headerOffsetPx = Math.ceil(header.getBoundingClientRect().height);
+	}
+}
+
 function setupToc(): void {
 	setupHeadingAnchorCopy();
 	observer?.disconnect();
 	observer = null;
 	headings = [];
 
-	const rootFontSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-	headerOffsetPx = Math.round(3.5 * rootFontSize);
+	syncHeaderOffset();
 
 	const links = Array.from(document.querySelectorAll('[data-toc-link]'));
 	const bySlug = new Map<string, TocHeadingItem>();
@@ -182,7 +188,10 @@ export function initArticleTocClient(): void {
 	initialized = true;
 
 	window.addEventListener('hashchange', refreshActive);
-	window.addEventListener('resize', refreshActive, { passive: true });
+	window.addEventListener('resize', () => {
+		syncHeaderOffset();
+		refreshActive();
+	}, { passive: true });
 	window.addEventListener('site:toc-refresh', setupToc);
 	registerAfterSwap(setupToc);
 }
