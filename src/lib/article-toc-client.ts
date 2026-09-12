@@ -1,0 +1,188 @@
+import { registerAfterSwap } from './view-transition-lifecycle';
+
+interface TocHeadingItem {
+	slug: string;
+	links: Element[];
+	heading: HTMLElement;
+}
+
+let initialized = false;
+let headings: TocHeadingItem[] = [];
+let observer: IntersectionObserver | null = null;
+let headerOffsetPx = 56;
+
+const anchorButtonClass = 'article-heading-anchor-copy';
+const copiedLabel = '已复制';
+
+function buildAnchorUrl(slug: string): string {
+	return `${window.location.origin}${window.location.pathname}${window.location.search}#${slug}`;
+}
+
+async function copyHeadingAnchor(slug: string, button: HTMLButtonElement): Promise<void> {
+	try {
+		await navigator.clipboard.writeText(buildAnchorUrl(slug));
+		button.dataset.label = copiedLabel;
+		window.setTimeout(() => {
+			button.dataset.label = '';
+		}, 1200);
+	} catch {
+		button.dataset.label = '';
+	}
+}
+
+function setupHeadingAnchorCopy(): void {
+	const contentRoot = document.querySelector('.article-content');
+
+	if (!contentRoot) {
+		return;
+	}
+
+	const contentHeadings = contentRoot.querySelectorAll<HTMLElement>(
+		'h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]',
+	);
+
+	for (const heading of contentHeadings) {
+		if (heading.querySelector(`.${anchorButtonClass}`)) {
+			continue;
+		}
+
+		const slug = heading.id;
+		if (!slug) {
+			continue;
+		}
+
+		const button = document.createElement('button');
+		button.type = 'button';
+		button.className = anchorButtonClass;
+		button.setAttribute('aria-label', `复制标题链接 #${slug}`);
+		button.title = `复制链接 #${slug}`;
+		button.innerHTML =
+			'<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10.59 13.41a1 1 0 0 0 1.41 1.41l3.83-3.83a3 3 0 1 0-4.24-4.24L9.88 8.46a1 1 0 0 0 1.41 1.42l1.71-1.72a1 1 0 1 1 1.41 1.42zM13.41 10.59a1 1 0 0 0-1.41-1.41l-3.83 3.83a3 3 0 1 0 4.24 4.24l1.71-1.71a1 1 0 0 0-1.41-1.42L11 15.83a1 1 0 1 1-1.41-1.42z"/></svg>';
+		button.addEventListener('click', () => {
+			void copyHeadingAnchor(slug, button);
+		});
+		heading.prepend(button);
+	}
+}
+
+function setActive(slug: string): void {
+	for (const item of headings) {
+		const isActive = item.slug === slug;
+
+		for (const link of item.links) {
+			if (isActive) {
+				link.setAttribute('aria-current', 'location');
+
+				const sheet = link.closest('[data-mobile-toc-sheet]');
+				if (sheet) {
+					if (document.documentElement.dataset.mobileTocOpen === 'true') {
+						link.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+					}
+					continue;
+				}
+
+				const sidebar = link.closest('.article-layout__sidebar');
+				if (sidebar && getComputedStyle(sidebar).display === 'none') {
+					continue;
+				}
+
+				link.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+			} else {
+				link.removeAttribute('aria-current');
+			}
+		}
+	}
+}
+
+function pickActiveSlug(): string {
+	if (headings.length === 0) {
+		return '';
+	}
+
+	const activationY = headerOffsetPx;
+	const activationTolerancePx = 2;
+
+	let current = headings[0].slug;
+
+	for (const item of headings) {
+		if (item.heading.getBoundingClientRect().top <= activationY + activationTolerancePx) {
+			current = item.slug;
+		} else {
+			break;
+		}
+	}
+
+	return current;
+}
+
+function refreshActive(): void {
+	const activeSlug = pickActiveSlug();
+
+	if (activeSlug) {
+		setActive(activeSlug);
+	}
+}
+
+function setupToc(): void {
+	setupHeadingAnchorCopy();
+	observer?.disconnect();
+	observer = null;
+	headings = [];
+
+	const rootFontSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+	headerOffsetPx = Math.round(3.5 * rootFontSize);
+
+	const links = Array.from(document.querySelectorAll('[data-toc-link]'));
+	const bySlug = new Map<string, TocHeadingItem>();
+
+	for (const link of links) {
+		const slug = link.getAttribute('data-toc-link');
+		if (!slug) {
+			continue;
+		}
+
+		const heading = document.getElementById(slug);
+		if (!heading) {
+			continue;
+		}
+
+		const existing = bySlug.get(slug);
+		if (existing) {
+			existing.links.push(link);
+		} else {
+			bySlug.set(slug, { slug, links: [link], heading });
+		}
+	}
+
+	headings = Array.from(bySlug.values());
+
+	if (headings.length === 0) {
+		return;
+	}
+
+	observer = new IntersectionObserver(
+		() => refreshActive(),
+		{
+			rootMargin: `-${headerOffsetPx}px 0px -70% 0px`,
+			threshold: [0, 1],
+		},
+	);
+
+	for (const item of headings) {
+		observer.observe(item.heading);
+	}
+
+	refreshActive();
+}
+
+export function initArticleTocClient(): void {
+	if (initialized) {
+		return;
+	}
+	initialized = true;
+
+	window.addEventListener('hashchange', refreshActive);
+	window.addEventListener('resize', refreshActive, { passive: true });
+	window.addEventListener('site:toc-refresh', setupToc);
+	registerAfterSwap(setupToc);
+}
