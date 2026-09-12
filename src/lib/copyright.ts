@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export const COPYRIGHT_CC_LICENSE_IDS = [
 	'cc0-1.0',
 	'cc-by-4.0',
@@ -10,15 +12,18 @@ export const COPYRIGHT_CC_LICENSE_IDS = [
 
 export type CcLicenseId = (typeof COPYRIGHT_CC_LICENSE_IDS)[number];
 
-export type CopyrightConfig =
-	| {
-		kind: 'cc';
-		license: CcLicenseId;
-	}
-	| {
-		kind: 'no-repost';
-		statement?: string;
-	};
+export const copyrightSchema = z.discriminatedUnion('kind', [
+	z.object({
+		kind: z.literal('cc'),
+		license: z.enum(COPYRIGHT_CC_LICENSE_IDS),
+	}),
+	z.object({
+		kind: z.literal('no-repost'),
+		statement: z.string().trim().min(1).optional(),
+	}),
+]);
+
+export type CopyrightConfig = z.infer<typeof copyrightSchema>;
 
 export const COPYRIGHT_CC_DOWNLOADS_URL = 'https://creativecommons.org/mission/downloads/';
 
@@ -45,7 +50,7 @@ export const COPYRIGHT_CC_LICENSES: Record<CcLicenseId, { badgeSrc: string; href
 	},
 	'cc-by-nc-4.0': {
 		badgeSrc: 'https://i.creativecommons.org/l/by-nc/4.0/88x31.png',
-		href: 'https://creativecommons.org/licenses/by-nc/4.0/',
+		href: 'https://creativecommons.org/licenses/by-nc-4.0/',
 		label: 'CC BY-NC 4.0',
 	},
 	'cc-by-nc-sa-4.0': {
@@ -59,46 +64,3 @@ export const COPYRIGHT_CC_LICENSES: Record<CcLicenseId, { badgeSrc: string; href
 		label: 'CC BY-NC-ND 4.0',
 	},
 };
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-	return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-
-export function parseCopyrightConfig(rawValue: unknown, sourceLabel: string): CopyrightConfig | undefined {
-	if (rawValue === undefined || rawValue === null) {
-		return undefined;
-	}
-
-	if (!isRecord(rawValue)) {
-		throw new Error(`${sourceLabel} has an invalid copyright value.`);
-	}
-
-	const kind = rawValue.kind;
-	if (kind === 'cc') {
-		const license = rawValue.license;
-
-		if (typeof license !== 'string' || !COPYRIGHT_CC_LICENSE_IDS.includes(license as CcLicenseId)) {
-			throw new Error(`${sourceLabel} has an unsupported copyright.license value.`);
-		}
-
-		return {
-			kind,
-			license: license as CcLicenseId,
-		};
-	}
-
-	if (kind === 'no-repost') {
-		const statement = rawValue.statement;
-
-		if (statement !== undefined && (typeof statement !== 'string' || !statement.trim())) {
-			throw new Error(`${sourceLabel} has an invalid copyright.statement value.`);
-		}
-
-		return {
-			kind,
-			statement: typeof statement === 'string' ? statement.trim() : undefined,
-		};
-	}
-
-	throw new Error(`${sourceLabel} has an unsupported copyright.kind value.`);
-}

@@ -18,7 +18,7 @@ export function ArticleCopyright({ copyright }: ArticleCopyrightProps) {
 					版权声明
 				</h2>
 
-				{ccLicense ? (
+				{copyright.kind === 'cc' && ccLicense ? (
 					<div className="article-copyright__content">
 						<a
 							href={ccLicense.href}
@@ -45,7 +45,7 @@ export function ArticleCopyright({ copyright }: ArticleCopyrightProps) {
 					</div>
 				) : (
 					<p className="article-copyright__body">
-						{copyright.statement ??
+						{(copyright.kind === 'no-repost' ? copyright.statement : undefined) ??
 							'本文著作权归作者所有。未经作者明确许可，不得转载、摘编、改编或以其他形式公开发布。'}
 					</p>
 				)}

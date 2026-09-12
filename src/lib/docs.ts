@@ -1,17 +1,21 @@
 import type { CollectionEntry } from 'astro:content';
 import { parse as parseYaml } from 'yaml';
+import { z } from 'zod';
 import { isIncludedContentDoc } from './content-doc-include.mjs';
-import { parseCopyrightConfig, type CopyrightConfig } from './copyright';
+import { copyrightSchema, type CopyrightConfig } from './copyright';
 import { stripEdgeSlashes } from './path-slashes.mjs';
 
 type DocEntry = CollectionEntry<'docs'>;
 
-export type NavIconKind =
-	| 'normal'
-	| 'transfer'
-	| 'transfer-and-out-of-station-transfer'
-	| 'out-of-station-transfer'
-	| 'out-of-station-transfer-and-out-of-station-transfer';
+export const NAV_ICON_KINDS = [
+	'normal',
+	'transfer',
+	'transfer-and-out-of-station-transfer',
+	'out-of-station-transfer',
+	'out-of-station-transfer-and-out-of-station-transfer',
+] as const;
+
+export type NavIconKind = (typeof NAV_ICON_KINDS)[number];
 
 export type FolderListItem = {
 	fixOrder?: number;
@@ -48,7 +52,7 @@ type RawFolderMeta = {
 	comment?: boolean;
 	copyright?: CopyrightConfig;
 	fixOrder?: number;
-	icon?: string;
+	icon?: NavIconKind;
 	name?: string;
 	timeless?: boolean;
 	title?: string;
@@ -198,14 +202,6 @@ const SOURCE_FOLDER_META_FILES = import.meta.glob('../content/**/.meta.{yml,yaml
 	query: '?raw',
 }) as Record<string, string>;
 
-const VALID_NAV_ICON_KINDS = new Set<NavIconKind>([
-	'normal',
-	'transfer',
-	'transfer-and-out-of-station-transfer',
-	'out-of-station-transfer',
-	'out-of-station-transfer-and-out-of-station-transfer',
-]);
-
 function toPosixPath(path: string) {
 	return path.replaceAll('\\', '/');
 }
@@ -262,6 +258,16 @@ function addFolderPathWithAncestors(folderPathSet: Set<string>, folderPath: stri
 	folderPathSet.add('');
 }
 
+export const folderMetaSchema = z.object({
+	comment: z.boolean().optional(),
+	copyright: copyrightSchema.optional(),
+	'fix-order': z.number().int().lt(0).optional(),
+	icon: z.enum(NAV_ICON_KINDS).optional(),
+	name: z.string().optional(),
+	timeless: z.boolean().optional(),
+	title: z.string().optional(),
+});
+
 function parseFolderMeta(sourcePath: string, rawContent: string): RawFolderMeta {
 	const parsed = parseYaml(rawContent);
 
@@ -269,60 +275,32 @@ function parseFolderMeta(sourcePath: string, rawContent: string): RawFolderMeta 
 		return {};
 	}
 
-	if (typeof parsed !== 'object' || Array.isArray(parsed)) {
-		throw new Error(`Folder meta file ${sourcePath} must contain a YAML object.`);
+	const result = folderMetaSchema.safeParse(parsed);
+	if (!result.success) {
+		const formatted = result.error.issues
+			.map((issue) => `${issue.path.join('.') || 'root'}: ${issue.message}`)
+			.join('; ');
+		throw new Error(`Folder meta file ${sourcePath} has invalid metadata: ${formatted}`);
 	}
 
-	const { comment, copyright, icon, name, timeless, title } = parsed as Record<string, unknown>;
-	const fixOrder = (parsed as Record<string, unknown>)['fix-order'];
-
-	if (comment !== undefined && typeof comment !== 'boolean') {
-		throw new Error(`Folder meta file ${sourcePath} has an invalid comment value.`);
-	}
-
-	if (icon !== undefined && typeof icon !== 'string') {
-		throw new Error(`Folder meta file ${sourcePath} has an invalid icon value.`);
-	}
-
-	if (name !== undefined && typeof name !== 'string') {
-		throw new Error(`Folder meta file ${sourcePath} has an invalid name value.`);
-	}
-
-	if (timeless !== undefined && typeof timeless !== 'boolean') {
-		throw new Error(`Folder meta file ${sourcePath} has an invalid timeless value.`);
-	}
-
-	if (title !== undefined && typeof title !== 'string') {
-		throw new Error(`Folder meta file ${sourcePath} has an invalid title value.`);
-	}
-
-	if (fixOrder !== undefined && (typeof fixOrder !== 'number' || !Number.isInteger(fixOrder) || fixOrder >= 0)) {
-		throw new Error(`Folder meta file ${sourcePath} has an invalid fix-order value.`);
-	}
-
+	const data = result.data;
 	return {
-		comment,
-		copyright: parseCopyrightConfig(copyright, `Folder meta file ${sourcePath}`),
-		fixOrder: fixOrder as number | undefined,
-		icon,
-		name,
-		timeless,
-		title,
+		comment: data.comment,
+		copyright: data.copyright,
+		fixOrder: data['fix-order'],
+		icon: data.icon,
+		name: data.name,
+		timeless: data.timeless,
+		title: data.title,
 	};
 }
 
-function resolveFolderMeta(folderPath: string, rawMeta: RawFolderMeta | undefined, parentMeta: FolderMeta | undefined): FolderMeta {
-	const resolvedIcon = rawMeta?.icon;
-
-	if (resolvedIcon !== undefined && !VALID_NAV_ICON_KINDS.has(resolvedIcon as NavIconKind)) {
-		throw new Error(`Folder ${folderPath || '/'} has an unsupported icon value: ${resolvedIcon}.`);
-	}
-
+function resolveFolderMeta(_folderPath: string, rawMeta: RawFolderMeta | undefined, parentMeta: FolderMeta | undefined): FolderMeta {
 	return {
 		comment: rawMeta?.comment ?? parentMeta?.comment,
 		copyright: rawMeta?.copyright ?? parentMeta?.copyright,
 		fixOrder: rawMeta?.fixOrder,
-		icon: resolvedIcon as NavIconKind | undefined,
+		icon: rawMeta?.icon,
 		timelessEffectToFile: rawMeta?.timeless ?? parentMeta?.timelessEffectToFile ?? false,
 		title: rawMeta?.title ?? rawMeta?.name,
 	};
