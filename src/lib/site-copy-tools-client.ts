@@ -15,6 +15,7 @@ const siteCopyToastViewportPadding = 16;
 const siteCopyToastOffset = 12;
 const siteCopyToastDuration = 700;
 const ARTICLE_SOURCE_MENU_HIDE_MS = 220;
+const COPY_ATTRIBUTION_MIN_LENGTH = 50;
 
 function clamp(value: number, min: number, max: number): number {
 	if (max <= min) {
@@ -264,7 +265,13 @@ export function initSiteCopyTools(): void {
 	document.addEventListener('copy', (event) => {
 		const selectedPlainText = getSelectedPlainText();
 
-		if (!selectedPlainText || !event.clipboardData) {
+		if (!selectedPlainText) {
+			return;
+		}
+
+		showSiteCopyToast('已复制');
+
+		if (selectedPlainText.length <= COPY_ATTRIBUTION_MIN_LENGTH || !event.clipboardData) {
 			return;
 		}
 
@@ -277,8 +284,6 @@ export function initSiteCopyTools(): void {
 		if (selectedHtml) {
 			event.clipboardData.setData('text/html', `${selectedHtml}<span>${escapeSiteCopyHtml(suffix)}</span>`);
 		}
-
-		showSiteCopyToast('已复制');
 	}, true);
 
 	const copyTextToClipboard = async (value: string): Promise<boolean> => {
