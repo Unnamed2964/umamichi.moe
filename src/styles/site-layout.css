@@ -1050,14 +1050,12 @@ html[data-mobile-menu-open='true'] {
 .site-header__nav-icon {
 	position: absolute;
 	left: 0;
-	top: 0;
-	width: 0;
-	height: 0;
-	overflow: visible;
+	bottom: 0;
 	z-index: 1;
 	display: none;
 	line-height: 0;
 	pointer-events: none;
+	transform: translateX(-50%);
 }
 
 @media screen and (min-width: 48rem) {
@@ -1424,15 +1422,13 @@ html.dark .site-icon-button[data-site-theme-toggle] [data-site-theme-icon='dark'
 
 .site-mobile-menu__nav-icon {
 	position: absolute;
-	left: 0;
+	right: 8px;
 	top: 0;
-	width: 0;
-	height: 0;
-	overflow: visible;
 	z-index: 1;
 	display: inline-flex;
 	line-height: 0;
 	pointer-events: none;
+	transform: translateY(-50%);
 }
 
 @media screen and (min-width: 48rem) {
