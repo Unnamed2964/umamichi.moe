@@ -3,10 +3,8 @@ import {
 	ALLOWED_ORIGINS,
 	SITE_ID,
 	TIKKUN_SCHEMA_VERSION,
-	canonicalize,
 	normalizeBrowser,
 	normalizePage,
-	sha256Hex,
 	type BaseTelemetryEvent,
 } from '../../lib/telemetry';
 
@@ -43,8 +41,7 @@ const GET_MESSAGE = `<p>✨</p>
 		"asOrganization": "Cloudflare, Inc.",
 		"deviceType": "desktop",
 		"timezone": "Asia/Tokyo"
-	},
-	"hash": "sha256-hex"
+	}
 }</code></pre>`;
 
 export function GET() {
@@ -68,12 +65,7 @@ export async function POST({ request }: { request: Request }) {
 		return new Response('invalid origin', { status: 403 });
 	}
 
-	const { hash, ...event } = body as Record<string, unknown> & { hash?: unknown };
-	const telemetryEvent = event as BaseTelemetryEvent;
-
-	if (typeof hash !== 'string' || hash.length === 0) {
-		return new Response('missing hash', { status: 400 });
-	}
+	const telemetryEvent = body as BaseTelemetryEvent;
 
 	if (telemetryEvent.version !== TIKKUN_SCHEMA_VERSION) {
 		return new Response('invalid version', { status: 400 });
@@ -83,19 +75,12 @@ export async function POST({ request }: { request: Request }) {
 		return new Response('invalid siteId', { status: 400 });
 	}
 
-	const expectedHash = await sha256Hex(JSON.stringify(canonicalize(telemetryEvent)));
-
-	if (hash !== expectedHash) {
-		return new Response('invalid hash', { status: 400 });
-	}
-
 	const record = {
 		kind: 'tikkun',
 		version: telemetryEvent.version,
 		siteId: telemetryEvent.siteId,
 		page: normalizePage(telemetryEvent.page),
 		browser: normalizeBrowser(telemetryEvent.browser),
-		hash,
 		timestamp: Date.now(),
 		client: {
 			country: cf.country,
