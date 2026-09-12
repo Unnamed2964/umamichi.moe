@@ -282,28 +282,15 @@ export function initSiteCopyTools(): void {
 	}, true);
 
 	const copyTextToClipboard = async (value: string): Promise<boolean> => {
-		if (!value) {
+		if (!value || !navigator.clipboard?.writeText) {
 			return false;
 		}
 
-		if (navigator.clipboard?.writeText) {
+		try {
 			await navigator.clipboard.writeText(value);
 			return true;
-		}
-
-		const fallback = document.createElement('textarea');
-		fallback.value = value;
-		fallback.setAttribute('readonly', '');
-		fallback.style.position = 'fixed';
-		fallback.style.left = '-9999px';
-		fallback.style.top = '0';
-		document.body.append(fallback);
-		fallback.select();
-
-		try {
-			return document.execCommand('copy');
-		} finally {
-			fallback.remove();
+		} catch {
+			return false;
 		}
 	};
 
