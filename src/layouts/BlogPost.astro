@@ -14,6 +14,7 @@ import type { CopyrightConfig } from '../lib/copyright';
 import { buildDocsStructure, toTagHref, type SidebarNode } from '../lib/docs';
 import gitHistoryManifest from '../generated/git-history-manifest.json';
 import { historyUrlForEntryId } from '../lib/git-history';
+import { stripEdgeSlashes } from '../lib/path-slashes.mjs';
 import { formatReadingTimeLabel } from '../lib/reading-time';
 
 type LayoutData = {
@@ -79,7 +80,7 @@ const tags: ArticleTag[] = (pageData.tags ?? []).map((tag) => ({
 	label: tag,
 }));
 const currentPath = Astro.url.pathname;
-const routePath = currentPath.replace(/^\/+|\/+$/g, '');
+const routePath = stripEdgeSlashes(currentPath);
 const topLevelFolderPath = routePath.split('/').filter(Boolean)[0] ?? '';
 const docs = await getCollection('docs');
 const docsStructure = buildDocsStructure(docs);
