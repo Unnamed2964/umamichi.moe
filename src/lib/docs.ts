@@ -554,7 +554,7 @@ function buildSidebarTree(folderPath: string, folderStateMap: Map<string, Folder
 	return {
 		children: folder.childItems.map((item) => {
 			if (item.kind === 'folder') {
-				const childFolderPath = item.href.replace(/^\//, '').replace(/\/$/, '');
+				const childFolderPath = stripEdgeSlashes(item.href);
 				return buildSidebarTree(childFolderPath, folderStateMap);
 			}
 
@@ -753,7 +753,7 @@ function buildTopLevelNavigation(folderStateMap: Map<string, FolderState>): {
 	const topLevelNavItems = [...topLevelNavSourceItems]
 		.sort(compareFolderPageItems)
 		.map((item) => {
-			const folderPath = item.href.replace(/^\//, '').replace(/\/$/, '');
+			const folderPath = stripEdgeSlashes(item.href);
 
 			if (item.kind === 'folder') {
 				topLevelFolderTrees.set(folderPath, buildSidebarTree(folderPath, folderStateMap));

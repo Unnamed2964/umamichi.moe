@@ -3,6 +3,7 @@ import { cp, mkdir, readdir, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { stripLeadingSlashes } from '../lib/path-slashes.mjs';
 
 const CONTENT_DIR = path.join(process.cwd(), 'src/content');
 
@@ -84,7 +85,7 @@ function contentAssetsDevPlugin() {
 					return;
 				}
 
-				const relativePath = decodeURIComponent(rawUrl.replace(/^\/+/, ''));
+				const relativePath = decodeURIComponent(stripLeadingSlashes(rawUrl));
 				if (!relativePath || !shouldPublishContentAsset(relativePath)) {
 					next();
 					return;
