@@ -19,28 +19,15 @@
 		const checkIcon = '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/></svg>';
 
 		const copyTextToClipboard = async (value) => {
-			if (!value) {
+			if (!value || !navigator.clipboard?.writeText) {
 				return false;
 			}
 
-			if (navigator.clipboard?.writeText) {
+			try {
 				await navigator.clipboard.writeText(value);
 				return true;
-			}
-
-			const fallback = document.createElement('textarea');
-			fallback.value = value;
-			fallback.setAttribute('readonly', '');
-			fallback.style.position = 'fixed';
-			fallback.style.left = '-9999px';
-			fallback.style.top = '0';
-			document.body.append(fallback);
-			fallback.select();
-
-			try {
-				return document.execCommand('copy');
-			} finally {
-				fallback.remove();
+			} catch {
+				return false;
 			}
 		};
 
