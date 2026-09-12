@@ -139,3 +139,51 @@ describe('getFolderListData', () => {
 		expect(() => getFolderListData(structure, 'missing')).toThrow(/Unable to resolve folder list data/);
 	});
 });
+
+describe('folder meta validation', () => {
+	it('rejects invalid fix-order values', () => {
+		expect(() =>
+			scanContentFromInput({
+				docs: [{ relativePath: 'blog/a.md' }],
+				folderMetas: [{ folderPath: 'blog', rawContent: 'fix-order: 5\n' }],
+			}),
+		).toThrow(/Folder meta file blog\/\.meta\.yml has invalid metadata: fix-order/);
+	});
+
+	it('rejects invalid copyright license', () => {
+		expect(() =>
+			scanContentFromInput({
+				docs: [{ relativePath: 'blog/a.md' }],
+				folderMetas: [
+					{
+						folderPath: 'blog',
+						rawContent: 'copyright:\n  kind: cc\n  license: invalid-license\n',
+					},
+				],
+			}),
+		).toThrow(/Folder meta file blog\/\.meta\.yml has invalid metadata: copyright\.license/);
+	});
+
+	it('rejects invalid icon kind', () => {
+		expect(() =>
+			scanContentFromInput({
+				docs: [{ relativePath: 'blog/a.md' }],
+				folderMetas: [{ folderPath: 'blog', rawContent: 'icon: nonexistent-icon\n' }],
+			}),
+		).toThrow(/Folder meta file blog\/\.meta\.yml has invalid metadata: icon/);
+	});
+
+	it('accepts valid folder meta with cc license and icon', () => {
+		expect(() =>
+			scanContentFromInput({
+				docs: [{ relativePath: 'blog/a.md' }],
+				folderMetas: [
+					{
+						folderPath: 'blog',
+						rawContent: 'title: 文章\nicon: transfer\ncomment: true\nfix-order: -1\ncopyright:\n  kind: cc\n  license: cc-by-nc-sa-4.0\n',
+					},
+				],
+			}),
+		).not.toThrow();
+	});
+});
