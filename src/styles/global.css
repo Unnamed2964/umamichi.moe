@@ -224,6 +224,11 @@ html[data-route-loading] .site-route-progress__bar--2 {
 	.site-copy-toast.is-visible {
 		transform: none;
 	}
+
+	.navbar-running-line,
+	.mobile-navbar-running-line {
+		transition: none !important;
+	}
 }
 
 .navbar-running-line {
@@ -232,7 +237,7 @@ html[data-route-loading] .site-route-progress__bar--2 {
 	bottom: 0;
 	left: 0;
 	height: 8px;
-	transition: width 2000ms ease;
+	transition: width 420ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .mobile-navbar-running-line {
@@ -242,7 +247,7 @@ html[data-route-loading] .site-route-progress__bar--2 {
 	width: 8px;
 	height: 0;
 	background: var(--site-nav-running-line-bg);
-	transition: height 2000ms ease;
+	transition: height 420ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 [data-site-header] a[data-nav-item] {
