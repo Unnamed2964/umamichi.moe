@@ -6,18 +6,6 @@ const SHOW_DELAY_MS = 200;
 let showTimer: ReturnType<typeof setTimeout> | null = null;
 let loading = false;
 
-function shouldSkipRouteLoading(event: Event): boolean {
-	if (!isTransitionBeforePreparationEvent(event)) {
-		return true;
-	}
-
-	if (event.navigationType === 'traverse' && event.from.href === event.to.href) {
-		return true;
-	}
-
-	return false;
-}
-
 function setRouteLoading(active: boolean): void {
 	document.documentElement.toggleAttribute('data-route-loading', active);
 
@@ -67,7 +55,7 @@ export function initSiteRouteLoading(): void {
 	(window as unknown as Record<string, boolean>)[INIT_KEY] = true;
 
 	document.addEventListener('astro:before-preparation', (event) => {
-		if (shouldSkipRouteLoading(event)) {
+		if (!isTransitionBeforePreparationEvent(event)) {
 			return;
 		}
 

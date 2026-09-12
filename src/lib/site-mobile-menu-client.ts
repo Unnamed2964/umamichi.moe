@@ -6,9 +6,19 @@ import { registerAfterSwap } from './view-transition-lifecycle';
 const INIT_KEY = '__siteMobileMenuInit';
 const PRESERVE_SCROLLBAR_REASON = 'mobile-menu';
 
+interface CloseWatcherInstance extends EventTarget {
+	requestClose(): void;
+	close(): void;
+	destroy(): void;
+	oncancel: ((event: Event) => void) | null;
+	onclose: ((event: Event) => void) | null;
+}
+
+type CloseWatcherConstructor = new (options?: { signal?: AbortSignal }) => CloseWatcherInstance;
+
 declare global {
 	interface Window {
-		__siteMobileMenuCloseForNavigation?: () => void | Promise<void>;
+		CloseWatcher?: CloseWatcherConstructor;
 	}
 }
 
@@ -46,8 +56,28 @@ export function initSiteMobileMenu(): void {
 	}
 	(window as unknown as Record<string, boolean>)[INIT_KEY] = true;
 
-	let menuHistoryPushed = false;
 	let menuClosePromise: Promise<void> | null = null;
+	let closeWatcher: CloseWatcherInstance | null = null;
+
+	const createCloseWatcher = () => {
+		if (typeof window.CloseWatcher === 'undefined' || !isMobileMenuViewport()) {
+			return;
+		}
+
+		closeWatcher?.destroy();
+		closeWatcher = new window.CloseWatcher();
+		closeWatcher.onclose = () => {
+			closeWatcher = null;
+			closeMenu();
+		};
+	};
+
+	const destroyCloseWatcher = () => {
+		if (closeWatcher) {
+			closeWatcher.destroy();
+			closeWatcher = null;
+		}
+	};
 
 	const finishMenuClose = () => {
 		if (isMenuOpen()) {
@@ -73,6 +103,7 @@ export function initSiteMobileMenu(): void {
 		delete document.documentElement.dataset.mobileMenuClosing;
 		syncMenuToggleButtons(true);
 		dispatchSiteNavLayoutChange();
+		createCloseWatcher();
 	};
 
 	const setMenuOpenImmediate = (isOpen: boolean) => {
@@ -92,6 +123,7 @@ export function initSiteMobileMenu(): void {
 			return;
 		}
 
+		destroyCloseWatcher();
 		delete document.documentElement.dataset.mobileMenuOpen;
 		syncMobileHeaderPlaceholder(false);
 		releasePreservedScrollbar(PRESERVE_SCROLLBAR_REASON);
@@ -108,6 +140,8 @@ export function initSiteMobileMenu(): void {
 		if (!isMenuOpen() && !isMenuClosing()) {
 			return Promise.resolve();
 		}
+
+		destroyCloseWatcher();
 
 		if (menuClosePromise) {
 			return menuClosePromise;
@@ -141,60 +175,26 @@ export function initSiteMobileMenu(): void {
 		syncMobileHeaderPlaceholder(true);
 		acquirePreservedScrollbar(PRESERVE_SCROLLBAR_REASON);
 		applyMenuOpenState(mobileMenu);
-
-		if (!isMobileMenuViewport() || menuHistoryPushed) {
-			return;
-		}
-
-		history.pushState({ siteMobileMenu: true }, '', window.location.href);
-		menuHistoryPushed = true;
 	};
 
-	const releaseMenuHistoryEntry = () => {
-		if (!menuHistoryPushed) {
-			return;
-		}
-
-		menuHistoryPushed = false;
-
-		if (history.state?.siteMobileMenu) {
-			history.replaceState(null, '', window.location.href);
-		}
-	};
-
-	const closeMenu = ({ fromPopstate = false, immediate = false } = {}) => {
+	const closeMenu = ({ immediate = false } = {}) => {
 		if (!isMenuOpen() && !isMenuClosing()) {
 			return;
 		}
+
+		destroyCloseWatcher();
 
 		if (immediate) {
 			setMenuOpenImmediate(false);
 		} else {
 			void beginMenuClose();
 		}
-
-		if (fromPopstate) {
-			menuHistoryPushed = false;
-		} else {
-			releaseMenuHistoryEntry();
-		}
 	};
-
-	window.__siteMobileMenuCloseForNavigation = () => beginMenuClose();
 
 	const resetMobileMenuAfterNavigation = () => {
-		releaseMenuHistoryEntry();
+		destroyCloseWatcher();
 		setMenuOpenImmediate(false);
 	};
-
-	window.addEventListener('popstate', () => {
-		if (!isMenuOpen()) {
-			return;
-		}
-
-		// Same-URL traverse is neutralized by initSiteSameDocumentTraverseGuard.
-		closeMenu({ fromPopstate: true });
-	});
 
 	const toggleMenuFromButton = (toggleButton: Element) => {
 		const isCurrentlyOpen = toggleButton.getAttribute('aria-expanded') === 'true';
@@ -220,31 +220,6 @@ export function initSiteMobileMenu(): void {
 		);
 	};
 
-	const shouldKeepMenuOpenForNavigation = (target: Element) => {
-		if (!target.closest('[data-site-menu-link]') || !isMenuOpen()) {
-			return false;
-		}
-
-		const menuLink = target.closest('a[href]');
-
-		if (!(menuLink instanceof HTMLAnchorElement)) {
-			return false;
-		}
-
-		try {
-			const url = new URL(menuLink.href, window.location.href);
-			const isSameOrigin = url.origin === window.location.origin;
-			const isSameLocation =
-				url.pathname === window.location.pathname
-				&& url.search === window.location.search
-				&& url.hash === window.location.hash;
-
-			return isSameOrigin && !isSameLocation;
-		} catch {
-			return false;
-		}
-	};
-
 	document.addEventListener('click', (event) => {
 		const target = event.target;
 
@@ -265,10 +240,7 @@ export function initSiteMobileMenu(): void {
 		}
 
 		if (target.closest('[data-site-menu-link]') && isMenuOpen()) {
-			if (!shouldKeepMenuOpenForNavigation(target)) {
-				closeMenu();
-			}
-
+			closeMenu();
 			return;
 		}
 
@@ -296,7 +268,7 @@ export function initSiteMobileMenu(): void {
 
 	window.addEventListener('pageshow', (event) => {
 		if (event.persisted) {
-			menuHistoryPushed = false;
+			destroyCloseWatcher();
 			setMenuOpenImmediate(false);
 		}
 	});
