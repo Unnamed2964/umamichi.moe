@@ -1,4 +1,4 @@
-import { parseCssDurationToMs, readFloatingInsetPx } from './css-values';
+import { parseCssDurationToMs, readFloatingInsetPx, TRANSITION_END_SLACK_MS } from './css-values';
 import { registerAfterSwap } from './view-transition-lifecycle';
 
 const previewId = 'article-footnote-preview';
@@ -6,7 +6,6 @@ const previewBodyClass = 'article-footnote-preview__body';
 const offset = 8;
 const showDelayMs = 150;
 const hideDelayMs = 200;
-const HIDE_TRANSITION_SLACK_MS = 20;
 
 let initialized = false;
 let setupAbortController: AbortController | null = null;
@@ -30,7 +29,7 @@ function footnoteHideFallbackMs(preview: HTMLElement): number {
 		throw new Error('Missing footnote preview transition duration');
 	}
 
-	return duration + HIDE_TRANSITION_SLACK_MS;
+	return duration + TRANSITION_END_SLACK_MS;
 }
 
 function clearShowTimer(): void {

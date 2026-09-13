@@ -1,7 +1,7 @@
 /**
  * Selection copy attribution toast and article source menu chrome.
  */
-import { readFloatingInsetPx, readRootCssDurationMs } from './css-values';
+import { readFloatingInsetPx, readRootCssDurationMs, TRANSITION_END_SLACK_MS } from './css-values';
 import { registerAfterSwap } from './view-transition-lifecycle';
 
 const INIT_KEY = '__siteCopyToolsInit';
@@ -14,8 +14,6 @@ type ArticleSourceMenuElement = HTMLElement & {
 const siteCopyToastId = 'site-copy-toast';
 const siteCopyToastOffset = 12;
 const siteCopyToastDuration = 700;
-/** Slack after overlay token so transitionend races still settle. */
-const OVERLAY_HIDE_SLACK_MS = 20;
 const COPY_ATTRIBUTION_MIN_LENGTH = 50;
 
 function overlayHideFallbackMs(): number {
@@ -25,7 +23,7 @@ function overlayHideFallbackMs(): number {
 		throw new Error('Missing --transition-overlay duration');
 	}
 
-	return durationMs + OVERLAY_HIDE_SLACK_MS;
+	return durationMs + TRANSITION_END_SLACK_MS;
 }
 
 function clamp(value: number, min: number, max: number): number {

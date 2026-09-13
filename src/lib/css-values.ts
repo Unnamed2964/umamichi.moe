@@ -1,3 +1,6 @@
+/** Extra ms after a CSS transition so transitionend races still settle. */
+export const TRANSITION_END_SLACK_MS = 20;
+
 /** Parse a CSS time (first list item) to milliseconds. */
 export function parseCssDurationToMs(value: string): number | null {
 	const first = value.split(',')[0]?.trim();
