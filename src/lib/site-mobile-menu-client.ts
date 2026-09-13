@@ -30,19 +30,6 @@ function isMenuClosing(): boolean {
 	return document.documentElement.dataset.mobileMenuClosing === 'true';
 }
 
-function syncMobileHeaderPlaceholder(keepPlaceholder: boolean): void {
-	const header = document.querySelector('[data-site-header]');
-
-	if (keepPlaceholder && isMobileMenuViewport() && header instanceof HTMLElement) {
-		const headerHeight = Math.ceil(header.getBoundingClientRect().height);
-		document.documentElement.style.setProperty('--site-header-placeholder-height', `${headerHeight}px`);
-		dispatchSiteNavLayoutChange();
-		return;
-	}
-
-	document.documentElement.style.removeProperty('--site-header-placeholder-height');
-}
-
 function syncMenuToggleButtons(isOpen: boolean): void {
 	for (const button of document.querySelectorAll('[data-site-menu-toggle]')) {
 		button.setAttribute('aria-expanded', String(isOpen));
@@ -85,7 +72,6 @@ export function initSiteMobileMenu(): void {
 		}
 
 		delete document.documentElement.dataset.mobileMenuClosing;
-		syncMobileHeaderPlaceholder(false);
 		releasePreservedScrollbar(PRESERVE_SCROLLBAR_REASON);
 		menuClosePromise = null;
 	};
@@ -117,7 +103,6 @@ export function initSiteMobileMenu(): void {
 		delete document.documentElement.dataset.mobileMenuClosing;
 
 		if (isOpen) {
-			syncMobileHeaderPlaceholder(true);
 			acquirePreservedScrollbar(PRESERVE_SCROLLBAR_REASON);
 			applyMenuOpenState(mobileMenu);
 			return;
@@ -125,7 +110,6 @@ export function initSiteMobileMenu(): void {
 
 		destroyCloseWatcher();
 		delete document.documentElement.dataset.mobileMenuOpen;
-		syncMobileHeaderPlaceholder(false);
 		releasePreservedScrollbar(PRESERVE_SCROLLBAR_REASON);
 		applyMenuClosedState(mobileMenu);
 	};
@@ -172,7 +156,6 @@ export function initSiteMobileMenu(): void {
 			return;
 		}
 
-		syncMobileHeaderPlaceholder(true);
 		acquirePreservedScrollbar(PRESERVE_SCROLLBAR_REASON);
 		applyMenuOpenState(mobileMenu);
 	};
@@ -258,11 +241,6 @@ export function initSiteMobileMenu(): void {
 	window.addEventListener('resize', () => {
 		if (window.innerWidth >= 768) {
 			closeMenu({ immediate: true });
-			return;
-		}
-
-		if (isMenuOpen() || isMenuClosing()) {
-			syncMobileHeaderPlaceholder(true);
 		}
 	}, { passive: true });
 
