@@ -13,6 +13,13 @@ export type SiteAppearanceState = {
 	palette: string;
 };
 
+/**
+ * Module-path appearance (theme toggle, ClientRouter after-swap, palette apply).
+ * Cold-load FOUC boot is duplicated in BaseHead.astro (inline is:inline script) — keep in sync:
+ * preference parse, getResolvedTheme, applyAppearanceToRoot, syncMermaidMedia mediaMap.
+ * This module also validates palette ids via site-palette-catalog; the inline script does not.
+ */
+
 export function getStoredThemePreference(): ThemePreference {
 	const stored = localStorage.getItem(SITE_THEME_STORAGE_KEY);
 	return stored === 'light' || stored === 'dark' ? stored : 'system';

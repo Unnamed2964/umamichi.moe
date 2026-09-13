@@ -47,6 +47,12 @@ const { title, description, image = FallbackImage, disableTikkun = false } = Ast
 />
 <meta name="generator" content={Astro.generator} />
 
+{/*
+  Blocking FOUC boot (must stay is:inline, synchronous).
+  Duplicates theme/palette resolve logic in src/lib/site-appearance.ts — keep both in sync:
+  preference parse, system→resolved, root class/dataset/colorScheme, mermaid mediaMap, palette dataset.
+  Inline path skips palette allowlist (catalog not loaded); module path validates in getStoredPaletteId.
+*/}
 <script is:inline define:vars={{ siteThemeStorageKey: SITE_THEME_STORAGE_KEY, sitePaletteStorageKey: SITE_PALETTE_STORAGE_KEY }}>
 	(() => {
 		const stored = window.localStorage.getItem(siteThemeStorageKey);
