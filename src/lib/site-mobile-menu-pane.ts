@@ -1,7 +1,7 @@
-export const MOBILE_MENU_BREAKPOINT_PX = 768;
+import { SITE_MD_MIN_MQ } from './site-breakpoints';
 
 export function isMobileMenuViewport(): boolean {
-	return window.innerWidth < MOBILE_MENU_BREAKPOINT_PX;
+	return !window.matchMedia(SITE_MD_MIN_MQ).matches;
 }
 
 function getPaneShiftSurface(): HTMLElement {

@@ -5,13 +5,13 @@ import { createPortal } from 'react-dom';
 import { LuList, LuX } from 'react-icons/lu';
 import type { ArticleTocHeading } from '../../lib/article-toc';
 import { filterArticleTocHeadings } from '../../lib/article-toc';
+import { SITE_XL_MIN_MQ } from '../../lib/site-breakpoints';
 import { ArticleTocLinks } from './ArticleToc';
 
 type ArticleMobileTocProps = Readonly<{
 	headings: ArticleTocHeading[];
 }>;
 
-const DESKTOP_TOC_MQ = '(min-width: 80rem)';
 const PRESERVE_SCROLLBAR_REASON = 'article-mobile-toc';
 
 export default function ArticleMobileToc({ headings }: ArticleMobileTocProps) {
@@ -26,7 +26,7 @@ export default function ArticleMobileToc({ headings }: ArticleMobileTocProps) {
 			return;
 		}
 
-		const media = window.matchMedia(DESKTOP_TOC_MQ);
+		const media = window.matchMedia(SITE_XL_MIN_MQ);
 		const onChange = () => {
 			if (media.matches) {
 				setOpen(false);
