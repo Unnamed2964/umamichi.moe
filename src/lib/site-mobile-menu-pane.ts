@@ -4,28 +4,26 @@ export function isMobileMenuViewport(): boolean {
 	return window.innerWidth < MOBILE_MENU_BREAKPOINT_PX;
 }
 
-function getPaneShiftSurface(): HTMLElement | null {
-	const shiftSurface = document.querySelector('.site-pane-shift.wpm-pane-shift')
-		?? document.querySelector('.site-route-main.wpm-pane-shift')
-		?? document.querySelector('[data-site-mobile-menu]');
+function getPaneShiftSurface(): HTMLElement {
+	const shiftSurface = document.querySelector('[data-site-pane-shift]');
 
-	return shiftSurface instanceof HTMLElement ? shiftSurface : null;
+	if (!(shiftSurface instanceof HTMLElement)) {
+		throw new Error('Missing [data-site-pane-shift]');
+	}
+
+	return shiftSurface;
 }
 
-function parsePaneDurationMs(): number {
-	const shiftSurface = getPaneShiftSurface();
+function parsePaneDurationMs(shiftSurface: HTMLElement): number {
+	const duration = getComputedStyle(shiftSurface).transitionDuration;
+	const first = duration.split(',')[0]?.trim();
 
-	if (shiftSurface) {
-		const duration = getComputedStyle(shiftSurface).transitionDuration;
-		const first = duration.split(',')[0]?.trim();
+	if (first?.endsWith('ms')) {
+		return Number.parseFloat(first);
+	}
 
-		if (first?.endsWith('ms')) {
-			return Number.parseFloat(first);
-		}
-
-		if (first?.endsWith('s')) {
-			return Number.parseFloat(first) * 1000;
-		}
+	if (first?.endsWith('s')) {
+		return Number.parseFloat(first) * 1000;
 	}
 
 	return 500;
@@ -37,12 +35,7 @@ export function waitForPaneClose(): Promise<void> {
 	}
 
 	const shiftSurface = getPaneShiftSurface();
-
-	if (!shiftSurface) {
-		return Promise.resolve();
-	}
-
-	const fallbackMs = parsePaneDurationMs() + 50;
+	const fallbackMs = parsePaneDurationMs(shiftSurface) + 50;
 
 	return new Promise((resolve) => {
 		let settled = false;
