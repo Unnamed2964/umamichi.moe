@@ -3,8 +3,6 @@ import {
 	ALLOWED_ORIGINS,
 	SITE_ID,
 	TIKKUN_SCHEMA_VERSION,
-	normalizeBrowser,
-	normalizePage,
 	type BaseTelemetryEvent,
 } from '../../lib/telemetry';
 
@@ -55,7 +53,13 @@ export function GET() {
 export async function POST({ request }: { request: Request }) {
 	const cf = request.cf || {};
 	const origin = request.headers.get('Origin');
-	const body = await request.json().catch(() => ({} as Record<string, unknown>));
+
+	let telemetryEvent: BaseTelemetryEvent;
+	try {
+		telemetryEvent = await request.json();
+	} catch {
+		return new Response('invalid json', { status: 400 });
+	}
 
 	if (!env?.tikkun) {
 		return new Response('missing tikkun binding', { status: 500 });
@@ -64,8 +68,6 @@ export async function POST({ request }: { request: Request }) {
 	if (!origin || !ALLOWED_ORIGINS.has(origin)) {
 		return new Response('invalid origin', { status: 403 });
 	}
-
-	const telemetryEvent = body as BaseTelemetryEvent;
 
 	if (telemetryEvent.version !== TIKKUN_SCHEMA_VERSION) {
 		return new Response('invalid version', { status: 400 });
@@ -79,8 +81,8 @@ export async function POST({ request }: { request: Request }) {
 		kind: 'tikkun',
 		version: telemetryEvent.version,
 		siteId: telemetryEvent.siteId,
-		page: normalizePage(telemetryEvent.page),
-		browser: normalizeBrowser(telemetryEvent.browser),
+		page: telemetryEvent.page,
+		browser: telemetryEvent.browser,
 		timestamp: Date.now(),
 		client: {
 			country: cf.country,

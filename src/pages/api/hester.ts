@@ -3,8 +3,6 @@ import {
 	ALLOWED_ORIGINS,
 	HESTER_SCHEMA_VERSION,
 	SITE_ID,
-	normalizeBrowser,
-	normalizePage,
 	type HesterTelemetryEvent,
 } from '../../lib/telemetry';
 
@@ -52,7 +50,13 @@ export function GET() {
 export async function POST({ request }: { request: Request }) {
 	const cf = request.cf || {};
 	const origin = request.headers.get('Origin');
-	const body = await request.json().catch(() => ({} as Record<string, unknown>));
+
+	let telemetryEvent: HesterTelemetryEvent;
+	try {
+		telemetryEvent = await request.json();
+	} catch {
+		return new Response('invalid json', { status: 400 });
+	}
 
 	if (!env?.tikkun) {
 		return new Response('missing tikkun binding', { status: 500 });
@@ -61,8 +65,6 @@ export async function POST({ request }: { request: Request }) {
 	if (!origin || !ALLOWED_ORIGINS.has(origin)) {
 		return new Response('invalid origin', { status: 403 });
 	}
-
-	const telemetryEvent = body as HesterTelemetryEvent;
 
 	if (telemetryEvent.version !== HESTER_SCHEMA_VERSION) {
 		return new Response('invalid version', { status: 400 });
@@ -76,16 +78,9 @@ export async function POST({ request }: { request: Request }) {
 		kind: 'hester',
 		version: telemetryEvent.version,
 		siteId: telemetryEvent.siteId,
-		page: normalizePage(telemetryEvent.page),
-		browser: normalizeBrowser(telemetryEvent.browser),
-		error: {
-			statusCode:
-				typeof telemetryEvent.error?.statusCode === 'number' ? telemetryEvent.error.statusCode : null,
-			statusTitle:
-				typeof telemetryEvent.error?.statusTitle === 'string' ? telemetryEvent.error.statusTitle : null,
-			requestPath:
-				typeof telemetryEvent.error?.requestPath === 'string' ? telemetryEvent.error.requestPath : null,
-		},
+		page: telemetryEvent.page,
+		browser: telemetryEvent.browser,
+		error: telemetryEvent.error,
 		timestamp: Date.now(),
 		client: {
 			country: cf.country,
