@@ -75,7 +75,7 @@ const { title, description, image = FallbackImage, disableTikkun = false } = Ast
 			};
 
 			for (const element of document.querySelectorAll('[id^="mermaid-dark"]')) {
-				element.setAttribute('media', mediaMap[preference] ?? 'none');
+				element.setAttribute('media', mediaMap[preference]);
 			}
 		};
 

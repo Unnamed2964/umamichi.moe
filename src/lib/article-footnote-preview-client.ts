@@ -25,7 +25,12 @@ function clamp(value: number, min: number, max: number): number {
 
 function footnoteHideFallbackMs(preview: HTMLElement): number {
 	const duration = parseCssDurationToMs(getComputedStyle(preview).transitionDuration);
-	return (duration ?? 0) + HIDE_TRANSITION_SLACK_MS;
+
+	if (duration === null) {
+		throw new Error('Missing footnote preview transition duration');
+	}
+
+	return duration + HIDE_TRANSITION_SLACK_MS;
 }
 
 function clearShowTimer(): void {
