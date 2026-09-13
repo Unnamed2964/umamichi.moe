@@ -1,4 +1,4 @@
-import paletteManifest from '@umamichi-ui/common-css/palettes.json';
+import { getAllowedSitePaletteIds } from './site-palette-catalog';
 
 export const SITE_THEME_STORAGE_KEY = 'site-theme';
 export const SITE_PALETTE_STORAGE_KEY = 'site-palette';
@@ -12,10 +12,6 @@ export type SiteAppearanceState = {
 	resolved: ResolvedTheme;
 	palette: string;
 };
-
-function getAllowedSitePaletteIds(): Set<string> {
-	return new Set(paletteManifest.palettes.map((entry) => entry.id));
-}
 
 export function getStoredThemePreference(): ThemePreference {
 	const stored = localStorage.getItem(SITE_THEME_STORAGE_KEY);
