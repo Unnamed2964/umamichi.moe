@@ -1,4 +1,5 @@
 import { SITE_MD_MIN_MQ } from './site-breakpoints';
+import { parseCssDurationToMs, readRootCssDurationMs } from './css-values';
 
 export function isMobileMenuViewport(): boolean {
 	return !window.matchMedia(SITE_MD_MIN_MQ).matches;
@@ -15,18 +16,13 @@ function getPaneShiftSurface(): HTMLElement {
 }
 
 function parsePaneDurationMs(shiftSurface: HTMLElement): number {
-	const duration = getComputedStyle(shiftSurface).transitionDuration;
-	const first = duration.split(',')[0]?.trim();
+	const fromElement = parseCssDurationToMs(getComputedStyle(shiftSurface).transitionDuration);
 
-	if (first?.endsWith('ms')) {
-		return Number.parseFloat(first);
+	if (fromElement !== null) {
+		return fromElement;
 	}
 
-	if (first?.endsWith('s')) {
-		return Number.parseFloat(first) * 1000;
-	}
-
-	return 500;
+	return readRootCssDurationMs('--wpm-pane-duration') ?? 0;
 }
 
 export function waitForPaneClose(): Promise<void> {

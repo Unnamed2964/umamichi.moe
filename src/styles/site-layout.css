@@ -863,8 +863,8 @@ html[data-mobile-toc-open='true'] .site-floating-layer {
 	transform: translateY(100%);
 	pointer-events: none;
 	transition:
-		transform var(--transition-overlay, 0.22s ease),
-		opacity var(--transition-overlay, 0.22s ease);
+		transform var(--transition-overlay, 200ms ease),
+		opacity var(--transition-overlay, 200ms ease);
 	padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
 }
 

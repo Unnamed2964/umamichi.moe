@@ -1,11 +1,12 @@
+import { parseCssDurationToMs, readFloatingInsetPx } from './css-values';
 import { registerAfterSwap } from './view-transition-lifecycle';
 
 const previewId = 'article-footnote-preview';
 const previewBodyClass = 'article-footnote-preview__body';
-const viewportPadding = 16;
 const offset = 8;
 const showDelayMs = 150;
 const hideDelayMs = 200;
+const HIDE_TRANSITION_SLACK_MS = 20;
 
 let initialized = false;
 let setupAbortController: AbortController | null = null;
@@ -20,6 +21,11 @@ function clamp(value: number, min: number, max: number): number {
 	}
 
 	return Math.min(Math.max(value, min), max);
+}
+
+function footnoteHideFallbackMs(preview: HTMLElement): number {
+	const duration = parseCssDurationToMs(getComputedStyle(preview).transitionDuration);
+	return (duration ?? 0) + HIDE_TRANSITION_SLACK_MS;
 }
 
 function clearShowTimer(): void {
@@ -105,13 +111,14 @@ function getPreviewBody(preview: HTMLDivElement): HTMLDivElement {
 }
 
 function positionPreview(preview: HTMLDivElement, ref: HTMLElement): void {
+	const inset = readFloatingInsetPx();
 	const anchorRect = ref.getBoundingClientRect();
 	preview.style.visibility = 'hidden';
 	preview.hidden = false;
 
 	const previewRect = preview.getBoundingClientRect();
-	const spaceBelow = window.innerHeight - anchorRect.bottom - offset - viewportPadding;
-	const spaceAbove = anchorRect.top - offset - viewportPadding;
+	const spaceBelow = window.innerHeight - anchorRect.bottom - offset - inset;
+	const spaceAbove = anchorRect.top - offset - inset;
 	const placeAbove = previewRect.height > spaceBelow && spaceAbove >= spaceBelow;
 
 	let top = placeAbove
@@ -121,13 +128,13 @@ function positionPreview(preview: HTMLDivElement, ref: HTMLElement): void {
 
 	left = clamp(
 		left,
-		viewportPadding,
-		window.innerWidth - previewRect.width - viewportPadding,
+		inset,
+		window.innerWidth - previewRect.width - inset,
 	);
 	top = clamp(
 		top,
-		viewportPadding,
-		window.innerHeight - previewRect.height - viewportPadding,
+		inset,
+		window.innerHeight - previewRect.height - inset,
 	);
 
 	preview.style.left = `${left}px`;
@@ -159,7 +166,7 @@ function closePreview(): void {
 	};
 
 	preview.addEventListener('transitionend', finalizeHide, { once: true });
-	window.setTimeout(finalizeHide, 220);
+	window.setTimeout(finalizeHide, footnoteHideFallbackMs(preview));
 }
 
 function openPreview(ref: HTMLElement): void {
