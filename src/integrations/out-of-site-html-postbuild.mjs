@@ -138,7 +138,10 @@ function resolveHtmlRootFromBuildDir(buildDirPath) {
  * @param {{ site?: string, privateKeyPem?: string }} [options]
  */
 export default function outOfSiteHtmlPostbuildIntegration(options = {}) {
-	const siteOrigin = stripTrailingSlashes(options.site ?? 'https://umamichi.moe');
+	const siteOrigin = stripTrailingSlashes(options.site ?? '');
+	if (!siteOrigin) {
+		throw new Error('out-of-site-html-postbuild: options.site is required');
+	}
 	const privateKeyPem = options.privateKeyPem ?? '';
 
 	return {

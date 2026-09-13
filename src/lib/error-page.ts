@@ -1,6 +1,7 @@
 import { getCollection } from 'astro:content';
 import { buildDocsStructure } from './docs';
 import { stripEdgeSlashes } from './path-slashes.mjs';
+import { SITE_URL } from './site-config';
 
 const ERROR_PAGE_PATHS = new Set(['/404/', '/500/', '/502/', '/503/', '/504/']);
 
@@ -15,7 +16,7 @@ function normalizePathname(pathname: string) {
 }
 
 function toPathname(pathname: string) {
-	return normalizePathname(new URL(pathname, 'https://umamichi.moe').pathname);
+	return normalizePathname(new URL(pathname, SITE_URL).pathname);
 }
 
 function getRecoveryCandidates(pathname: string) {

@@ -10,10 +10,10 @@ export const prerender = false;
 
 const GET_MESSAGE = `<p>🌫️</p>
 <p>这里用于记录 404 / 50x 错误页进入事件。</p>
-<p>您正在使用 GET 方法访问。在 umamichi.moe 的错误页中使用 POST 方法访问本 URL 时，以下内容将会被发送到 Cloudflare KV 中，作为错误访问路径与设备环境的参考：</p>
+<p>您正在使用 GET 方法访问。在 ${SITE_ID} 的错误页中使用 POST 方法访问本 URL 时，以下内容将会被发送到 Cloudflare KV 中，作为错误访问路径与设备环境的参考：</p>
 <pre><code>{
-	"version": 1,
-	"siteId": "umamichi.moe",
+	"version": ${HESTER_SCHEMA_VERSION},
+	"siteId": ${JSON.stringify(SITE_ID)},
 	"page": {
 		"pathname": "/404/",
 		"referrer": "https://example.com"

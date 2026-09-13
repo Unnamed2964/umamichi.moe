@@ -1,10 +1,12 @@
-export const SITE_ID = 'umamichi.moe';
+import {
+	SITE_ID as CONFIG_SITE_ID,
+	TELEMETRY_ALLOWED_ORIGINS,
+} from './site-config';
+
+export const SITE_ID = CONFIG_SITE_ID;
 export const TIKKUN_SCHEMA_VERSION = 2;
 export const HESTER_SCHEMA_VERSION = 2;
-export const ALLOWED_ORIGINS = new Set([
-	'https://umamichi.moe',
-	'https://www.umamichi.moe',
-]);
+export const ALLOWED_ORIGINS = TELEMETRY_ALLOWED_ORIGINS;
 
 export type JsonValue =
 	| null

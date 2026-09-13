@@ -97,6 +97,7 @@ const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription,
 						<span class="choice-link-meta">{recoveryHref}</span>
 					</span>
 				</a>
+				{SITE_GITHUB_ERROR_FLOW_SOURCE_URL && (
 				<a class="choice-link choice-link-github" href={SITE_GITHUB_ERROR_FLOW_SOURCE_URL} target="_blank" rel="noreferrer">
 					<span class="choice-link-arrow choice-link-arrow-github" aria-hidden="true">
 						<svg viewBox="0 0 98 96" focusable="false">
@@ -109,6 +110,7 @@ const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription,
 						<span class="choice-link-meta">src/components/ErrorRecoveryExperience.astro</span>
 					</span>
 				</a>
+				)}
 			</nav>
 		</div>
 	</section>
@@ -118,6 +120,7 @@ const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription,
 
 <script>
 	import { createBaseTelemetryEvent, postTelemetry } from '../lib/client-telemetry';
+	import { isHesterTelemetryEnabled } from '../lib/site-config';
 	import { HESTER_SCHEMA_VERSION, SITE_ID } from '../lib/telemetry';
 
 	(() => {
@@ -187,7 +190,9 @@ const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription,
 			});
 		};
 
-		hester();
+		if (isHesterTelemetryEnabled()) {
+			hester();
+		}
 		runProgressSequence();
 	})();
 </script>

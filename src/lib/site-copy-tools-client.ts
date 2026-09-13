@@ -2,6 +2,7 @@
  * Selection copy attribution toast and article source menu chrome.
  */
 import { readFloatingInsetPx, readRootCssDurationMs, TRANSITION_END_SLACK_MS } from './css-values';
+import { SITE_ID } from './site-config';
 import { registerAfterSwap } from './view-transition-lifecycle';
 
 const INIT_KEY = '__siteCopyToolsInit';
@@ -35,7 +36,7 @@ function clamp(value: number, min: number, max: number): number {
 }
 
 function getSiteCopySourceUrl(): string {
-	return `umamichi.moe${window.location.pathname}${window.location.search}${window.location.hash}`;
+	return `${SITE_ID}${window.location.pathname}${window.location.search}${window.location.hash}`;
 }
 
 function getSiteCopySuffix(): string {
