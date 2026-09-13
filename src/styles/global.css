@@ -319,7 +319,7 @@ html[data-route-loading] .site-route-progress__bar--2 {
 
 	html[data-mobile-menu-open='true'] [data-site-header-spacer],
 	html[data-mobile-menu-closing='true'] [data-site-header-spacer] {
-		height: var(--site-header-placeholder-height, 0);
+		height: var(--site-header-offset);
 	}
 
 	html[data-mobile-menu-open='true'] body > * .site-pane-shift.wpm-pane-shift {

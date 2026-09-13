@@ -9,10 +9,15 @@ interface TocHeadingItem {
 let initialized = false;
 let headings: TocHeadingItem[] = [];
 let observer: IntersectionObserver | null = null;
-let headerOffsetPx = 56;
+let headerOffsetPx = 0;
 
 const anchorButtonClass = 'article-heading-anchor-copy';
 const copiedLabel = '已复制';
+
+/** Used px of `--site-header-offset` via `scroll-padding-top` (same declared H). */
+function readHeaderOffsetPx(): number {
+	return Number.parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop);
+}
 
 function buildAnchorUrl(slug: string): string {
 	return `${window.location.origin}${window.location.pathname}${window.location.search}#${slug}`;
@@ -123,20 +128,13 @@ function refreshActive(): void {
 	}
 }
 
-function syncHeaderOffset(): void {
-	const header = document.querySelector('[data-site-header]');
-	if (header instanceof HTMLElement) {
-		headerOffsetPx = Math.ceil(header.getBoundingClientRect().height);
-	}
-}
-
 function setupToc(): void {
 	setupHeadingAnchorCopy();
 	observer?.disconnect();
 	observer = null;
 	headings = [];
 
-	syncHeaderOffset();
+	headerOffsetPx = readHeaderOffsetPx();
 
 	const links = Array.from(document.querySelectorAll('[data-toc-link]'));
 	const bySlug = new Map<string, TocHeadingItem>();
@@ -188,10 +186,7 @@ export function initArticleTocClient(): void {
 	initialized = true;
 
 	window.addEventListener('hashchange', refreshActive);
-	window.addEventListener('resize', () => {
-		syncHeaderOffset();
-		refreshActive();
-	}, { passive: true });
+	window.addEventListener('resize', setupToc, { passive: true });
 	window.addEventListener('site:toc-refresh', setupToc);
 	registerAfterSwap(setupToc);
 }
