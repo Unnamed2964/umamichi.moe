@@ -1,5 +1,5 @@
 import { SITE_MD_MIN_MQ } from './site-breakpoints';
-import { parseCssDurationToMs, readRootCssDurationMs } from './css-values';
+import { parseCssDurationToMs, readRootCssDurationMs, TRANSITION_END_SLACK_MS } from './css-values';
 
 export function isMobileMenuViewport(): boolean {
 	return !window.matchMedia(SITE_MD_MIN_MQ).matches;
@@ -37,7 +37,7 @@ export function waitForPaneClose(): Promise<void> {
 	}
 
 	const shiftSurface = getPaneShiftSurface();
-	const fallbackMs = parsePaneDurationMs(shiftSurface) + 50;
+	const fallbackMs = parsePaneDurationMs(shiftSurface) + TRANSITION_END_SLACK_MS;
 
 	return new Promise((resolve) => {
 		let settled = false;
