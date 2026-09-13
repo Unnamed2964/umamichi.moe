@@ -35,6 +35,7 @@
 
 html {
 	--site-header-offset: calc(3.5rem + 1px);
+	--site-floating-inset: 16px;
 	--site-nav-running-line-bg: var(--theme-400);
 	--site-nav-future-icon: var(--gray-300);
 	--site-copy-toast-bg: var(--site-bg);
@@ -193,10 +194,10 @@ html[data-route-loading] .site-route-progress__bar--2 {
 
 .site-copy-toast {
 	position: fixed;
-	left: 16px;
-	top: 16px;
+	left: var(--site-floating-inset);
+	top: var(--site-floating-inset);
 	z-index: 40;
-	max-width: min(calc(100vw - 32px), 36rem);
+	max-width: min(calc(100vw - 2 * var(--site-floating-inset)), 36rem);
 	padding: 0.35rem 0.65rem;
 	box-sizing: border-box;
 	border: 1px solid var(--site-copy-toast-border);

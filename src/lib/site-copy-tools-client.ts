@@ -1,6 +1,7 @@
 /**
  * Selection copy attribution toast and article source menu chrome.
  */
+import { readFloatingInsetPx, readRootCssDurationMs } from './css-values';
 import { registerAfterSwap } from './view-transition-lifecycle';
 
 const INIT_KEY = '__siteCopyToolsInit';
@@ -11,11 +12,15 @@ type ArticleSourceMenuElement = HTMLElement & {
 };
 
 const siteCopyToastId = 'site-copy-toast';
-const siteCopyToastViewportPadding = 16;
 const siteCopyToastOffset = 12;
 const siteCopyToastDuration = 700;
-const ARTICLE_SOURCE_MENU_HIDE_MS = 220;
+/** Slack after overlay token so transitionend races still settle. */
+const OVERLAY_HIDE_SLACK_MS = 20;
 const COPY_ATTRIBUTION_MIN_LENGTH = 50;
+
+function overlayHideFallbackMs(): number {
+	return (readRootCssDurationMs('--transition-overlay') ?? 0) + OVERLAY_HIDE_SLACK_MS;
+}
 
 function clamp(value: number, min: number, max: number): number {
 	if (max <= min) {
@@ -160,8 +165,8 @@ export function initSiteCopyTools(): void {
 
 	let siteCopyToastHideTimer = 0;
 	let siteCopyLastPointer = {
-		x: Math.max(window.innerWidth / 2, siteCopyToastViewportPadding),
-		y: Math.max(window.innerHeight / 2, siteCopyToastViewportPadding),
+		x: Math.max(window.innerWidth / 2, readFloatingInsetPx()),
+		y: Math.max(window.innerHeight / 2, readFloatingInsetPx()),
 	};
 
 	const getSiteCopyAnchorRect = (): DOMRect | null => {
@@ -203,6 +208,7 @@ export function initSiteCopyTools(): void {
 	};
 
 	const positionSiteCopyToast = (toast: HTMLDivElement): void => {
+		const inset = readFloatingInsetPx();
 		const anchorRect = getSiteCopyAnchorRect();
 		const toastRect = toast.getBoundingClientRect();
 		const rawLeft = anchorRect
@@ -213,13 +219,13 @@ export function initSiteCopyTools(): void {
 			: siteCopyLastPointer.y + siteCopyToastOffset;
 		const left = clamp(
 			rawLeft,
-			siteCopyToastViewportPadding,
-			window.innerWidth - toastRect.width - siteCopyToastViewportPadding,
+			inset,
+			window.innerWidth - toastRect.width - inset,
 		);
 		const top = clamp(
 			rawTop,
-			siteCopyToastViewportPadding,
-			window.innerHeight - toastRect.height - siteCopyToastViewportPadding,
+			inset,
+			window.innerHeight - toastRect.height - inset,
 		);
 
 		toast.style.left = `${left}px`;
@@ -232,8 +238,8 @@ export function initSiteCopyTools(): void {
 		toast.textContent = message;
 		toast.classList.add('is-visible');
 		toast.style.visibility = 'hidden';
-		toast.style.left = `${siteCopyToastViewportPadding}px`;
-		toast.style.top = `${siteCopyToastViewportPadding}px`;
+		toast.style.left = `${readFloatingInsetPx()}px`;
+		toast.style.top = `${readFloatingInsetPx()}px`;
 		positionSiteCopyToast(toast);
 		toast.style.visibility = 'visible';
 
@@ -362,7 +368,7 @@ export function initSiteCopyTools(): void {
 
 		typedMenu._articleSourceMenuTransitionEnd = onTransitionEnd;
 		typedMenu.addEventListener('transitionend', onTransitionEnd);
-		typedMenu._articleSourceMenuHideTimer = window.setTimeout(finalizeHide, ARTICLE_SOURCE_MENU_HIDE_MS);
+		typedMenu._articleSourceMenuHideTimer = window.setTimeout(finalizeHide, overlayHideFallbackMs());
 	};
 
 	const closeArticleSourceMenus = () => {

@@ -72,7 +72,7 @@
 	background: var(--site-button-active-bg);
 }
 
-.article-content .article-block-copy[data-copied='已复制'] {
+.article-content .article-block-copy[data-copied] {
 	background: var(--site-button-hover-bg);
 	color: var(--site-link-hover);
 }
@@ -91,12 +91,12 @@ html.dark .article-content .astro-code span {
 
 .article-footnote-preview {
 	position: fixed;
-	left: 16px;
-	top: 16px;
+	left: var(--site-floating-inset);
+	top: var(--site-floating-inset);
 	z-index: 40;
 	box-sizing: border-box;
-	max-width: min(calc(100vw - 32px), 28rem);
-	max-height: min(calc(100vh - 32px), 40vh);
+	max-width: min(calc(100vw - 2 * var(--site-floating-inset)), 28rem);
+	max-height: min(calc(100vh - 2 * var(--site-floating-inset)), 40vh);
 	overflow: auto;
 	overscroll-behavior: contain;
 	padding: 0.75rem 1rem;

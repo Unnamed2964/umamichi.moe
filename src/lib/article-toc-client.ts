@@ -1,3 +1,4 @@
+import { COPY_FEEDBACK_MS } from './copy-feedback';
 import { registerAfterSwap } from './view-transition-lifecycle';
 
 interface TocHeadingItem {
@@ -12,7 +13,6 @@ let observer: IntersectionObserver | null = null;
 let headerOffsetPx = 0;
 
 const anchorButtonClass = 'article-heading-anchor-copy';
-const copiedLabel = '已复制';
 
 /** Used px of `--site-header-offset` via `scroll-padding-top` (same declared H). */
 function readHeaderOffsetPx(): number {
@@ -26,12 +26,12 @@ function buildAnchorUrl(slug: string): string {
 async function copyHeadingAnchor(slug: string, button: HTMLButtonElement): Promise<void> {
 	try {
 		await navigator.clipboard.writeText(buildAnchorUrl(slug));
-		button.dataset.label = copiedLabel;
+		button.dataset.copied = 'true';
 		window.setTimeout(() => {
-			button.dataset.label = '';
-		}, 1200);
+			button.removeAttribute('data-copied');
+		}, COPY_FEEDBACK_MS);
 	} catch {
-		button.dataset.label = '';
+		button.removeAttribute('data-copied');
 	}
 }
 
