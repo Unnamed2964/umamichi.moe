@@ -1,3 +1,4 @@
+import { SITE_MD_MIN_MQ } from './site-breakpoints';
 import { isMobileMenuViewport, waitForPaneClose } from './site-mobile-menu-pane.ts';
 import { acquirePreservedScrollbar, releasePreservedScrollbar } from './site-preserve-scrollbar.ts';
 import { dispatchSiteNavLayoutChange } from './site-events';
@@ -239,7 +240,7 @@ export function initSiteMobileMenu(): void {
 	});
 
 	window.addEventListener('resize', () => {
-		if (window.innerWidth >= 768) {
+		if (window.matchMedia(SITE_MD_MIN_MQ).matches) {
 			closeMenu({ immediate: true });
 		}
 	}, { passive: true });

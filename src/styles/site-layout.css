@@ -2,9 +2,9 @@
  * Site layout tokens and shared UI primitives.
  * Replaces Chakra layout/font tokens used by SiteFrame and article chrome.
  *
- * Breakpoints (align with global.css and Chakra defaults):
- *   md: 48rem (768px)
- *   xl: 80rem (1280px) — article fixed sidebars
+ * Breakpoints (align with global.css; JS: src/lib/site-breakpoints.ts):
+ *   md: 48rem
+ *   xl: 80rem — article fixed sidebars / desktop TOC
  */
 
 html {
@@ -714,7 +714,7 @@ html {
 	width: 100%;
 }
 
-@media screen and (max-width: 47.99rem) {
+@media screen and (max-width: 47.999rem) {
 	.article-layout__sidebar-mobile {
 		margin-top: -1rem;
 	}
