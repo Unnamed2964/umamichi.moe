@@ -22,7 +22,7 @@ import react from '@astrojs/react';
 
 import cloudflare from '@astrojs/cloudflare';
 
-const site = 'https://umamichi.moe';
+const site = umamichiConfig.site.url;
 const env = loadEnv(process.env.NODE_ENV ?? 'development', process.cwd(), '');
 const outOfSitePrivateKey = env.OUT_OF_SITE_ED25519_PRIVATE_KEY ?? '';
 const redirects = buildAstroRedirectsFromMaps(umamichiConfig.content.redirect_maps ?? {}, {

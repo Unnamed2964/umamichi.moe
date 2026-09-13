@@ -1,48 +1,58 @@
-import Giscus from "@giscus/react"
-import { useEffect, useState } from "react"
-import { getGiscusThemeUrl } from "../lib/giscus-theme"
-import { isAppearanceChangeForSubscribers, type SiteAppearanceChangeDetail } from "../lib/site-events"
+import Giscus from '@giscus/react';
+import { useEffect, useState } from 'react';
+import { getGiscusThemeUrl } from '../lib/giscus-theme';
+import { isAppearanceChangeForSubscribers, type SiteAppearanceChangeDetail } from '../lib/site-events';
+import { getGiscusConfig } from '../lib/site-config';
 
 export default function ArticleComments() {
-  const [giscusTheme, setGiscusTheme] = useState<string | null>(null)
+	const giscus = getGiscusConfig();
+	const [giscusTheme, setGiscusTheme] = useState<string | null>(null);
 
-  useEffect(() => {
-    const syncGiscusTheme = () => setGiscusTheme(getGiscusThemeUrl())
+	useEffect(() => {
+		if (!giscus) {
+			return;
+		}
 
-    syncGiscusTheme()
-    const onAppearanceChange = (event: CustomEvent<SiteAppearanceChangeDetail>) => {
-      if (!isAppearanceChangeForSubscribers(event.detail.reason)) {
-        return
-      }
+		const syncGiscusTheme = () => setGiscusTheme(getGiscusThemeUrl());
 
-      syncGiscusTheme()
-    }
+		syncGiscusTheme();
+		const onAppearanceChange = (event: CustomEvent<SiteAppearanceChangeDetail>) => {
+			if (!isAppearanceChangeForSubscribers(event.detail.reason)) {
+				return;
+			}
 
-    document.addEventListener("site:appearance-change", onAppearanceChange)
+			syncGiscusTheme();
+		};
 
-    return () => {
-      document.removeEventListener("site:appearance-change", onAppearanceChange)
-    }
-  }, [])
+		document.addEventListener('site:appearance-change', onAppearanceChange);
 
-  return (
-    <section aria-label="评论区" data-out-of-site-ugc="giscus" style={{ marginTop: "3rem" }}>
-      {giscusTheme && (
-        <Giscus
-          repo="Unnamed2964/umamichi.moe"
-          repoId="R_kgDOR3nnpw"
-          category="Announcements"
-          categoryId="DIC_kwDOR3nnp84C8BSy"
-          mapping="pathname"
-          strict="0"
-          reactionsEnabled="1"
-          emitMetadata="0"
-          inputPosition="top"
-          theme={giscusTheme}
-          lang="zh-CN"
-          loading="eager"
-        />
-      )}
-    </section>
-  )
+		return () => {
+			document.removeEventListener('site:appearance-change', onAppearanceChange);
+		};
+	}, [giscus]);
+
+	if (!giscus) {
+		return null;
+	}
+
+	return (
+		<section aria-label="评论区" data-out-of-site-ugc="giscus" style={{ marginTop: '3rem' }}>
+			{giscusTheme && (
+				<Giscus
+					repo={giscus.repo as `${string}/${string}`}
+					repoId={giscus.repoId}
+					category={giscus.category}
+					categoryId={giscus.categoryId}
+					mapping={(giscus.mapping ?? 'pathname') as 'pathname'}
+					strict={(giscus.strict ?? '0') as '0' | '1'}
+					reactionsEnabled={(giscus.reactionsEnabled ?? '1') as '0' | '1'}
+					emitMetadata={(giscus.emitMetadata ?? '0') as '0' | '1'}
+					inputPosition={giscus.inputPosition ?? 'top'}
+					theme={giscusTheme}
+					lang={giscus.lang ?? 'zh-CN'}
+					loading={(giscus.loading ?? 'eager') as 'eager' | 'lazy'}
+				/>
+			)}
+		</section>
+	);
 }

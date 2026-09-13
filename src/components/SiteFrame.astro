@@ -2,7 +2,7 @@
 import MetroNavIcon from './MetroNavIcon.astro';
 import PaletteDropdown from './PaletteDropdown.tsx';
 import ThemeToggleButton from './ThemeToggleButton.astro';
-import { SITE_TITLE } from '../consts';
+import { SITE_TITLE, formatSiteCopyright } from '../consts';
 import type { TopLevelNavItem } from '../lib/docs';
 import { SITE_MAIN_MAX_W } from '../lib/site-layout';
 import { getActiveNavIndex, getMetroNavIconTone, isActiveLink } from '../lib/site-frame';
@@ -16,6 +16,7 @@ interface Props {
 const { currentPath, navItems } = Astro.props;
 const activeNavIndex = getActiveNavIndex(navItems, currentPath);
 const year = new Date().getFullYear();
+const copyrightLine = formatSiteCopyright(year);
 
 const iconBars = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" aria-hidden="true" focusable="false"><path fill="currentColor" d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"/></svg>`;
 
@@ -235,7 +236,7 @@ const iconGithub = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512
 			<div class="site-container site-container--frame">
 				<div class="site-footer__stack">
 					<p class="site-footer__line">
-						<span>© {year} Umamichi/Unnamed2964.</span>
+						<span>{copyrightLine}</span>
 						<span>
 							Powered by{' '}
 							<a class="site-footer__link" href="https://astro.build/" target="_blank" rel="noreferrer">Astro</a>, Transitions powered by{' '}

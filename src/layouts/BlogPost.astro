@@ -9,7 +9,7 @@ import SiteNavTextOutlineFilter from '../components/SiteNavTextOutlineFilter.ast
 import ArticleLayout from '../components/ArticleLayout.astro';
 import ArticleNavScript from '../components/ArticleNavScript.astro';
 import type { ArticleTag } from '../lib/article';
-import { SITE_DESCRIPTION, SITE_GITHUB_SOURCE_BASE_URL, SITE_TITLE } from '../consts';
+import { SITE_DESCRIPTION, SITE_TITLE, sourceUrlForPath } from '../consts';
 import type { CopyrightConfig } from '../lib/copyright';
 import { buildDocsStructure, toTagHref, type SidebarNode } from '../lib/docs';
 import gitHistoryManifest from '../generated/git-history-manifest.json';
@@ -92,7 +92,7 @@ const rawContent = currentEntryId
 	: undefined;
 const sourceMarkdown = formatExportMarkdown(rawContent, title);
 const readingTimeLabel = rawContent ? formatReadingTimeLabel(rawContent) : undefined;
-const sourceUrl = sourcePath ? `${SITE_GITHUB_SOURCE_BASE_URL}/${sourcePath}` : undefined;
+const sourceUrl = sourcePath ? sourceUrlForPath(sourcePath) : undefined;
 const historyEntries = new Set(gitHistoryManifest.entries ?? []);
 const historyUrl =
 	currentEntryId && historyEntries.has(currentEntryId)

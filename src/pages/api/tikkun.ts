@@ -9,11 +9,11 @@ import {
 export const prerender = false;
 
 const GET_MESSAGE = `<p>✨</p>
-<p>感谢您对本网站的技术细节的关注🥺</p>
-<p>您正在使用 GET 方法访问。在 umamichi.moe/* 使用 POST 方法访问本 URL 时，以下内容将会被发送到 Cloudflare KV 中，作为了解用户体验的参考：</p>
+<p>感谢您对本网站的关注</p>
+<p>您正在使用 GET 方法访问。在 ${SITE_ID}/* 使用 POST 方法访问本 URL 时，以下内容将会被发送到 Cloudflare KV 中，作为了解用户体验的参考：</p>
 <pre><code>{
-	"version": 1,
-	"siteId": "umamichi.moe",
+	"version": ${TIKKUN_SCHEMA_VERSION},
+	"siteId": ${JSON.stringify(SITE_ID)},
 	"page": {
 		"pathname": "/blog/first-post/",
 		"referrer": "https://example.com"
