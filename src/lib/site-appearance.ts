@@ -75,7 +75,7 @@ export function syncMermaidMedia(preference: ThemePreference): void {
 	};
 
 	for (const element of document.querySelectorAll('[id^="mermaid-dark"]')) {
-		element.setAttribute('media', mediaMap[preference] ?? 'none');
+		element.setAttribute('media', mediaMap[preference]);
 	}
 }
 

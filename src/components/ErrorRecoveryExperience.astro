@@ -124,7 +124,7 @@ const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription,
 		const root = document.querySelector<HTMLElement>('[data-error-screen]');
 
 		if (!root) {
-			return;
+			throw new Error('Missing [data-error-screen]');
 		}
 
 		const errorRoot = root;
@@ -133,21 +133,20 @@ const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription,
 			const event = {
 				...createBaseTelemetryEvent(HESTER_SCHEMA_VERSION, SITE_ID),
 				error: {
-					statusCode: Number.parseInt(errorRoot.dataset.statusCode || '', 10) || null,
-					statusTitle: errorRoot.dataset.statusTitle || null,
-					requestPath: errorRoot.dataset.requestPath || null,
+					statusCode: Number.parseInt(errorRoot.dataset.statusCode!, 10),
+					statusTitle: errorRoot.dataset.statusTitle!,
+					requestPath: errorRoot.dataset.requestPath!,
 				},
 			};
 
 			await postTelemetry('/api/hester', event);
 		}
 
-		const progressValue = root.querySelector('[data-progress-value]');
-		const choiceHeading = root.querySelector('[data-choice-heading]');
-		const choiceSubtitle = root.querySelector('[data-choice-subtitle]');
-		const choiceCopy = root.querySelector('[data-choice-copy]');
-		const choicePath = root.querySelector('[data-choice-path]');
-		const choiceActions = root.querySelector('[data-choice-actions]');
+		const progressValue = errorRoot.querySelector('[data-progress-value]')!;
+		const choiceHeading = errorRoot.querySelector('[data-choice-heading]')!;
+		const choiceSubtitle = errorRoot.querySelector('[data-choice-subtitle]')!;
+		const choiceCopy = errorRoot.querySelector('[data-choice-copy]')!;
+		const choiceActions = errorRoot.querySelector('[data-choice-actions]')!;
 		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		const progressDuration = 9000;
 		const bootDuration = reducedMotion ? 120 : 4000;
@@ -155,36 +154,31 @@ const { recoveryHref, recoveryLabel, requestPath, statusCode, statusDescription,
 		const progressSteps = [0, 10, 30, 70, 100];
 
 		const revealChoice = () => {
-			root.dataset.phase = 'choice';
-			choiceHeading?.removeAttribute('hidden');
-			choiceSubtitle?.removeAttribute('hidden');
-			choiceCopy?.removeAttribute('hidden');
-			choicePath?.removeAttribute('hidden');
-			choiceActions?.removeAttribute('hidden');
+			errorRoot.dataset.phase = 'choice';
+			choiceHeading.removeAttribute('hidden');
+			choiceSubtitle.removeAttribute('hidden');
+			choiceCopy.removeAttribute('hidden');
+			choiceActions.removeAttribute('hidden');
 		};
 
 		const startChoiceSequence = () => {
-			root.dataset.phase = 'choice';
+			errorRoot.dataset.phase = 'choice';
 			window.setTimeout(revealChoice, choiceDelay);
 		};
 
 		const startBoot = () => {
-			root.dataset.phase = 'boot';
+			errorRoot.dataset.phase = 'boot';
 			window.setTimeout(startChoiceSequence, bootDuration);
 		};
 
 		const runProgressSequence = () => {
-			if (progressValue) {
-				progressValue.textContent = String(progressSteps[0]);
-			}
+			progressValue.textContent = String(progressSteps[0]);
 
 			progressSteps.slice(1).forEach((step, index, steps) => {
 				const delay = index === steps.length - 1 ? progressDuration : (progressDuration * step) / 100;
 
 				window.setTimeout(() => {
-					if (progressValue) {
-						progressValue.textContent = String(step);
-					}
+					progressValue.textContent = String(step);
 
 					if (step === 100) {
 						window.setTimeout(startBoot, reducedMotion ? 30 : 90);

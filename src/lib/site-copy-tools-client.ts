@@ -19,7 +19,13 @@ const OVERLAY_HIDE_SLACK_MS = 20;
 const COPY_ATTRIBUTION_MIN_LENGTH = 50;
 
 function overlayHideFallbackMs(): number {
-	return (readRootCssDurationMs('--transition-overlay') ?? 0) + OVERLAY_HIDE_SLACK_MS;
+	const durationMs = readRootCssDurationMs('--transition-overlay');
+
+	if (durationMs === null) {
+		throw new Error('Missing --transition-overlay duration');
+	}
+
+	return durationMs + OVERLAY_HIDE_SLACK_MS;
 }
 
 function clamp(value: number, min: number, max: number): number {
@@ -31,9 +37,7 @@ function clamp(value: number, min: number, max: number): number {
 }
 
 function getSiteCopySourceUrl(): string {
-	const path = `${window.location.pathname}${window.location.search}${window.location.hash}` || '/';
-	const withLeadingSlash = path.startsWith('/') ? path : `/${path}`;
-	return `umamichi.moe${withLeadingSlash}`;
+	return `umamichi.moe${window.location.pathname}${window.location.search}${window.location.hash}`;
 }
 
 function getSiteCopySuffix(): string {
@@ -415,13 +419,8 @@ export function initSiteCopyTools(): void {
 			const container = copyButton.closest('[data-article-source-tools]');
 			const source = container?.querySelector('[data-article-markdown-source]');
 			const markdown = source instanceof HTMLTextAreaElement ? source.value : '';
-
-			try {
-				const copied = await copyTextToClipboard(markdown);
-				showSiteCopyToast(copied ? '已复制 Markdown' : '复制失败');
-			} catch {
-				showSiteCopyToast('复制失败');
-			}
+			const copied = await copyTextToClipboard(markdown);
+			showSiteCopyToast(copied ? '已复制 Markdown' : '复制失败');
 
 			if (container instanceof Element) {
 				closeArticleSourceMenu(container);

@@ -22,7 +22,13 @@ function parsePaneDurationMs(shiftSurface: HTMLElement): number {
 		return fromElement;
 	}
 
-	return readRootCssDurationMs('--wpm-pane-duration') ?? 0;
+	const fromToken = readRootCssDurationMs('--wpm-pane-duration');
+
+	if (fromToken === null) {
+		throw new Error('Missing pane close duration');
+	}
+
+	return fromToken;
 }
 
 export function waitForPaneClose(): Promise<void> {

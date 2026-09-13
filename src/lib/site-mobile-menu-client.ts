@@ -38,6 +38,16 @@ function syncMenuToggleButtons(isOpen: boolean): void {
 	}
 }
 
+function getMobileMenu(): HTMLElement {
+	const mobileMenu = document.querySelector('[data-site-mobile-menu]');
+
+	if (!(mobileMenu instanceof HTMLElement)) {
+		throw new Error('Missing [data-site-mobile-menu]');
+	}
+
+	return mobileMenu;
+}
+
 export function initSiteMobileMenu(): void {
 	if (typeof window === 'undefined' || (window as unknown as Record<string, boolean>)[INIT_KEY]) {
 		return;
@@ -94,11 +104,7 @@ export function initSiteMobileMenu(): void {
 	};
 
 	const setMenuOpenImmediate = (isOpen: boolean) => {
-		const mobileMenu = document.querySelector('[data-site-mobile-menu]');
-
-		if (!(mobileMenu instanceof HTMLElement)) {
-			return;
-		}
+		const mobileMenu = getMobileMenu();
 
 		menuClosePromise = null;
 		delete document.documentElement.dataset.mobileMenuClosing;
@@ -116,15 +122,11 @@ export function initSiteMobileMenu(): void {
 	};
 
 	const beginMenuClose = (): Promise<void> => {
-		const mobileMenu = document.querySelector('[data-site-mobile-menu]');
-
-		if (!(mobileMenu instanceof HTMLElement)) {
-			return Promise.resolve();
-		}
-
 		if (!isMenuOpen() && !isMenuClosing()) {
 			return Promise.resolve();
 		}
+
+		const mobileMenu = getMobileMenu();
 
 		destroyCloseWatcher();
 
@@ -151,11 +153,7 @@ export function initSiteMobileMenu(): void {
 			delete document.documentElement.dataset.mobileMenuClosing;
 		}
 
-		const mobileMenu = document.querySelector('[data-site-mobile-menu]');
-
-		if (!(mobileMenu instanceof HTMLElement)) {
-			return;
-		}
+		const mobileMenu = getMobileMenu();
 
 		acquirePreservedScrollbar(PRESERVE_SCROLLBAR_REASON);
 		applyMenuOpenState(mobileMenu);
