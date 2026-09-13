@@ -13,11 +13,30 @@ export type SiteAppearanceState = {
 	palette: string;
 };
 
+/** Mermaid dark diagram media — shared by module path and BaseHead FOUC boot via define:vars. */
+export const MERMAID_MEDIA_BY_PREFERENCE: Record<ThemePreference, string> = {
+	system: '(prefers-color-scheme: dark)',
+	dark: 'all',
+	light: 'none',
+};
+
+/**
+ * Values for BaseHead `is:inline` FOUC boot (`define:vars`).
+ * Theme apply / preference parse still live in the inline IIFE (cannot import modules before paint);
+ * storage keys, mermaid map, and palette allowlist come from here so they cannot drift.
+ */
+export function getFoucBootDefineVars() {
+	return {
+		siteThemeStorageKey: SITE_THEME_STORAGE_KEY,
+		sitePaletteStorageKey: SITE_PALETTE_STORAGE_KEY,
+		allowedPaletteIds: [...getAllowedSitePaletteIds()],
+		mermaidMediaByPreference: MERMAID_MEDIA_BY_PREFERENCE,
+	};
+}
+
 /**
  * Module-path appearance (theme toggle, ClientRouter after-swap, palette apply).
- * Cold-load FOUC boot is duplicated in BaseHead.astro (inline is:inline script) — keep in sync:
- * preference parse, getResolvedTheme, applyAppearanceToRoot, syncMermaidMedia mediaMap.
- * This module also validates palette ids via site-palette-catalog; the inline script does not.
+ * Cold-load FOUC boot stays `is:inline` in BaseHead.astro; inject shared values via getFoucBootDefineVars().
  */
 
 export function getStoredThemePreference(): ThemePreference {
@@ -68,14 +87,8 @@ export function applyAppearanceToRoot(root: HTMLElement, state: SiteAppearanceSt
 }
 
 export function syncMermaidMedia(preference: ThemePreference): void {
-	const mediaMap: Record<ThemePreference, string> = {
-		system: '(prefers-color-scheme: dark)',
-		dark: 'all',
-		light: 'none',
-	};
-
 	for (const element of document.querySelectorAll('[id^="mermaid-dark"]')) {
-		element.setAttribute('media', mediaMap[preference]);
+		element.setAttribute('media', MERMAID_MEDIA_BY_PREFERENCE[preference]);
 	}
 }
 
