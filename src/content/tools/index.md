@@ -113,9 +113,9 @@ GitHub：[kyuri-metro/njmetro-railmap-creator](https://github.com/kyuri-metro/nj
 
 ---
 
-## Vibe Coding 的小作品
+## 小作品
 
-由 Vibe Coding 简单制作成的小作品。~~这并不是说其他章节的作品不是 Vibe Coding，但是本章的作品所花费的精力和注意力是小于其他章节的。~~
+一次性制作的小作品。不再维护。
 
 ### [铁路缓和曲线交互实验](https://railroad-spline-experiment.umamichi.moe/)
 
@@ -125,6 +125,6 @@ GitHub：[Unnamed2964/kyuri-railroad-spline-experiment](https://github.com/Unnam
 
 ## 说明
 
-这个页面会继续补充新的小工具。若某个工具失效或你有想法，请通过 GitHub 或邮箱 umamichi#outlook.com（将“#”替换为“@”）联系我。
+这个页面会继续补充新的小工具。如果希望提出bug、建议或有其他联系请求，请通过 GitHub Issue 或邮箱 umamichi#outlook.com（将“#”替换为“@”）联系我。
 
 [^1]: 尚未知其他场合是否采用相同的方块-汉字-英文比例
