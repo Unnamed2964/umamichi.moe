@@ -158,7 +158,7 @@ npm run deploy
 - `public/`：站点级静态资源；与 content 重复的图片/附件副本仅用于旧 URL 兼容（见 `public/README.md`）
 - `umamichi.config.mjs`：站点级项目配置
 - `functions/`：Cloudflare 相关函数代码
-- `docs/`：项目内部说明文档
+- `docs/`：项目内部说明文档（架构相关）；过程归档与导视等素材见 [`umamichi-moe-craft`](https://github.com/Unnamed2964/umamichi-moe-craft)
 
 ## LLM 生成代码说明
 

@@ -89,5 +89,5 @@
 
 ## 相关
 
-- 讨论过程：`docs/site-font-weight-conversation-transcript.md`
+- 讨论过程：https://github.com/Unnamed2964/umamichi-moe-craft/blob/main/transcripts/site-font-weight-conversation-transcript.md
 - 全局 UI 约定：Umamichi UI conventions（水色 accent、少装饰）
